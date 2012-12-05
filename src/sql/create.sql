@@ -240,9 +240,10 @@ CREATE TABLE `user` (
   `name` varchar(45) NOT NULL,
   `password` binary(128) NOT NULL COMMENT 'should be a md5 of the actual password',
   `registered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `email` varchar(128) DEFAULT NULL,
+  `email` varchar(128) NOT NULL COMMENT 'Enforce the user to provide an email address and must be unique.',
   `organization` varchar(128) DEFAULT NULL,
-  PRIMARY KEY (`uuid`)
+  PRIMARY KEY (`uuid`),
+  UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -313,4 +314,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-05 12:44:23
+-- Dump completed on 2012-12-05 20:57:07
