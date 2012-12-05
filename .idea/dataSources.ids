@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><component name="dataSourceStorage">
+  <data-source source="LOCAL" name="Data Source" product="MySQL" version="5.5.28" jdbc-version="4.0" driver-name="MySQL-AB JDBC Driver" driver-version="mysql-connector-java-5.1.22 ( Revision: ${bzr.revision-id} )" uuid="e2226a51-503f-4b6e-9000-7cbfc092c185">
+    <extra-name-characters>#@</extra-name-characters>
+    <identifier-quote-string>`</identifier-quote-string>
+    <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+    <jdbc-url>jdbc:mysql://localhost:3306/rate3</jdbc-url>
+    <user-name>root</user-name>
+    <user-password>dfd8dfcbdfc9dfc9dfc5dfc5dfc4</user-password>
+    <schema-pattern>rate3.*</schema-pattern>
+    <default-schemas>rate3.*</default-schemas>
+    <default-dialect>MySQL</default-dialect>
+    <libraries>
+      <library>
+        <url>jar://$PROJECT_DIR$/lib/mysql-connector-java-5.1.22-bin.jar!/</url>
+      </library>
+      <library>
+        <url>file://$PROJECT_DIR$/lib/mysql-connector-license.txt</url>
+      </library>
+    </libraries>
+    <table name="algorithm" schema="" catalog="rate3" type="TABLE">
+      <column name="uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="user_uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
+      <column name="type" sqlType="ENUM" length="11" precision="0" nullable="false" jdbcType="1" />
+      <column name="protocol" sqlType="ENUM" length="8" precision="0" nullable="false" jdbcType="1" />
+      <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
+      <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="false" jdbcType="-1" />
+      <primary-key name="PRIMARY" columns="uuid" />
+    </table>
+    <table name="algorithm_version" schema="" catalog="rate3" type="TABLE">
+      <column name="uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="algorithm_uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" remarks="dGhpcyBjb2x1bW4gaXMgYWxzbyB1c2VkIHRvIGlkZW50aWZ5IGRpZmZlcmVudCB2ZXJzaW9ucyBvZiBhbiBhbGdvcml0aG0=" version="true" />
+      <primary-key name="PRIMARY" columns="uuid" />
+    </table>
+    <table name="benchmark" schema="" catalog="rate3" type="TABLE">
+      <column name="uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="view_uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="protocol" sqlType="ENUM" length="8" precision="0" nullable="false" jdbcType="1" />
+      <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
+      <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
+      <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="false" jdbcType="-1" />
+      <primary-key name="PRIMARY" columns="uuid" />
+    </table>
+    <table name="class" schema="" catalog="rate3" type="TABLE">
+      <column name="uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="person_uuid" sqlType="BINARY" length="128" precision="0" nullable="true" jdbcType="-2" />
+      <column name="type" sqlType="ENUM" length="11" precision="0" nullable="false" jdbcType="1" />
+      <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
+      <column name="import_tag" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" remarks="V2l0aCBlYWNoIGltcG9ydCwgeW91IG11c3QgcHJvdmlkZSBhIGltcG9ydF90YWcuIEl0IGlzIHVzZWQgZm9yIHJvbGxiYWNrIGZ1bmN0aW9ucy4=" />
+      <primary-key name="PRIMARY" columns="uuid" />
+      <index name="import_tag_UNIQUE" unique="true" columns="import_tag" />
+    </table>
+    <table name="device_type" schema="" catalog="rate3" type="TABLE">
+      <column name="uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
+      <column name="type" sqlType="ENUM" length="11" precision="0" nullable="false" jdbcType="1" />
+      <column name="provider" sqlType="VARCHAR" length="45" precision="0" nullable="true" jdbcType="12" remarks="Zm9yIGV4YW1wbGUgUEtVLCBZQU5OQU4=" />
+      <column name="version" sqlType="VARCHAR" length="45" precision="0" nullable="true" jdbcType="12" remarks="Zm9yIGV4YW1wbGUgVjMsIFY1LCBhbnkgdGV4dCB0aGF0IGNvdWxkIGRpc3Rpbmd1aXNoIGRpZmZlcmVudCB2ZXJzaW9ucw==" />
+      <column name="extra" sqlType="BLOB" length="65535" precision="0" nullable="true" jdbcType="-4" />
+      <primary-key name="PRIMARY" columns="uuid" />
+    </table>
+    <table name="person" schema="" catalog="rate3" type="TABLE">
+      <column name="uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="true" jdbcType="12" />
+      <column name="gender" sqlType="ENUM" length="7" precision="0" nullable="false" jdbcType="1" def="J1VOS05PV04n" />
+      <column name="birth" sqlType="DATE" length="10" precision="0" nullable="true" jdbcType="91" />
+      <column name="extra" sqlType="BLOB" length="65535" precision="0" nullable="true" jdbcType="-4" />
+      <primary-key name="PRIMARY" columns="uuid" />
+    </table>
+    <table name="sample" schema="" catalog="rate3" type="TABLE">
+      <column name="uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="class_uuid" sqlType="BINARY" length="128" precision="0" nullable="true" jdbcType="-2" />
+      <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="true" jdbcType="93" />
+      <column name="file" sqlType="VARCHAR" length="256" precision="0" nullable="false" jdbcType="12" remarks="dGhpcyBzaG91bGQgYmUgYSBwYXRoIHdpdGggVU5JWCBzZXBlcmF0b3IgXCcvXCcgdG8gYXZvaWQgc3RyYW5nZSBiZWhhdmlvcnM=" />
+      <column name="device_type" sqlType="BINARY" length="128" precision="0" nullable="true" jdbcType="-2" />
+      <column name="import_tag" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" remarks="V2l0aCBlYWNoIGltcG9ydCwgeW91IG11c3QgcHJvdmlkZSBhIGltcG9ydF90YWcuIEl0IGlzIHVzZWQgZm9yIHJvbGxiYWNrIGZ1bmN0aW9ucy4=" />
+      <primary-key name="PRIMARY" columns="uuid" />
+      <index name="import_tag_UNIQUE" unique="true" columns="import_tag" />
+    </table>
+    <table name="task" schema="" catalog="rate3" type="TABLE">
+      <column name="uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="algorithm_version_uuid" sqlType="BINARY" length="128" precision="0" nullable="true" jdbcType="-2" />
+      <column name="benchmark_uuid" sqlType="BINARY" length="128" precision="0" nullable="true" jdbcType="-2" />
+      <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="true" jdbcType="93" />
+      <column name="finished" sqlType="TIMESTAMP" length="19" precision="0" nullable="true" jdbcType="93" />
+      <primary-key name="PRIMARY" columns="uuid" />
+    </table>
+    <table name="user" schema="" catalog="rate3" type="TABLE">
+      <column name="uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
+      <column name="password" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" remarks="c2hvdWxkIGJlIGEgbWQ1IG9mIHRoZSBhY3R1YWwgcGFzc3dvcmQ=" />
+      <column name="registered" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
+      <column name="email" sqlType="VARCHAR" length="128" precision="0" nullable="true" jdbcType="12" />
+      <column name="organization" sqlType="VARCHAR" length="128" precision="0" nullable="true" jdbcType="12" />
+      <primary-key name="PRIMARY" columns="uuid" />
+    </table>
+    <table name="view" schema="" catalog="rate3" type="TABLE">
+      <column name="uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
+      <column name="import_tag" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" remarks="V2l0aCBlYWNoIGltcG9ydCwgeW91IG11c3QgcHJvdmlkZSBhIGltcG9ydF90YWcuIEl0IGlzIHVzZWQgZm9yIHJvbGxiYWNrIGZ1bmN0aW9ucy4=" />
+      <column name="type" sqlType="ENUM" length="11" precision="0" nullable="false" jdbcType="1" />
+      <primary-key name="PRIMARY" columns="uuid" />
+      <index name="import_tag_UNIQUE" unique="true" columns="import_tag" />
+    </table>
+    <table name="view_sample" schema="" catalog="rate3" type="TABLE">
+      <column name="view_uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <column name="sample_uuid" sqlType="BINARY" length="128" precision="0" nullable="false" jdbcType="-2" />
+      <primary-key name="PRIMARY" columns="view_uuid,sample_uuid" />
+    </table>
+  </data-source>
+</component>
