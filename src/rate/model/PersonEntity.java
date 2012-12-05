@@ -1,8 +1,6 @@
 package rate.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.Arrays;
 
@@ -13,12 +11,12 @@ import java.util.Arrays;
  * Time: 下午8:43
  * To change this template use File | Settings | File Templates.
  */
-@javax.persistence.Table(name = "person", schema = "", catalog = "rate3")
+@Table(name = "person", schema = "", catalog = "rate3")
 @Entity
 public class PersonEntity {
     private byte[] uuid;
 
-    @javax.persistence.Column(name = "uuid")
+    @Column(name = "uuid")
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -30,7 +28,7 @@ public class PersonEntity {
 
     private String name;
 
-    @javax.persistence.Column(name = "name")
+    @Column(name = "name")
     @Basic
     public String getName() {
         return name;
@@ -42,7 +40,7 @@ public class PersonEntity {
 
     private String gender;
 
-    @javax.persistence.Column(name = "gender")
+    @Column(name = "gender")
     @Basic
     public String getGender() {
         return gender;
@@ -54,7 +52,7 @@ public class PersonEntity {
 
     private Date birth;
 
-    @javax.persistence.Column(name = "birth")
+    @Column(name = "birth")
     @Basic
     public Date getBirth() {
         return birth;
@@ -66,7 +64,7 @@ public class PersonEntity {
 
     private byte[] extra;
 
-    @javax.persistence.Column(name = "extra")
+    @Column(name = "extra")
     @Basic
     public byte[] getExtra() {
         return extra;

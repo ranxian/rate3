@@ -1,8 +1,6 @@
 package rate.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
@@ -13,12 +11,12 @@ import java.util.Arrays;
  * Time: 下午8:43
  * To change this template use File | Settings | File Templates.
  */
-@javax.persistence.Table(name = "algorithm_version", schema = "", catalog = "rate3")
+@Table(name = "algorithm_version", schema = "", catalog = "rate3")
 @Entity
 public class AlgorithmVersionEntity {
     private byte[] uuid;
 
-    @javax.persistence.Column(name = "uuid")
+    @Column(name = "uuid")
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -30,7 +28,7 @@ public class AlgorithmVersionEntity {
 
     private byte[] algorithmUuid;
 
-    @javax.persistence.Column(name = "algorithm_uuid")
+    @Column(name = "algorithm_uuid")
     @Basic
     public byte[] getAlgorithmUuid() {
         return algorithmUuid;
@@ -42,7 +40,7 @@ public class AlgorithmVersionEntity {
 
     private Timestamp created;
 
-    @javax.persistence.Column(name = "created")
+    @Column(name = "created")
     @Basic
     public Timestamp getCreated() {
         return created;

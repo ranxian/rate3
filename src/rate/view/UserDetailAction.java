@@ -10,7 +10,6 @@ import rate.model.UserEntity;
  */
 public class UserDetailAction {
     public String execute() throws Exception {
-
         return "success";
     }
 
@@ -19,7 +18,11 @@ public class UserDetailAction {
     }
 
     private String uuid;
+    public String getUuid() {
+        return uuid;
+    }
     public void setUuid(String s) {
         uuid = s;
     }
+
 }

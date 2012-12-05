@@ -1,8 +1,6 @@
 package rate.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
@@ -13,12 +11,12 @@ import java.util.Arrays;
  * Time: 下午8:43
  * To change this template use File | Settings | File Templates.
  */
-@javax.persistence.Table(name = "task", schema = "", catalog = "rate3")
+@Table(name = "task", schema = "", catalog = "rate3")
 @Entity
 public class TaskEntity {
     private byte[] uuid;
 
-    @javax.persistence.Column(name = "uuid")
+    @Column(name = "uuid")
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -30,7 +28,7 @@ public class TaskEntity {
 
     private byte[] algorithmVersionUuid;
 
-    @javax.persistence.Column(name = "algorithm_version_uuid")
+    @Column(name = "algorithm_version_uuid")
     @Basic
     public byte[] getAlgorithmVersionUuid() {
         return algorithmVersionUuid;
@@ -42,7 +40,7 @@ public class TaskEntity {
 
     private byte[] benchmarkUuid;
 
-    @javax.persistence.Column(name = "benchmark_uuid")
+    @Column(name = "benchmark_uuid")
     @Basic
     public byte[] getBenchmarkUuid() {
         return benchmarkUuid;
@@ -54,7 +52,7 @@ public class TaskEntity {
 
     private Timestamp created;
 
-    @javax.persistence.Column(name = "created")
+    @Column(name = "created")
     @Basic
     public Timestamp getCreated() {
         return created;
@@ -66,7 +64,7 @@ public class TaskEntity {
 
     private Timestamp finished;
 
-    @javax.persistence.Column(name = "finished")
+    @Column(name = "finished")
     @Basic
     public Timestamp getFinished() {
         return finished;

@@ -1,8 +1,6 @@
 package rate.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Arrays;
 
 /**
@@ -12,12 +10,12 @@ import java.util.Arrays;
  * Time: 下午8:43
  * To change this template use File | Settings | File Templates.
  */
-@javax.persistence.Table(name = "view", schema = "", catalog = "rate3")
+@Table(name = "view", schema = "", catalog = "rate3")
 @Entity
 public class ViewEntity {
     private byte[] uuid;
 
-    @javax.persistence.Column(name = "uuid")
+    @Column(name = "uuid")
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -29,7 +27,7 @@ public class ViewEntity {
 
     private String name;
 
-    @javax.persistence.Column(name = "name")
+    @Column(name = "name")
     @Basic
     public String getName() {
         return name;
@@ -41,7 +39,7 @@ public class ViewEntity {
 
     private String importTag;
 
-    @javax.persistence.Column(name = "import_tag")
+    @Column(name = "import_tag")
     @Basic
     public String getImportTag() {
         return importTag;
@@ -53,7 +51,7 @@ public class ViewEntity {
 
     private String type;
 
-    @javax.persistence.Column(name = "type")
+    @Column(name = "type")
     @Basic
     public String getType() {
         return type;

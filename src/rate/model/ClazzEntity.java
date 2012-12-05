@@ -1,8 +1,6 @@
 package rate.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
@@ -13,12 +11,12 @@ import java.util.Arrays;
  * Time: 下午8:43
  * To change this template use File | Settings | File Templates.
  */
-@javax.persistence.Table(name = "class", schema = "", catalog = "rate3")
+@Table(name = "class", schema = "", catalog = "rate3")
 @Entity
 public class ClazzEntity {
     private byte[] uuid;
 
-    @javax.persistence.Column(name = "uuid")
+    @Column(name = "uuid")
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -30,7 +28,7 @@ public class ClazzEntity {
 
     private byte[] personUuid;
 
-    @javax.persistence.Column(name = "person_uuid")
+    @Column(name = "person_uuid")
     @Basic
     public byte[] getPersonUuid() {
         return personUuid;
@@ -42,7 +40,7 @@ public class ClazzEntity {
 
     private String type;
 
-    @javax.persistence.Column(name = "type")
+    @Column(name = "type")
     @Basic
     public String getType() {
         return type;
@@ -54,7 +52,7 @@ public class ClazzEntity {
 
     private Timestamp created;
 
-    @javax.persistence.Column(name = "created")
+    @Column(name = "created")
     @Basic
     public Timestamp getCreated() {
         return created;
@@ -66,7 +64,7 @@ public class ClazzEntity {
 
     private String importTag;
 
-    @javax.persistence.Column(name = "import_tag")
+    @Column(name = "import_tag")
     @Basic
     public String getImportTag() {
         return importTag;

@@ -1,8 +1,6 @@
 package rate.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
@@ -13,12 +11,12 @@ import java.util.Arrays;
  * Time: 下午8:43
  * To change this template use File | Settings | File Templates.
  */
-@javax.persistence.Table(name = "benchmark", schema = "", catalog = "rate3")
+@Table(name = "benchmark", schema = "", catalog = "rate3")
 @Entity
 public class BenchmarkEntity {
     private byte[] uuid;
 
-    @javax.persistence.Column(name = "uuid")
+    @Column(name = "uuid")
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -30,7 +28,7 @@ public class BenchmarkEntity {
 
     private byte[] viewUuid;
 
-    @javax.persistence.Column(name = "view_uuid")
+    @Column(name = "view_uuid")
     @Basic
     public byte[] getViewUuid() {
         return viewUuid;
@@ -42,7 +40,7 @@ public class BenchmarkEntity {
 
     private String protocol;
 
-    @javax.persistence.Column(name = "protocol")
+    @Column(name = "protocol")
     @Basic
     public String getProtocol() {
         return protocol;
@@ -54,7 +52,7 @@ public class BenchmarkEntity {
 
     private String name;
 
-    @javax.persistence.Column(name = "name")
+    @Column(name = "name")
     @Basic
     public String getName() {
         return name;
@@ -66,7 +64,7 @@ public class BenchmarkEntity {
 
     private Timestamp created;
 
-    @javax.persistence.Column(name = "created")
+    @Column(name = "created")
     @Basic
     public Timestamp getCreated() {
         return created;
@@ -78,7 +76,7 @@ public class BenchmarkEntity {
 
     private String description;
 
-    @javax.persistence.Column(name = "description")
+    @Column(name = "description")
     @Basic
     public String getDescription() {
         return description;

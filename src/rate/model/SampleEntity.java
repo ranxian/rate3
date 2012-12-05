@@ -1,8 +1,6 @@
 package rate.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
@@ -13,12 +11,12 @@ import java.util.Arrays;
  * Time: 下午8:43
  * To change this template use File | Settings | File Templates.
  */
-@javax.persistence.Table(name = "sample", schema = "", catalog = "rate3")
+@Table(name = "sample", schema = "", catalog = "rate3")
 @Entity
 public class SampleEntity {
     private byte[] uuid;
 
-    @javax.persistence.Column(name = "uuid")
+    @Column(name = "uuid")
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -30,7 +28,7 @@ public class SampleEntity {
 
     private byte[] classUuid;
 
-    @javax.persistence.Column(name = "class_uuid")
+    @Column(name = "class_uuid")
     @Basic
     public byte[] getClassUuid() {
         return classUuid;
@@ -42,7 +40,7 @@ public class SampleEntity {
 
     private Timestamp created;
 
-    @javax.persistence.Column(name = "created")
+    @Column(name = "created")
     @Basic
     public Timestamp getCreated() {
         return created;
@@ -54,7 +52,7 @@ public class SampleEntity {
 
     private String file;
 
-    @javax.persistence.Column(name = "file")
+    @Column(name = "file")
     @Basic
     public String getFile() {
         return file;
@@ -66,7 +64,7 @@ public class SampleEntity {
 
     private byte[] deviceType;
 
-    @javax.persistence.Column(name = "device_type")
+    @Column(name = "device_type")
     @Basic
     public byte[] getDeviceType() {
         return deviceType;
@@ -78,7 +76,7 @@ public class SampleEntity {
 
     private String importTag;
 
-    @javax.persistence.Column(name = "import_tag")
+    @Column(name = "import_tag")
     @Basic
     public String getImportTag() {
         return importTag;

@@ -1,8 +1,6 @@
 package rate.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
@@ -13,12 +11,12 @@ import java.util.Arrays;
  * Time: 下午8:43
  * To change this template use File | Settings | File Templates.
  */
-@javax.persistence.Table(name = "user", schema = "", catalog = "rate3")
+@Table(name = "user", schema = "", catalog = "rate3")
 @Entity
 public class UserEntity {
     private byte[] uuid;
 
-    @javax.persistence.Column(name = "uuid")
+    @Column(name = "uuid")
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -30,7 +28,7 @@ public class UserEntity {
 
     private String name;
 
-    @javax.persistence.Column(name = "name")
+    @Column(name = "name")
     @Basic
     public String getName() {
         return name;
@@ -42,10 +40,14 @@ public class UserEntity {
 
     private byte[] password;
 
-    @javax.persistence.Column(name = "password")
+    @Column(name = "password")
     @Basic
     public byte[] getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setPassword(byte[] password) {
@@ -54,7 +56,7 @@ public class UserEntity {
 
     private Timestamp registered;
 
-    @javax.persistence.Column(name = "registered")
+    @Column(name = "registered")
     @Basic
     public Timestamp getRegistered() {
         return registered;
@@ -66,7 +68,7 @@ public class UserEntity {
 
     private String email;
 
-    @javax.persistence.Column(name = "email")
+    @Column(name = "email")
     @Basic
     public String getEmail() {
         return email;
@@ -78,7 +80,7 @@ public class UserEntity {
 
     private String organization;
 
-    @javax.persistence.Column(name = "organization")
+    @Column(name = "organization")
     @Basic
     public String getOrganization() {
         return organization;
