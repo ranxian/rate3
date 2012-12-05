@@ -1,8 +1,9 @@
-package rate.db;
+package rate.model;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.sql.Date;
 import java.util.Arrays;
 
 /**
@@ -12,9 +13,9 @@ import java.util.Arrays;
  * Time: 下午8:43
  * To change this template use File | Settings | File Templates.
  */
-@javax.persistence.Table(name = "device_type", schema = "", catalog = "rate3")
+@javax.persistence.Table(name = "person", schema = "", catalog = "rate3")
 @Entity
-public class DeviceTypeEntity {
+public class PersonEntity {
     private byte[] uuid;
 
     @javax.persistence.Column(name = "uuid")
@@ -39,40 +40,28 @@ public class DeviceTypeEntity {
         this.name = name;
     }
 
-    private String type;
+    private String gender;
 
-    @javax.persistence.Column(name = "type")
+    @javax.persistence.Column(name = "gender")
     @Basic
-    public String getType() {
-        return type;
+    public String getGender() {
+        return gender;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    private String provider;
+    private Date birth;
 
-    @javax.persistence.Column(name = "provider")
+    @javax.persistence.Column(name = "birth")
     @Basic
-    public String getProvider() {
-        return provider;
+    public Date getBirth() {
+        return birth;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
-
-    private String version;
-
-    @javax.persistence.Column(name = "version")
-    @Basic
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
+    public void setBirth(Date birth) {
+        this.birth = birth;
     }
 
     private byte[] extra;
@@ -92,14 +81,13 @@ public class DeviceTypeEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DeviceTypeEntity that = (DeviceTypeEntity) o;
+        PersonEntity that = (PersonEntity) o;
 
+        if (birth != null ? !birth.equals(that.birth) : that.birth != null) return false;
         if (!Arrays.equals(extra, that.extra)) return false;
+        if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (provider != null ? !provider.equals(that.provider) : that.provider != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (!Arrays.equals(uuid, that.uuid)) return false;
-        if (version != null ? !version.equals(that.version) : that.version != null) return false;
 
         return true;
     }
@@ -108,9 +96,8 @@ public class DeviceTypeEntity {
     public int hashCode() {
         int result = uuid != null ? Arrays.hashCode(uuid) : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (provider != null ? provider.hashCode() : 0);
-        result = 31 * result + (version != null ? version.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        result = 31 * result + (birth != null ? birth.hashCode() : 0);
         result = 31 * result + (extra != null ? Arrays.hashCode(extra) : 0);
         return result;
     }

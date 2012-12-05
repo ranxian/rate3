@@ -1,4 +1,4 @@
-package rate.db;
+package rate.model;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;

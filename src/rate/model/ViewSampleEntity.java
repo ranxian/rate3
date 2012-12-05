@@ -1,8 +1,7 @@
-package rate.db;
+package rate.model;
 
-import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -12,11 +11,14 @@ import java.util.Arrays;
  * Time: 下午8:43
  * To change this template use File | Settings | File Templates.
  */
-public class ViewSampleEntityPK implements Serializable {
+@javax.persistence.IdClass(rate.model.ViewSampleEntityPK.class)
+@javax.persistence.Table(name = "view_sample", schema = "", catalog = "rate3")
+@Entity
+public class ViewSampleEntity {
     private byte[] viewUuid;
 
+    @javax.persistence.Column(name = "view_uuid")
     @Id
-    @Column(name = "view_uuid")
     public byte[] getViewUuid() {
         return viewUuid;
     }
@@ -27,8 +29,8 @@ public class ViewSampleEntityPK implements Serializable {
 
     private byte[] sampleUuid;
 
+    @javax.persistence.Column(name = "sample_uuid")
     @Id
-    @Column(name = "sample_uuid")
     public byte[] getSampleUuid() {
         return sampleUuid;
     }
@@ -42,7 +44,7 @@ public class ViewSampleEntityPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ViewSampleEntityPK that = (ViewSampleEntityPK) o;
+        ViewSampleEntity that = (ViewSampleEntity) o;
 
         if (!Arrays.equals(sampleUuid, that.sampleUuid)) return false;
         if (!Arrays.equals(viewUuid, that.viewUuid)) return false;

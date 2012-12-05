@@ -5,4 +5,12 @@
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 
 <struts>
+    <constant name="struts.devMode" value="true" />
+    <package name="rate.view" extends="struts-default">
+        <action name="user-detail"
+                class="rate.view.UserDetailAction"
+                method="execute">
+            <result name="success">/user-detail.jsp</result>
+        </action>
+    </package>
 </struts>

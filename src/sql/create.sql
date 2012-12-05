@@ -23,8 +23,8 @@ DROP TABLE IF EXISTS `algorithm`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `algorithm` (
-  `uuid` binary(128) NOT NULL,
-  `user_uuid` binary(128) NOT NULL,
+  `uuid` binary(16) NOT NULL,
+  `user_uuid` binary(16) NOT NULL,
   `name` varchar(45) NOT NULL,
   `type` enum('FINGERVEIN') NOT NULL,
   `protocol` enum('FVC2006') NOT NULL,
@@ -51,8 +51,8 @@ DROP TABLE IF EXISTS `algorithm_version`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `algorithm_version` (
-  `uuid` binary(128) NOT NULL,
-  `algorithm_uuid` binary(128) NOT NULL,
+  `uuid` binary(16) NOT NULL,
+  `algorithm_uuid` binary(16) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'this column is also used to identify different versions of an algorithm',
   PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -75,8 +75,8 @@ DROP TABLE IF EXISTS `benchmark`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `benchmark` (
-  `uuid` binary(128) NOT NULL,
-  `view_uuid` binary(128) NOT NULL,
+  `uuid` binary(16) NOT NULL,
+  `view_uuid` binary(16) NOT NULL,
   `protocol` enum('FVC2006') NOT NULL,
   `name` varchar(45) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -102,8 +102,8 @@ DROP TABLE IF EXISTS `class`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `class` (
-  `uuid` binary(128) NOT NULL,
-  `person_uuid` binary(128) DEFAULT NULL,
+  `uuid` binary(16) NOT NULL,
+  `person_uuid` binary(16) DEFAULT NULL,
   `type` enum('FINGERVEIN') NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `import_tag` varchar(45) NOT NULL COMMENT 'With each import, you must provide a import_tag. It is used for rollback functions.',
@@ -129,7 +129,7 @@ DROP TABLE IF EXISTS `device_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `device_type` (
-  `uuid` binary(128) NOT NULL,
+  `uuid` binary(16) NOT NULL,
   `name` varchar(45) NOT NULL,
   `type` enum('FINGERVEIN') NOT NULL,
   `provider` varchar(45) DEFAULT NULL COMMENT 'for example PKU, YANNAN',
@@ -156,7 +156,7 @@ DROP TABLE IF EXISTS `person`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `person` (
-  `uuid` binary(128) NOT NULL,
+  `uuid` binary(16) NOT NULL,
   `name` varchar(45) DEFAULT NULL,
   `gender` enum('MALE','FEMALE','UNKNOWN') NOT NULL DEFAULT 'UNKNOWN',
   `birth` date DEFAULT NULL,
@@ -182,11 +182,11 @@ DROP TABLE IF EXISTS `sample`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sample` (
-  `uuid` binary(128) NOT NULL,
-  `class_uuid` binary(128) DEFAULT NULL,
+  `uuid` binary(16) NOT NULL,
+  `class_uuid` binary(16) DEFAULT NULL,
   `created` timestamp NULL DEFAULT NULL,
   `file` varchar(256) NOT NULL COMMENT 'this should be a path with UNIX seperator \\''/\\'' to avoid strange behaviors',
-  `device_type` binary(128) DEFAULT NULL,
+  `device_type` binary(16) DEFAULT NULL,
   `import_tag` varchar(45) NOT NULL COMMENT 'With each import, you must provide a import_tag. It is used for rollback functions.',
   PRIMARY KEY (`uuid`),
   UNIQUE KEY `import_tag_UNIQUE` (`import_tag`)
@@ -210,9 +210,9 @@ DROP TABLE IF EXISTS `task`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `task` (
-  `uuid` binary(128) NOT NULL,
-  `algorithm_version_uuid` binary(128) DEFAULT NULL,
-  `benchmark_uuid` binary(128) DEFAULT NULL,
+  `uuid` binary(16) NOT NULL,
+  `algorithm_version_uuid` binary(16) DEFAULT NULL,
+  `benchmark_uuid` binary(16) DEFAULT NULL,
   `created` timestamp NULL DEFAULT NULL,
   `finished` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`uuid`)
@@ -236,9 +236,9 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
-  `uuid` binary(128) NOT NULL,
+  `uuid` binary(16) NOT NULL,
   `name` varchar(45) NOT NULL,
-  `password` binary(128) NOT NULL COMMENT 'should be a md5 of the actual password',
+  `password` binary(16) NOT NULL COMMENT 'should be a md5 of the actual password',
   `registered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `email` varchar(128) NOT NULL COMMENT 'Enforce the user to provide an email address and must be unique.',
   `organization` varchar(128) DEFAULT NULL,
@@ -264,7 +264,7 @@ DROP TABLE IF EXISTS `view`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `view` (
-  `uuid` binary(128) NOT NULL,
+  `uuid` binary(16) NOT NULL,
   `name` varchar(45) NOT NULL,
   `import_tag` varchar(45) NOT NULL COMMENT 'With each import, you must provide a import_tag. It is used for rollback functions.',
   `type` enum('FINGERVEIN') NOT NULL,
@@ -290,8 +290,8 @@ DROP TABLE IF EXISTS `view_sample`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `view_sample` (
-  `view_uuid` binary(128) NOT NULL,
-  `sample_uuid` binary(128) NOT NULL,
+  `view_uuid` binary(16) NOT NULL,
+  `sample_uuid` binary(16) NOT NULL,
   PRIMARY KEY (`view_uuid`,`sample_uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -314,4 +314,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-05 20:57:07
+-- Dump completed on 2012-12-05 22:22:09

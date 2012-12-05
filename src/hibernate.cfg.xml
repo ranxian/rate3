@@ -8,17 +8,17 @@
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="connection.username">root</property>
     <property name="connection.password">testing</property>
-      <mapping class="rate.db.AlgorithmEntity"/>
-      <mapping class="rate.db.AlgorithmVersionEntity"/>
-      <mapping class="rate.db.BenchmarkEntity"/>
-      <mapping class="rate.db.ClazzEntity"/>
-      <mapping class="rate.db.DeviceTypeEntity"/>
-      <mapping class="rate.db.PersonEntity"/>
-      <mapping class="rate.db.SampleEntity"/>
-      <mapping class="rate.db.TaskEntity"/>
-      <mapping class="rate.db.UserEntity"/>
-      <mapping class="rate.db.ViewEntity"/>
-      <mapping class="rate.db.ViewSampleEntity"/>
+      <mapping class="rate.model.AlgorithmEntity"/>
+      <mapping class="rate.model.AlgorithmVersionEntity"/>
+      <mapping class="rate.model.BenchmarkEntity"/>
+      <mapping class="rate.model.ClazzEntity"/>
+      <mapping class="rate.model.DeviceTypeEntity"/>
+      <mapping class="rate.model.PersonEntity"/>
+      <mapping class="rate.model.SampleEntity"/>
+      <mapping class="rate.model.TaskEntity"/>
+      <mapping class="rate.model.UserEntity"/>
+      <mapping class="rate.model.ViewEntity"/>
+      <mapping class="rate.model.ViewSampleEntity"/>
       <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>
