@@ -238,7 +238,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `uuid` binary(16) NOT NULL,
   `name` varchar(45) NOT NULL,
-  `password` binary(16) NOT NULL COMMENT 'should be a md5 of the actual password',
+  `password` varchar(36) NOT NULL COMMENT 'should be a md5 of the actual password',
   `registered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `email` varchar(128) NOT NULL COMMENT 'Enforce the user to provide an email address and must be unique.',
   `organization` varchar(128) DEFAULT NULL,
@@ -314,4 +314,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-05 22:22:09
+-- Dump completed on 2012-12-05 22:27:57
