@@ -1,8 +1,11 @@
 package rate.model;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -18,24 +21,24 @@ public class ViewSampleEntity {
 
     @javax.persistence.Column(name = "view_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
-    public byte[] getViewUuid() {
-        return viewUuid;
+    public UUID getViewUuid() {
+        return UUID.nameUUIDFromBytes(viewUuid);
     }
 
-    public void setViewUuid(byte[] viewUuid) {
-        this.viewUuid = viewUuid;
+    public void setViewUuid(UUID viewUuid) {
+        this.viewUuid = HexBin.decode(viewUuid.toString());
     }
 
     private byte[] sampleUuid;
 
     @javax.persistence.Column(name = "sample_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
-    public byte[] getSampleUuid() {
-        return sampleUuid;
+    public UUID getSampleUuid() {
+        return UUID.nameUUIDFromBytes(sampleUuid);
     }
 
-    public void setSampleUuid(byte[] sampleUuid) {
-        this.sampleUuid = sampleUuid;
+    public void setSampleUuid(UUID sampleUuid) {
+        this.sampleUuid = HexBin.decode(sampleUuid.toString());
     }
 
     @Override

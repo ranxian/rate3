@@ -1,10 +1,13 @@
 package rate.model;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -19,36 +22,36 @@ public class TaskEntity {
 
     @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
-    public byte[] getUuid() {
-        return uuid;
+    public UUID getUuid() {
+        return UUID.nameUUIDFromBytes(uuid);
     }
 
-    public void setUuid(byte[] uuid) {
-        this.uuid = uuid;
+    public void setUuid(UUID uuid) {
+        this.uuid = HexBin.decode(uuid.toString().replace("-", ""));
     }
 
     private byte[] algorithmVersionUuid;
 
     @javax.persistence.Column(name = "algorithm_version_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
-    public byte[] getAlgorithmVersionUuid() {
-        return algorithmVersionUuid;
+    public UUID getAlgorithmVersionUuid() {
+        return UUID.nameUUIDFromBytes(algorithmVersionUuid);
     }
 
-    public void setAlgorithmVersionUuid(byte[] algorithmVersionUuid) {
-        this.algorithmVersionUuid = algorithmVersionUuid;
+    public void setAlgorithmVersionUuid(UUID algorithmVersionUuid) {
+        this.algorithmVersionUuid = HexBin.decode(algorithmVersionUuid.toString());
     }
 
     private byte[] benchmarkUuid;
 
     @javax.persistence.Column(name = "benchmark_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
-    public byte[] getBenchmarkUuid() {
-        return benchmarkUuid;
+    public UUID getBenchmarkUuid() {
+        return UUID.nameUUIDFromBytes(benchmarkUuid);
     }
 
-    public void setBenchmarkUuid(byte[] benchmarkUuid) {
-        this.benchmarkUuid = benchmarkUuid;
+    public void setBenchmarkUuid(UUID benchmarkUuid) {
+        this.benchmarkUuid = HexBin.decode(benchmarkUuid.toString());
     }
 
     private Timestamp created;

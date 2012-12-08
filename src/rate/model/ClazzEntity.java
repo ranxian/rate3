@@ -1,10 +1,13 @@
 package rate.model;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -19,24 +22,24 @@ public class ClazzEntity {
 
     @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
-    public byte[] getUuid() {
-        return uuid;
+    public UUID getUuid() {
+        return UUID.nameUUIDFromBytes(uuid);
     }
 
-    public void setUuid(byte[] uuid) {
-        this.uuid = uuid;
+    public void setUuid(UUID uuid) {
+        this.uuid = HexBin.decode(uuid.toString().replace("-", ""));
     }
 
     private byte[] personUuid;
 
     @javax.persistence.Column(name = "person_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
-    public byte[] getPersonUuid() {
-        return personUuid;
+    public UUID getPersonUuid() {
+        return UUID.nameUUIDFromBytes(personUuid);
     }
 
-    public void setPersonUuid(byte[] personUuid) {
-        this.personUuid = personUuid;
+    public void setPersonUuid(UUID personUuid) {
+        this.personUuid = HexBin.decode(personUuid.toString());
     }
 
     private String type;
