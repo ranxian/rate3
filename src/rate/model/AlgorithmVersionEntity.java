@@ -1,22 +1,23 @@
 package rate.model;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
 /**
- * Created with IntelliJ IDEA.
- * User: yyk
- * Date: 12-12-5
- * Time: 下午8:43
- * To change this template use File | Settings | File Templates.
+ * User:    Yu Yuankai
+ * Email:   yykpku@gmail.com
+ * Date:    12-12-8
+ * Time:    下午10:46
  */
-@Table(name = "algorithm_version", schema = "", catalog = "rate3")
+@javax.persistence.Table(name = "algorithm_version", schema = "", catalog = "rate3")
 @Entity
 public class AlgorithmVersionEntity {
     private byte[] uuid;
 
-    @Column(name = "uuid")
+    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -28,7 +29,7 @@ public class AlgorithmVersionEntity {
 
     private byte[] algorithmUuid;
 
-    @Column(name = "algorithm_uuid")
+    @javax.persistence.Column(name = "algorithm_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
     public byte[] getAlgorithmUuid() {
         return algorithmUuid;
@@ -40,7 +41,7 @@ public class AlgorithmVersionEntity {
 
     private Timestamp created;
 
-    @Column(name = "created")
+    @javax.persistence.Column(name = "created", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
     public Timestamp getCreated() {
         return created;

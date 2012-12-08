@@ -1,6 +1,7 @@
 package rate.util;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.HibernateException;
 import org.hibernate.service.ServiceRegistryBuilder;
@@ -29,5 +30,9 @@ public class HibernateUtil {
 
     public  static SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    public static Session getSession() {
+        return getSessionFactory().openSession();
     }
 }

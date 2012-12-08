@@ -6,17 +6,16 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * Created with IntelliJ IDEA.
- * User: yyk
- * Date: 12-12-5
- * Time: 下午8:43
- * To change this template use File | Settings | File Templates.
+ * User:    Yu Yuankai
+ * Email:   yykpku@gmail.com
+ * Date:    12-12-8
+ * Time:    下午10:46
  */
 public class ViewSampleEntityPK implements Serializable {
     private byte[] viewUuid;
 
     @Id
-    @Column(name = "view_uuid")
+    @Column(name = "view_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     public byte[] getViewUuid() {
         return viewUuid;
     }
@@ -28,7 +27,7 @@ public class ViewSampleEntityPK implements Serializable {
     private byte[] sampleUuid;
 
     @Id
-    @Column(name = "sample_uuid")
+    @Column(name = "sample_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     public byte[] getSampleUuid() {
         return sampleUuid;
     }

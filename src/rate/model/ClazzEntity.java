@@ -1,22 +1,23 @@
 package rate.model;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
 /**
- * Created with IntelliJ IDEA.
- * User: yyk
- * Date: 12-12-5
- * Time: 下午8:43
- * To change this template use File | Settings | File Templates.
+ * User:    Yu Yuankai
+ * Email:   yykpku@gmail.com
+ * Date:    12-12-8
+ * Time:    下午10:46
  */
-@Table(name = "class", schema = "", catalog = "rate3")
+@javax.persistence.Table(name = "class", schema = "", catalog = "rate3")
 @Entity
 public class ClazzEntity {
     private byte[] uuid;
 
-    @Column(name = "uuid")
+    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -28,7 +29,7 @@ public class ClazzEntity {
 
     private byte[] personUuid;
 
-    @Column(name = "person_uuid")
+    @javax.persistence.Column(name = "person_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
     public byte[] getPersonUuid() {
         return personUuid;
@@ -40,7 +41,7 @@ public class ClazzEntity {
 
     private String type;
 
-    @Column(name = "type")
+    @javax.persistence.Column(name = "type", nullable = false, insertable = true, updatable = true, length = 11, precision = 0)
     @Basic
     public String getType() {
         return type;
@@ -52,7 +53,7 @@ public class ClazzEntity {
 
     private Timestamp created;
 
-    @Column(name = "created")
+    @javax.persistence.Column(name = "created", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
     public Timestamp getCreated() {
         return created;
@@ -64,7 +65,7 @@ public class ClazzEntity {
 
     private String importTag;
 
-    @Column(name = "import_tag")
+    @javax.persistence.Column(name = "import_tag", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getImportTag() {
         return importTag;

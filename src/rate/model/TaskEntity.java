@@ -1,22 +1,23 @@
 package rate.model;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
 /**
- * Created with IntelliJ IDEA.
- * User: yyk
- * Date: 12-12-5
- * Time: 下午8:43
- * To change this template use File | Settings | File Templates.
+ * User:    Yu Yuankai
+ * Email:   yykpku@gmail.com
+ * Date:    12-12-8
+ * Time:    下午10:46
  */
-@Table(name = "task", schema = "", catalog = "rate3")
+@javax.persistence.Table(name = "task", schema = "", catalog = "rate3")
 @Entity
 public class TaskEntity {
     private byte[] uuid;
 
-    @Column(name = "uuid")
+    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -28,7 +29,7 @@ public class TaskEntity {
 
     private byte[] algorithmVersionUuid;
 
-    @Column(name = "algorithm_version_uuid")
+    @javax.persistence.Column(name = "algorithm_version_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
     public byte[] getAlgorithmVersionUuid() {
         return algorithmVersionUuid;
@@ -40,7 +41,7 @@ public class TaskEntity {
 
     private byte[] benchmarkUuid;
 
-    @Column(name = "benchmark_uuid")
+    @javax.persistence.Column(name = "benchmark_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
     public byte[] getBenchmarkUuid() {
         return benchmarkUuid;
@@ -52,7 +53,7 @@ public class TaskEntity {
 
     private Timestamp created;
 
-    @Column(name = "created")
+    @javax.persistence.Column(name = "created", nullable = true, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
     public Timestamp getCreated() {
         return created;
@@ -64,7 +65,7 @@ public class TaskEntity {
 
     private Timestamp finished;
 
-    @Column(name = "finished")
+    @javax.persistence.Column(name = "finished", nullable = true, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
     public Timestamp getFinished() {
         return finished;

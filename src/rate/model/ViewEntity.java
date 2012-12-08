@@ -1,21 +1,22 @@
 package rate.model;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Arrays;
 
 /**
- * Created with IntelliJ IDEA.
- * User: yyk
- * Date: 12-12-5
- * Time: 下午8:43
- * To change this template use File | Settings | File Templates.
+ * User:    Yu Yuankai
+ * Email:   yykpku@gmail.com
+ * Date:    12-12-8
+ * Time:    下午10:46
  */
-@Table(name = "view", schema = "", catalog = "rate3")
+@javax.persistence.Table(name = "view", schema = "", catalog = "rate3")
 @Entity
 public class ViewEntity {
     private byte[] uuid;
 
-    @Column(name = "uuid")
+    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -27,7 +28,7 @@ public class ViewEntity {
 
     private String name;
 
-    @Column(name = "name")
+    @javax.persistence.Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getName() {
         return name;
@@ -39,7 +40,7 @@ public class ViewEntity {
 
     private String importTag;
 
-    @Column(name = "import_tag")
+    @javax.persistence.Column(name = "import_tag", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getImportTag() {
         return importTag;
@@ -51,7 +52,7 @@ public class ViewEntity {
 
     private String type;
 
-    @Column(name = "type")
+    @javax.persistence.Column(name = "type", nullable = false, insertable = true, updatable = true, length = 11, precision = 0)
     @Basic
     public String getType() {
         return type;

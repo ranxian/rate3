@@ -1,22 +1,22 @@
 package rate.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Arrays;
 
 /**
- * Created with IntelliJ IDEA.
- * User: yyk
- * Date: 12-12-5
- * Time: 下午8:43
- * To change this template use File | Settings | File Templates.
+ * User:    Yu Yuankai
+ * Email:   yykpku@gmail.com
+ * Date:    12-12-8
+ * Time:    下午10:46
  */
-@IdClass(ViewSampleEntityPK.class)
-@Table(name = "view_sample", schema = "", catalog = "rate3")
+@javax.persistence.IdClass(rate.model.ViewSampleEntityPK.class)
+@javax.persistence.Table(name = "view_sample", schema = "", catalog = "rate3")
 @Entity
 public class ViewSampleEntity {
     private byte[] viewUuid;
 
-    @Column(name = "view_uuid")
+    @javax.persistence.Column(name = "view_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public byte[] getViewUuid() {
         return viewUuid;
@@ -28,7 +28,7 @@ public class ViewSampleEntity {
 
     private byte[] sampleUuid;
 
-    @Column(name = "sample_uuid")
+    @javax.persistence.Column(name = "sample_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public byte[] getSampleUuid() {
         return sampleUuid;

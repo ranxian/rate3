@@ -1,22 +1,23 @@
 package rate.model;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.sql.Date;
 import java.util.Arrays;
 
 /**
- * Created with IntelliJ IDEA.
- * User: yyk
- * Date: 12-12-5
- * Time: 下午8:43
- * To change this template use File | Settings | File Templates.
+ * User:    Yu Yuankai
+ * Email:   yykpku@gmail.com
+ * Date:    12-12-8
+ * Time:    下午10:46
  */
-@Table(name = "person", schema = "", catalog = "rate3")
+@javax.persistence.Table(name = "person", schema = "", catalog = "rate3")
 @Entity
 public class PersonEntity {
     private byte[] uuid;
 
-    @Column(name = "uuid")
+    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public byte[] getUuid() {
         return uuid;
@@ -28,7 +29,7 @@ public class PersonEntity {
 
     private String name;
 
-    @Column(name = "name")
+    @javax.persistence.Column(name = "name", nullable = true, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getName() {
         return name;
@@ -40,7 +41,7 @@ public class PersonEntity {
 
     private String gender;
 
-    @Column(name = "gender")
+    @javax.persistence.Column(name = "gender", nullable = false, insertable = true, updatable = true, length = 7, precision = 0)
     @Basic
     public String getGender() {
         return gender;
@@ -52,7 +53,7 @@ public class PersonEntity {
 
     private Date birth;
 
-    @Column(name = "birth")
+    @javax.persistence.Column(name = "birth", nullable = true, insertable = true, updatable = true, length = 10, precision = 0)
     @Basic
     public Date getBirth() {
         return birth;
@@ -64,7 +65,7 @@ public class PersonEntity {
 
     private byte[] extra;
 
-    @Column(name = "extra")
+    @javax.persistence.Column(name = "extra", nullable = true, insertable = true, updatable = true, length = 65535, precision = 0)
     @Basic
     public byte[] getExtra() {
         return extra;

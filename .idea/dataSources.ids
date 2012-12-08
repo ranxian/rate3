@@ -17,6 +17,7 @@
         <url>file://$PROJECT_DIR$/lib/mysql-connector-license.txt</url>
       </library>
     </libraries>
+    <schema name="" catalog="rate3" />
     <table name="algorithm" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="user_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />

@@ -1,34 +1,38 @@
 package rate.model;
 
-import javax.persistence.*;
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
- * Created with IntelliJ IDEA.
- * User: yyk
- * Date: 12-12-5
- * Time: 下午8:43
- * To change this template use File | Settings | File Templates.
+ * User:    Yu Yuankai
+ * Email:   yykpku@gmail.com
+ * Date:    12-12-8
+ * Time:    下午10:46
  */
-@Table(name = "user", schema = "", catalog = "rate3")
+@javax.persistence.Table(name = "user", schema = "", catalog = "rate3")
 @Entity
 public class UserEntity {
     private byte[] uuid;
 
-    @Column(name = "uuid")
+    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
-    public byte[] getUuid() {
-        return uuid;
+    public UUID getUuid() {
+        return UUID.nameUUIDFromBytes(uuid);
     }
 
-    public void setUuid(byte[] uuid) {
-        this.uuid = uuid;
+    public void setUuid(UUID uuid) {
+        this.uuid = HexBin.decode(uuid.toString().replace("-",""));
     }
 
     private String name;
 
-    @Column(name = "name")
+    @javax.persistence.Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getName() {
         return name;
@@ -38,11 +42,11 @@ public class UserEntity {
         this.name = name;
     }
 
-    private byte[] password;
+    private String password;
 
-    @Column(name = "password")
+    @javax.persistence.Column(name = "password", nullable = false, insertable = true, updatable = true, length = 36, precision = 0)
     @Basic
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -50,13 +54,9 @@ public class UserEntity {
         this.password = password;
     }
 
-    public void setPassword(byte[] password) {
-        this.password = password;
-    }
-
     private Timestamp registered;
 
-    @Column(name = "registered")
+    @javax.persistence.Column(name = "registered", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
     public Timestamp getRegistered() {
         return registered;
@@ -68,7 +68,7 @@ public class UserEntity {
 
     private String email;
 
-    @Column(name = "email")
+    @javax.persistence.Column(name = "email", nullable = false, insertable = true, updatable = true, length = 128, precision = 0)
     @Basic
     public String getEmail() {
         return email;
@@ -80,7 +80,7 @@ public class UserEntity {
 
     private String organization;
 
-    @Column(name = "organization")
+    @javax.persistence.Column(name = "organization", nullable = true, insertable = true, updatable = true, length = 128, precision = 0)
     @Basic
     public String getOrganization() {
         return organization;
@@ -100,7 +100,7 @@ public class UserEntity {
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (organization != null ? !organization.equals(that.organization) : that.organization != null) return false;
-        if (!Arrays.equals(password, that.password)) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (registered != null ? !registered.equals(that.registered) : that.registered != null) return false;
         if (!Arrays.equals(uuid, that.uuid)) return false;
 
@@ -111,7 +111,7 @@ public class UserEntity {
     public int hashCode() {
         int result = uuid != null ? Arrays.hashCode(uuid) : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (password != null ? Arrays.hashCode(password) : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (registered != null ? registered.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (organization != null ? organization.hashCode() : 0);

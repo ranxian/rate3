@@ -1,5 +1,11 @@
 package rate.view;
-import rate.model.UserEntity;
+import org.hibernate.Query;
+import org.hibernate.type.UUIDBinaryType;
+import rate.util.HibernateUtil;
+import rate.model.*;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,15 +15,21 @@ import rate.model.UserEntity;
  * To change this template use File | Settings | File Templates.
  */
 public class UserDetailAction {
+    private String uuid;
+    private UserEntity user;
+
     public String execute() throws Exception {
+        Query q = HibernateUtil.getSession().createQuery("from UserEntity where uuid =:uuid");
+        q.setParameter("uuid", UUID.fromString(uuid));
+        List<UserEntity> list = q.list();
+        user = list.get(0);
         return "success";
     }
 
-    public String getName() {
-        return "this is a test";
+    public UserEntity getUser() {
+        return user;
     }
 
-    private String uuid;
     public String getUuid() {
         return uuid;
     }
