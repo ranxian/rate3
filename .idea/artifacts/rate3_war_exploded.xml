@@ -13,7 +13,7 @@
           <element id="library" level="project" name="commons-codec:commons-codec:1.6" />
           <element id="library" level="project" name="log4j:log4j:1.2.9" />
           <element id="library" level="project" name="mysql:mysql-connector-java:5.1.9" />
-          <element id="library" level="project" name="commons-configuration-1.9" />
+          <element id="library" level="project" name="commons-configuration:commons-configuration:1.9" />
         </element>
       </element>
     </root>
