@@ -21,7 +21,7 @@
     </tr>
     <s:iterator value="users">
         <tr>
-            <td><a href="/user-detail.action?uuid=<s:property value='uuid' />"><s:property value="name" /></a></td>
+            <td><a href="/user/<s:property value='uuid' />"><s:property value="name" /></a></td>
             <td><s:property value="registered" /></td>
             <td><s:property value="email" /></td>
             <td><s:property value="organization" /></td>

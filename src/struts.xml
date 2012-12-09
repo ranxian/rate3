@@ -6,22 +6,24 @@
 
 <struts>
     <constant name="struts.devMode" value="true" />
-    <package name="rate.view" extends="struts-default">
-        <action name="user-detail"
-                class="rate.view.user.DetailAction"
-                method="execute">
-            <result name="success">/user-detail.jsp</result>
-        </action>
-        <action name="user-add"
+    <constant name="struts.action.extension" value=""/>
+    <package name="rate.view.user" namespace="/user" extends="struts-default">
+        <action name="add"
                 class="rate.view.user.AddAction"
                 method="execute">
-            <result name="fail">/user-add.jsp</result>
-            <result name="success">/user-detail.jsp</result>
+            <result name="fail">/templates/user/add.jsp</result>
+            <result name="success">/templates/user/detail.jsp</result>
         </action>
-        <action name="user-list"
+        <action name="list"
                 class="rate.view.user.ListAction"
                 method="execute">
-            <result name="success">/user-list.jsp</result>
+            <result name="success">/templates/user/list.jsp</result>
+        </action>
+        <action name="*"
+                class="rate.view.user.DetailAction"
+                method="execute">
+            <param name="uuid">{1}</param>
+            <result name="success">/templates/user/detail.jsp</result>
         </action>
     </package>
 </struts>
