@@ -30,7 +30,6 @@ public class Generator {
 
     private AbstractGenerateStrategy generateStrategy;
 
-
     public ViewEntity generate() throws Exception {
         if (generateStrategy==null) {
             throw new Exception("No generate strategy specified");
@@ -45,6 +44,9 @@ public class Generator {
             session.beginTransaction();
 
             ViewEntity view = new ViewEntity();
+            view.setName(generateStrategy.getViewName());
+            view.setGenerator(generateStrategy.getGenerator());
+            view.setType("FINGERVEIN"); // TODO: maybe treat it like name and generator
             session.save(view);
             for (SampleEntity sample: samples) {
                 ViewSampleEntity toBeInsert = new ViewSampleEntity();

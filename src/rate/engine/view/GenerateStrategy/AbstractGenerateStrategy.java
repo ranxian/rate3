@@ -13,4 +13,24 @@ import java.util.UUID;
  */
 abstract public class AbstractGenerateStrategy{
     abstract public List<SampleEntity> getSamples() throws GenerateStrategyException;
+
+    public String getViewName() {
+        return viewName;
+    }
+
+    public void setViewName(String viewName) {
+        this.viewName = viewName;
+    }
+
+    private String viewName;
+
+    public String getGenerator() {
+        return generator;
+    }
+
+    public void setGenerator(String generator) {
+        this.generator = generator;
+    }
+
+    private String generator;
 }

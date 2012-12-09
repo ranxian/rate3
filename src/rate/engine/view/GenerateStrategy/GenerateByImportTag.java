@@ -26,7 +26,10 @@ public class GenerateByImportTag extends AbstractGenerateStrategy {
 
     public List<SampleEntity>  getSamples() throws GenerateStrategyException {
         if (importTag==null) {
-            throw new GenerateStrategyException("No importTag is specified");
+            throw new GenerateStrategyException("No importTag specified");
+        }
+        if (getViewName()==null || getGenerator()==null) {
+            throw new GenerateStrategyException("No viewName or no generator name specified");
         }
 
         Query query = HibernateUtil.getSession().createQuery("from SampleEntity where importTag = :tag");

@@ -5,10 +5,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import rate.util.UUIDType;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 /**
@@ -17,7 +15,7 @@ import java.util.UUID;
  * Date:    12-12-9
  * Time:    上午11:08
  */
-@javax.persistence.Table(name = "view", schema = "", catalog = "rate3")
+@Table(name = "view", schema = "", catalog = "rate3")
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class ViewEntity {
@@ -26,7 +24,7 @@ public class ViewEntity {
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
-    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public UUID getUuid() {
         return uuid;
@@ -38,7 +36,7 @@ public class ViewEntity {
 
     private String name;
 
-    @javax.persistence.Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
+    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getName() {
         return name;
@@ -48,21 +46,9 @@ public class ViewEntity {
         this.name = name;
     }
 
-    private String importTag;
-
-    @javax.persistence.Column(name = "import_tag", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
-    @Basic
-    public String getImportTag() {
-        return importTag;
-    }
-
-    public void setImportTag(String importTag) {
-        this.importTag = importTag;
-    }
-
     private String type;
 
-    @javax.persistence.Column(name = "type", nullable = false, insertable = true, updatable = true, length = 11, precision = 0)
+    @Column(name = "type", nullable = false, insertable = true, updatable = true, length = 11, precision = 0)
     @Basic
     public String getType() {
         return type;
@@ -79,7 +65,6 @@ public class ViewEntity {
 
         ViewEntity that = (ViewEntity) o;
 
-        if (importTag != null ? !importTag.equals(that.importTag) : that.importTag != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
@@ -91,8 +76,33 @@ public class ViewEntity {
     public int hashCode() {
         int result = uuid != null ? uuid.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (importTag != null ? importTag.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (generator != null ? generator.hashCode() : 0);
+        result = 31 * result + (generated != null ? generated.hashCode() : 0);
         return result;
+    }
+
+    private String generator;
+
+    @Column(name = "generator", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
+    @Basic
+    public String getGenerator() {
+        return generator;
+    }
+
+    public void setGenerator(String generator) {
+        this.generator = generator;
+    }
+
+    private Timestamp generated;
+
+    @Column(name = "generated", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
+    @Basic
+    public Timestamp getGenerated() {
+        return generated;
+    }
+
+    public void setGenerated(Timestamp generated) {
+        this.generated = generated;
     }
 }

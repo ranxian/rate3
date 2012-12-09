@@ -50,7 +50,6 @@
       <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
       <column name="import_tag" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" remarks="V2l0aCBlYWNoIGltcG9ydCwgeW91IG11c3QgcHJvdmlkZSBhIGltcG9ydF90YWcuIEl0IGlzIHVzZWQgZm9yIHJvbGxiYWNrIGZ1bmN0aW9ucy4=" />
       <primary-key name="PRIMARY" columns="uuid" />
-      <index name="import_tag_UNIQUE" unique="true" columns="import_tag" />
     </table>
     <table name="device_type" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
@@ -77,7 +76,6 @@
       <column name="device_type" sqlType="BINARY" length="16" precision="0" nullable="true" jdbcType="-2" />
       <column name="import_tag" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" remarks="V2l0aCBlYWNoIGltcG9ydCwgeW91IG11c3QgcHJvdmlkZSBhIGltcG9ydF90YWcuIEl0IGlzIHVzZWQgZm9yIHJvbGxiYWNrIGZ1bmN0aW9ucy4=" />
       <primary-key name="PRIMARY" columns="uuid" />
-      <index name="import_tag_UNIQUE" unique="true" columns="import_tag" />
     </table>
     <table name="task" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
@@ -90,7 +88,7 @@
     <table name="user" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
-      <column name="password" sqlType="VARCHAR" length="36" precision="0" nullable="false" jdbcType="12" remarks="c2hvdWxkIGJlIGEgbWQ1IG9mIHRoZSBhY3R1YWwgcGFzc3dvcmQ=" />
+      <column name="password" sqlType="CHAR" length="32" precision="0" nullable="false" jdbcType="1" remarks="c2hvdWxkIGJlIGEgbWQ1IG9mIHRoZSBhY3R1YWwgcGFzc3dvcmQ=" />
       <column name="registered" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
       <column name="email" sqlType="VARCHAR" length="128" precision="0" nullable="false" jdbcType="12" remarks="RW5mb3JjZSB0aGUgdXNlciB0byBwcm92aWRlIGFuIGVtYWlsIGFkZHJlc3MgYW5kIG11c3QgYmUgdW5pcXVlLg==" />
       <column name="organization" sqlType="VARCHAR" length="128" precision="0" nullable="true" jdbcType="12" />
@@ -100,10 +98,11 @@
     <table name="view" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
-      <column name="import_tag" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" remarks="V2l0aCBlYWNoIGltcG9ydCwgeW91IG11c3QgcHJvdmlkZSBhIGltcG9ydF90YWcuIEl0IGlzIHVzZWQgZm9yIHJvbGxiYWNrIGZ1bmN0aW9ucy4=" />
+      <column name="generator" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" remarks="V2l0aCBlYWNoIGltcG9ydCwgeW91IG11c3QgcHJvdmlkZSBhIGltcG9ydF90YWcuIEl0IGlzIHVzZWQgZm9yIHJvbGxiYWNrIGZ1bmN0aW9ucy4=" />
       <column name="type" sqlType="ENUM" length="11" precision="0" nullable="false" jdbcType="1" />
+      <column name="generated" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" />
       <primary-key name="PRIMARY" columns="uuid" />
-      <index name="import_tag_UNIQUE" unique="true" columns="import_tag" />
+      <index name="import_tag_UNIQUE" unique="true" columns="generator" />
     </table>
     <table name="view_sample" schema="" catalog="rate3" type="TABLE">
       <column name="view_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />

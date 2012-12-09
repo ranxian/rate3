@@ -268,10 +268,11 @@ DROP TABLE IF EXISTS `view`;
 CREATE TABLE `view` (
   `uuid` binary(16) NOT NULL,
   `name` varchar(45) NOT NULL,
-  `import_tag` varchar(45) NOT NULL COMMENT 'With each import, you must provide a import_tag. It is used for rollback functions.',
+  `generator` varchar(45) NOT NULL COMMENT 'With each import, you must provide a import_tag. It is used for rollback functions.',
   `type` enum('FINGERVEIN') NOT NULL,
+  `generated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`uuid`),
-  UNIQUE KEY `import_tag_UNIQUE` (`import_tag`)
+  UNIQUE KEY `import_tag_UNIQUE` (`generator`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -316,4 +317,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-09 16:26:33
+-- Dump completed on 2012-12-09 17:45:03
