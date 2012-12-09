@@ -8,8 +8,8 @@ import rate.model.ViewEntity;
 import rate.model.ViewSampleEntity;
 import rate.util.HibernateUtil;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -30,14 +30,14 @@ public class Generator {
 
     private AbstractGenerateStrategy generateStrategy;
 
-    // returns how many samples are generated
-    public int generate() throws Exception {
+
+    public ViewEntity generate() throws Exception {
         if (generateStrategy==null) {
             throw new Exception("No generate strategy specified");
         }
         List<SampleEntity> samples = generateStrategy.getSamples();
         if (samples.size()==0) {
-            return 0;
+            return null;
         }
 
         try {
@@ -53,12 +53,11 @@ public class Generator {
                 session.save(toBeInsert);
             }
             session.getTransaction().commit();
+            return view;
         }
         catch (Exception ex) {
             logger.debug(ex);
             throw ex;
         }
-
-        return 0;
     }
 }
