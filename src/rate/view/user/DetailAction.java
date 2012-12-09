@@ -15,12 +15,14 @@ import java.util.UUID;
  * To change this template use File | Settings | File Templates.
  */
 public class DetailAction {
-    private String uuid;
+    private UUID uuid;
     private UserEntity user;
 
     public String execute() throws Exception {
+        System.err.println("execute called");
+
         Query q = HibernateUtil.getSession().createQuery("from UserEntity where uuid =:uuid");
-        q.setParameter("uuid", UUID.fromString(uuid));
+        q.setParameter("uuid", uuid);
         List<UserEntity> list = q.list();
         user = list.get(0);
         return "success";
@@ -31,10 +33,10 @@ public class DetailAction {
     }
 
     public String getUuid() {
-        return uuid;
+        return uuid.toString();
     }
     public void setUuid(String s) {
-        uuid = s;
+        uuid = UUID.fromString(s);
     }
 
 }

@@ -16,7 +16,12 @@
                 class="rate.view.user.AddAction"
                 method="execute">
             <result name="fail">/user-add.jsp</result>
-            <result name="success">/user-detail.jsp?uuid=${user.uuid}</result>
+            <result name="success">/user-detail.jsp</result>
+        </action>
+        <action name="user-list"
+                class="rate.view.user.ListAction"
+                method="execute">
+            <result name="success">/user-list.jsp</result>
         </action>
     </package>
 </struts>

@@ -16,9 +16,12 @@ import java.sql.SQLException ;
 import java.sql.Types;
 import java.util.UUID;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import org.hibernate.HibernateException ;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType ;
+
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 
 public class UUIDType implements UserType
@@ -38,7 +41,9 @@ public class UUIDType implements UserType
     }
 
     private static UUID byteArray2UUID(byte[] byteArray) {
-        return UUID.nameUUIDFromBytes(byteArray);
+        ByteBuffer byteBuffer = ByteBuffer.wrap(byteArray);
+        LongBuffer longBuffer = byteBuffer.asLongBuffer();
+        return new UUID(longBuffer.get(0), longBuffer.get(1));
     }
 
     public Object assemble (Serializable cached, Object owner) throws HibernateException

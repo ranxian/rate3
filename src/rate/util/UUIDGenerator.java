@@ -18,6 +18,7 @@ public class UUIDGenerator implements IdentifierGenerator {
         public Serializable generate (SessionImplementor session, Object parent)
                 throws HibernateException
         {
-            return UUID.randomUUID () ;
+            UUID r = UUID.randomUUID () ;
+            return r;
         }
 }

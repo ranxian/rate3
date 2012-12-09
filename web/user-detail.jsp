@@ -18,7 +18,7 @@
 </head>
 <body>
            <p>Just a test to show how to use the model</p>
-           <p>Requested User uuid: <s:property value="uuid" /></p>
+           <p>User Name: <s:property value="user.name" /></p>
            <p>User Email: <s:property value="user.email" /></p>
 </body>
 </html>

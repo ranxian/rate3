@@ -26,7 +26,6 @@ public class AddAction {
     public String execute() throws Exception {
         if (user==null) return "fail";
         try {
-            //user.setUuid(UUID.randomUUID());
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
             session.save(user);
