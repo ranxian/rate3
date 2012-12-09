@@ -1,4 +1,5 @@
 package rate.view.user;
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.type.UUIDBinaryType;
 import rate.util.HibernateUtil;
@@ -15,12 +16,13 @@ import java.util.UUID;
  * To change this template use File | Settings | File Templates.
  */
 public class DetailAction {
+    private static final Logger logger = Logger.getLogger(DetailAction.class);
+
     private UUID uuid;
     private UserEntity user;
 
     public String execute() throws Exception {
-        System.err.println("execute called");
-
+        logger.debug(uuid.toString());
         Query q = HibernateUtil.getSession().createQuery("from UserEntity where uuid =:uuid");
         q.setParameter("uuid", uuid);
         List<UserEntity> list = q.list();

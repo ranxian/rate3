@@ -10,7 +10,8 @@
         <element id="directory" name="lib">
           <element id="library" level="project" name="struts2-2.3.4" />
           <element id="library" level="project" name="hibernate-4.1.1" />
-          <element id="file-copy" path="$PROJECT_DIR$/lib/mysql-connector-java-5.1.22-bin.jar" />
+          <element id="library" level="project" name="log4j-1.2.17" />
+          <element id="library" level="project" name="mysql-connector-java-5.1.22-bin" />
         </element>
       </element>
     </root>
