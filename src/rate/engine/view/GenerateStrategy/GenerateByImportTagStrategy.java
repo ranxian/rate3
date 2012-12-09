@@ -13,13 +13,21 @@ import java.util.UUID;
  * Date:    12-12-9
  * Time:    下午4:48
  */
-public class GenerateByImportTag extends AbstractGenerateStrategy {
+public class GenerateByImportTagStrategy extends AbstractGenerateStrategy {
+    public GenerateByImportTagStrategy() {
+        this.setGenerator("GenerateByImportTagGenerator");
+    }
+
     public String getImportTag() {
         return importTag;
     }
 
     public void setImportTag(String importTag) {
         this.importTag = importTag;
+    }
+
+    public String getViewName() {
+        return "ViewByImportTag-" + importTag;
     }
 
     String importTag;
