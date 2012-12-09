@@ -107,8 +107,7 @@ CREATE TABLE `class` (
   `type` enum('FINGERVEIN') NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `import_tag` varchar(45) NOT NULL COMMENT 'With each import, you must provide a import_tag. It is used for rollback functions.',
-  PRIMARY KEY (`uuid`),
-  UNIQUE KEY `import_tag_UNIQUE` (`import_tag`)
+  PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -189,8 +188,7 @@ CREATE TABLE `sample` (
   `file` varchar(256) NOT NULL COMMENT 'this should be a path with UNIX seperator \\''/\\'' to avoid strange behaviors',
   `device_type` binary(16) DEFAULT NULL,
   `import_tag` varchar(45) NOT NULL COMMENT 'With each import, you must provide a import_tag. It is used for rollback functions.',
-  PRIMARY KEY (`uuid`),
-  UNIQUE KEY `import_tag_UNIQUE` (`import_tag`)
+  PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -315,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-09 16:04:05
+-- Dump completed on 2012-12-09 16:09:53
