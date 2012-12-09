@@ -35,15 +35,6 @@ CREATE TABLE `algorithm` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `algorithm`
---
-
-LOCK TABLES `algorithm` WRITE;
-/*!40000 ALTER TABLE `algorithm` DISABLE KEYS */;
-/*!40000 ALTER TABLE `algorithm` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `algorithm_version`
 --
 
@@ -57,15 +48,6 @@ CREATE TABLE `algorithm_version` (
   PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `algorithm_version`
---
-
-LOCK TABLES `algorithm_version` WRITE;
-/*!40000 ALTER TABLE `algorithm_version` DISABLE KEYS */;
-/*!40000 ALTER TABLE `algorithm_version` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `benchmark`
@@ -86,15 +68,6 @@ CREATE TABLE `benchmark` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `benchmark`
---
-
-LOCK TABLES `benchmark` WRITE;
-/*!40000 ALTER TABLE `benchmark` DISABLE KEYS */;
-/*!40000 ALTER TABLE `benchmark` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `class`
 --
 
@@ -111,15 +84,6 @@ CREATE TABLE `class` (
   UNIQUE KEY `import_tag_UNIQUE` (`import_tag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `class`
---
-
-LOCK TABLES `class` WRITE;
-/*!40000 ALTER TABLE `class` DISABLE KEYS */;
-/*!40000 ALTER TABLE `class` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `device_type`
@@ -140,15 +104,6 @@ CREATE TABLE `device_type` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `device_type`
---
-
-LOCK TABLES `device_type` WRITE;
-/*!40000 ALTER TABLE `device_type` DISABLE KEYS */;
-/*!40000 ALTER TABLE `device_type` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `person`
 --
 
@@ -164,15 +119,6 @@ CREATE TABLE `person` (
   PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `person`
---
-
-LOCK TABLES `person` WRITE;
-/*!40000 ALTER TABLE `person` DISABLE KEYS */;
-/*!40000 ALTER TABLE `person` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `sample`
@@ -194,15 +140,6 @@ CREATE TABLE `sample` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sample`
---
-
-LOCK TABLES `sample` WRITE;
-/*!40000 ALTER TABLE `sample` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sample` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `task`
 --
 
@@ -220,15 +157,6 @@ CREATE TABLE `task` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `task`
---
-
-LOCK TABLES `task` WRITE;
-/*!40000 ALTER TABLE `task` DISABLE KEYS */;
-/*!40000 ALTER TABLE `task` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `user`
 --
 
@@ -238,7 +166,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `uuid` binary(16) NOT NULL,
   `name` varchar(45) NOT NULL,
-  `password` varchar(36) NOT NULL COMMENT 'should be a md5 of the actual password',
+  `password` char(32) NOT NULL COMMENT 'should be a md5 of the actual password',
   `registered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `email` varchar(128) NOT NULL COMMENT 'Enforce the user to provide an email address and must be unique.',
   `organization` varchar(128) DEFAULT NULL,
@@ -246,15 +174,6 @@ CREATE TABLE `user` (
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `view`
@@ -274,15 +193,6 @@ CREATE TABLE `view` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `view`
---
-
-LOCK TABLES `view` WRITE;
-/*!40000 ALTER TABLE `view` DISABLE KEYS */;
-/*!40000 ALTER TABLE `view` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `view_sample`
 --
 
@@ -295,15 +205,6 @@ CREATE TABLE `view_sample` (
   PRIMARY KEY (`view_uuid`,`sample_uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `view_sample`
---
-
-LOCK TABLES `view_sample` WRITE;
-/*!40000 ALTER TABLE `view_sample` DISABLE KEYS */;
-/*!40000 ALTER TABLE `view_sample` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -314,4 +215,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-05 22:27:57
+-- Dump completed on 2012-12-09 14:14:58
