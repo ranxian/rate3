@@ -1,4 +1,4 @@
-package rate.view;
+package rate.view.user;
 import org.hibernate.Query;
 import org.hibernate.type.UUIDBinaryType;
 import rate.util.HibernateUtil;
@@ -14,7 +14,7 @@ import java.util.UUID;
  * Time: 下午9:37
  * To change this template use File | Settings | File Templates.
  */
-public class UserDetailAction {
+public class DetailAction {
     private String uuid;
     private UserEntity user;
 
