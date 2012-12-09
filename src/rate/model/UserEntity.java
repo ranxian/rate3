@@ -1,6 +1,7 @@
 package rate.model;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -8,6 +9,9 @@ import rate.util.UUIDGenerator;
 import rate.util.UUIDType;
 
 import javax.persistence.*;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.UUID;
@@ -58,8 +62,8 @@ public class UserEntity {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String password) throws Exception {
+        this.password = DigestUtils.md5Hex(password);
     }
 
     private Timestamp registered;
