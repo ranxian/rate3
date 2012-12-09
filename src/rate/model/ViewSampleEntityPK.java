@@ -1,38 +1,42 @@
 package rate.model;
 
+import org.hibernate.annotations.TypeDef;
+import rate.util.UUIDType;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
  * Email:   yykpku@gmail.com
- * Date:    12-12-8
- * Time:    下午10:46
+ * Date:    12-12-9
+ * Time:    上午11:08
  */
+@TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class ViewSampleEntityPK implements Serializable {
-    private byte[] viewUuid;
+    private UUID viewUuid;
 
     @Id
     @Column(name = "view_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
-    public byte[] getViewUuid() {
+    public UUID getViewUuid() {
         return viewUuid;
     }
 
-    public void setViewUuid(byte[] viewUuid) {
+    public void setViewUuid(UUID viewUuid) {
         this.viewUuid = viewUuid;
     }
 
-    private byte[] sampleUuid;
+    private UUID sampleUuid;
 
     @Id
     @Column(name = "sample_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
-    public byte[] getSampleUuid() {
+    public UUID getSampleUuid() {
         return sampleUuid;
     }
 
-    public void setSampleUuid(byte[] sampleUuid) {
+    public void setSampleUuid(UUID sampleUuid) {
         this.sampleUuid = sampleUuid;
     }
 
@@ -43,16 +47,16 @@ public class ViewSampleEntityPK implements Serializable {
 
         ViewSampleEntityPK that = (ViewSampleEntityPK) o;
 
-        if (!Arrays.equals(sampleUuid, that.sampleUuid)) return false;
-        if (!Arrays.equals(viewUuid, that.viewUuid)) return false;
+        if (sampleUuid != null ? !sampleUuid.equals(that.sampleUuid) : that.sampleUuid != null) return false;
+        if (viewUuid != null ? !viewUuid.equals(that.viewUuid) : that.viewUuid != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = viewUuid != null ? Arrays.hashCode(viewUuid) : 0;
-        result = 31 * result + (sampleUuid != null ? Arrays.hashCode(sampleUuid) : 0);
+        int result = viewUuid != null ? viewUuid.hashCode() : 0;
+        result = 31 * result + (sampleUuid != null ? sampleUuid.hashCode() : 0);
         return result;
     }
 }

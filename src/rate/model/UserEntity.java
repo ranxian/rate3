@@ -7,10 +7,7 @@ import org.hibernate.annotations.TypeDef;
 import rate.util.UUIDGenerator;
 import rate.util.UUIDType;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.UUID;
@@ -21,10 +18,9 @@ import java.util.UUID;
  * Date:    12-12-8
  * Time:    下午10:46
  */
-@javax.persistence.Table(name = "user", schema = "", catalog = "rate3")
+@Table(name = "user", schema = "", catalog = "rate3")
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
-//@TypeDef(name = "UUIDGenerator", typeClass = UUIDGenerator.class)
 public class UserEntity {
 
     private UUID uuid;
@@ -33,7 +29,7 @@ public class UserEntity {
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
-    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     public UUID getUuid() {
         return uuid;
     }
@@ -44,7 +40,7 @@ public class UserEntity {
 
     private String name;
 
-    @javax.persistence.Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
+    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getName() {
         return name;
@@ -56,7 +52,7 @@ public class UserEntity {
 
     private String password;
 
-    @javax.persistence.Column(name = "password", nullable = false, insertable = true, updatable = true, length = 36, precision = 0)
+    @Column(name = "password", nullable = false, insertable = true, updatable = true, length = 36, precision = 0)
     @Basic
     public String getPassword() {
         return password;
@@ -68,7 +64,7 @@ public class UserEntity {
 
     private Timestamp registered;
 
-    @javax.persistence.Column(name = "registered", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
+    @Column(name = "registered", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
     public Timestamp getRegistered() {
         return registered;
@@ -80,7 +76,7 @@ public class UserEntity {
 
     private String email;
 
-    @javax.persistence.Column(name = "email", nullable = false, insertable = true, updatable = true, length = 128, precision = 0)
+    @Column(name = "email", nullable = false, insertable = true, updatable = true, length = 128, precision = 0)
     @Basic
     public String getEmail() {
         return email;
@@ -92,7 +88,7 @@ public class UserEntity {
 
     private String organization;
 
-    @javax.persistence.Column(name = "organization", nullable = true, insertable = true, updatable = true, length = 128, precision = 0)
+    @Column(name = "organization", nullable = true, insertable = true, updatable = true, length = 128, precision = 0)
     @Basic
     public String getOrganization() {
         return organization;

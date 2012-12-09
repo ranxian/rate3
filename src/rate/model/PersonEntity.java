@@ -1,33 +1,40 @@
 package rate.model;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import rate.util.UUIDType;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.sql.Date;
-import java.util.Arrays;
 import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
  * Email:   yykpku@gmail.com
- * Date:    12-12-8
- * Time:    下午10:46
+ * Date:    12-12-9
+ * Time:    上午11:08
  */
 @javax.persistence.Table(name = "person", schema = "", catalog = "rate3")
 @Entity
+@TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class PersonEntity {
-    private byte[] uuid;
+    private UUID uuid;
 
+    @Type(type="UUIDType")
+    @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
+    @GeneratedValue(generator = "UUIDGenerator")
     @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public UUID getUuid() {
-        return UUID.nameUUIDFromBytes(uuid);
+        return uuid;
     }
 
     public void setUuid(UUID uuid) {
-        this.uuid = HexBin.decode(uuid.toString().replace("-", ""));
+        this.uuid = uuid;
     }
 
     private String name;
@@ -66,15 +73,15 @@ public class PersonEntity {
         this.birth = birth;
     }
 
-    private byte[] extra;
+    private UUID extra;
 
     @javax.persistence.Column(name = "extra", nullable = true, insertable = true, updatable = true, length = 65535, precision = 0)
     @Basic
-    public byte[] getExtra() {
+    public UUID getExtra() {
         return extra;
     }
 
-    public void setExtra(byte[] extra) {
+    public void setExtra(UUID extra) {
         this.extra = extra;
     }
 
@@ -86,21 +93,21 @@ public class PersonEntity {
         PersonEntity that = (PersonEntity) o;
 
         if (birth != null ? !birth.equals(that.birth) : that.birth != null) return false;
-        if (!Arrays.equals(extra, that.extra)) return false;
+        if (extra != null ? !extra.equals(that.extra) : that.extra != null) return false;
         if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (!Arrays.equals(uuid, that.uuid)) return false;
+        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = uuid != null ? Arrays.hashCode(uuid) : 0;
+        int result = uuid != null ? uuid.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (birth != null ? birth.hashCode() : 0);
-        result = 31 * result + (extra != null ? Arrays.hashCode(extra) : 0);
+        result = 31 * result + (extra != null ? extra.hashCode() : 0);
         return result;
     }
 }
