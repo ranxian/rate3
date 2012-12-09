@@ -5,8 +5,6 @@ import org.hibernate.Session;
 import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 
-import java.util.UUID;
-
 /**
  * User:    Yu Yuankai
  * Email:   yykpku@gmail.com
@@ -34,6 +32,6 @@ public class AddAction {
         catch (HibernateException ex) {
             throw ex;
         }
-        return "success";
+        return "redirect";
     }
 }

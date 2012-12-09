@@ -12,7 +12,9 @@
                 class="rate.view.user.AddAction"
                 method="execute">
             <result name="fail">/templates/user/add.jsp</result>
-            <result name="success">/templates/user/detail.jsp</result>
+            <result name="redirect" type="redirect">
+                <param name="location">/user/${user.uuid}</param>
+            </result>
         </action>
         <action name="list"
                 class="rate.view.user.ListAction"

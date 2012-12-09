@@ -1,7 +1,6 @@
 package rate.view.user;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
-import org.hibernate.type.UUIDBinaryType;
 import rate.util.HibernateUtil;
 import rate.model.*;
 
@@ -9,11 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created with IntelliJ IDEA.
- * User: yyk
+ * User: Yu Yuankai
  * Date: 12-12-5
  * Time: 下午9:37
- * To change this template use File | Settings | File Templates.
  */
 public class DetailAction {
     private static final Logger logger = Logger.getLogger(DetailAction.class);
