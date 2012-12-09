@@ -1,5 +1,6 @@
 package rate.util;
 
+import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
@@ -12,6 +13,7 @@ import org.hibernate.service.ServiceRegistryBuilder;
  * Time: 下午9:09
  */
 public class HibernateUtil {
+    private static final Logger logger = Logger.getLogger(HibernateUtil.class);
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
     private static SessionFactory buildSessionFactory() {
@@ -23,7 +25,7 @@ public class HibernateUtil {
             // what the hell is java
         }
         catch (HibernateException ex) {
-            System.err.println("Hibernate SessionFactory creation failed." + ex);
+            logger.error(ex);
             throw ex;
         }
     }

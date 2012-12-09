@@ -10,9 +10,10 @@
         <element id="directory" name="lib">
           <element id="library" level="project" name="struts2-2.3.4" />
           <element id="library" level="project" name="hibernate-4.1.1" />
-          <element id="library" level="project" name="log4j-1.2.17" />
-          <element id="library" level="project" name="mysql-connector-java-5.1.22-bin" />
-          <element id="library" level="project" name="commons-codec-1.7" />
+          <element id="library" level="project" name="commons-codec:commons-codec:1.6" />
+          <element id="library" level="project" name="log4j:log4j:1.2.9" />
+          <element id="library" level="project" name="mysql:mysql-connector-java:5.1.9" />
+          <element id="library" level="project" name="commons-configuration-1.9" />
         </element>
       </element>
     </root>
