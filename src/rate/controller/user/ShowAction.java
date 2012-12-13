@@ -1,8 +1,8 @@
-package rate.controller.algorithm;
+package rate.controller.user;
 
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Query;
-import rate.model.AlgorithmEntity;
+import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.UUID;
  * Time: 下午12:39
  */
 public class ShowAction extends ActionSupport {
-    private AlgorithmEntity algorithm;
+    private UserEntity user;
     private String uuid;
 
     public String getUuid() {
@@ -24,19 +24,19 @@ public class ShowAction extends ActionSupport {
         this.uuid = uuid;
     }
 
-    public AlgorithmEntity getAlgorithm() {
-        return algorithm;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setAlgorithm(AlgorithmEntity algorithm) {
-        this.algorithm = algorithm;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     public String execute() throws Exception {
-        Query q = HibernateUtil.getSession().createQuery("from AlgorithmEntity where uuid=:uuid");
+        Query q = HibernateUtil.getSession().createQuery("from UserEntity where uuid=:uuid");
         q.setParameter("uuid", UUID.fromString(uuid));
-        List<AlgorithmEntity> list = q.list();
-        algorithm = list.get(0);
+        List<UserEntity> list = q.list();
+        user = list.get(0);
         return SUCCESS;
     }
 }
