@@ -1,3 +1,4 @@
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: XianRan
@@ -13,5 +14,10 @@
 <body>
 <h1>This is your views' list</h1>
 <p>Views lists here</p>
+
+<s:iterator value="views">
+    <p>1</p>
+    <!-- list views here  -->
+</s:iterator>
 </body>
 </html>

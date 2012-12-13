@@ -34,21 +34,21 @@
         </action>
     </package>
     <package name="rate.controller.view" namespace="/view" extends="struts-default">
-        <action name="index" class="rate.controller.view.IndexAction" method="excute">
+        <action name="index" class="rate.controller.view.IndexAction" method="execute">
             <result name="success">/templates/view/index.jsp</result>
         </action>
-        <action name="create" class="rate.controller.view.CreateAction" method="excute">
+        <action name="create" class="rate.controller.view.CreateAction" method="execute">
             <result name="success"></result>
             <result name="input">/templates/view/create.jsp</result>
         </action>
-        <action name="edit" class="rate.controller.view.EditAction" method="excute">
+        <action name="edit" class="rate.controller.view.EditAction" method="execute">
             <result name="success"></result>
             <result name="input">/templates/view/edit.jsp</result>
         </action>
-        <action name="show" class="rate.controller.view.ShowAction" method="excute">
+        <action name="show" class="rate.controller.view.ShowAction" method="execute">
             <result name="success">/templates/view/show.jsp</result>
         </action>
-        <action name="delete" class="rate.controller.view.DeleteAction" method="excute">
+        <action name="delete" class="rate.controller.view.DeleteAction" method="execute">
             <result name="success">/templates/view/index.jsp</result>
             <result name="error">/templates/view/show.jsp</result>
         </action>

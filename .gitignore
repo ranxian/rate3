@@ -3,5 +3,6 @@
 # Package Files #
 *.war
 *.ear
+
 out/
 workspace.xml

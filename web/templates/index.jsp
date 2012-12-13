@@ -1,3 +1,4 @@
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: XianRan
@@ -13,5 +14,15 @@
   <body>
     <h1>Welcome to Rate3!</h1>
     <p>FAQ lists here</p>
+    <hr />
+
+    <list>
+        <li><a href="<s:url namespace="/view" action="index" />">Views</a></li>
+        <li><a href="">Algorithms</a></li>
+        <li><a href="">Status</a></li>
+    </list>
+
+    <hr>
+    <p>By Yu Yuankai and Xian Ran</p>
   </body>
 </html>
