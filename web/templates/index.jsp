@@ -12,5 +12,6 @@
   </head>
   <body>
     <h1>Welcome to Rate3!</h1>
+    <p>FAQ lists here</p>
   </body>
 </html>
