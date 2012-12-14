@@ -12,6 +12,7 @@
     <title></title>
 </head>
 <body>
-
+<h3>${view.name}</h3>
+<p><a href="<s:url action="edit"><s:param name="uuid">${uuid}</s:param></s:url>">Edit Me</a></p>
 </body>
 </html>

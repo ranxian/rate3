@@ -15,9 +15,22 @@
 <h1>This is your views' list</h1>
 <p>Views lists here</p>
 
-<s:iterator value="views">
-    <p>1</p>
-    <!-- list views here  -->
-</s:iterator>
+<table border="1">
+    <tr>
+        <th>name</th>
+        <th>generator</th>
+        <th>type</th>
+        <th>timestamp</th>
+    </tr>
+    <s:iterator value="views">
+        <tr>
+            <td><a href="<s:url action="show"><s:param name="uuid">${uuid}</s:param></s:url>"><s:property value="name" /></a></td>
+            <td><s:property value="name" /></td>
+            <td><s:property value="generator" /></td>
+            <td><s:property value="type" /></td>
+            <td><s:property value="timestamp" /></td>
+        </tr>
+    </s:iterator>
+</table>
 </body>
 </html>
