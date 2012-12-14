@@ -25,7 +25,7 @@ public class HibernateUtil {
             // what the hell is java
         }
         catch (HibernateException ex) {
-            logger.error(ex);
+            // logger.error(ex);
             throw ex;
         }
     }
