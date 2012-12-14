@@ -24,7 +24,6 @@ DROP TABLE IF EXISTS `algorithm`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `algorithm` (
   `uuid` binary(16) NOT NULL,
-  `user_uuid` binary(16) NOT NULL,
   `name` varchar(45) NOT NULL,
   `type` enum('FINGERVEIN') NOT NULL,
   `protocol` enum('FVC2006') NOT NULL,
@@ -256,7 +255,31 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES ('1yd(∆ÍCÍæTlV‚(ê','heell','b4b147bc522828731f1a016bfa72c073','2012-12-14 11:32:09','heell@gmail.com','PKU');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_algorithm`
+--
+
+DROP TABLE IF EXISTS `user_algorithm`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_algorithm` (
+  `user_uuid` binary(16) NOT NULL,
+  `algorithm_uuid` binary(16) NOT NULL,
+  PRIMARY KEY (`user_uuid`,`algorithm_uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_algorithm`
+--
+
+LOCK TABLES `user_algorithm` WRITE;
+/*!40000 ALTER TABLE `user_algorithm` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_algorithm` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -320,4 +343,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-09 21:03:40
+-- Dump completed on 2012-12-14 19:53:04
