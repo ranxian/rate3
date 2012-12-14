@@ -16,8 +16,8 @@ import java.util.UUID;
 /**
  * User:    Yu Yuankai
  * Email:   yykpku@gmail.com
- * Date:    12-12-9
- * Time:    上午11:08
+ * Date:    12-12-14
+ * Time:    下午7:59
  */
 @javax.persistence.Table(name = "algorithm", schema = "", catalog = "rate3")
 @Entity
@@ -36,18 +36,6 @@ public class AlgorithmEntity {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
-    }
-
-    private byte[] userUuid;
-
-    @javax.persistence.Column(name = "user_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
-    @Basic
-    public byte[] getUserUuid() {
-        return userUuid;
-    }
-
-    public void setUserUuid(byte[] userUuid) {
-        this.userUuid = userUuid;
     }
 
     private String name;
@@ -122,8 +110,7 @@ public class AlgorithmEntity {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (protocol != null ? !protocol.equals(that.protocol) : that.protocol != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (!Arrays.equals(userUuid, that.userUuid)) return false;
-        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
+        if (!(uuid == that.uuid)) return false;
 
         return true;
     }
@@ -131,7 +118,6 @@ public class AlgorithmEntity {
     @Override
     public int hashCode() {
         int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (userUuid != null ? Arrays.hashCode(userUuid) : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (protocol != null ? protocol.hashCode() : 0);

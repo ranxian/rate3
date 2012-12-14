@@ -74,15 +74,16 @@ public class SampleEntity {
         this.file = file;
     }
 
-    private byte[] deviceType;
+    private UUID deviceType;
 
+    @Type(type="rate.util.UUIDType")
     @javax.persistence.Column(name = "device_type", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
-    public byte[] getDeviceType() {
+    public UUID getDeviceType() {
         return deviceType;
     }
 
-    public void setDeviceType(byte[] deviceType) {
+    public void setDeviceType(UUID deviceType) {
         this.deviceType = deviceType;
     }
 
@@ -107,7 +108,7 @@ public class SampleEntity {
 
         if (classUuid != null ? !classUuid.equals(that.classUuid) : that.classUuid != null) return false;
         if (created != null ? !created.equals(that.created) : that.created != null) return false;
-        if (!Arrays.equals(deviceType, that.deviceType)) return false;
+        if (!(deviceType == that.deviceType)) return false;
         if (file != null ? !file.equals(that.file) : that.file != null) return false;
         if (importTag != null ? !importTag.equals(that.importTag) : that.importTag != null) return false;
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
@@ -121,7 +122,7 @@ public class SampleEntity {
         result = 31 * result + (classUuid != null ? classUuid.hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (file != null ? file.hashCode() : 0);
-        result = 31 * result + (deviceType != null ? Arrays.hashCode(deviceType) : 0);
+        result = 31 * result + (deviceType != null ? deviceType.hashCode() : 0);
         result = 31 * result + (importTag != null ? importTag.hashCode() : 0);
         return result;
     }

@@ -20,6 +20,7 @@
       <mapping class="rate.model.UserEntity"/>
       <mapping class="rate.model.ViewEntity"/>
       <mapping class="rate.model.ViewSampleEntity"/>
+      <mapping class="rate.model.UserAlgorithmEntity"/>
       <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>
