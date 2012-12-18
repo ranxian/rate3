@@ -35,7 +35,6 @@ public class EditAction extends ActionSupport {
         Query q = HibernateUtil.getSession().createQuery("from ViewEntity where uuid=:uuid");
         q.setParameter("uuid", UUID.fromString(uuid));
         List<ViewEntity> list = q.list();
-
         view = list.get(0);
         return SUCCESS;
     }

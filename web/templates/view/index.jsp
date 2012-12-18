@@ -25,10 +25,10 @@
     <s:iterator value="views">
         <tr>
             <td><a href="<s:url action="show"><s:param name="uuid">${uuid}</s:param></s:url>"><s:property value="name" /></a></td>
-            <td><s:property value="name" /></td>
             <td><s:property value="generator" /></td>
             <td><s:property value="type" /></td>
             <td><s:property value="timestamp" /></td>
+            <td><a href="<s:url action="delete"><s:param name="uuid">${uuid}</s:param></s:url>">Delete</a></td>
         </tr>
     </s:iterator>
 </table>
