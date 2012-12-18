@@ -18,7 +18,7 @@
 
     <list>
         <li><a href="<s:url namespace="/view" action="index" />">Views</a></li>
-        <li><a href="">Algorithms</a></li>
+        <li><a href="<s:url namespace="/algorithm" action="index" />">Algorithms</a></li>
         <li><a href="">Status</a></li>
         <li><a href="<s:url namespace="/user" action="index" />">Users</a></li>
     </list>

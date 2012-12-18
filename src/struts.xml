@@ -79,4 +79,32 @@
             <result name="error">/templates/view/show.jsp</result>
         </action>
     </package>
+    <package name="rate.controller.algorithm" namespace="/algorithm" extends="struts-default">
+        <action name="index" class="rate.controller.algorithm.IndexAction" method="execute">
+            <result name="success">/templates/algorithm/index.jsp</result>
+        </action>
+        <action name="new" class="rate.controller.algorithm.NewAction" method="execute">
+            <result name="success">/templates/algorithm/new.jsp</result>
+        </action>
+        <action name="create" class="rate.controller.algorithm.CreateAction" method="execute">
+            <result name="success" type="redirectAction">
+                <param name="actionName">show</param>
+                <param name="uuid">${algorithm.uuid}</param>
+            </result>
+            <result name="input">/templates/algorithm/new.jsp</result>
+        </action>
+        <action name="edit" class="rate.controller.algorithm.EditAction" method="execute">
+            <result name="success">/templates/algorithm/edit.jsp</result>
+        </action>
+        <action name="update" class="rate.controller.algorithm.UpdateAction" method="execute">
+            <result name="success" type="redirectAction">
+                <param name="actionName">show</param>
+                <param name="uuid">${algorithm.uuid}</param>
+            </result>
+            <result name="input">/templates/algorithm/edit.jsp</result>
+        </action>
+        <action name="show" class="rate.controller.algorithm.ShowAction" method="execute">
+            <result name="success">/templates/algorithm/show.jsp</result>
+        </action>
+    </package>
 </struts>
