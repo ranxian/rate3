@@ -32,5 +32,7 @@
         </tr>
     </s:iterator>
 </table>
+<hr>
+<a href="<s:url action="new"></s:url>"><button>New View</button></a>
 </body>
 </html>

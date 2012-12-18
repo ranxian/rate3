@@ -25,7 +25,7 @@ public class DeleteAction extends ActionSupport {
     public String execute() throws Exception {
         Session session = HibernateUtil.getSession();
         Query q = session.createQuery("from ViewEntity where uuid=:uuid");
-        q.setParameter("uuid", UUID.fromString(uuid));
+        q.setParameter("uuid", uuid);
         ViewEntity view = (ViewEntity)q.list().get(0);
 
         session.beginTransaction();

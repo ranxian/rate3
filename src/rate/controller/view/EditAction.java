@@ -33,7 +33,7 @@ public class EditAction extends ActionSupport {
 
     public String execute() throws Exception {
         Query q = HibernateUtil.getSession().createQuery("from ViewEntity where uuid=:uuid");
-        q.setParameter("uuid", UUID.fromString(uuid));
+        q.setParameter("uuid", uuid);
         List<ViewEntity> list = q.list();
         view = list.get(0);
         return SUCCESS;

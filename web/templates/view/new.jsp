@@ -16,13 +16,13 @@
     <s:textfield name="view.name" label="Name"></s:textfield>
     <s:select label="Generator"
               name="view.generator"
-              list="{'FVC', 'FVC', 'FVC'}"
+              list="{'FVC2004', 'FVC2006'}"
               headerKey="0"
               headerValue="Choose a view generating strategy"
             ></s:select>
     <s:select label="Type"
               name="view.type"
-              list="{'aa', 'bb', 'cc'}"
+              list="{'FINGERVEIN', 'FINGERVEIN'}"
               headerKey="0"
               headerValue="Choose a view type"
             ></s:select>

@@ -26,8 +26,11 @@ public class UpdateAction extends ActionSupport {
 
     public String execute() throws Exception {
         Session session = HibernateUtil.getSession();
+
         session.beginTransaction();
+
         session.update(view);
+
         session.getTransaction().commit();
 
         return SUCCESS;

@@ -45,7 +45,7 @@
                 <param name="actionName">show</param>
                 <param name="uuid">${view.uuid}</param>
             </result>
-            <result name="fail">/templates/view/new.jsp</result>
+            <result name="input">/templates/view/new.jsp</result>
         </action>
         <action name="edit" class="rate.controller.view.EditAction" method="execute">
             <result name="success">/templates/view/edit.jsp</result>
@@ -55,7 +55,7 @@
                 <param name="actionName">show</param>
                 <param name="uuid">${view.uuid}</param>
             </result>
-            <result name="fail">/templates/view/edit.jsp</result>
+            <result name="input">/templates/view/edit.jsp</result>
         </action>
         <action name="show" class="rate.controller.view.ShowAction" method="execute">
             <result name="success">/templates/view/show.jsp</result>
