@@ -7,25 +7,37 @@
 <struts>
     <constant name="struts.devMode" value="true" />
     <constant name="struts.action.extension" value=""/>
-    <package name="rate.view.user" namespace="/user" extends="struts-default">
-        <action name="add"
-                class="rate.view.user.AddAction"
+    <package name="rate.controller.user" namespace="/user" extends="struts-default">
+        <action name="index"
+                class="rate.controller.user.IndexAction"
                 method="execute">
-            <result name="fail">/templates/user/add.jsp</result>
-            <result name="redirect" type="redirect">
-                <param name="location">/user/${user.uuid}</param>
-            </result>
+            <result name="success">/templates/user/index.jsp</result>
         </action>
-        <action name="list"
-                class="rate.view.user.ListAction"
+        <action name="new"
+                class="rate.controller.user.NewAction"
                 method="execute">
-            <result name="success">/templates/user/list.jsp</result>
+            <result name="success">/templates/user/new.jsp</result>
+        </action>
+        <action name="create" class="rate.controller.user.CreateAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">${user.uuid}</param>
+            </result>
+            <result name="input">/templates/user/new.jsp</result>
+        </action>
+        <action name="edit" class="rate.controller.user.EditAction">
+            <result name="success">/templates/user/edit.jsp</result>
+        </action>
+        <action name="update" class="rate.controller.user.UpdateAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">${user.uuid}</param>
+            </result>
+            <result name="input">/templates/user/edit.jsp</result>
         </action>
         <action name="*"
-                class="rate.view.user.DetailAction"
+                class="rate.controller.user.ShowAction"
                 method="execute">
             <param name="uuid">{1}</param>
-            <result name="success">/templates/user/detail.jsp</result>
+            <result name="success">/templates/user/show.jsp</result>
         </action>
     </package>
     <package name="basicstruts2" extends="struts-default">

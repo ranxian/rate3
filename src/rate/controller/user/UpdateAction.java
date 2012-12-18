@@ -1,16 +1,17 @@
 package rate.controller.user;
+
 import com.opensymphony.xwork2.ActionSupport;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 
 /**
  * Created by XianRan
- * Time: 下午12:39
+ * Time: 下午9:25
  */
-public class CreateAction extends ActionSupport {
+public class UpdateAction extends ActionSupport {
     private UserEntity user;
+
     public UserEntity getUser() {
         return user;
     }
@@ -20,15 +21,14 @@ public class CreateAction extends ActionSupport {
     }
 
     public String execute() throws Exception {
-        try {
-            Session session = HibernateUtil.getSession();
-            session.beginTransaction();
-            session.save(user);
-            session.getTransaction().commit();
-        }
-        catch (HibernateException ex) {
-            throw ex;
-        }
+        Session session = HibernateUtil.getSession();
+
+        session.beginTransaction();
+
+        session.update(user);
+
+        session.getTransaction().commit();
+
         return SUCCESS;
     }
 }

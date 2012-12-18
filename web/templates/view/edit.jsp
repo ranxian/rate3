@@ -12,6 +12,8 @@
     <title></title>
 </head>
 <body>
+<h3><a href="<s:url action="show" ><s:param name="uuid">${view.uuid}</s:param></s:url>">${view.name}</a></h3>
+<hr>
 <s:form action="update">
    <s:hidden name="view.uuid" id="id"></s:hidden>
     <s:textfield name="view.name" label="Name"></s:textfield>
