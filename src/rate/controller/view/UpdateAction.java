@@ -1,27 +1,20 @@
 package rate.controller.view;
+
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.model.ViewEntity;
 import rate.util.HibernateUtil;
+
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Created by XianRan
- * Time: 下午12:40
+ * Time: 下午9:25
  */
-public class EditAction extends ActionSupport {
-    private String uuid;
+public class UpdateAction extends ActionSupport {
     private ViewEntity view;
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
 
     public ViewEntity getView() {
         return view;
@@ -32,10 +25,14 @@ public class EditAction extends ActionSupport {
     }
 
     public String execute() throws Exception {
-        Query q = HibernateUtil.getSession().createQuery("from ViewEntity where uuid=:uuid");
-        q.setParameter("uuid", uuid);
-        List<ViewEntity> list = q.list();
-        view = list.get(0);
+        Session session = HibernateUtil.getSession();
+
+        session.beginTransaction();
+
+        session.update(view);
+
+        session.getTransaction().commit();
+
         return SUCCESS;
     }
 }

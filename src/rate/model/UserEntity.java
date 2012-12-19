@@ -27,18 +27,18 @@ import java.util.UUID;
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class UserEntity {
 
-    private UUID uuid;
+    private String uuid;
 
     @Id
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
     @Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 

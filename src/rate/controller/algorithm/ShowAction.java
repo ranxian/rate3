@@ -34,7 +34,7 @@ public class ShowAction extends ActionSupport {
 
     public String execute() throws Exception {
         Query q = HibernateUtil.getSession().createQuery("from AlgorithmEntity where uuid=:uuid");
-        q.setParameter("uuid", UUID.fromString(uuid));
+        q.setParameter("uuid", uuid);
         List<AlgorithmEntity> list = q.list();
         algorithm = list.get(0);
         return SUCCESS;

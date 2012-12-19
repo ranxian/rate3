@@ -12,7 +12,7 @@
     <title>add a user</title>
 </head>
 <body>
-<s:form action="add">
+<s:form action="create">
 
     <s:textfield  name="user.name" label="Name" />
     <s:password  name="user.password" label="Password" />

@@ -1,30 +1,32 @@
-package rate.controller.view;
+package rate.controller.user;
+
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Session;
-import rate.model.ViewEntity;
+import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 
 /**
  * Created by XianRan
- * Time: 下午12:39
+ * Time: 下午9:25
  */
-public class CreateAction extends ActionSupport {
-    private ViewEntity view;
+public class UpdateAction extends ActionSupport {
+    private UserEntity user;
 
-    public ViewEntity getView() {
-        return view;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setView(ViewEntity view) {
-        this.view = view;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     public String execute() throws Exception {
         Session session = HibernateUtil.getSession();
 
-        // Here should call generate from engine
         session.beginTransaction();
-        session.save(view);
+
+        session.update(user);
+
         session.getTransaction().commit();
 
         return SUCCESS;

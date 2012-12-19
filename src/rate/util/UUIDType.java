@@ -53,7 +53,7 @@ public class UUIDType implements UserType
         if (!byte[].class.isAssignableFrom (cached.getClass())) {
             return null ;
         }
-        return byteArray2UUID((byte[]) cached) ;
+        return byteArray2UUID((byte[]) cached).toString() ;
     }
 
     public Object deepCopy (Object value) throws HibernateException {
@@ -64,27 +64,27 @@ public class UUIDType implements UserType
     }
 
     public Serializable disassemble (Object value) throws HibernateException {
-        return UUID2ByteArray((UUID) value);
+        return UUID2ByteArray(UUID.fromString((String)value));
     }
 
     public boolean equals (Object x, Object y) throws HibernateException {
         if (x == y)
             return true ;
-        if (!UUID.class.isAssignableFrom (x.getClass ())) {
+        if (!String.class.isAssignableFrom (x.getClass ())) {
             throw new HibernateException (x.getClass ().toString () + CAST_EXCEPTION_TEXT) ;
         }
-        else if (!UUID.class.isAssignableFrom (y.getClass ())) {
+        else if (!String.class.isAssignableFrom (y.getClass ())) {
             throw new HibernateException (y.getClass ().toString () + CAST_EXCEPTION_TEXT) ;
         }
 
-        UUID a = (UUID) x ;
-        UUID b = (UUID) y ;
+        String a = (String) x ;
+        String b = (String) y ;
 
         return a.equals (b) ;
     }
 
     public int hashCode (Object x) throws HibernateException {
-        if (!UUID.class.isAssignableFrom (x.getClass ())) {
+        if (!String.class.isAssignableFrom (x.getClass ())) {
             throw new HibernateException (x.getClass ().toString () + CAST_EXCEPTION_TEXT) ;
         }
         return x.hashCode () ;
@@ -98,7 +98,7 @@ public class UUIDType implements UserType
             SQLException
     {
         byte[] value = rs.getBytes(names[0]);
-        return (value == null) ? null : byteArray2UUID(value);
+        return (value == null) ? null : byteArray2UUID(value).toString();
     }
 
     public void nullSafeSet (PreparedStatement st, Object value, int index, SessionImplementor sessionImplementor)
@@ -108,15 +108,15 @@ public class UUIDType implements UserType
             st.setNull (index, Types.VARBINARY);
             return ;
         }
-        if (!UUID.class.isAssignableFrom (value.getClass ())) {
+        if (!String.class.isAssignableFrom (value.getClass ())) {
             throw new HibernateException (value.getClass ().toString () + CAST_EXCEPTION_TEXT) ;
         }
 
-        st.setBytes(index, UUID2ByteArray((UUID) value)); ;
+        st.setBytes(index, UUID2ByteArray(UUID.fromString((String) value))); ;
     }
 
     public Object replace (Object original, Object target, Object owner) throws HibernateException {
-        if (!UUID.class.isAssignableFrom (original.getClass ())) {
+        if (!String.class.isAssignableFrom (original.getClass ())) {
             throw new HibernateException (original.getClass ().toString () + CAST_EXCEPTION_TEXT) ;
         }
         return original;
@@ -124,7 +124,7 @@ public class UUIDType implements UserType
 
     @SuppressWarnings("unchecked")
     public Class returnedClass () {
-        return UUID.class ;
+        return String.class ;
     }
 
     public int[] sqlTypes () {

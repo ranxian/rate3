@@ -12,7 +12,7 @@
     <title></title>
 </head>
 <body>
-<h1>This is your views' list</h1>
+<h1>This is your algorithms' list</h1>
 <p>Views lists here</p>
 
 <table border="1">
@@ -22,17 +22,17 @@
         <th>type</th>
         <th>timestamp</th>
     </tr>
-    <s:iterator value="views">
+    <s:iterator value="algorithms">
         <tr>
             <td><a href="<s:url action="show"><s:param name="uuid">${uuid}</s:param></s:url>"><s:property value="name" /></a></td>
-            <td><s:property value="generator" /></td>
             <td><s:property value="type" /></td>
-            <td><s:property value="timestamp" /></td>
-            <td><a href="<s:url action="delete"><s:param name="uuid">${uuid}</s:param></s:url>">Delete</a></td>
+            <td><s:property value="protocal" /></td>
+            <td><s:property value="description"></s:property></td>
+            <td><s:property value="created"></s:property></td>
         </tr>
     </s:iterator>
 </table>
 <hr>
-<a href="<s:url action="new"></s:url>"><button>New View</button></a>
+<a href="<s:url action="new"></s:url>"><button>New Algorithm</button></a>
 </body>
 </html>

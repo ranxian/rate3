@@ -20,5 +20,7 @@
            <p>Just a test to show how to use the model</p>
            <p>User Name: <s:property value="user.name" /></p>
            <p>User Email: <s:property value="user.email" /></p>
+           <p>User Org: <s:property value="user.organization" /></p>
+           <a href="<s:url action="edit"><s:param name="uuid">${user.uuid}</s:param> </s:url> ">Edit me</a>
 </body>
 </html>
