@@ -22,30 +22,30 @@ import java.util.UUID;
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class AlgorithmVersionEntity {
-    private UUID uuid;
+    private String uuid;
 
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
     @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
-    private UUID algorithmUuid;
+    private String algorithmUuid;
 
     @javax.persistence.Column(name = "algorithm_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
-    public UUID getAlgorithmUuid() {
+    public String getAlgorithmUuid() {
         return algorithmUuid;
     }
 
-    public void setAlgorithmUuid(UUID algorithmUuid) {
+    public void setAlgorithmUuid(String algorithmUuid) {
         this.algorithmUuid = algorithmUuid;
     }
 

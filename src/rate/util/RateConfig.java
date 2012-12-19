@@ -1,12 +1,17 @@
 package rate.util;
 
+import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import rate.model.AlgorithmVersionEntity;
 
 import java.lang.String;
+import java.util.List;
 
 /**
  * User:    Yu Yuankai
@@ -43,5 +48,20 @@ public class RateConfig {
 
     public static String getBenchmarkDir(String benchmarkUuid) {
         return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getBenchmarkRootDir(), benchmarkUuid));
+    }
+
+    public static String getAlgorithmDir(String algorithmVersionUuid) {
+        Session session = HibernateUtil.getSession();
+        Query q = session.createQuery("from AlgorithmVersionEntity where uuid = :uuid");
+        q.setParameter("uuid", algorithmVersionUuid);
+        List<AlgorithmVersionEntity> results = q.list();
+        if (results.size()!=1) {
+            return null;
+        }
+        else {
+            AlgorithmVersionEntity e = results.get(0);
+            String temp = FilenameUtils.concat(RateConfig.getRootDir(), "algorithms").concat(e.getAlgorithmUuid()).concat(e.getUuid());
+            return FilenameUtils.separatorsToUnix(temp);
+        }
     }
 }
