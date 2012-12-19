@@ -17,6 +17,7 @@ import java.sql.Types;
 import java.util.UUID;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException ;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType ;
@@ -26,6 +27,7 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 public class UUIDType implements UserType
 {
+    private static final Logger logger = Logger.getLogger(UUIDType.class);
 
     private static final String CAST_EXCEPTION_TEXT = " cannot be cast to a java.util.UUID." ;
 

@@ -36,4 +36,12 @@ public class RateConfig {
     public static String getSampleRootDir() {
         return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getRootDir(), "samples"));
     }
+
+    public static String getBenchmarkRootDir() {
+        return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getRootDir(), "benchmarks"));
+    }
+
+    public static String getBenchmarkDir(String benchmarkUuid) {
+        return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getBenchmarkRootDir(), benchmarkUuid));
+    }
 }

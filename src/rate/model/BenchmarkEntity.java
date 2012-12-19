@@ -10,13 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
  * Email:   yykpku@gmail.com
- * Date:    12-12-9
- * Time:    上午11:08
+ * Date:    12-12-14
+ * Time:    下午9:18
  */
 @javax.persistence.Table(name = "benchmark", schema = "", catalog = "rate3")
 @Entity
@@ -37,15 +38,15 @@ public class BenchmarkEntity {
         this.uuid = uuid;
     }
 
-    private UUID viewUuid;
+    private byte[] viewUuid;
 
     @javax.persistence.Column(name = "view_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
-    public UUID getViewUuid() {
+    public byte[] getViewUuid() {
         return viewUuid;
     }
 
-    public void setViewUuid(UUID viewUuid) {
+    public void setViewUuid(byte[] viewUuid) {
         this.viewUuid = viewUuid;
     }
 
@@ -97,6 +98,18 @@ public class BenchmarkEntity {
         this.description = description;
     }
 
+    private String generator;
+
+    @javax.persistence.Column(name = "generator", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
+    @Basic
+    public String getGenerator() {
+        return generator;
+    }
+
+    public void setGenerator(String generator) {
+        this.generator = generator;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -106,10 +119,11 @@ public class BenchmarkEntity {
 
         if (created != null ? !created.equals(that.created) : that.created != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (generator != null ? !generator.equals(that.generator) : that.generator != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (protocol != null ? !protocol.equals(that.protocol) : that.protocol != null) return false;
-        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
-        if (viewUuid != null ? !viewUuid.equals(that.viewUuid) : that.viewUuid != null) return false;
+        if (!(uuid == that.uuid)) return false;
+        if (!Arrays.equals(viewUuid, that.viewUuid)) return false;
 
         return true;
     }
@@ -117,11 +131,12 @@ public class BenchmarkEntity {
     @Override
     public int hashCode() {
         int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (viewUuid != null ? viewUuid.hashCode() : 0);
+        result = 31 * result + (viewUuid != null ? Arrays.hashCode(viewUuid) : 0);
         result = 31 * result + (protocol != null ? protocol.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (generator != null ? generator.hashCode() : 0);
         return result;
     }
 }
