@@ -22,30 +22,30 @@ import java.util.UUID;
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class ClazzEntity {
-    private UUID uuid;
+    private String uuid;
 
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
     @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
-    private UUID personUuid;
+    private String personUuid;
 
     @javax.persistence.Column(name = "person_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
-    public UUID getPersonUuid() {
+    public String getPersonUuid() {
         return personUuid;
     }
 
-    public void setPersonUuid(UUID personUuid) {
+    public void setPersonUuid(String personUuid) {
         this.personUuid = personUuid;
     }
 

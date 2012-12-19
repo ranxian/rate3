@@ -22,42 +22,43 @@ import java.util.UUID;
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class TaskEntity {
-    private UUID uuid;
+    private String uuid;
 
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
     @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
-    private UUID algorithmVersionUuid;
+    private String algorithmVersionUuid;
 
+    @Type(type="UUIDType")
     @javax.persistence.Column(name = "algorithm_version_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
-    public UUID getAlgorithmVersionUuid() {
+    public String getAlgorithmVersionUuid() {
         return algorithmVersionUuid;
     }
 
-    public void setAlgorithmVersionUuid(UUID algorithmVersionUuid) {
+    public void setAlgorithmVersionUuid(String algorithmVersionUuid) {
         this.algorithmVersionUuid = algorithmVersionUuid;
     }
 
-    private UUID benchmarkUuid;
+    private String benchmarkUuid;
 
     @javax.persistence.Column(name = "benchmark_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
-    public UUID getBenchmarkUuid() {
+    public String getBenchmarkUuid() {
         return benchmarkUuid;
     }
 
-    public void setBenchmarkUuid(UUID benchmarkUuid) {
+    public void setBenchmarkUuid(String benchmarkUuid) {
         this.benchmarkUuid = benchmarkUuid;
     }
 

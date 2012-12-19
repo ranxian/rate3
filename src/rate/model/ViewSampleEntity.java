@@ -1,5 +1,6 @@
 package rate.model;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import rate.util.UUIDType;
 
@@ -18,27 +19,28 @@ import java.util.UUID;
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class ViewSampleEntity {
-    private UUID viewUuid;
+    private String viewUuid;
 
     @javax.persistence.Column(name = "view_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
-    public UUID getViewUuid() {
+    public String getViewUuid() {
         return viewUuid;
     }
 
-    public void setViewUuid(UUID viewUuid) {
+    public void setViewUuid(String viewUuid) {
         this.viewUuid = viewUuid;
     }
 
-    private UUID sampleUuid;
+    private String sampleUuid;
 
+    @Type(type="UUIDType")
     @javax.persistence.Column(name = "sample_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
-    public UUID getSampleUuid() {
+    public String getSampleUuid() {
         return sampleUuid;
     }
 
-    public void setSampleUuid(UUID sampleUuid) {
+    public void setSampleUuid(String sampleUuid) {
         this.sampleUuid = sampleUuid;
     }
 

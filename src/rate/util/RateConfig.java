@@ -46,22 +46,31 @@ public class RateConfig {
         return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getRootDir(), "benchmarks"));
     }
 
-    public static String getBenchmarkDir(String benchmarkUuid) {
-        return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getBenchmarkRootDir(), benchmarkUuid));
+    public static String getAlgorithmRootDir() {
+        return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getRootDir(), "algorithms"));
     }
 
-    public static String getAlgorithmDir(String algorithmVersionUuid) {
-        Session session = HibernateUtil.getSession();
-        Query q = session.createQuery("from AlgorithmVersionEntity where uuid = :uuid");
-        q.setParameter("uuid", algorithmVersionUuid);
-        List<AlgorithmVersionEntity> results = q.list();
-        if (results.size()!=1) {
-            return null;
-        }
-        else {
-            AlgorithmVersionEntity e = results.get(0);
-            String temp = FilenameUtils.concat(RateConfig.getRootDir(), "algorithms").concat(e.getAlgorithmUuid()).concat(e.getUuid());
-            return FilenameUtils.separatorsToUnix(temp);
-        }
-    }
+//    public static String getBenchmarkDir(String benchmarkUuid) {
+//        return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getBenchmarkRootDir(), benchmarkUuid));
+//    }
+
+//    public static String getAlgorithmVersionDir(String algorithmVersionUuid) {
+//        Session session = HibernateUtil.getSession();
+//        Query q = session.createQuery("from AlgorithmVersionEntity where uuid = :uuid");
+//        q.setParameter("uuid", algorithmVersionUuid);
+//        List<AlgorithmVersionEntity> results = q.list();
+//        if (results.size()!=1) {
+//            return null;
+//        }
+//        else {
+//            AlgorithmVersionEntity e = results.get(0);
+//            String temp = FilenameUtils.concat(RateConfig.getRootDir(), "algorithms").concat(e.getAlgorithmUuid()).concat(e.getUuid());
+//            return FilenameUtils.separatorsToUnix(temp);
+//        }
+//    }
+
+//    public static String getAlgorithmVersionDir(AlgorithmVersionEntity e) {
+//        String temp = FilenameUtils.concat(RateConfig.getRootDir(), "algorithms").concat(e.getAlgorithmUuid()).concat(e.getUuid());
+//        return FilenameUtils.separatorsToUnix(temp);
+//    }
 }

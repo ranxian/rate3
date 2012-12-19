@@ -1,8 +1,10 @@
 package rate.model;
 
+import org.apache.commons.io.FilenameUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import rate.util.RateConfig;
 import rate.util.UUIDType;
 
 import javax.persistence.Basic;
@@ -124,5 +126,10 @@ public class AlgorithmEntity {
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
+    }
+
+    public String dir() {
+        String dir = FilenameUtils.concat(RateConfig.getAlgorithmRootDir(), this.getUuid());
+        return FilenameUtils.separatorsToUnix(dir);
     }
 }

@@ -18,28 +18,29 @@ import java.util.UUID;
  */
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class UserAlgorithmEntityPK implements Serializable {
-    private UUID userUuid;
+    private String userUuid;
 
     @Id
     @Type(type="UUIDType")
     @Column(name = "user_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
-    public UUID getUserUuid() {
+    public String getUserUuid() {
         return userUuid;
     }
 
-    public void setUserUuid(UUID userUuid) {
+    public void setUserUuid(String userUuid) {
         this.userUuid = userUuid;
     }
 
-    private UUID algorithmUuid;
+    private String algorithmUuid;
 
+    @Type(type="UUIDType")
     @Id
     @Column(name = "algorithm_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
-    public UUID getAlgorithmUuid() {
+    public String getAlgorithmUuid() {
         return algorithmUuid;
     }
 
-    public void setAlgorithmUuid(UUID algorithmUuid) {
+    public void setAlgorithmUuid(String algorithmUuid) {
         this.algorithmUuid = algorithmUuid;
     }
 

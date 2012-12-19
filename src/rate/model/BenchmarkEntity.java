@@ -1,8 +1,10 @@
 package rate.model;
 
+import org.apache.commons.io.FilenameUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import rate.util.RateConfig;
 import rate.util.UUIDType;
 
 import javax.persistence.Basic;
@@ -23,30 +25,31 @@ import java.util.UUID;
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class BenchmarkEntity {
-    private UUID uuid;
+    private String uuid;
 
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
     @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
-    private byte[] viewUuid;
+    private String viewUuid;
 
+    @Type(type="UUIDType")
     @javax.persistence.Column(name = "view_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Basic
-    public byte[] getViewUuid() {
+    public String getViewUuid() {
         return viewUuid;
     }
 
-    public void setViewUuid(byte[] viewUuid) {
+    public void setViewUuid(String viewUuid) {
         this.viewUuid = viewUuid;
     }
 
@@ -123,7 +126,7 @@ public class BenchmarkEntity {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (protocol != null ? !protocol.equals(that.protocol) : that.protocol != null) return false;
         if (!(uuid == that.uuid)) return false;
-        if (!Arrays.equals(viewUuid, that.viewUuid)) return false;
+        if (!(viewUuid == that.viewUuid)) return false;
 
         return true;
     }
@@ -131,12 +134,17 @@ public class BenchmarkEntity {
     @Override
     public int hashCode() {
         int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (viewUuid != null ? Arrays.hashCode(viewUuid) : 0);
+        result = 31 * result + (viewUuid != null ? viewUuid.hashCode() : 0);
         result = 31 * result + (protocol != null ? protocol.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (generator != null ? generator.hashCode() : 0);
         return result;
+    }
+
+    public String dir() {
+        String dir = FilenameUtils.concat(RateConfig.getBenchmarkRootDir(), this.getUuid());
+        return FilenameUtils.separatorsToUnix(dir);
     }
 }
