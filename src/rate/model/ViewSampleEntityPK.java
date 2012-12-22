@@ -31,8 +31,6 @@ public class ViewSampleEntityPK implements Serializable {
 
     private String sampleUuid;
 
-    @Type(type="UUIDType")
-    @Id
     @Column(name = "sample_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     public String getSampleUuid() {
         return sampleUuid;

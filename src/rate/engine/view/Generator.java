@@ -50,7 +50,7 @@ public class Generator {
             session.save(view);
             for (SampleEntity sample: samples) {
                 ViewSampleEntity toBeInsert = new ViewSampleEntity();
-                toBeInsert.setViewUuid(UUID.fromString(view.getUuid()));
+                toBeInsert.setViewUuid(view.getUuid());
                 toBeInsert.setSampleUuid(sample.getUuid());
                 session.save(toBeInsert);
             }

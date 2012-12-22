@@ -1,7 +1,11 @@
 package rate.test;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
 import rate.engine.benchmark.generator.AbstractGenerator;
 import rate.engine.benchmark.generator.GeneralFVC2006Generator;
+import rate.model.ViewEntity;
+import rate.util.HibernateUtil;
 
 /**
  * User:    Yu Yuankai
@@ -11,9 +15,18 @@ import rate.engine.benchmark.generator.GeneralFVC2006Generator;
  */
 public class BenchmarkGeneratorTest {
     public static void main(String[] args) throws Exception {
-        GeneralFVC2006Generator generator = new GeneralFVC2006Generator();
-        generator.setClassCount(10);
-        generator.setSampleCount(5);
-        generator.generate();
+
+        Session session = HibernateUtil.getSession();
+        Query query = session.createQuery("from ViewEntity ");
+        ViewEntity view = (ViewEntity)query.list().get(0);
+        query = session.createQuery("from ViewSampleEntity V left join SampleEntity S where ViewSampleEntity.viewUuid=:viewUuid");
+        query.setParameter("viewUuid", view.getUuid());
+        System.out.println(query.list().get(0));
+
+        return;
+//        GeneralFVC2006Generator generator = new GeneralFVC2006Generator();
+//        generator.setClassCount(10);
+//        generator.setSampleCount(5);
+//        generator.generate();
     }
 }

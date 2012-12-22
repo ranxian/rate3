@@ -143,8 +143,12 @@ public class BenchmarkEntity {
         return result;
     }
 
-    public String dir() {
+    public String dirPath() {
         String dir = FilenameUtils.concat(RateConfig.getBenchmarkRootDir(), this.getUuid());
         return FilenameUtils.separatorsToUnix(dir);
+    }
+
+    public String filePath() {
+         return FilenameUtils.separatorsToUnix(FilenameUtils.concat(this.dirPath(), "benchmark.txt"));
     }
 }
