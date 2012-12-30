@@ -4,8 +4,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import rate.util.UUIDType;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -15,34 +14,34 @@ import java.util.UUID;
  * Date:    12-12-14
  * Time:    下午7:59
  */
-@javax.persistence.IdClass(rate.model.UserAlgorithmEntityPK.class)
-@javax.persistence.Table(name = "user_algorithm", schema = "", catalog = "rate3")
+@IdClass(UserAlgorithmEntityPK.class)
+@Table(name = "user_algorithm", schema = "", catalog = "rate3")
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 @Entity
 public class UserAlgorithmEntity {
-    private UUID userUuid;
+    private String userUuid;
 
     @Type(type="UUIDType")
-    @javax.persistence.Column(name = "user_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "user_uuid", nullable = false, insertable = false, updatable = false, length = 16, precision = 0)
     @Id
-    public UUID getUserUuid() {
+    public String getUserUuid() {
         return userUuid;
     }
 
-    public void setUserUuid(UUID userUuid) {
+    public void setUserUuid(String userUuid) {
         this.userUuid = userUuid;
     }
 
-    private UUID algorithmUuid;
+    private String algorithmUuid;
 
     @Type(type="UUIDType")
-    @javax.persistence.Column(name = "algorithm_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "algorithm_uuid", nullable = false, insertable = false, updatable = false, length = 16, precision = 0)
     @Id
-    public UUID getAlgorithmUuid() {
+    public String getAlgorithmUuid() {
         return algorithmUuid;
     }
 
-    public void setAlgorithmUuid(UUID algorithmUuid) {
+    public void setAlgorithmUuid(String algorithmUuid) {
         this.algorithmUuid = algorithmUuid;
     }
 
@@ -53,16 +52,40 @@ public class UserAlgorithmEntity {
 
         UserAlgorithmEntity that = (UserAlgorithmEntity) o;
 
-        if (!(algorithmUuid == algorithmUuid)) return false;
-        if (!(userUuid == that.userUuid)) return false;
+        if (!(getAlgorithmByAlgorithmUuid() == that.getAlgorithmByAlgorithmUuid())) return false;
+        if (!(getUserByUserUuid() == that.getUserByUserUuid())) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = userUuid != null ? userUuid.hashCode() : 0;
-        result = 31 * result + (algorithmUuid != null ? algorithmUuid.hashCode() : 0);
+        int result = getUserByUserUuid() != null ? getUserByUserUuid().hashCode() : 0;
+        result = 31 * result + (getAlgorithmByAlgorithmUuid() != null ? getAlgorithmByAlgorithmUuid().hashCode() : 0);
         return result;
+    }
+
+    private UserEntity userByUserUuid;
+
+    @ManyToOne
+    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", nullable = false)
+    public UserEntity getUserByUserUuid() {
+        return userByUserUuid;
+    }
+
+    public void setUserByUserUuid(UserEntity userByUserUuid) {
+        this.userByUserUuid = userByUserUuid;
+    }
+
+    private AlgorithmEntity algorithmByAlgorithmUuid;
+
+    @ManyToOne
+    @JoinColumn(name = "algorithm_uuid", referencedColumnName = "uuid", nullable = false)
+    public AlgorithmEntity getAlgorithmByAlgorithmUuid() {
+        return algorithmByAlgorithmUuid;
+    }
+
+    public void setAlgorithmByAlgorithmUuid(AlgorithmEntity algorithmByAlgorithmUuid) {
+        this.algorithmByAlgorithmUuid = algorithmByAlgorithmUuid;
     }
 }

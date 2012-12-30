@@ -7,12 +7,10 @@ import org.hibernate.annotations.TypeDef;
 import rate.util.RateConfig;
 import rate.util.UUIDType;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -21,7 +19,7 @@ import java.util.UUID;
  * Date:    12-12-14
  * Time:    下午9:18
  */
-@javax.persistence.Table(name = "benchmark", schema = "", catalog = "rate3")
+@Table(name = "benchmark", schema = "", catalog = "rate3")
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class BenchmarkEntity {
@@ -30,7 +28,7 @@ public class BenchmarkEntity {
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
-    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public String getUuid() {
         return uuid;
@@ -43,7 +41,7 @@ public class BenchmarkEntity {
     private String viewUuid;
 
     @Type(type="UUIDType")
-    @javax.persistence.Column(name = "view_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "view_uuid", nullable = false, insertable = false, updatable = false, length = 16, precision = 0)
     @Basic
     public String getViewUuid() {
         return viewUuid;
@@ -55,7 +53,7 @@ public class BenchmarkEntity {
 
     private String protocol;
 
-    @javax.persistence.Column(name = "protocol", nullable = false, insertable = true, updatable = true, length = 8, precision = 0)
+    @Column(name = "protocol", nullable = false, insertable = true, updatable = true, length = 8, precision = 0)
     @Basic
     public String getProtocol() {
         return protocol;
@@ -67,7 +65,7 @@ public class BenchmarkEntity {
 
     private String name;
 
-    @javax.persistence.Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
+    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getName() {
         return name;
@@ -79,7 +77,7 @@ public class BenchmarkEntity {
 
     private Timestamp created;
 
-    @javax.persistence.Column(name = "created", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
+    @Column(name = "created", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
     public Timestamp getCreated() {
         return created;
@@ -91,7 +89,7 @@ public class BenchmarkEntity {
 
     private String description;
 
-    @javax.persistence.Column(name = "description", nullable = false, insertable = true, updatable = true, length = 65535, precision = 0)
+    @Column(name = "description", nullable = false, insertable = true, updatable = true, length = 65535, precision = 0)
     @Basic
     public String getDescription() {
         return description;
@@ -103,7 +101,7 @@ public class BenchmarkEntity {
 
     private String generator;
 
-    @javax.persistence.Column(name = "generator", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
+    @Column(name = "generator", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getGenerator() {
         return generator;
@@ -150,5 +148,28 @@ public class BenchmarkEntity {
 
     public String filePath() {
          return FilenameUtils.separatorsToUnix(FilenameUtils.concat(this.dirPath(), "benchmark.txt"));
+    }
+
+    private ViewEntity viewByViewUuid;
+
+    @ManyToOne
+    @JoinColumn(name = "view_uuid", referencedColumnName = "uuid", nullable = false)
+    public ViewEntity getViewByViewUuid() {
+        return viewByViewUuid;
+    }
+
+    public void setViewByViewUuid(ViewEntity viewByViewUuid) {
+        this.viewByViewUuid = viewByViewUuid;
+    }
+
+    private Collection<TaskEntity> tasksByUuid;
+
+    @OneToMany(mappedBy = "benchmarkByBenchmarkUuid")
+    public Collection<TaskEntity> getTasksByUuid() {
+        return tasksByUuid;
+    }
+
+    public void setTasksByUuid(Collection<TaskEntity> tasksByUuid) {
+        this.tasksByUuid = tasksByUuid;
     }
 }

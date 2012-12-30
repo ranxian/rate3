@@ -19,8 +19,8 @@ public class BenchmarkGeneratorTest {
         Session session = HibernateUtil.getSession();
         Query query = session.createQuery("from ViewEntity ");
         ViewEntity view = (ViewEntity)query.list().get(0);
-        query = session.createQuery("from ViewSampleEntity V left join SampleEntity S where ViewSampleEntity.viewUuid=:viewUuid");
-        query.setParameter("viewUuid", view.getUuid());
+        query = session.createQuery("from ViewSampleEntity where viewByViewUuid=:view");
+        query.setParameter("view", view);
         System.out.println(query.list().get(0));
 
         return;

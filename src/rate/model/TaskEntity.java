@@ -5,10 +5,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import rate.util.UUIDType;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -18,7 +15,7 @@ import java.util.UUID;
  * Date:    12-12-9
  * Time:    上午11:08
  */
-@javax.persistence.Table(name = "task", schema = "", catalog = "rate3")
+@Table(name = "task", schema = "", catalog = "rate3")
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class TaskEntity {
@@ -27,7 +24,7 @@ public class TaskEntity {
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
-    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public String getUuid() {
         return uuid;
@@ -40,7 +37,7 @@ public class TaskEntity {
     private String algorithmVersionUuid;
 
     @Type(type="UUIDType")
-    @javax.persistence.Column(name = "algorithm_version_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "algorithm_version_uuid", nullable = true, insertable = false, updatable = false, length = 16, precision = 0)
     @Basic
     public String getAlgorithmVersionUuid() {
         return algorithmVersionUuid;
@@ -52,7 +49,7 @@ public class TaskEntity {
 
     private String benchmarkUuid;
 
-    @javax.persistence.Column(name = "benchmark_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "benchmark_uuid", nullable = true, insertable = false, updatable = false, length = 16, precision = 0)
     @Basic
     public String getBenchmarkUuid() {
         return benchmarkUuid;
@@ -64,7 +61,7 @@ public class TaskEntity {
 
     private Timestamp created;
 
-    @javax.persistence.Column(name = "created", nullable = true, insertable = true, updatable = true, length = 19, precision = 0)
+    @Column(name = "created", nullable = true, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
     public Timestamp getCreated() {
         return created;
@@ -76,7 +73,7 @@ public class TaskEntity {
 
     private Timestamp finished;
 
-    @javax.persistence.Column(name = "finished", nullable = true, insertable = true, updatable = true, length = 19, precision = 0)
+    @Column(name = "finished", nullable = true, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
     public Timestamp getFinished() {
         return finished;
@@ -112,5 +109,29 @@ public class TaskEntity {
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (finished != null ? finished.hashCode() : 0);
         return result;
+    }
+
+    private BenchmarkEntity benchmarkByBenchmarkUuid;
+
+    @ManyToOne
+    @JoinColumn(name = "benchmark_uuid", referencedColumnName = "uuid")
+    public BenchmarkEntity getBenchmarkByBenchmarkUuid() {
+        return benchmarkByBenchmarkUuid;
+    }
+
+    public void setBenchmarkByBenchmarkUuid(BenchmarkEntity benchmarkByBenchmarkUuid) {
+        this.benchmarkByBenchmarkUuid = benchmarkByBenchmarkUuid;
+    }
+
+    private AlgorithmVersionEntity algorithmVersionByAlgorithmVersionUuid;
+
+    @ManyToOne
+    @JoinColumn(name = "algorithm_version_uuid", referencedColumnName = "uuid")
+    public AlgorithmVersionEntity getAlgorithmVersionByAlgorithmVersionUuid() {
+        return algorithmVersionByAlgorithmVersionUuid;
+    }
+
+    public void setAlgorithmVersionByAlgorithmVersionUuid(AlgorithmVersionEntity algorithmVersionByAlgorithmVersionUuid) {
+        this.algorithmVersionByAlgorithmVersionUuid = algorithmVersionByAlgorithmVersionUuid;
     }
 }

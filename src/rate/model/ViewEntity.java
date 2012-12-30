@@ -7,6 +7,7 @@ import rate.util.UUIDType;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -105,5 +106,27 @@ public class ViewEntity {
 
     public void setGenerated(Timestamp generated) {
         this.generated = generated;
+    }
+
+    private Collection<BenchmarkEntity> benchmarksByUuid;
+
+    @OneToMany(mappedBy = "viewByViewUuid")
+    public Collection<BenchmarkEntity> getBenchmarksByUuid() {
+        return benchmarksByUuid;
+    }
+
+    public void setBenchmarksByUuid(Collection<BenchmarkEntity> benchmarksByUuid) {
+        this.benchmarksByUuid = benchmarksByUuid;
+    }
+
+    private Collection<ViewSampleEntity> viewSamplesByUuid;
+
+    @OneToMany(mappedBy = "viewByViewUuid")
+    public Collection<ViewSampleEntity> getViewSamplesByUuid() {
+        return viewSamplesByUuid;
+    }
+
+    public void setViewSamplesByUuid(Collection<ViewSampleEntity> viewSamplesByUuid) {
+        this.viewSamplesByUuid = viewSamplesByUuid;
     }
 }

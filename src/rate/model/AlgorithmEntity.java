@@ -7,12 +7,10 @@ import org.hibernate.annotations.TypeDef;
 import rate.util.RateConfig;
 import rate.util.UUIDType;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -21,7 +19,7 @@ import java.util.UUID;
  * Date:    12-12-14
  * Time:    下午7:59
  */
-@javax.persistence.Table(name = "algorithm", schema = "", catalog = "rate3")
+@Table(name = "algorithm", schema = "", catalog = "rate3")
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class AlgorithmEntity {
@@ -30,7 +28,7 @@ public class AlgorithmEntity {
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
-    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public String getUuid() {
         return uuid;
@@ -42,7 +40,7 @@ public class AlgorithmEntity {
 
     private String name;
 
-    @javax.persistence.Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
+    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getName() {
         return name;
@@ -54,7 +52,7 @@ public class AlgorithmEntity {
 
     private String type;
 
-    @javax.persistence.Column(name = "type", nullable = false, insertable = true, updatable = true, length = 11, precision = 0)
+    @Column(name = "type", nullable = false, insertable = true, updatable = true, length = 11, precision = 0)
     @Basic
     public String getType() {
         return type;
@@ -66,7 +64,7 @@ public class AlgorithmEntity {
 
     private String protocol;
 
-    @javax.persistence.Column(name = "protocol", nullable = false, insertable = true, updatable = true, length = 8, precision = 0)
+    @Column(name = "protocol", nullable = false, insertable = true, updatable = true, length = 8, precision = 0)
     @Basic
     public String getProtocol() {
         return protocol;
@@ -78,7 +76,7 @@ public class AlgorithmEntity {
 
     private Timestamp created;
 
-    @javax.persistence.Column(name = "created", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
+    @Column(name = "created", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
     public Timestamp getCreated() {
         return created;
@@ -90,7 +88,7 @@ public class AlgorithmEntity {
 
     private String description;
 
-    @javax.persistence.Column(name = "description", nullable = false, insertable = true, updatable = true, length = 65535, precision = 0)
+    @Column(name = "description", nullable = false, insertable = true, updatable = true, length = 65535, precision = 0)
     @Basic
     public String getDescription() {
         return description;
@@ -131,5 +129,27 @@ public class AlgorithmEntity {
     public String dir() {
         String dir = FilenameUtils.concat(RateConfig.getAlgorithmRootDir(), this.getUuid());
         return FilenameUtils.separatorsToUnix(dir);
+    }
+
+    private Collection<AlgorithmVersionEntity> algorithmVersionsByUuid;
+
+    @OneToMany(mappedBy = "algorithmByAlgorithmUuid")
+    public Collection<AlgorithmVersionEntity> getAlgorithmVersionsByUuid() {
+        return algorithmVersionsByUuid;
+    }
+
+    public void setAlgorithmVersionsByUuid(Collection<AlgorithmVersionEntity> algorithmVersionsByUuid) {
+        this.algorithmVersionsByUuid = algorithmVersionsByUuid;
+    }
+
+    private Collection<UserAlgorithmEntity> userAlgorithmsByUuid;
+
+    @OneToMany(mappedBy = "algorithmByAlgorithmUuid")
+    public Collection<UserAlgorithmEntity> getUserAlgorithmsByUuid() {
+        return userAlgorithmsByUuid;
+    }
+
+    public void setUserAlgorithmsByUuid(Collection<UserAlgorithmEntity> userAlgorithmsByUuid) {
+        this.userAlgorithmsByUuid = userAlgorithmsByUuid;
     }
 }

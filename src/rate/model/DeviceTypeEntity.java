@@ -5,10 +5,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import rate.util.UUIDType;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -17,7 +15,7 @@ import java.util.UUID;
  * Date:    12-12-9
  * Time:    上午11:08
  */
-@javax.persistence.Table(name = "device_type", schema = "", catalog = "rate3")
+@Table(name = "device_type", schema = "", catalog = "rate3")
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class DeviceTypeEntity {
@@ -26,7 +24,7 @@ public class DeviceTypeEntity {
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
-    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public String getUuid() {
         return uuid;
@@ -38,7 +36,7 @@ public class DeviceTypeEntity {
 
     private String name;
 
-    @javax.persistence.Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
+    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getName() {
         return name;
@@ -50,7 +48,7 @@ public class DeviceTypeEntity {
 
     private String type;
 
-    @javax.persistence.Column(name = "type", nullable = false, insertable = true, updatable = true, length = 11, precision = 0)
+    @Column(name = "type", nullable = false, insertable = true, updatable = true, length = 11, precision = 0)
     @Basic
     public String getType() {
         return type;
@@ -62,7 +60,7 @@ public class DeviceTypeEntity {
 
     private String provider;
 
-    @javax.persistence.Column(name = "provider", nullable = true, insertable = true, updatable = true, length = 45, precision = 0)
+    @Column(name = "provider", nullable = true, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getProvider() {
         return provider;
@@ -74,7 +72,7 @@ public class DeviceTypeEntity {
 
     private String version;
 
-    @javax.persistence.Column(name = "version", nullable = true, insertable = true, updatable = true, length = 45, precision = 0)
+    @Column(name = "version", nullable = true, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getVersion() {
         return version;
@@ -86,7 +84,7 @@ public class DeviceTypeEntity {
 
     private byte[] extra;
 
-    @javax.persistence.Column(name = "extra", nullable = true, insertable = true, updatable = true, length = 65535, precision = 0)
+    @Column(name = "extra", nullable = true, insertable = true, updatable = true, length = 65535, precision = 0)
     @Basic
     public byte[] getExtra() {
         return extra;
@@ -122,5 +120,16 @@ public class DeviceTypeEntity {
         result = 31 * result + (version != null ? version.hashCode() : 0);
         result = 31 * result + (extra != null ? extra.hashCode() : 0);
         return result;
+    }
+
+    private Collection<SampleEntity> samplesByUuid;
+
+    @OneToMany(mappedBy = "deviceTypeByDeviceType")
+    public Collection<SampleEntity> getSamplesByUuid() {
+        return samplesByUuid;
+    }
+
+    public void setSamplesByUuid(Collection<SampleEntity> samplesByUuid) {
+        this.samplesByUuid = samplesByUuid;
     }
 }

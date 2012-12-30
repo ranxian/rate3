@@ -5,11 +5,9 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import rate.util.UUIDType;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -18,7 +16,7 @@ import java.util.UUID;
  * Date:    12-12-9
  * Time:    上午11:08
  */
-@javax.persistence.Table(name = "person", schema = "", catalog = "rate3")
+@Table(name = "person", schema = "", catalog = "rate3")
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class PersonEntity {
@@ -27,7 +25,7 @@ public class PersonEntity {
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
-    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public String getUuid() {
         return uuid;
@@ -39,7 +37,7 @@ public class PersonEntity {
 
     private String name;
 
-    @javax.persistence.Column(name = "name", nullable = true, insertable = true, updatable = true, length = 45, precision = 0)
+    @Column(name = "name", nullable = true, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getName() {
         return name;
@@ -51,7 +49,7 @@ public class PersonEntity {
 
     private String gender;
 
-    @javax.persistence.Column(name = "gender", nullable = false, insertable = true, updatable = true, length = 7, precision = 0)
+    @Column(name = "gender", nullable = false, insertable = true, updatable = true, length = 7, precision = 0)
     @Basic
     public String getGender() {
         return gender;
@@ -63,7 +61,7 @@ public class PersonEntity {
 
     private Date birth;
 
-    @javax.persistence.Column(name = "birth", nullable = true, insertable = true, updatable = true, length = 10, precision = 0)
+    @Column(name = "birth", nullable = true, insertable = true, updatable = true, length = 10, precision = 0)
     @Basic
     public Date getBirth() {
         return birth;
@@ -75,7 +73,7 @@ public class PersonEntity {
 
     private byte[] extra;
 
-    @javax.persistence.Column(name = "extra", nullable = true, insertable = true, updatable = true, length = 65535, precision = 0)
+    @Column(name = "extra", nullable = true, insertable = true, updatable = true, length = 65535, precision = 0)
     @Basic
     public byte[] getExtra() {
         return extra;
@@ -109,5 +107,16 @@ public class PersonEntity {
         result = 31 * result + (birth != null ? birth.hashCode() : 0);
         result = 31 * result + (extra != null ? extra.hashCode() : 0);
         return result;
+    }
+
+    private Collection<ClazzEntity> clazzsByUuid;
+
+    @OneToMany(mappedBy = "personByPersonUuid")
+    public Collection<ClazzEntity> getClazzsByUuid() {
+        return clazzsByUuid;
+    }
+
+    public void setClazzsByUuid(Collection<ClazzEntity> clazzsByUuid) {
+        this.clazzsByUuid = clazzsByUuid;
     }
 }

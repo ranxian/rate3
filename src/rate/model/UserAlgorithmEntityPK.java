@@ -6,6 +6,8 @@ import rate.util.UUIDType;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.UUID;
@@ -20,9 +22,9 @@ import java.util.UUID;
 public class UserAlgorithmEntityPK implements Serializable {
     private String userUuid;
 
-    @Id
     @Type(type="UUIDType")
-    @Column(name = "user_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "user_uuid", nullable = false, insertable = false, updatable = false, length = 16, precision = 0)
+    @Id
     public String getUserUuid() {
         return userUuid;
     }
@@ -34,8 +36,8 @@ public class UserAlgorithmEntityPK implements Serializable {
     private String algorithmUuid;
 
     @Type(type="UUIDType")
+    @Column(name = "algorithm_uuid", nullable = false, insertable = false, updatable = false, length = 16, precision = 0)
     @Id
-    @Column(name = "algorithm_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     public String getAlgorithmUuid() {
         return algorithmUuid;
     }
@@ -49,18 +51,44 @@ public class UserAlgorithmEntityPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserAlgorithmEntityPK that = (UserAlgorithmEntityPK) o;
+        UserAlgorithmEntity that = (UserAlgorithmEntity) o;
 
-        if (!(algorithmUuid == that.algorithmUuid)) return false;
-        if (!(userUuid == that.userUuid)) return false;
+        if (!(getAlgorithmByAlgorithmUuid() == that.getAlgorithmByAlgorithmUuid())) return false;
+        if (!(getUserByUserUuid() == that.getUserByUserUuid())) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = userUuid != null ? userUuid.hashCode() : 0;
-        result = 31 * result + (algorithmUuid != null ? algorithmUuid.hashCode() : 0);
+        int result = getUserByUserUuid() != null ? getUserByUserUuid().hashCode() : 0;
+        result = 31 * result + (getAlgorithmByAlgorithmUuid() != null ? getAlgorithmByAlgorithmUuid().hashCode() : 0);
         return result;
+    }
+
+    private UserEntity userByUserUuid;
+
+    @ManyToOne
+    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", nullable = false)
+    @Id
+    public UserEntity getUserByUserUuid() {
+        return userByUserUuid;
+    }
+
+    public void setUserByUserUuid(UserEntity userByUserUuid) {
+        this.userByUserUuid = userByUserUuid;
+    }
+
+    private AlgorithmEntity algorithmByAlgorithmUuid;
+
+    @ManyToOne
+    @JoinColumn(name = "algorithm_uuid", referencedColumnName = "uuid", nullable = false)
+    @Id
+    public AlgorithmEntity getAlgorithmByAlgorithmUuid() {
+        return algorithmByAlgorithmUuid;
+    }
+
+    public void setAlgorithmByAlgorithmUuid(AlgorithmEntity algorithmByAlgorithmUuid) {
+        this.algorithmByAlgorithmUuid = algorithmByAlgorithmUuid;
     }
 }

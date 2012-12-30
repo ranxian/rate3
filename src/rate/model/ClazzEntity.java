@@ -5,11 +5,9 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import rate.util.UUIDType;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -18,7 +16,7 @@ import java.util.UUID;
  * Date:    12-12-9
  * Time:    上午11:08
  */
-@javax.persistence.Table(name = "class", schema = "", catalog = "rate3")
+@Table(name = "class", schema = "", catalog = "rate3")
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class ClazzEntity {
@@ -27,7 +25,7 @@ public class ClazzEntity {
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
-    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public String getUuid() {
         return uuid;
@@ -37,21 +35,21 @@ public class ClazzEntity {
         this.uuid = uuid;
     }
 
-    private String personUuid;
-
-    @javax.persistence.Column(name = "person_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
-    @Basic
-    public String getPersonUuid() {
-        return personUuid;
-    }
-
-    public void setPersonUuid(String personUuid) {
-        this.personUuid = personUuid;
-    }
+//    private String personUuid;
+//
+//    @Column(name = "person_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
+//    @Basic
+//    public String getPersonUuid() {
+//        return personUuid;
+//    }
+//
+//    public void setPersonUuid(String personUuid) {
+//        this.personUuid = personUuid;
+//    }
 
     private String type;
 
-    @javax.persistence.Column(name = "type", nullable = false, insertable = true, updatable = true, length = 11, precision = 0)
+    @Column(name = "type", nullable = false, insertable = true, updatable = true, length = 11, precision = 0)
     @Basic
     public String getType() {
         return type;
@@ -63,7 +61,7 @@ public class ClazzEntity {
 
     private Timestamp created;
 
-    @javax.persistence.Column(name = "created", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
+    @Column(name = "created", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
     public Timestamp getCreated() {
         return created;
@@ -75,7 +73,7 @@ public class ClazzEntity {
 
     private String importTag;
 
-    @javax.persistence.Column(name = "import_tag", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
+    @Column(name = "import_tag", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
     @Basic
     public String getImportTag() {
         return importTag;
@@ -94,7 +92,7 @@ public class ClazzEntity {
 
         if (created != null ? !created.equals(that.created) : that.created != null) return false;
         if (importTag != null ? !importTag.equals(that.importTag) : that.importTag != null) return false;
-        if (personUuid != null ? !personUuid.equals(that.personUuid) : that.personUuid != null) return false;
+        if (getPersonByPersonUuid() != null ? !getPersonByPersonUuid().equals(that.getPersonByPersonUuid()) : that.getPersonByPersonUuid() != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
 
@@ -104,10 +102,33 @@ public class ClazzEntity {
     @Override
     public int hashCode() {
         int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (personUuid != null ? personUuid.hashCode() : 0);
+        result = 31 * result + (getPersonByPersonUuid() != null ? getPersonByPersonUuid().hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (importTag != null ? importTag.hashCode() : 0);
         return result;
+    }
+
+    private PersonEntity personByPersonUuid;
+
+    @ManyToOne
+    @JoinColumn(name = "person_uuid", referencedColumnName = "uuid")
+    public PersonEntity getPersonByPersonUuid() {
+        return personByPersonUuid;
+    }
+
+    public void setPersonByPersonUuid(PersonEntity personByPersonUuid) {
+        this.personByPersonUuid = personByPersonUuid;
+    }
+
+    private Collection<SampleEntity> samplesByUuid;
+
+    @OneToMany(mappedBy = "clazzByClassUuid")
+    public Collection<SampleEntity> getSamplesByUuid() {
+        return samplesByUuid;
+    }
+
+    public void setSamplesByUuid(Collection<SampleEntity> samplesByUuid) {
+        this.samplesByUuid = samplesByUuid;
     }
 }

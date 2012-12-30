@@ -14,6 +14,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -56,7 +57,7 @@ public class UserEntity {
 
     private String password;
 
-    @Column(name = "password", nullable = false, insertable = true, updatable = true, length = 36, precision = 0)
+    @Column(name = "password", nullable = false, insertable = true, updatable = true, length = 32, precision = 0)
     @Basic
     public String getPassword() {
         return password;
@@ -128,5 +129,16 @@ public class UserEntity {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (organization != null ? organization.hashCode() : 0);
         return result;
+    }
+
+    private Collection<UserAlgorithmEntity> userAlgorithmsByUuid;
+
+    @OneToMany(mappedBy = "userByUserUuid")
+    public Collection<UserAlgorithmEntity> getUserAlgorithmsByUuid() {
+        return userAlgorithmsByUuid;
+    }
+
+    public void setUserAlgorithmsByUuid(Collection<UserAlgorithmEntity> userAlgorithmsByUuid) {
+        this.userAlgorithmsByUuid = userAlgorithmsByUuid;
     }
 }

@@ -20,7 +20,7 @@ public class ViewSampleEntityPK implements Serializable {
     private String viewUuid;
 
     @Id
-    @Column(name = "view_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Column(name = "view_uuid", nullable = false, insertable = false, updatable = false, length = 16, precision = 0)
     public String getViewUuid() {
         return viewUuid;
     }
@@ -31,7 +31,9 @@ public class ViewSampleEntityPK implements Serializable {
 
     private String sampleUuid;
 
-    @Column(name = "sample_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @Id
+    @Type(type="UUIDType")
+    @Column(name = "sample_uuid", nullable = false, insertable = false, updatable = false, length = 16, precision = 0)
     public String getSampleUuid() {
         return sampleUuid;
     }
