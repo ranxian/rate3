@@ -9,9 +9,12 @@ import rate.util.UUIDType;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Collection;
 
 /**
  * User:    Yu Yuankai
@@ -23,16 +26,20 @@ import java.util.UUID;
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class BenchmarkEntity {
+
+    //private static final Logger logger = Logger.getLogger(BenchmarkEntity.class);
+
     private String uuid;
 
     @Type(type="UUIDType")
     @GenericGenerator(name="UUIDGenerator", strategy="rate.util.UUIDGenerator")
     @GeneratedValue(generator = "UUIDGenerator")
-    @Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    @javax.persistence.Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
     @Id
     public String getUuid() {
         return uuid;
     }
+
 
     public void setUuid(String uuid) {
         this.uuid = uuid;

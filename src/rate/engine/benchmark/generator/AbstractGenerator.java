@@ -10,6 +10,7 @@ import rate.model.ViewEntity;
  * Time:    下午9:04
  */
 abstract public class AbstractGenerator {
+
     public ViewEntity getView() {
         return view;
     }
@@ -18,7 +19,7 @@ abstract public class AbstractGenerator {
         this.view = view;
     }
 
-    private ViewEntity view;
+    private ViewEntity view = null;
 
     public String getProtocol() {
         return protocol;
@@ -28,7 +29,7 @@ abstract public class AbstractGenerator {
         this.protocol = protocol;
     }
 
-    private String protocol;
+    private String protocol = "";
 
     abstract public BenchmarkEntity generate() throws GeneratorException;
 }

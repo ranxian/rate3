@@ -44,6 +44,8 @@ public class Generator {
             session.beginTransaction();
 
             ViewEntity view = new ViewEntity();
+            logger.debug("new view" + view.getUuid());
+
             view.setName(generateStrategy.getViewName());
             view.setGenerator(generateStrategy.getGenerator());
             view.setType("FINGERVEIN"); // TODO: maybe treat it like name and generator

@@ -9,9 +9,7 @@ import rate.util.UUIDType;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
