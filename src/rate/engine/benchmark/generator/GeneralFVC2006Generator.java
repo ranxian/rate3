@@ -1,6 +1,8 @@
 package rate.engine.benchmark.generator;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -50,8 +52,8 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
     private int sampleCount = 0;
 
     public BenchmarkEntity generate() throws GeneratorException {
-        if (classCount==0 || sampleCount==0 || getView()==null) {
-            throw new GeneratorException("No classCount or sampleCount specified");
+        if (classCount==0 || sampleCount==0 || getView()==null || getGeneratorName()==null || getBenchmarkName()==null) {
+            throw new GeneratorException("No classCount or sampleCount or view or generator name specified");
         }
 
         BenchmarkEntity benchmarkEntity = null;
@@ -62,6 +64,10 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
 
             benchmarkEntity = new BenchmarkEntity();
             benchmarkEntity.setViewByViewUuid(this.getView());
+            benchmarkEntity.setGenerator(this.getGeneratorName());
+            benchmarkEntity.setName(getBenchmarkName());
+            benchmarkEntity.setProtocol("FVC2006");
+
             session.save(benchmarkEntity);
 
             // create the directory
@@ -89,40 +95,61 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
                 throw new GeneratorException("Not enough classes");
             }
 
-            HashMap<ClazzEntity, List<SampleEntity>> selectedMap = new HashMap<ClazzEntity, List<SampleEntity>>();
+
+            List<Pair<ClazzEntity, List<SampleEntity>>> selectedMap = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
             for (int i=0; i<selectedClasses.size(); i++) {
                 ClazzEntity classEntity = selectedClasses.get(i);
-                query = session.createQuery("from ViewSampleEntity as V where V.sampleBySampleUuid.clazzByClassUuid=:clazz order by rand()");
+                query = session.createQuery("select V.sampleBySampleUuid from ViewSampleEntity as V where V.sampleBySampleUuid.clazzByClassUuid=:clazz order by rand()");
                 query.setMaxResults(this.sampleCount);
                 query.setParameter("clazz", classEntity);
                 List<SampleEntity> selectedSamples = (List<SampleEntity>)query.list();
                 if (selectedSamples.size() < this.sampleCount) {
                     throw new GeneratorException("Not enough samples for class with uuid " + classEntity.getUuid());
                 }
-                selectedMap.put(classEntity, selectedSamples);
+                Pair<ClazzEntity, List<SampleEntity>> newPair = new ImmutablePair<ClazzEntity, List<SampleEntity>>(classEntity, selectedSamples);
+                selectedMap.add(newPair);
             }
 
-            Iterator iterator = selectedMap.entrySet().iterator();
+            Iterator iterator = selectedMap.iterator();
+            // inner class
             while (iterator.hasNext()) {
                 Map.Entry entry = (Map.Entry) iterator.next();
-                System.out.println(entry.getKey());
+                ClazzEntity clazzEntity = (ClazzEntity)entry.getKey();
                 List<SampleEntity> samples = (List<SampleEntity>)entry.getValue();
-                for (SampleEntity sample : samples) {
-                      System.out.println("\t" + sample.getUuid());
+                for (int i=0; i<samples.size()-1; i++) {
+                    // Enroll
+                    SampleEntity sample1 = samples.get(i);
+                    pw.println(String.format("E %s %s", clazzEntity.getUuid(), sample1.getUuid()));
+                    pw.println(sample1.getFile());
+                    // Match with remaining
+                    for (int j=i+1; j<samples.size(); j++) {
+                        SampleEntity sample2 = samples.get(j);
+                        pw.println(String.format("M %s %s %s %s", clazzEntity.getUuid(), sample1.getUuid(), clazzEntity.getUuid(), sample2.getUuid()));
+                        pw.println(sample2.getFile());
+                    }
                 }
             }
 
+            // inter class
+            for (int i=0; i<selectedMap.size()-1; i++) {
+                Pair<ClazzEntity, List<SampleEntity>> pair1 = selectedMap.get(i);
+                ClazzEntity class1 = pair1.getKey();
+                SampleEntity sample1 = pair1.getValue().get(0);
+                // Enroll
+                pw.println(String.format("E %s %s", class1.getUuid(), sample1.getUuid()));
+                pw.println(sample1.getFile());
+                // Match with remaining
+                for (int j=i+1; j<selectedMap.size(); j++) {
+                    Pair<ClazzEntity, List<SampleEntity>> pair2 = selectedMap.get(i);
+                    ClazzEntity class2 = pair1.getKey();
+                    SampleEntity sample2 = pair1.getValue().get(0);
+                    pw.println(String.format("M %s %s %s %s", class1.getUuid(), sample1.getUuid(), class2.getUuid(), sample2.getUuid()));
+                    pw.println(sample2.getFile());
+                }
+            }
+            pw.close();
 
-
-
-
-            //List<ClazzEntity> clazzes =
-
-
-
-            // TODO
-            // Create the enroll and match instructions and save it to file
-            // Commit to database
+            session.getTransaction().commit();
         }
         catch (Exception ex) {
             logger.debug(ex);

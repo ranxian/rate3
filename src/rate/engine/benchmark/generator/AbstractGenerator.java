@@ -11,6 +11,26 @@ import rate.model.ViewEntity;
  */
 abstract public class AbstractGenerator {
 
+    public String getBenchmarkName() {
+        return benchmarkName;
+    }
+
+    public void setBenchmarkName(String benchmarkName) {
+        this.benchmarkName = benchmarkName;
+    }
+
+    private String benchmarkName = null;
+
+    public String getGeneratorName() {
+        return generatorName;
+    }
+
+    public void setGeneratorName(String generatorName) {
+        this.generatorName = generatorName;
+    }
+
+    String generatorName = null;
+
     public ViewEntity getView() {
         return view;
     }
