@@ -112,4 +112,9 @@ public class AlgorithmVersionEntity {
     public void setTasksByUuid(Collection<TaskEntity> tasksByUuid) {
         this.tasksByUuid = tasksByUuid;
     }
+
+    public String dirPath() {
+        String dir = FilenameUtils.concat(getAlgorithmByAlgorithmUuid().dirPath(), this.getUuid());
+        return FilenameUtils.separatorsToUnix(dir);
+    }
 }

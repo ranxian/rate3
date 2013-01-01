@@ -124,7 +124,7 @@ public class AlgorithmEntity {
         return result;
     }
 
-    public String dir() {
+    public String dirPath() {
         String dir = FilenameUtils.concat(RateConfig.getAlgorithmRootDir(), this.getUuid());
         return FilenameUtils.separatorsToUnix(dir);
     }

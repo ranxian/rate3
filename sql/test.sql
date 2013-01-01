@@ -39,6 +39,7 @@ CREATE TABLE `algorithm` (
 
 LOCK TABLES `algorithm` WRITE;
 /*!40000 ALTER TABLE `algorithm` DISABLE KEYS */;
+INSERT INTO `algorithm` VALUES ('˜—∆˘O:¥¿≤ç∫pÍ’','YYK TEST','FINGERVEIN','FVC2006','2013-01-01 03:44:21','This is the description.'),('9Ÿıô}cDC≤*œòAèV','yyk test 2','FINGERVEIN','FVC2006','2013-01-01 07:12:11','So this is test 2 '),('„L»ù…M%ÑK#=ΩÆÔü','YYK TEST 3','FINGERVEIN','FVC2006','2013-01-01 11:21:40','hi hi there');
 /*!40000 ALTER TABLE `algorithm` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -63,6 +64,7 @@ CREATE TABLE `algorithm_version` (
 
 LOCK TABLES `algorithm_version` WRITE;
 /*!40000 ALTER TABLE `algorithm_version` DISABLE KEYS */;
+INSERT INTO `algorithm_version` VALUES ('t2î®T‚É\0ˇÒÏπ\\','˜—∆˘O:¥¿≤ç∫pÍ’','2013-01-01 13:02:15');
 /*!40000 ALTER TABLE `algorithm_version` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -79,7 +81,7 @@ CREATE TABLE `benchmark` (
   `protocol` enum('FVC2006') NOT NULL,
   `name` varchar(45) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `description` text NOT NULL,
+  `description` text,
   `generator` varchar(45) NOT NULL,
   PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -91,6 +93,7 @@ CREATE TABLE `benchmark` (
 
 LOCK TABLES `benchmark` WRITE;
 /*!40000 ALTER TABLE `benchmark` DISABLE KEYS */;
+INSERT INTO `benchmark` VALUES (' ≤edﬁF≥≥%ﬁD+1e','›¢ù3∂Aè÷Œ™ßf','FVC2006','Test for SmallFVC2006Generator','2012-12-31 08:32:01',NULL,'SmallFVC2006Generator');
 /*!40000 ALTER TABLE `benchmark` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -343,4 +346,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-14 19:53:04
+-- Dump completed on 2013-01-01 21:06:58
