@@ -1,5 +1,6 @@
 package rate.model;
 
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -8,6 +9,8 @@ import rate.util.UUIDType;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -129,4 +132,37 @@ public class ViewEntity {
     public void setViewSamplesByUuid(Collection<ViewSampleEntity> viewSamplesByUuid) {
         this.viewSamplesByUuid = viewSamplesByUuid;
     }
+
+    @Transient
+    public int getNumOfBenchmarks() {
+        return getBenchmarksByUuid().size();
+    }
+
+    private void setNumOfBenchmarks(int noneSense) {
+        // make JPA happy
+    }
+
+    @Transient
+    public int getNumOfClasses() {
+        // TODO: The performance should be improved in the future. Maybe put a field in the table.
+        Set<String> clazzUuids = new HashSet<String>();
+        for (ViewSampleEntity viewSample : getViewSamplesByUuid()) {
+              clazzUuids.add(viewSample.getSampleBySampleUuid().getClazzByClassUuid().getUuid());
+        }
+        return clazzUuids.size();
+    }
+
+    private void setNumOfClasses(int noneSense) {
+        // make JPA happy
+    }
+
+    @Transient
+    public int getNumOfSamples() {
+        return getViewSamplesByUuid().size();
+    }
+
+    private void setNumOfSamples(int noneSense) {
+        // make JPA happy
+    }
+
 }
