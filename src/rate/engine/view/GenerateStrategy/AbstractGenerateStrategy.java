@@ -11,7 +11,7 @@ import java.util.UUID;
  * Date:    12-12-9
  * Time:    下午4:47
  */
-abstract public class AbstractGenerateStrategy{
+abstract public class AbstractGenerateStrategy {
     abstract public List<SampleEntity> getSamples() throws GenerateStrategyException;
 
     public String getViewName() {

@@ -7,6 +7,7 @@ import rate.util.UUIDType;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -91,7 +92,7 @@ public class PersonEntity {
         PersonEntity that = (PersonEntity) o;
 
         if (birth != null ? !birth.equals(that.birth) : that.birth != null) return false;
-        if (extra != null ? !extra.equals(that.extra) : that.extra != null) return false;
+        if (extra != null ? !Arrays.equals(extra, that.extra) : that.extra != null) return false;
         if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;

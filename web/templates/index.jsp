@@ -1,29 +1,49 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: XianRan
-  Date: 12-12-5
-  Time: 下午1:00
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <html>
   <head>
-    <title></title>
+    <title>RATE3</title>
+    <link rel="stylesheet" type="text/css" href="css/rate.css">
+    <script type="text/javascript" src="js/rate.js"></script>
   </head>
   <body>
-    <h1>Welcome to Rate3!</h1>
-    <p>FAQ lists here</p>
-    <hr />
-
-    <list>
-        <li><a href="<s:url namespace="/view" action="index" />">Views</a></li>
-        <li><a href="<s:url namespace="/algorithm" action="index" />">Algorithms</a></li>
-        <li><a href="">Status</a></li>
-        <li><a href="<s:url namespace="/user" action="index" />">Users</a></li>
-    </list>
-
-    <hr>
-    <p>By Yu Yuankai and Xian Ran</p>
+    <div id="header">
+      <div class="container">
+        <a href="index.html">
+          <h1 id="brand">RATE3
+            <small>Recognition Algorithm Test Engine</small>
+          </h1>
+        </a>
+        <div id="border-div"></div>
+        <form id="login_form">
+          <input type="text" placeholder="Username" class="nav-input" />
+          <input type="password" placeholder="Password" class="nav-input" />
+          <input type="submit" value="Login" class="btn btn-mini pull-right" />
+          <a class="white pull-right" href="#">Register</a>
+        </form>
+      </div>
+    </div>
+    <div id="navbar">
+      <div class="container">
+        <ul>
+            <li><a href="<s:url namespace="/view" action="index" />">Views</a></li>
+            <li><a href="<s:url namespace="/algorithm" action="index" />">Algorithms</a></li>
+            <li><a href="<s:url namespace="/" action="index" />">Status</a></li>
+            <li><a href="<s:url namespace="/user" action="index" />">About</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="main">
+      <div class="container">
+        <p>Welcome to RATE!</p>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <p>All Rights Reserved 2012 AI LAB, Peking University </p>
+        <p>Any problem, Please Contact Administrator</p>
+      </div>
+    </div>
   </body>
 </html>

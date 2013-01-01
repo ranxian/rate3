@@ -6,6 +6,7 @@ import org.hibernate.annotations.TypeDef;
 import rate.util.UUIDType;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -101,7 +102,7 @@ public class DeviceTypeEntity {
 
         DeviceTypeEntity that = (DeviceTypeEntity) o;
 
-        if (extra != null ? !extra.equals(that.extra) : that.extra != null) return false;
+        if (extra != null ? !Arrays.equals(extra, that.extra) : that.extra != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (provider != null ? !provider.equals(that.provider) : that.provider != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;

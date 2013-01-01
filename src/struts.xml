@@ -7,6 +7,7 @@
 <struts>
     <constant name="struts.devMode" value="true" />
     <constant name="struts.action.extension" value=""/>
+    <constant name="struts.action.excludePattern" value="/css/.*,/js/.*,/less/.*"/>
     <package name="rate.controller.user" namespace="/user" extends="struts-default">
         <action name="index"
                 class="rate.controller.user.IndexAction"

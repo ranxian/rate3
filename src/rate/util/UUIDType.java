@@ -112,7 +112,7 @@ public class UUIDType implements UserType
             throw new HibernateException (value.getClass ().toString () + CAST_EXCEPTION_TEXT) ;
         }
 
-        st.setBytes(index, UUID2ByteArray(UUID.fromString((String) value))); ;
+        st.setBytes(index, UUID2ByteArray(UUID.fromString((String) value)));
     }
 
     public Object replace (Object original, Object target, Object owner) throws HibernateException {

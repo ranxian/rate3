@@ -14,6 +14,7 @@
           <element id="library" level="project" name="apache-log4j:log4j:1.2.15" />
           <element id="library" level="project" name="hibernate-4.1.1" />
           <element id="library" level="project" name="mysql:mysql-connector-java:5.1.22" />
+          <element id="library" level="project" name="org.freemarker:freemarker:2.3.19" />
         </element>
       </element>
     </root>
