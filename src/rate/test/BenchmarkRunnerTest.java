@@ -2,6 +2,8 @@ package rate.test;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import rate.engine.benchmark.runner.RunnerInvoker;
+import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
 import rate.util.HibernateUtil;
 
@@ -18,5 +20,8 @@ public class BenchmarkRunnerTest {
         session.beginTransaction();
         Query query = session.createQuery("from BenchmarkEntity ");
         BenchmarkEntity benchmark = (BenchmarkEntity)query.list().get(0);
+        query = session.createQuery("from AlgorithmVersionEntity ");
+        AlgorithmVersionEntity algorithmVersion = (AlgorithmVersionEntity)query.list().get(0);
+        RunnerInvoker.run(benchmark, algorithmVersion);
     }
 }

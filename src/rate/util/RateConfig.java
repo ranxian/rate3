@@ -10,6 +10,9 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.model.AlgorithmVersionEntity;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.lang.String;
 import java.util.List;
 
@@ -50,27 +53,41 @@ public class RateConfig {
         return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getRootDir(), "algorithms"));
     }
 
-//    public static String getBenchmarkDir(String benchmarkUuid) {
-//        return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getBenchmarkRootDir(), benchmarkUuid));
-//    }
+    public static String getTempRootDir() {
+        return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getRootDir(), "temp"));
+    }
 
-//    public static String getAlgorithmVersionDir(String algorithmVersionUuid) {
-//        Session session = HibernateUtil.getSession();
-//        Query q = session.createQuery("from AlgorithmVersionEntity where uuid = :uuid");
-//        q.setParameter("uuid", algorithmVersionUuid);
-//        List<AlgorithmVersionEntity> results = q.list();
-//        if (results.size()!=1) {
-//            return null;
-//        }
-//        else {
-//            AlgorithmVersionEntity e = results.get(0);
-//            String temp = FilenameUtils.concat(RateConfig.getRootDir(), "algorithms").concat(e.getAlgorithmUuid()).concat(e.getUuid());
-//            return FilenameUtils.separatorsToUnix(temp);
-//        }
-//    }
+    public static String getTaskRootDir() {
+        return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getRootDir(), "tasks"));
+    }
 
-//    public static String getAlgorithmVersionDir(AlgorithmVersionEntity e) {
-//        String temp = FilenameUtils.concat(RateConfig.getRootDir(), "algorithms").concat(e.getAlgorithmUuid()).concat(e.getUuid());
-//        return FilenameUtils.separatorsToUnix(temp);
-//    }
+    // TODO: should not be here, for convenient now
+    public String getLastLine(String filePath) {
+        try {
+            RandomAccessFile raf = new RandomAccessFile(filePath, "r");
+            StringBuilder sb = new StringBuilder();
+
+            for (long i=raf.length()-1; i!=-1; i--) {
+                raf.seek(i);
+                char c = raf.readChar();
+
+                // if the last char is '\n', it should be ignored
+                if (c=='\n' && i==raf.length()-1) continue;
+
+                if (c=='\n') break;
+                else sb.append(c);
+            }
+
+            return sb.reverse().toString();
+        }
+        catch (FileNotFoundException ex) {
+            logger.debug(ex);
+            return "";
+        }
+        catch (IOException ex) {
+            logger.debug(ex);
+            return "";
+        }
+    }
+
 }

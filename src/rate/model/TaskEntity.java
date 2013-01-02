@@ -1,8 +1,10 @@
 package rate.model;
 
+import org.apache.commons.io.FilenameUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import rate.util.RateConfig;
 import rate.util.UUIDType;
 
 import javax.persistence.*;
@@ -134,4 +136,16 @@ public class TaskEntity {
     public void setAlgorithmVersionByAlgorithmVersionUuid(AlgorithmVersionEntity algorithmVersionByAlgorithmVersionUuid) {
         this.algorithmVersionByAlgorithmVersionUuid = algorithmVersionByAlgorithmVersionUuid;
     }
+
+    public String tempDirPath() {
+        String p = FilenameUtils.concat(FilenameUtils.concat(RateConfig.getTempRootDir(), "tasks"), this.getUuid());
+        return FilenameUtils.separatorsToUnix(p);
+    }
+
+    public String dirPath() {
+        String p = FilenameUtils.concat(RateConfig.getTaskRootDir(), this.getUuid());
+        return FilenameUtils.separatorsToUnix(p);
+    }
+
+
 }

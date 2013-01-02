@@ -1,12 +1,10 @@
 package rate.engine.benchmark.generator;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import rate.model.AlgorithmEntity;
 import rate.model.BenchmarkEntity;
 import rate.model.ClazzEntity;
 import rate.model.SampleEntity;
@@ -14,9 +12,11 @@ import rate.util.HibernateUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User:    Yu Yuankai
@@ -25,7 +25,7 @@ import java.util.*;
  * Time:    下午9:04
  */
 public class GeneralFVC2006Generator extends AbstractGenerator {
-    private static final Logger logger = Logger.getLogger(AbstractGenerator.class);
+    private static final Logger logger = Logger.getLogger(GeneralFVC2006Generator.class);
 
     public GeneralFVC2006Generator() {
         this.setProtocol("FVC2006");
@@ -71,6 +71,7 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
             session.save(benchmarkEntity);
 
             // create the directory
+            // TODO: This step should be put in BenchmarkEntity
             File dir = new File(benchmarkEntity.dirPath());
 
             if (!dir.exists()) {
@@ -85,7 +86,7 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
             PrintWriter pw = new PrintWriter(new FileOutputStream(benchmarkFile));
 
             Query query = session.createQuery("select distinct V.sampleBySampleUuid.clazzByClassUuid from ViewSampleEntity as V where V.viewByViewUuid=:view order by RAND()");
-            logger.debug(this.getView().getUuid());
+            //logger.debug(this.getView().getUuid());
             query.setParameter("view", this.getView());
             query.setMaxResults(this.classCount);
 
@@ -140,9 +141,9 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
                 pw.println(sample1.getFile());
                 // Match with remaining
                 for (int j=i+1; j<selectedMap.size(); j++) {
-                    Pair<ClazzEntity, List<SampleEntity>> pair2 = selectedMap.get(i);
-                    ClazzEntity class2 = pair1.getKey();
-                    SampleEntity sample2 = pair1.getValue().get(0);
+                    Pair<ClazzEntity, List<SampleEntity>> pair2 = selectedMap.get(j);
+                    ClazzEntity class2 = pair2.getKey();
+                    SampleEntity sample2 = pair2.getValue().get(0);
                     pw.println(String.format("M %s %s %s %s", class1.getUuid(), sample1.getUuid(), class2.getUuid(), sample2.getUuid()));
                     pw.println(sample2.getFile());
                 }

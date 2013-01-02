@@ -1,7 +1,11 @@
 package rate.util;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,10 +15,13 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 public class JavaProcess {
+
+    private static final Logger logger = Logger.getLogger(JavaProcess.class);
+
     private JavaProcess() {
     }
 
-    public static int exec(Class klass) throws IOException,
+    public static int exec(Class klass, List<String> paramaters) throws IOException,
             InterruptedException {
         String javaHome = System.getProperty("java.home");
         String javaBin = javaHome +
@@ -23,11 +30,18 @@ public class JavaProcess {
         String classpath = System.getProperty("java.class.path");
         String className = klass.getCanonicalName();
 
+        String parameter = StringUtils.join(paramaters, " ");
+
         ProcessBuilder builder = new ProcessBuilder(
-                javaBin, "-cp", classpath, className);
+                javaBin, "-cp", classpath, className, parameter);
+
+        logger.debug(String.format("Run with command: %s", StringUtils.join(builder.command(), " ")));
 
         Process process = builder.start();
+
         process.waitFor();
+
+        logger.debug("Process return: " + process.exitValue());
         return process.exitValue();
     }
 }

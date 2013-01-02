@@ -1,5 +1,8 @@
 package rate.engine.benchmark.runner;
 
+import rate.model.AlgorithmVersionEntity;
+import rate.model.BenchmarkEntity;
+
 /**
  * Created with IntelliJ IDEA.
  * User: yyk
@@ -9,4 +12,27 @@ package rate.engine.benchmark.runner;
  */
 abstract public class AbstractRunner {
 
+    public BenchmarkEntity getBenchmark() {
+        return benchmark;
+    }
+
+    public void setBenchmarkEntity(BenchmarkEntity benchmark) {
+        this.benchmark = benchmark;
+    }
+
+    private BenchmarkEntity benchmark = null;
+
+    public AlgorithmVersionEntity getAlgorithmVersion() {
+        return algorithmVersion;
+    }
+
+    public void setAlgorithmVersionEntity(AlgorithmVersionEntity algorithmVersion) {
+        this.algorithmVersion = algorithmVersion;
+    }
+
+    private AlgorithmVersionEntity algorithmVersion = null;
+
+    public void run() throws Exception {
+
+    }
 }

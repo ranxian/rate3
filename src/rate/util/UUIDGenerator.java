@@ -22,7 +22,7 @@ public class UUIDGenerator implements IdentifierGenerator {
             throws HibernateException
     {
         String  r = UUID.randomUUID ().toString() ;
-        logger.debug("UUIDGenerator: " + r);
+        logger.trace("UUIDGenerator: " + r);
         return r;
     }
 }
