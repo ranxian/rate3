@@ -4,6 +4,7 @@
         <th>Created</th>
         <th>Description</th>
         <th>Number of Results</th>
+        <th>for debug use</th>
     </tr>
     </thead>
     <tbody>
@@ -12,6 +13,7 @@
         <td><a href="/algorithm_version/show?uuid=${uuid}"><@s.property value="created"></a></@s.property></td>
         <td><@s.property value="description" /></td>
         <td><@s.property value="numOfResults" /></td>
+        <td><a href="/algorithm_version/delete?uuid=${uuid}">delete</a></td>
     </tr>
     </@s.iterator>
     </tbody>

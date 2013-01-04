@@ -73,11 +73,6 @@ public class AlgorithmVersionEntity {
         return result;
     }
 
-    public String dir() {
-        String dir = FilenameUtils.concat(RateConfig.getAlgorithmRootDir(), this.getAlgorithmByAlgorithmUuid().getUuid()).concat(this.getUuid());
-        return FilenameUtils.separatorsToUnix(dir);
-    }
-
     private AlgorithmEntity algorithmByAlgorithmUuid;
 
     @ManyToOne

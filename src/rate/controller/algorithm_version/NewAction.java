@@ -1,6 +1,7 @@
 package rate.controller.algorithm_version;
 
 import com.opensymphony.xwork2.ActionSupport;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
@@ -14,6 +15,8 @@ import rate.util.HibernateUtil;
  * To change this template use File | Settings | File Templates.
  */
 public class NewAction extends ActionSupport {
+
+    private static final Logger logger = Logger.getLogger(NewAction.class);
 
     public String getAlgorithmUuid() {
         return algorithmUuid;

@@ -46,7 +46,7 @@ public class IndexAction extends ActionSupport {
     private AlgorithmEntity algorithm;
 
     public String execute() throws Exception {
-        Query q = HibernateUtil.getSession().createQuery("from AlgorithmEntity where uuid=:uuid").setParameter("uuid", getAlgorithmUuid());
+                Query q = HibernateUtil.getSession().createQuery("from AlgorithmEntity where uuid=:uuid").setParameter("uuid", getAlgorithmUuid());
         algorithm = (AlgorithmEntity)q.list().get(0);
         return SUCCESS;
     }

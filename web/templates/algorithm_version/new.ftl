@@ -15,6 +15,19 @@
         </div>
     </div>
 
+<div class="control-group">
+    <div class="controls">
+        <@s.file name ="enrollExe" label ="Enroll.exe" />
+    </div>
+</div>
+
+<div class="control-group">
+    <div class="controls">
+        <@s.file name ="matchExe" label ="Match.exe" />
+    </div>
+</div>
+
+
     <@s.submit></@s.submit>
 </@s.form>
 

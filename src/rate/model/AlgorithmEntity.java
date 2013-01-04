@@ -150,4 +150,13 @@ public class AlgorithmEntity {
     public void setUserAlgorithmsByUuid(Collection<UserAlgorithmEntity> userAlgorithmsByUuid) {
         this.userAlgorithmsByUuid = userAlgorithmsByUuid;
     }
+
+    @Transient
+    public int getNumOfVersions() {
+        return this.getAlgorithmVersionsByUuid().size();
+    }
+
+    private void setNumOfVersions(int nonsense) {
+        // make JPA happy
+    }
 }

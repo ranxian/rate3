@@ -4,12 +4,14 @@ import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.model.AlgorithmVersionEntity;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -89,5 +91,10 @@ public class RateConfig {
             return "";
         }
     }
+
+//    // TODO: sholud not be here
+//    public static void putFile(String filePath, File toBePut) throws IOException {
+//        FileUtils.copyFile(toBePut, new File(filePath));
+//    }
 
 }

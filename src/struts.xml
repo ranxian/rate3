@@ -122,5 +122,12 @@
                 <param name="uuid">${algorithm.uuid}</param>
             </result>
         </action>
+        <action name="delete" class="rate.controller.algorithm_version.DeleteAction" method="execute">
+            <result name="success" type="redirectAction">
+                <param name="namespace">/algorithm</param>
+                <param name="actionName">show</param>
+                <param name="uuid">${algorithm.uuid}</param>
+            </result>
+        </action>
     </package>
 </struts>

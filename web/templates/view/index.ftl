@@ -5,7 +5,7 @@
 
 <p>Views lists here</p>
 
-<a class="btn" class="title-addition" href="/view/new">Import Views</a>
+<#--<a class="btn" class="title-addition" href="/view/new">Import Views</a>-->
 
 <div class="ratehr"></div>
 
