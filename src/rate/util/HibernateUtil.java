@@ -7,6 +7,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.HibernateException;
 import org.hibernate.service.ServiceRegistryBuilder;
 
+import java.sql.Timestamp;
+
 /**
  * User: Yu Yuankai
  * Date: 12-12-8
@@ -36,5 +38,10 @@ public class HibernateUtil {
 
     public static Session getSession() {
         return getSessionFactory().openSession();
+    }
+
+    public static Timestamp getCurrentTimestamp() {
+        java.util.Date today = new java.util.Date();
+        return new java.sql.Timestamp(today.getTime());
     }
 }

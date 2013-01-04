@@ -130,4 +130,10 @@
             </result>
         </action>
     </package>
+    <package name="rate.controller.status" namespace="/status" extends="struts-default">
+        <action name="index" class="rate.controller.StatusAction" method="execute">
+            <result name="success" type="freemarker">/templates/status/index.ftl</result>
+        </action>
+    </package>
+
 </struts>

@@ -83,6 +83,7 @@ public class FVC2006Runner extends AbstractRunner {
 
     private void prepare() throws IOException {
         session.beginTransaction();
+
         task = new TaskEntity();
         task.setAlgorithmVersionByAlgorithmVersionUuid(getAlgorithmVersion());
         task.setBenchmarkByBenchmarkUuid(getBenchmark());
@@ -100,6 +101,10 @@ public class FVC2006Runner extends AbstractRunner {
         matchExeFilePath = FilenameUtils.concat(getAlgorithmVersion().dirPath(), "match.exe");
 
         templateFilePath = FilenameUtils.concat(task.tempDirPath(), "template");
+
+        task.setCreated(HibernateUtil.getCurrentTimestamp());
+        session.save(task);
+        session.getTransaction().commit();
     }
 
     private String genCmdFromLines(String line1, String line2) {
