@@ -27,8 +27,9 @@ CREATE TABLE `algorithm` (
   `name` varchar(45) NOT NULL,
   `type` enum('FINGERVEIN') NOT NULL,
   `protocol` enum('FVC2006') NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `description` text NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -39,7 +40,7 @@ CREATE TABLE `algorithm` (
 
 LOCK TABLES `algorithm` WRITE;
 /*!40000 ALTER TABLE `algorithm` DISABLE KEYS */;
-INSERT INTO `algorithm` VALUES ('˜—∆˘O:¥¿≤ç∫pÍ’','YYK TEST','FINGERVEIN','FVC2006','2013-01-01 03:44:21','This is the description.'),('9Ÿıô}cDC≤*œòAèV','yyk test 2','FINGERVEIN','FVC2006','2013-01-01 07:12:11','So this is test 2 '),('„L»ù…M%ÑK#=ΩÆÔü','YYK TEST 3','FINGERVEIN','FVC2006','2013-01-01 11:21:40','hi hi there');
+INSERT INTO `algorithm` VALUES ('˜—∆˘O:¥¿≤ç∫pÍ’','YYK TEST','FINGERVEIN','FVC2006','2013-01-01 03:44:21','This is the description.','2013-01-04 15:51:55'),('9Ÿıô}cDC≤*œòAèV','yyk test 2','FINGERVEIN','FVC2006','2013-01-01 07:12:11','So this is test 2 ','2013-01-04 15:09:06'),('sˇº0üxHBÖØÌ\n¶\\‚Í','','','FVC2006','2013-01-04 08:47:31','','2013-01-04 15:09:06'),('Ñ;M–UO‘ßP∏\'Á’ë3','aaaaaa','FINGERVEIN','FVC2006','2013-01-04 14:46:13','adsgadsf','2013-01-04 15:33:07'),('ò$v`˛‡D∂´ö~Óæ;','akdjgadf','FINGERVEIN','FVC2006','2013-01-04 14:44:55','ajdkgakdjlfad','2013-01-04 15:51:14'),('£Œès.fI_©t‰ëMQâ]','Test 4 ','FINGERVEIN','FVC2006','2013-01-04 14:37:27','Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong Verrrrrrry looooooooong ','2013-01-04 15:51:39'),('„L»ù…M%ÑK#=ΩÆÔü','YYK TEST 3','FINGERVEIN','FVC2006','2013-01-01 11:21:40','hi hi there','2013-01-04 15:09:06'),('˜„(·ÒEË†◊£¡Wƒ8î','adgasdf','FINGERVEIN','FVC2006','2013-01-04 08:48:03','asdgasdf','2013-01-04 15:09:06');
 /*!40000 ALTER TABLE `algorithm` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,7 +66,7 @@ CREATE TABLE `algorithm_version` (
 
 LOCK TABLES `algorithm_version` WRITE;
 /*!40000 ALTER TABLE `algorithm_version` DISABLE KEYS */;
-INSERT INTO `algorithm_version` VALUES ('t2î®T‚É\0ˇÒÏπ\\','˜—∆˘O:¥¿≤ç∫pÍ’','2013-01-04 07:29:17','I\'m the algorithm_version desc');
+INSERT INTO `algorithm_version` VALUES ('ˆ/ƒ»CFê]Ù¸Ñî±','ò$v`˛‡D∂´ö~Óæ;','2013-01-04 15:21:35',''),('6QrP›J?≠@≥¡}ÀLÛ','Ñ;M–UO‘ßP∏\'Á’ë3','2013-01-04 15:33:07',''),('<ËÉx\\FL≥´0sT+úy','ò$v`˛‡D∂´ö~Óæ;','2013-01-04 15:19:31',''),('D1,;:5L∫±‘—yÑ.t','ò$v`˛‡D∂´ö~Óæ;','2013-01-04 14:45:15','asdgasdf'),('ÅÒ+xCÎØ\riŸYst{','˜—∆˘O:¥¿≤ç∫pÍ’','2013-01-04 12:59:49',''),('ç◊ﬁKg¥¿?¡Út<','£Œès.fI_©t‰ëMQâ]','2013-01-04 15:51:39',''),('úBà·jN´äácJ≥ÿb','ò$v`˛‡D∂´ö~Óæ;','2013-01-04 15:20:36',''),('¶ÜÌR†I7ÉP›\\≠~≠m','˜—∆˘O:¥¿≤ç∫pÍ’','2013-01-04 15:51:55',''),('∂6ß±ÌzBÒãJÎbã?ÔÅ','„L»ù…M%ÑK#=ΩÆÔü','2013-01-04 12:56:52',''),('√◊!ULõ	‡GkwØ','ò$v`˛‡D∂´ö~Óæ;','2013-01-04 15:51:14','');
 /*!40000 ALTER TABLE `algorithm_version` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -231,6 +232,7 @@ CREATE TABLE `task` (
 
 LOCK TABLES `task` WRITE;
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
+INSERT INTO `task` VALUES ('\ZîÈMõbDLÑR„¸7ƒXè','ÅÒ+xCÎØ\riŸYst{','f+K{{,@\\¥ 1	áÓi','2013-01-04 13:27:17',NULL),('d£\0«s¢J£}>∂≈î◊K','ÅÒ+xCÎØ\riŸYst{','f+K{{,@\\¥ 1	áÓi','2013-01-04 13:25:49',NULL),('Ç„‰’¿K)∂RGÔ¥•','ÅÒ+xCÎØ\riŸYst{','f+K{{,@\\¥ 1	áÓi','2013-01-04 13:24:34',NULL),('ˇ4ß–XL)ãP&Äëä|b','ÅÒ+xCÎØ\riŸYst{','f+K{{,@\\¥ 1	áÓi','2013-01-04 13:24:39',NULL);
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -347,4 +349,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-04 15:31:03
+-- Dump completed on 2013-01-04 23:53:22

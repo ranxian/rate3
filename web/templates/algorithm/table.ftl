@@ -6,6 +6,7 @@
         <th>Protocol</th>
         <th>Description</th>
         <th>Created</th>
+        <th>Updated</th>
         <th>Versions</th>
     </tr>
     </thead>
@@ -17,6 +18,7 @@
         <td><@s.property value="protocol" /></td>
         <td><@s.property value="description"></@s.property></td>
         <td><@s.property value="created"></@s.property></td>
+        <td><@s.property value="updated"></@s.property></td>
         <td><@s.property value="numOfVersions"></@s.property></td>
     </tr>
     </@s.iterator>

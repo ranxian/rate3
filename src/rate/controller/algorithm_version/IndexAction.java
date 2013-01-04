@@ -3,6 +3,7 @@ package rate.controller.algorithm_version;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
 import rate.util.HibernateUtil;
@@ -18,7 +19,8 @@ import java.util.Collection;
  */
 public class IndexAction extends ActionSupport {
 
-    private final Logger logger = Logger.getLogger(this.getClass());
+    private final static Logger logger = Logger.getLogger(IndexAction.class);
+    private final Session session = HibernateUtil.getSession();
 
     public String getAlgorithmUuid() {
         return algorithmUuid;
@@ -39,14 +41,16 @@ public class IndexAction extends ActionSupport {
     }
 
     public Collection<AlgorithmVersionEntity> getAlgorithmVersions() {
-        logger.trace("I'm executed");
-        return this.algorithm.getAlgorithmVersionsByUuid();
+        return session.createQuery("from AlgorithmVersionEntity where algorithmByAlgorithmUuid=:algorithm order by created desc")
+                .setParameter("algorithm", algorithm)
+                .list();
+        //return this.algorithm.getAlgorithmVersionsByUuid();
     }
 
     private AlgorithmEntity algorithm;
 
     public String execute() throws Exception {
-                Query q = HibernateUtil.getSession().createQuery("from AlgorithmEntity where uuid=:uuid").setParameter("uuid", getAlgorithmUuid());
+                Query q = session.createQuery("from AlgorithmEntity where uuid=:uuid order by created desc").setParameter("uuid", getAlgorithmUuid());
         algorithm = (AlgorithmEntity)q.list().get(0);
         return SUCCESS;
     }

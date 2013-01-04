@@ -24,6 +24,7 @@ public class CreateAction extends ActionSupport {
         try {
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
+            algorithm.setCreated(HibernateUtil.getCurrentTimestamp());
             session.save(algorithm);
             session.getTransaction().commit();
         }

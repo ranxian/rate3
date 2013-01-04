@@ -2,6 +2,7 @@ package rate.controller.algorithm;
 
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import rate.model.AlgorithmEntity;
 import rate.util.HibernateUtil;
 
@@ -12,6 +13,9 @@ import java.util.List;
  * Time: 下午12:38
  */
 public class IndexAction extends ActionSupport   {
+
+    private final Session session = HibernateUtil.getSession();
+
     public List<AlgorithmEntity> getAlgorithms() {
         return algorithms;
     }
@@ -23,7 +27,7 @@ public class IndexAction extends ActionSupport   {
     private List<AlgorithmEntity> algorithms;
 
     public String execute() throws Exception {
-        Query q = HibernateUtil.getSession().createQuery("from AlgorithmEntity");
+        Query q = session.createQuery("from AlgorithmEntity order by updated desc");
         algorithms = q.list();
         return SUCCESS;
     }

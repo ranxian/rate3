@@ -23,6 +23,8 @@ import java.io.IOException;
 public class CreateAction extends ActionSupport {
     private final static Logger logger = Logger.getLogger(CreateAction.class);
 
+    private final Session session = HibernateUtil.getSession();
+
     public AlgorithmVersionEntity getAlgorithmVersion() {
         return algorithmVersion;
     }
@@ -40,7 +42,7 @@ public class CreateAction extends ActionSupport {
     }
 
     public void setAlgorithmUuid(String uuid) {
-        this.algorithm = (AlgorithmEntity) HibernateUtil.getSession()
+        this.algorithm = (AlgorithmEntity) session
                 .createQuery("from AlgorithmEntity where uuid=:uuid")
                 .setParameter("uuid", uuid)
                 .list().get(0);
@@ -64,9 +66,8 @@ public class CreateAction extends ActionSupport {
 
     public String execute() {
         try {
-            this.algorithmVersion.setAlgorithmByAlgorithmUuid(this.algorithm);
-            Session session = HibernateUtil.getSession();
             session.beginTransaction();
+            this.algorithmVersion.setAlgorithmByAlgorithmUuid(this.algorithm);
             session.save(algorithmVersion);
 
             File dir = new File(algorithmVersion.dirPath());
@@ -76,6 +77,9 @@ public class CreateAction extends ActionSupport {
             FileUtils.copyFile(enrollExe, dst);
             dst = new File(FilenameUtils.concat(algorithmVersion.dirPath(), "match.exe"));
             FileUtils.copyFile(matchExe, dst);
+
+            algorithm.setUpdated(HibernateUtil.getCurrentTimestamp());
+            session.saveOrUpdate(algorithm);
 
             session.getTransaction().commit();
 

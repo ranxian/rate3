@@ -84,6 +84,18 @@ public class AlgorithmEntity {
         this.created = created;
     }
 
+    @Column(name = "updated", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
+    @Basic
+    public Timestamp getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Timestamp updated) {
+        this.updated = updated;
+    }
+
+    private Timestamp updated;
+
     private String description;
 
     @Column(name = "description", nullable = false, insertable = true, updatable = true, length = 65535, precision = 0)

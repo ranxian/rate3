@@ -25,6 +25,7 @@
       <column name="protocol" sqlType="ENUM" length="8" precision="0" nullable="false" jdbcType="1" />
       <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
       <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="false" jdbcType="-1" />
+      <column name="updated" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" />
       <primary-key name="PRIMARY" columns="uuid" />
     </table>
     <table name="algorithm_version" schema="" catalog="rate3" type="TABLE">

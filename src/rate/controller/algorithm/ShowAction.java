@@ -3,6 +3,7 @@ package rate.controller.algorithm;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
 import rate.util.HibernateUtil;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class ShowAction extends ActionSupport {
 
     private static final Logger logger = Logger.getLogger(ShowAction.class);
+    private final Session session = HibernateUtil.getSession();
 
     private AlgorithmEntity algorithm;
 
@@ -51,11 +53,13 @@ public class ShowAction extends ActionSupport {
     }
 
     public String execute() throws Exception {
-        Query q = HibernateUtil.getSession().createQuery("from AlgorithmEntity where uuid=:uuid");
+        Query q = session.createQuery("from AlgorithmEntity where uuid=:uuid");
         q.setParameter("uuid", uuid);
         List<AlgorithmEntity> list = q.list();
         algorithm = list.get(0);
-        algorithmVersions = algorithm.getAlgorithmVersionsByUuid();
+        algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithmByAlgorithmUuid=:algorithm order by created desc")
+                .setParameter("algorithm", algorithm)
+                .list();
         return SUCCESS;
     }
 }
