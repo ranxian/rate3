@@ -38,18 +38,6 @@ public class AlgorithmVersionEntity {
         this.uuid = uuid;
     }
 
-//    private String algorithmUuid;
-//
-//    @Column(name = "algorithm_uuid", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
-//    @Basic
-//    public String getAlgorithmUuid() {
-//        return algorithmUuid;
-//    }
-//
-//    public void setAlgorithmUuid(String algorithmUuid) {
-//        this.algorithmUuid = algorithmUuid;
-//    }
-
     private Timestamp created;
 
     @Column(name = "created", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
@@ -120,8 +108,7 @@ public class AlgorithmVersionEntity {
 
     @Transient
     public int getNumOfResults() {
-        return 10000;
-        //return this.getTasksByUuid().size();
+        return this.getTasksByUuid().size();
     }
 
     private void setNumOfResults(int nonsense) {

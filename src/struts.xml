@@ -112,5 +112,15 @@
         <action name="index" class="rate.controller.algorithm_version.IndexAction" method="execute">
             <result name="success" type="freemarker">/templates/algorithm_version/index.ftl</result>
         </action>
+        <action name="new" class="rate.controller.algorithm_version.NewAction" method="execute">
+            <result name="success" type="freemarker">/templates/algorithm_version/new.ftl</result>
+        </action>
+        <action name="create" class="rate.controller.algorithm_version.CreateAction" method="execute">
+            <result name="success" type="redirectAction">
+                <param name="namespace">/algorithm</param>
+                <param name="actionName">show</param>
+                <param name="uuid">${algorithm.uuid}</param>
+            </result>
+        </action>
     </package>
 </struts>

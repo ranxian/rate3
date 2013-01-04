@@ -1,9 +1,13 @@
 package rate.controller.algorithm_version;
 
 import com.opensymphony.xwork2.ActionSupport;
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import rate.model.AlgorithmEntity;
+import rate.model.AlgorithmVersionEntity;
 import rate.util.HibernateUtil;
+
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +17,8 @@ import rate.util.HibernateUtil;
  * To change this template use File | Settings | File Templates.
  */
 public class IndexAction extends ActionSupport {
+
+    private final Logger logger = Logger.getLogger(this.getClass());
 
     public String getAlgorithmUuid() {
         return algorithmUuid;
@@ -30,6 +36,11 @@ public class IndexAction extends ActionSupport {
 
     public void setAlgorithm(AlgorithmEntity algorithm) {
         this.algorithm = algorithm;
+    }
+
+    public Collection<AlgorithmVersionEntity> getAlgorithmVersions() {
+        logger.trace("I'm executed");
+        return this.algorithm.getAlgorithmVersionsByUuid();
     }
 
     private AlgorithmEntity algorithm;
