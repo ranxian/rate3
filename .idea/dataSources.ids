@@ -31,6 +31,7 @@
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="algorithm_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" remarks="dGhpcyBjb2x1bW4gaXMgYWxzbyB1c2VkIHRvIGlkZW50aWZ5IGRpZmZlcmVudCB2ZXJzaW9ucyBvZiBhbiBhbGdvcml0aG0=" version="true" />
+      <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="true" jdbcType="-1" />
       <primary-key name="PRIMARY" columns="uuid" />
     </table>
     <table name="benchmark" schema="" catalog="rate3" type="TABLE">
@@ -39,7 +40,7 @@
       <column name="protocol" sqlType="ENUM" length="8" precision="0" nullable="false" jdbcType="1" />
       <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
       <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
-      <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="false" jdbcType="-1" />
+      <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="true" jdbcType="-1" />
       <column name="generator" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
       <primary-key name="PRIMARY" columns="uuid" />
     </table>

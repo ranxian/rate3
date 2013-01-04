@@ -117,4 +117,26 @@ public class AlgorithmVersionEntity {
         String dir = FilenameUtils.concat(getAlgorithmByAlgorithmUuid().dirPath(), this.getUuid());
         return FilenameUtils.separatorsToUnix(dir);
     }
+
+    @Transient
+    public int getNumOfResults() {
+        return 10000;
+        //return this.getTasksByUuid().size();
+    }
+
+    private void setNumOfResults(int nonsense) {
+        // make JPA happy
+    }
+
+    private String description;
+
+    @Column(name = "description", nullable = false, insertable = true, updatable = true, length = 65535, precision = 0)
+    @Basic
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

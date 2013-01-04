@@ -9,7 +9,7 @@
 <div id="header">
     <div class="container">
         <a href="index.html">
-            <h1 id="brand">RATE3
+            <h1 id="brand">RATE
                 <small>Recognition Algorithm Test Engine</small>
             </h1>
         </a>
@@ -27,7 +27,7 @@
     <div class="container">
         <ul>
             <li><a href="/view/index">View</a></li>
-            <li><a href="/algorithm/index" class="active">Algorithm</a></li>
+            <li><a href="/algorithm/index">Algorithm</a></li>
             <li><a href="/status/index">Status</a></li>
         </ul>
     </div>

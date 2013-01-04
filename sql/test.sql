@@ -54,6 +54,7 @@ CREATE TABLE `algorithm_version` (
   `uuid` binary(16) NOT NULL,
   `algorithm_uuid` binary(16) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'this column is also used to identify different versions of an algorithm',
+  `description` text,
   PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -64,7 +65,7 @@ CREATE TABLE `algorithm_version` (
 
 LOCK TABLES `algorithm_version` WRITE;
 /*!40000 ALTER TABLE `algorithm_version` DISABLE KEYS */;
-INSERT INTO `algorithm_version` VALUES ('t2î®T‚É\0ˇÒÏπ\\','˜—∆˘O:¥¿≤ç∫pÍ’','2013-01-01 13:02:15');
+INSERT INTO `algorithm_version` VALUES ('t2î®T‚É\0ˇÒÏπ\\','˜—∆˘O:¥¿≤ç∫pÍ’','2013-01-04 07:29:17','I\'m the algorithm_version desc');
 /*!40000 ALTER TABLE `algorithm_version` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +94,7 @@ CREATE TABLE `benchmark` (
 
 LOCK TABLES `benchmark` WRITE;
 /*!40000 ALTER TABLE `benchmark` DISABLE KEYS */;
-INSERT INTO `benchmark` VALUES (' ≤edﬁF≥≥%ﬁD+1e','›¢ù3∂Aè÷Œ™ßf','FVC2006','Test for SmallFVC2006Generator','2012-12-31 08:32:01',NULL,'SmallFVC2006Generator');
+INSERT INTO `benchmark` VALUES ('f+K{{,@\\¥ 1	áÓi','›¢ù3∂Aè÷Œ™ßf','FVC2006','Test for SmallFVC2006Generator','2013-01-02 04:34:10',NULL,'SmallFVC2006Generator');
 /*!40000 ALTER TABLE `benchmark` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -346,4 +347,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-01 21:06:58
+-- Dump completed on 2013-01-04 15:31:03
