@@ -1,6 +1,7 @@
 package rate.model;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -21,6 +22,9 @@ import java.util.UUID;
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class TaskEntity {
+
+    private final Logger logger = Logger.getLogger(TaskEntity.class);
+
     private String uuid;
 
     @Type(type="UUIDType")
@@ -140,7 +144,9 @@ public class TaskEntity {
     @Transient
     public String getTempDirPath() {
         String p = FilenameUtils.concat(FilenameUtils.concat(RateConfig.getTempRootDir(), "tasks"), this.getUuid());
-        return FilenameUtils.separatorsToUnix(p);
+        String r = FilenameUtils.separatorsToUnix(p);
+//        logger.trace(r);
+        return r;
     }
     private void setTempDirPath(String nonsense) {}
 

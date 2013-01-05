@@ -1,8 +1,11 @@
 package rate.engine.benchmark.runner;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
+import rate.model.TaskEntity;
+import rate.util.HibernateUtil;
 import rate.util.JavaProcess;
 
 import java.util.ArrayList;
@@ -27,15 +30,18 @@ public class RunnerInvoker {
 
         logger.info(String.format("Invoke with benchmark: %s algorithmVersion: %s", benchmark.getUuid(), algorithmVersion.getUuid()));
 
+        Session session = HibernateUtil.getSession();
+        session.beginTransaction();
+
+        TaskEntity task = new TaskEntity();
+        task.setAlgorithmVersionByAlgorithmVersionUuid(algorithmVersion);
+        task.setBenchmarkByBenchmarkUuid(benchmark);
+        session.save(task);
+        session.getTransaction().commit();
+
         List<String> parameters = new ArrayList<String>();
-        parameters.add(benchmark.getUuid());
-        parameters.add(algorithmVersion.getUuid());
+        parameters.add(task.getUuid());
 
         JavaProcess.exec(RunnerMain.class, parameters);
-
-
-        // check protocol
-        // new a process with RunnerMain, benchmark uuid and algorithmVersion uuid, use rate.util.JavaProcess
-        // run the process and return
     }
 }

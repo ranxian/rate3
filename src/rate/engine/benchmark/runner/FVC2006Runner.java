@@ -26,35 +26,45 @@ public class FVC2006Runner extends AbstractRunner {
 
     private static final Logger logger = Logger.getLogger(FVC2006Runner.class);
 
+    private final Session session = HibernateUtil.getSession();
+
+    private String outputFilePath;
+    private String enrollExeFilePath;
+    private String matchExeFilePath;
+    private String templateFilePath;
+    private String imageFilePath;
+
     public FVC2006Runner() {
     }
 
     public void run() throws Exception {
 
-        logger.debug(String.format("%s is invoked", this.getClass().getName()));
+        logger.debug(String.format("%s invoked with task [%s]", this.getClass().getName(), task.getUuid()));
 
-        if (getBenchmark()==null || getAlgorithmVersion()==null) {
-            throw new RunnerException("No benchmark or algorithmVersion specified");
-        }
-
-        if (! getBenchmark().getProtocol().equals(getAlgorithmVersion().getAlgorithmByAlgorithmUuid().getProtocol())) {
+        if (! benchmark.getProtocol().equals(algorithmVersion.getAlgorithmByAlgorithmUuid().getProtocol())) {
             throw new RunnerException("Protocol does not match.");
         }
 
         this.prepare();
 
-        List<String> lines = FileUtils.readLines(new File(getBenchmark().filePath()));
+        List<String> lines = FileUtils.readLines(new File(benchmark.filePath()));
 
         File resultFile = new File(task.getResultFilePath());
+
+        resultFile.createNewFile();
         PrintWriter resultPw = new PrintWriter(resultFile);
+
+        logger.debug(String.format("OutputFilePath [%s]", outputFilePath));
+        logger.debug(String.format("ResultFilePath [%s]", task.getResultFilePath()));
 
         boolean enrollFailed = false;
 
+        logger.trace("begin to run commands");
         for (int i=0; i<lines.size(); i+=2) {
             String line1 = StringUtils.strip(lines.get(i));
-            String line2 = StringUtils.strip(lines.get(i+1));
+            String line2 = StringUtils.strip(lines.get(i + 1));
 
-            int result;
+            logger.trace(line1);
 
             if (line1.startsWith("E")) {
                 // try to delete the template file generated last time
@@ -69,14 +79,18 @@ public class FVC2006Runner extends AbstractRunner {
             }
 
             String cmd = this.genCmdFromLines(line1, line2);
-            logger.trace(cmd);
-            Process process = Runtime.getRuntime().exec(String.format("cmd /c %s", cmd));
+            logger.trace("Run command ["+cmd+"]");
+
+            continue;
+
+            /*Process process = Runtime.getRuntime().exec(String.format("%s", cmd));
             process.waitFor();
 
             String outputLine = StringUtils.strip(RateConfig.getLastLine(outputFilePath));
 
             if (line1.startsWith("E")) {
                 try {
+//                    logger.trace(outputLine);
                     String rs[] = StringUtils.split(outputLine, " ");
                     if (rs[0].equals(imageFilePath)
                             && rs[1].equals(templateFilePath)
@@ -84,54 +98,57 @@ public class FVC2006Runner extends AbstractRunner {
                             ) {
                         resultPw.println(String.format("%s 0", line1));
                         enrollFailed = false;
+                        resultPw.flush();
                     }
                     else throw new Exception(String.format("Enroll failed %s", line2));
                 }
                 catch (Exception ex) {
-                    logger.error(ex);
+                    logger.error("", ex);
                     resultPw.println(String.format("%s -1", line1));
                     enrollFailed = true;
                 }
             }
+            else if (line1.startsWith("M")) {
+                try {
+                    String rs[] = StringUtils.split(outputLine, " ");
+                    if (rs[0].equals(imageFilePath)
+                            && rs[1].equals(templateFilePath)
+                            && rs[2].equals("OK")
+                            ) {
+                        double matchScore = Double.parseDouble(rs[3]);
+                        resultPw.println(String.format("%s 0 %s", line1, String.valueOf(matchScore)));
+                        resultPw.flush();
+                    }
+                }
+                catch (Exception ex) {
+                    logger.error("", ex);
+                    resultPw.println(String.format("%s -1", line1));
+                }
+            }  */
         }
-
+        logger.trace("commands finished");
     }
 
-    private final Session session = HibernateUtil.getSession();
-    private TaskEntity task;
-
-    private String outputFilePath;
-    private String enrollExeFilePath;
-    private String matchExeFilePath;
-    private String templateFilePath;
-    private String imageFilePath;
 
     private void prepare() throws IOException {
-        session.beginTransaction();
 
-        task = new TaskEntity();
-        task.setAlgorithmVersionByAlgorithmVersionUuid(getAlgorithmVersion());
-        task.setBenchmarkByBenchmarkUuid(getBenchmark());
-        session.save(task);
-
-        FileUtils.forceMkdir(new File(task.getTempDirPath()));
-        FileUtils.forceMkdir(new File(task.getDirPath()));
+        if (!(new File(task.getTempDirPath()).exists())) {
+            FileUtils.forceMkdir(new File(task.getTempDirPath()));
+        }
+        if (!(new File(task.getDirPath()).exists())) {
+            FileUtils.forceMkdir(new File(task.getDirPath()));
+        }
 
         outputFilePath = FilenameUtils.concat(task.getTempDirPath(), "output.txt");
 
-        enrollExeFilePath = FilenameUtils.concat(getAlgorithmVersion().dirPath(), "enroll.exe");
-        matchExeFilePath = FilenameUtils.concat(getAlgorithmVersion().dirPath(), "match.exe");
+        enrollExeFilePath = FilenameUtils.concat(algorithmVersion.dirPath(), "enroll.exe");
+        matchExeFilePath = FilenameUtils.concat(algorithmVersion.dirPath(), "match.exe");
 
         templateFilePath = FilenameUtils.concat(task.getTempDirPath(), "template");
-
-        task.setCreated(HibernateUtil.getCurrentTimestamp());
-        session.save(task);
-        session.getTransaction().commit();
     }
 
     private String genCmdFromLines(String line1, String line2) {
         String exe = "";
-        String output = "";
         if (line1.startsWith("E")) {
             exe = enrollExeFilePath;
         }

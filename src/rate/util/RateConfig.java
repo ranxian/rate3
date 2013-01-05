@@ -6,6 +6,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -64,32 +65,30 @@ public class RateConfig {
     }
 
     // TODO: should not be here, for convenient now
-    public static String getLastLine(String filePath) {
-        try {
-            RandomAccessFile raf = new RandomAccessFile(filePath, "r");
-            StringBuilder sb = new StringBuilder();
+    public static String getLastLine(String filePath) throws IOException {
+        RandomAccessFile raf = new RandomAccessFile(filePath, "r");
+        StringBuilder sb = new StringBuilder();
 
-            for (long i=raf.length()-1; i!=-1; i--) {
-                raf.seek(i);
-                char c = raf.readChar();
+        int lengthOfChar = 1;
+        for (long i=raf.length()-lengthOfChar; i!=-1; i-=lengthOfChar) {
+            raf.seek(i);
+            char c = (char)raf.readByte();
 
-                // if the last char is '\n', it should be ignored
-                if (c=='\n' && i==raf.length()-1) continue;
+            //logger.trace(c);
 
-                if (c=='\n') break;
-                else sb.append(c);
-            }
+            // if the last char is '\n', it should be ignored
+            if (c=='\n' && i==raf.length()-lengthOfChar) continue;
 
-            return sb.reverse().toString();
+            if (c=='\n') break;
+            else sb.append(c);
         }
-        catch (FileNotFoundException ex) {
-            logger.debug(ex);
-            return "";
-        }
-        catch (IOException ex) {
-            logger.debug(ex);
-            return "";
-        }
+
+        String result = StringUtils.strip(sb.reverse().toString());
+//        logger.trace(String.format("%s\n\t%s", filePath, result));
+
+        raf.close();
+
+        return result;
     }
 
 //    // TODO: sholud not be here

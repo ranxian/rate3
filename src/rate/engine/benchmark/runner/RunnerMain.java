@@ -6,6 +6,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
+import rate.model.TaskEntity;
 import rate.util.HibernateUtil;
 
 /**
@@ -20,43 +21,41 @@ public class RunnerMain {
     private static final Logger logger = Logger.getLogger(RunnerMain.class);
 
     public static void main(String args[]) {
-        logger.info("Started");
         try {
-            logger.debug("RunnerMain started");
+            logger.debug("Started");
+
             args = args[0].split(" ");
-            String benchmarkUuid = args[0];
-            String algorithmVersionUuid = args[1];
+            String taskUuid = args[0];
             Session session = HibernateUtil.getSession();
-            Query query = session.createQuery("from BenchmarkEntity where uuid = :uuid").setParameter("uuid", benchmarkUuid);
-            BenchmarkEntity benchmark = (BenchmarkEntity)query.list().get(0);
-            query = session.createQuery("from AlgorithmVersionEntity where uuid = :uuid").setParameter("uuid", algorithmVersionUuid);
-            AlgorithmVersionEntity algorithmVersion = (AlgorithmVersionEntity)query.list().get(0);
+            Query query = session.createQuery("from TaskEntity where uuid = :uuid").setParameter("uuid", taskUuid);
+
+            TaskEntity task = (TaskEntity)query.list().get(0);
+            BenchmarkEntity benchmark = task.getBenchmarkByBenchmarkUuid();
+            AlgorithmVersionEntity algorithmVersion = task.getAlgorithmVersionByAlgorithmVersionUuid();
 
             if (!benchmark.getProtocol().equals(algorithmVersion.getAlgorithmByAlgorithmUuid().getProtocol())) {
                 throw new Exception("Protocol does not match");
             }
 
-            logger.debug(String.format("Protocol matched, benchmark %s algorithmVersion %s protocol %s", benchmark.getUuid(), algorithmVersion.getUuid(), benchmark.getProtocol()));
-
-            FVC2006Runner runner1 = new FVC2006Runner();
-
             Class<?> runnerClass = Class.forName("rate.engine.benchmark.runner."+benchmark.getProtocol()+"Runner");
 
             AbstractRunner runner = (AbstractRunner)runnerClass.newInstance();
-            runner.setBenchmarkEntity(benchmark);
-            runner.setAlgorithmVersionEntity(algorithmVersion);
+            runner.setTask(task);
+
+            logger.info(String.format("Attempt to run task [%s] with runner [%s]", task.getUuid(), runnerClass.getName()));
             runner.run();
+            logger.info(String.format("Run task [%s] with runner [%s] finished", task.getUuid(), runnerClass.getName()));
+
+            task.setFinished(HibernateUtil.getCurrentTimestamp());
+            session.beginTransaction();
+            session.update(task);
+            session.getTransaction().commit();
+
+            logger.info("Exit");
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error("", ex);
         }
-
-
-        // check the parameter and determine the RunnerClass
-        // new the class and run
-
-        logger.info("Exit");
-
-
     }
+
 }
