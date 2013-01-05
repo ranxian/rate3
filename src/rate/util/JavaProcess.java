@@ -27,7 +27,7 @@ public class JavaProcess {
         String javaBin = javaHome +
                 File.separator + "bin" +
                 File.separator + "java";
-        String classpath = System.getProperty("java.class.path");
+        String classpath = "\"" + System.getProperty("java.class.path") + "\"";
         String className = klass.getCanonicalName();
 
         String parameter = StringUtils.join(paramaters, " ");
@@ -35,7 +35,10 @@ public class JavaProcess {
         ProcessBuilder builder = new ProcessBuilder(
                 javaBin, "-cp", classpath, className, parameter);
 
-        logger.debug(String.format("Run with command: %s", StringUtils.join(builder.command(), " ")));
+        String cmd = String.format("Run with command: %s", StringUtils.join(builder.command(), " "));
+        logger.debug(cmd);
+
+        //Process process = Runtime.getRuntime().exec(cmd);
 
         Process process = builder.start();
 

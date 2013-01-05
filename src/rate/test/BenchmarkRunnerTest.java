@@ -1,5 +1,6 @@
 package rate.test;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.engine.benchmark.runner.RunnerInvoker;
@@ -15,6 +16,9 @@ import rate.util.HibernateUtil;
  * To change this template use File | Settings | File Templates.
  */
 public class BenchmarkRunnerTest {
+
+    private static final Logger logger = Logger.getLogger(BenchmarkRunnerTest.class);
+
     public static void main(String[] args) throws Exception {
         Session session = HibernateUtil.getSession();
         session.beginTransaction();

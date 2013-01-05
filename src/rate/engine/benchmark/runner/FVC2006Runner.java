@@ -38,7 +38,6 @@ public class FVC2006Runner extends AbstractRunner {
     }
 
     public void run() throws Exception {
-
         logger.debug(String.format("%s invoked with task [%s]", this.getClass().getName(), task.getUuid()));
 
         if (! benchmark.getProtocol().equals(algorithmVersion.getAlgorithmByAlgorithmUuid().getProtocol())) {
@@ -48,6 +47,8 @@ public class FVC2006Runner extends AbstractRunner {
         this.prepare();
 
         List<String> lines = FileUtils.readLines(new File(benchmark.filePath()));
+
+        String a = StringUtils.join(lines, " ");
 
         File resultFile = new File(task.getResultFilePath());
 
@@ -59,8 +60,9 @@ public class FVC2006Runner extends AbstractRunner {
 
         boolean enrollFailed = false;
 
-        logger.trace("begin to run commands");
+        logger.trace(String.format("Begin to run [%s] commands", lines.size()/2));
         for (int i=0; i<lines.size(); i+=2) {
+
             String line1 = StringUtils.strip(lines.get(i));
             String line2 = StringUtils.strip(lines.get(i + 1));
 
@@ -69,7 +71,7 @@ public class FVC2006Runner extends AbstractRunner {
             if (line1.startsWith("E")) {
                 // try to delete the template file generated last time
                 if (new File(templateFilePath).exists()) {
-                    FileUtils.forceDelete(new File(templateFilePath));
+                    new File(templateFilePath).delete();
                 }
             }
             else if (line1.startsWith("M")) {
@@ -79,11 +81,9 @@ public class FVC2006Runner extends AbstractRunner {
             }
 
             String cmd = this.genCmdFromLines(line1, line2);
-            logger.trace("Run command ["+cmd+"]");
+//            logger.trace("Run command ["+cmd+"]");
 
-            continue;
-
-            /*Process process = Runtime.getRuntime().exec(String.format("%s", cmd));
+            Process process = Runtime.getRuntime().exec(String.format("%s", cmd));
             process.waitFor();
 
             String outputLine = StringUtils.strip(RateConfig.getLastLine(outputFilePath));
@@ -124,20 +124,21 @@ public class FVC2006Runner extends AbstractRunner {
                     logger.error("", ex);
                     resultPw.println(String.format("%s -1", line1));
                 }
-            }  */
+            }
         }
         logger.trace("commands finished");
+
+        task.setFinished(HibernateUtil.getCurrentTimestamp());
+        session.beginTransaction();
+        session.update(task);
+        session.getTransaction().commit();
+
+        this.cleanUp();
     }
 
 
-    private void prepare() throws IOException {
-
-        if (!(new File(task.getTempDirPath()).exists())) {
-            FileUtils.forceMkdir(new File(task.getTempDirPath()));
-        }
-        if (!(new File(task.getDirPath()).exists())) {
-            FileUtils.forceMkdir(new File(task.getDirPath()));
-        }
+    protected void prepare() throws Exception {
+        super.prepare();
 
         outputFilePath = FilenameUtils.concat(task.getTempDirPath(), "output.txt");
 

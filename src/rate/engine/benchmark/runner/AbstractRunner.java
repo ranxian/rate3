@@ -1,8 +1,11 @@
 package rate.engine.benchmark.runner;
 
+import org.apache.commons.io.FileUtils;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
+
+import java.io.File;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +23,19 @@ abstract public class AbstractRunner {
         this.task = task;
         this.benchmark = task.getBenchmarkByBenchmarkUuid();
         this.algorithmVersion = task.getAlgorithmVersionByAlgorithmVersionUuid();
+    }
+
+    protected void prepare() throws Exception {
+        if (!(new File(task.getTempDirPath()).exists())) {
+            FileUtils.forceMkdir(new File(task.getTempDirPath()));
+        }
+        if (!(new File(task.getDirPath()).exists())) {
+            FileUtils.forceMkdir(new File(task.getDirPath()));
+        }
+    }
+
+    protected void cleanUp() throws Exception {
+        FileUtils.deleteDirectory(new File(task.getTempDirPath()));
     }
 
     public void run() throws Exception {
