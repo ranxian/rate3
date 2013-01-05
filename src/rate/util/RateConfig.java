@@ -64,7 +64,7 @@ public class RateConfig {
     }
 
     // TODO: should not be here, for convenient now
-    public String getLastLine(String filePath) {
+    public static String getLastLine(String filePath) {
         try {
             RandomAccessFile raf = new RandomAccessFile(filePath, "r");
             StringBuilder sb = new StringBuilder();

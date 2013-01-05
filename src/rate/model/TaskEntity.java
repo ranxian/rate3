@@ -137,15 +137,25 @@ public class TaskEntity {
         this.algorithmVersionByAlgorithmVersionUuid = algorithmVersionByAlgorithmVersionUuid;
     }
 
-    public String tempDirPath() {
+    @Transient
+    public String getTempDirPath() {
         String p = FilenameUtils.concat(FilenameUtils.concat(RateConfig.getTempRootDir(), "tasks"), this.getUuid());
         return FilenameUtils.separatorsToUnix(p);
     }
+    private void setTempDirPath(String nonsense) {}
 
-    public String dirPath() {
+    @Transient
+    public String getDirPath() {
         String p = FilenameUtils.concat(RateConfig.getTaskRootDir(), this.getUuid());
         return FilenameUtils.separatorsToUnix(p);
     }
+    private void setDirPath(String nonsense) {}
 
+    @Transient
+    public String getResultFilePath() {
+        String p = FilenameUtils.concat(getDirPath(), "result.txt");
+        return FilenameUtils.separatorsToUnix(p);
+    }
+    private void setResultFilePath(String nonsense) {}
 
 }
