@@ -12,10 +12,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.model.AlgorithmVersionEntity;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.lang.String;
 import java.util.List;
 
@@ -91,9 +88,14 @@ public class RateConfig {
         return result;
     }
 
-//    // TODO: sholud not be here
-//    public static void putFile(String filePath, File toBePut) throws IOException {
-//        FileUtils.copyFile(toBePut, new File(filePath));
-//    }
+    public static int getCountOfLines(String filePath) throws Exception {
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+        int count = 0;
+        String line;
+        while ((line=reader.readLine())!=null) {
+            count++;
+        }
+        return count;
+    }
 
 }
