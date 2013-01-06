@@ -29,7 +29,7 @@
             <li><a href="/view/index">Views</a></li>
             <li><a href="/algorithm/index">Algorithms</a></li>
             <#--<li><a href="/algorithm/index">Benchmarks</a></li>-->
-            <li><a href="/status/index">Status</a></li>
+            <li><a href="/task/index">Tasks</a></li>
         </ul>
     </div>
 </div>
