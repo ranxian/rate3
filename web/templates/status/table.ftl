@@ -15,7 +15,7 @@
         <td><a href="">${algorithmVersionByAlgorithmVersionUuid.created}</a></td>
         <td><a href="/benchmark/show?uuid=${benchmarkByBenchmarkUuid.uuid}">${benchmarkByBenchmarkUuid.name}</a></td>
         <td>${created}</td>
-        <td>${finished!"running"}</td>
+        <td><a href="/task/show?uuid=${uuid}">${finished!"running"}</a></td>
     </tr>
     </@s.iterator>
     </tbody>
