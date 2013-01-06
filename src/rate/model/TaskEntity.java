@@ -164,4 +164,10 @@ public class TaskEntity {
     }
     private void setResultFilePath(String nonsense) {}
 
+    @Transient
+    public String getUuidShort() {
+        return uuid.split("-")[0];
+    }
+    private void setUuidShort(String nonsense) {}
+
 }
