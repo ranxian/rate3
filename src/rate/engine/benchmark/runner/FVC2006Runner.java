@@ -9,10 +9,7 @@ import org.hibernate.Session;
 import rate.util.HibernateUtil;
 import rate.util.RateConfig;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -25,7 +22,7 @@ import java.util.*;
 
 public class FVC2006Runner
         extends AbstractRunner
-    implements Comparator<String>
+        implements Comparator<String>
 {
 
     private static final Logger logger = Logger.getLogger(FVC2006Runner.class);
@@ -38,6 +35,7 @@ public class FVC2006Runner
     private String templateFilePath;
     private String imageFilePath;
     private String resultFilePath;
+    private String errorRateFilePath;
 
     public FVC2006Runner() {
     }
@@ -152,6 +150,7 @@ public class FVC2006Runner
         templateFilePath = FilenameUtils.concat(task.getTempDirPath(), "template");
 
         resultFilePath = task.getResultFilePath();
+        errorRateFilePath = FilenameUtils.concat(task.getDirPath(), "rate.txt");
     }
 
     private String genCmdFromLines(String line1, String line2) {
@@ -322,7 +321,7 @@ public class FVC2006Runner
     }
 
     private double getErrorRateOnThreshold(double thresholdIn, String filePath) throws Exception {
-        logger.trace(String.format("filePath [%s] thresholdIn [%f]", filePath, thresholdIn));
+//        logger.trace(String.format("filePath [%s] thresholdIn [%f]", filePath, thresholdIn));
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
         String line;
         double threshold = 0, errorRate = 0;
@@ -390,17 +389,131 @@ public class FVC2006Runner
         return getFNMRonThreshold(threshold);
     }
 
+    private double EER_l;
+    private double EER_h;
+    private double EER;
+    // copy from Old source
+    private void calcEER() throws Exception {
+        Scanner fIn1 = new Scanner(new FileInputStream(fmrFilePath));
+        Scanner fIn2 = new Scanner(new FileInputStream(fnmrFilePath));
+
+        double t1 = 0.0, fmr1 = 1.0, fnmr1 = 0.0;
+        double t2 = 0.0, fmr2 = 1.0, fnmr2 = 0.0;
+        double t_fmr = 0.0;
+        double t_fnmr = 0.0;
+
+        if (fIn1.hasNext()) {
+            t_fmr = fIn1.nextDouble();
+        } else {
+            t_fmr = 1.0;
+        }
+
+        if (fIn2.hasNext()) {
+            t_fnmr = fIn2.nextDouble();
+        } else {
+            t_fnmr = 1.0;
+        }
+
+        while (fmr2 > fnmr2) {
+            t1 = t2;
+            fmr1 = fmr2;
+            fnmr1 = fnmr2;
+
+            if (t_fmr < t_fnmr) {
+                t2 = t_fmr;
+
+                if (t2 != 1.0) {
+                    fmr2 = fIn1.nextDouble();
+                } else {
+                    fmr2 = 0.0;
+                }
+
+                if (fIn1.hasNext()) {
+                    t_fmr = fIn1.nextDouble();
+                } else {
+                    t_fmr = 1.0;
+                }
+
+            } else if (t_fmr > t_fnmr) {
+                t2 = t_fnmr;
+
+                if (t2 != 1.0) {
+                    fnmr2 = fIn2.nextDouble();
+                } else {
+                    fnmr2 = 1.0;
+                }
+
+                if (fIn2.hasNext()) {
+                    t_fnmr = fIn2.nextDouble();
+                } else {
+                    t_fnmr = 1.0;
+                }
+
+            } else {
+                t2 = t_fmr;
+
+                if (t2 != 1.0) {
+                    fmr2 = fIn1.nextDouble();
+                } else {
+                    fmr2 = 0.0;
+                }
+
+                if (fIn1.hasNext()) {
+                    t_fmr = fIn1.nextDouble();
+                } else {
+                    t_fmr = 1.0;
+                }
+
+                if (t2 != 1.0) {
+                    fnmr2 = fIn2.nextDouble();
+                } else {
+                    fnmr2 = 1.0;
+                }
+
+                if (fIn2.hasNext()) {
+                    t_fnmr = fIn2.nextDouble();
+                } else {
+                    t_fnmr = 1.0;
+                }
+            }
+        }
+
+        fIn1.close();
+        fIn2.close();
+
+        if (fmr1 + fnmr1 < fmr2 + fnmr2) {
+            EER_l = fnmr1;
+            EER_h = fmr1;
+        } else {
+            EER_l = fmr2;
+            EER_h = fnmr2;
+        }
+        EER = (EER_l+EER_h)/2;
+    }
+
     private void calcErrorRates() throws Exception {
 //        logger.trace(findFMRonFNMR(0.05));
         double FMR100 = findFMRonFNMR(0.01);
         double FMR1000 = findFMRonFNMR(0.001);
         double zeroFMR = findFMRonFNMR(0);
         double zeroFNMR = findFNMRonFMR(0);
+        this.calcEER();
 
         logger.trace(String.format("FMR100 %f", FMR100));
         logger.trace(String.format("FMR1000 %f", FMR1000));
         logger.trace(String.format("zeroFMR %f", zeroFMR));
-    }
+        logger.trace(String.format("zeroFNMR %f", zeroFNMR));
+        logger.trace(String.format("EER_l %f", EER_l));
+        logger.trace(String.format("EER_h %f", EER_h));
 
+        PrintWriter errorRatePw = new PrintWriter(new File(errorRateFilePath));
+        errorRatePw.println(String.format("%f %f %f", EER, EER_l, EER_h));
+        errorRatePw.println(FMR100);
+        errorRatePw.println(FMR1000);
+        errorRatePw.println(zeroFMR);
+        errorRatePw.println(zeroFNMR);
+        errorRatePw.close();
+    }
 }
+
 
