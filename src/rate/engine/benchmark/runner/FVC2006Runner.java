@@ -184,11 +184,14 @@ public class FVC2006Runner
     public void analyzeAll() throws Exception {
         this.splitAndSortResult();
         logger.trace("Begin to calc FMR");
-        this.calcFNMR();
+        this.calcFMR();
         logger.trace("Finished calc FMR");
         logger.trace("Begin to calc FNMR");
         this.calcFNMR();
         logger.trace("Finished calc FNMR");
+        logger.trace("Begin to calc error rates");
+        this.calcErrorRates();
+        logger.trace("Finished calc error rates");
     }
 
     private String genuineFilePath;
@@ -258,7 +261,8 @@ public class FVC2006Runner
     private String fmrFilePath;
 
     private void calcFMR() throws Exception {
-        fmrFilePath = FilenameUtils.concat(task.getDirPath(), "fmr.txt");
+        this.fmrFilePath = FilenameUtils.concat(task.getDirPath(), "fmr.txt");
+//        logger.trace(String.format("fmrFilePath is set to [%s]", fmrFilePath));
         BufferedReader imposterReader = new BufferedReader(new FileReader(imposterFilePath));
         File fmrFile = new File(fmrFilePath);
         fmrFile.createNewFile();
@@ -287,6 +291,7 @@ public class FVC2006Runner
     }
 
     private String fnmrFilePath;
+
     private void calcFNMR() throws Exception {
         fnmrFilePath = FilenameUtils.concat(task.getDirPath(), "fnmr.txt");
         BufferedReader genuineReader = new BufferedReader(new FileReader(genuineFilePath));
@@ -316,4 +321,86 @@ public class FVC2006Runner
         fmrPw.close();
     }
 
+    private double getErrorRateOnThreshold(double thresholdIn, String filePath) throws Exception {
+        logger.trace(String.format("filePath [%s] thresholdIn [%f]", filePath, thresholdIn));
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+        String line;
+        double threshold = 0, errorRate = 0;
+        while ((line=reader.readLine())!=null) {
+            String rs[] = StringUtils.strip(line).split(" ");
+            threshold = Double.parseDouble(rs[0]);
+            errorRate = Double.parseDouble(rs[1]);
+
+//            logger.trace(String.format("getErrorRateOnThreshold: filePath [%s] threshold [%f] errorRate [%f]", filePath, threshold, errorRate));
+
+            if (threshold>=thresholdIn) break;
+        }
+        return errorRate;
+    }
+
+    private double getFMRonThreshold(double thresholdIn) throws Exception {
+//        logger.trace(String.format("fmrFilePath is now [%s]", fmrFilePath));
+        return getErrorRateOnThreshold(thresholdIn, this.fmrFilePath);
+    }
+
+    private double getFNMRonThreshold(double thresholdIn) throws Exception {
+        return getErrorRateOnThreshold(thresholdIn, fnmrFilePath);
+    }
+
+    // When FNMR is set to fnmr, what is the FMR
+    private double findFMRonFNMR(double fnmr) throws Exception {
+        BufferedReader fnmrReader = new BufferedReader(new FileReader(fnmrFilePath));
+        String line;
+        double threshold = 0, errorRate = 0;
+        while ((line=fnmrReader.readLine())!=null) {
+            String rs[] = StringUtils.strip(line).split(" ");
+            threshold = Double.parseDouble(rs[0]);
+            errorRate = Double.parseDouble(rs[1]);
+
+//            logger.trace(String.format("finFMRonFNMR: filePath [%s] threshold [%f] errorRate [%f]", fnmrFilePath, threshold, errorRate));
+
+            if (errorRate>=fnmr) break;
+        }
+        if (errorRate<fnmr) {
+            threshold = 1;
+        }
+
+        fnmrReader.close();
+
+        return getFMRonThreshold(threshold);
+    }
+
+    private double findFNMRonFMR(double fmr) throws Exception {
+        BufferedReader fmrReader = new BufferedReader(new FileReader(this.fmrFilePath));
+        String line;
+        double threshold = 0, errorRate = 0;
+        while ((line=fmrReader.readLine())!=null) {
+            String rs[] = StringUtils.strip(line).split(" ");
+            threshold = Double.parseDouble(rs[0]);
+            errorRate = Double.parseDouble(rs[1]);
+
+            if (errorRate<=fmr) break;
+        }
+        if (errorRate>fmr) {
+            threshold = 1;
+        }
+
+        fmrReader.close();
+
+        return getFNMRonThreshold(threshold);
+    }
+
+    private void calcErrorRates() throws Exception {
+//        logger.trace(findFMRonFNMR(0.05));
+        double FMR100 = findFMRonFNMR(0.01);
+        double FMR1000 = findFMRonFNMR(0.001);
+        double zeroFMR = findFMRonFNMR(0);
+        double zeroFNMR = findFNMRonFMR(0);
+
+        logger.trace(String.format("FMR100 %f", FMR100));
+        logger.trace(String.format("FMR1000 %f", FMR1000));
+        logger.trace(String.format("zeroFMR %f", zeroFMR));
+    }
+
 }
+
