@@ -19,7 +19,7 @@ abstract public class AbstractRunner {
     protected TaskEntity task;
     protected AlgorithmVersionEntity algorithmVersion;
 
-    public void setTask(TaskEntity task) {
+    public void setTask(TaskEntity task) throws Exception {
         this.task = task;
         this.benchmark = task.getBenchmarkByBenchmarkUuid();
         this.algorithmVersion = task.getAlgorithmVersionByAlgorithmVersionUuid();

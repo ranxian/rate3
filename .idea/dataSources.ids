@@ -23,9 +23,9 @@
       <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
       <column name="type" sqlType="ENUM" length="11" precision="0" nullable="false" jdbcType="1" />
       <column name="protocol" sqlType="ENUM" length="8" precision="0" nullable="false" jdbcType="1" />
-      <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
+      <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" />
       <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="false" jdbcType="-1" />
-      <column name="updated" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" />
+      <column name="updated" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
       <primary-key name="PRIMARY" columns="uuid" />
     </table>
     <table name="algorithm_version" schema="" catalog="rate3" type="TABLE">

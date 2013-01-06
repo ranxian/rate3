@@ -3,9 +3,10 @@ package rate.engine.benchmark.runner;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import rate.engine.task.FVC2006Task;
+import rate.model.TaskEntity;
 import rate.util.HibernateUtil;
 import rate.util.RateConfig;
 
@@ -29,23 +30,24 @@ public class FVC2006Runner
 
     private final Session session = HibernateUtil.getSession();
 
-    private String outputFilePath;
-    private String enrollExeFilePath;
-    private String matchExeFilePath;
+    private FVC2006Task fvc2006Task;
+
+    private String tempOutputFilePath;
     private String templateFilePath;
     private String imageFilePath;
-    private String resultFilePath;
-    private String errorRateFilePath;
-    private String rocFilePath;
-    private String genuineFilePath;
-    private String imposterFilePath;
-    private String fmrFilePath;
-    private String fnmrFilePath;
+
     private double EER_l;
     private double EER_h;
     private double EER;
 
     public FVC2006Runner() {
+    }
+
+    public void setTask(TaskEntity task) throws Exception {
+        super.setTask(task);
+        fvc2006Task = new FVC2006Task(task);
+        tempOutputFilePath = FilenameUtils.concat(task.getTempDirPath(), "output.txt");
+        templateFilePath = FilenameUtils.concat(task.getTempDirPath(), "template");
     }
 
     public void run() throws Exception {
@@ -77,11 +79,11 @@ public class FVC2006Runner
         // TODO: Read the whole txt into memory may lead to OutOfMemoryException.
         List<String> lines = FileUtils.readLines(new File(benchmark.filePath()));
 
-        File resultFile = new File(resultFilePath);
+        File resultFile = new File(fvc2006Task.getResultFilePath());
         resultFile.createNewFile();
         PrintWriter resultPw = new PrintWriter(resultFile);
 
-        logger.debug(String.format("OutputFilePath [%s]", outputFilePath));
+        logger.debug(String.format("OutputFilePath [%s]", tempOutputFilePath));
         logger.debug(String.format("ResultFilePath [%s]", task.getResultFilePath()));
 
         boolean enrollFailed = false;
@@ -111,7 +113,7 @@ public class FVC2006Runner
             Process process = Runtime.getRuntime().exec(String.format("%s", cmd));
             process.waitFor();
 
-            String outputLine = StringUtils.strip(RateConfig.getLastLine(outputFilePath));
+            String outputLine = StringUtils.strip(RateConfig.getLastLine(tempOutputFilePath));
 //            logger.trace(outputLine);
             if (line1.startsWith("E")) {
                 try {
@@ -154,22 +156,15 @@ public class FVC2006Runner
 
     public void prepare() throws Exception {
         super.prepare();
-        outputFilePath = FilenameUtils.concat(task.getTempDirPath(), "output.txt");
-        enrollExeFilePath = FilenameUtils.concat(algorithmVersion.dirPath(), "enroll.exe");
-        matchExeFilePath = FilenameUtils.concat(algorithmVersion.dirPath(), "match.exe");
-        templateFilePath = FilenameUtils.concat(task.getTempDirPath(), "template");
-        resultFilePath = task.getResultFilePath();
-        errorRateFilePath = FilenameUtils.concat(task.getDirPath(), "rate.txt");
-        rocFilePath = FilenameUtils.concat(task.getDirPath(), "roc.txt");
     }
 
     private String genCmdFromLines(String line1, String line2) {
         String exe = "";
         if (line1.startsWith("E")) {
-            exe = enrollExeFilePath;
+            exe = fvc2006Task.getEnrollExeFilePath();
         }
         else if (line1.startsWith("M")) {
-            exe = matchExeFilePath;
+            exe = fvc2006Task.getMatchExeFilePath();
         }
         else {
             return "";
@@ -185,7 +180,7 @@ public class FVC2006Runner
         list.add(imageFilePath);
         list.add(templateFilePath);
         list.add("0");
-        list.add(outputFilePath);
+        list.add(tempOutputFilePath);
 
         return StringUtils.join(list, " ");
     }
@@ -216,15 +211,12 @@ public class FVC2006Runner
     }
 
     private void splitAndSortResult() throws Exception {
-        genuineFilePath = FilenameUtils.concat(task.getDirPath(), "genuine.txt");
-        imposterFilePath = FilenameUtils.concat(task.getDirPath(), "imposter.txt");
-
 //        logger.trace(String.format("Result file [%s]", resultFilePath));
 //        logger.trace(String.format("Genuine file [%s]", genuineFilePath));
 //        logger.trace(String.format("Imposter file [%s]", imposterFilePath));
 
         // split and store in List<String>
-        BufferedReader resultReader = new BufferedReader(new FileReader(resultFilePath));
+        BufferedReader resultReader = new BufferedReader(new FileReader(fvc2006Task.getResultFilePath()));
         List<String> genuineList = new ArrayList<String>();
         List<String> imposterList = new ArrayList<String>();
         while (true) {
@@ -253,8 +245,8 @@ public class FVC2006Runner
         Collections.sort(imposterList, this);
 
         // write to genuine.txt and imposter.txt
-        File genuineFile = new File(genuineFilePath);
-        File imposterFile = new File(imposterFilePath);
+        File genuineFile = new File(fvc2006Task.getGenuineFilePath());
+        File imposterFile = new File(fvc2006Task.getImposterFilePath());
         genuineFile.createNewFile();
         imposterFile.createNewFile();
         PrintWriter genuinePw = new PrintWriter(genuineFile);
@@ -270,14 +262,13 @@ public class FVC2006Runner
     }
 
     private void calcFMR() throws Exception {
-        this.fmrFilePath = FilenameUtils.concat(task.getDirPath(), "fmr.txt");
 //        logger.trace(String.format("fmrFilePath is set to [%s]", fmrFilePath));
-        BufferedReader imposterReader = new BufferedReader(new FileReader(imposterFilePath));
-        File fmrFile = new File(fmrFilePath);
+        BufferedReader imposterReader = new BufferedReader(new FileReader(fvc2006Task.getImposterFilePath()));
+        File fmrFile = new File(fvc2006Task.getFmrFilePath());
         fmrFile.createNewFile();
         PrintWriter fmrPw = new PrintWriter(fmrFile);
 
-        int countOfLines = RateConfig.getCountOfLines(imposterFilePath);
+        int countOfLines = RateConfig.getCountOfLines(fvc2006Task.getImposterFilePath());
         int i=0;
         double p=-1, matchScore=0;
         while (true) {
@@ -300,13 +291,13 @@ public class FVC2006Runner
     }
 
     private void calcFNMR() throws Exception {
-        fnmrFilePath = FilenameUtils.concat(task.getDirPath(), "fnmr.txt");
-        BufferedReader genuineReader = new BufferedReader(new FileReader(genuineFilePath));
-        File fnmrFile = new File(fnmrFilePath);
+
+        BufferedReader genuineReader = new BufferedReader(new FileReader(fvc2006Task.getGenuineFilePath()));
+        File fnmrFile = new File(fvc2006Task.getFnmrFilePath());
         fnmrFile.createNewFile();
         PrintWriter fmrPw = new PrintWriter(fnmrFile);
 
-        int countOfLines = RateConfig.getCountOfLines(genuineFilePath);
+        int countOfLines = RateConfig.getCountOfLines(fvc2006Task.getGenuineFilePath());
         int i=0;
         double p=-1, matchScore=0;
         while (true) {
@@ -346,16 +337,16 @@ public class FVC2006Runner
     }
 
     private double getFMRonThreshold(double thresholdIn) throws Exception {
-        return getErrorRateOnThreshold(thresholdIn, this.fmrFilePath);
+        return getErrorRateOnThreshold(thresholdIn, fvc2006Task.getFmrFilePath());
     }
 
     private double getFNMRonThreshold(double thresholdIn) throws Exception {
-        return getErrorRateOnThreshold(thresholdIn, fnmrFilePath);
+        return getErrorRateOnThreshold(thresholdIn, fvc2006Task.getFnmrFilePath());
     }
 
     // When FNMR is set to fnmr, what is the FMR
     private double findFMRonFNMR(double fnmr) throws Exception {
-        BufferedReader fnmrReader = new BufferedReader(new FileReader(fnmrFilePath));
+        BufferedReader fnmrReader = new BufferedReader(new FileReader(fvc2006Task.getFnmrFilePath()));
         String line;
         double threshold = 0, errorRate = 0;
         while ((line=fnmrReader.readLine())!=null) {
@@ -377,7 +368,7 @@ public class FVC2006Runner
     }
 
     private double findFNMRonFMR(double fmr) throws Exception {
-        BufferedReader fmrReader = new BufferedReader(new FileReader(this.fmrFilePath));
+        BufferedReader fmrReader = new BufferedReader(new FileReader(fvc2006Task.getFmrFilePath()));
         String line;
         double threshold = 0, errorRate = 0;
         while ((line=fmrReader.readLine())!=null) {
@@ -399,8 +390,8 @@ public class FVC2006Runner
 
     // copy from Old source
     private void calcEER() throws Exception {
-        Scanner fIn1 = new Scanner(new FileInputStream(fmrFilePath));
-        Scanner fIn2 = new Scanner(new FileInputStream(fnmrFilePath));
+        Scanner fIn1 = new Scanner(new FileInputStream(fvc2006Task.getFmrFilePath()));
+        Scanner fIn2 = new Scanner(new FileInputStream(fvc2006Task.getFnmrFilePath()));
 
         double t1 = 0.0, fmr1 = 1.0, fnmr1 = 0.0;
         double t2 = 0.0, fmr2 = 1.0, fnmr2 = 0.0;
@@ -511,7 +502,7 @@ public class FVC2006Runner
         logger.trace(String.format("EER_l %f", EER_l));
         logger.trace(String.format("EER_h %f", EER_h));
 
-        PrintWriter errorRatePw = new PrintWriter(new File(errorRateFilePath));
+        PrintWriter errorRatePw = new PrintWriter(new File(fvc2006Task.getErrorRateFilePath()));
         errorRatePw.println(String.format("%f %f %f", EER, EER_l, EER_h));
         errorRatePw.println(FMR100);
         errorRatePw.println(FMR1000);
@@ -521,11 +512,11 @@ public class FVC2006Runner
     }
 
     private void calcRoc() throws Exception {
-        Scanner fIn1 = new Scanner(new FileInputStream(fmrFilePath));
-        Scanner fIn2 = new Scanner(new FileInputStream(fnmrFilePath));
+        Scanner fIn1 = new Scanner(new FileInputStream(fvc2006Task.getFmrFilePath()));
+        Scanner fIn2 = new Scanner(new FileInputStream(fvc2006Task.getFnmrFilePath()));
 
         PrintWriter fOut = new PrintWriter(
-                new FileWriter(new File(rocFilePath)));
+                new FileWriter(new File(fvc2006Task.getRocFilePath())));
 
         double t1 = 0.0, r1 = 1.0;
         double t2 = 0.0, r2 = 1.0;

@@ -3,6 +3,7 @@ package rate.controller.task;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import rate.engine.task.FVC2006Task;
 import rate.model.TaskEntity;
 import rate.util.HibernateUtil;
 
@@ -27,20 +28,23 @@ public class ShowAction extends ActionSupport {
 
     private String uuid;
 
-    public void setTask(TaskEntity task) {
-        this.task = task;
-    }
-
     public TaskEntity getTask() {
         return task;
     }
 
     private TaskEntity task;
 
-    public String execute() {
+    public FVC2006Task getFvc2006Task() {
+        return fvc2006Task;
+    }
+
+    private FVC2006Task fvc2006Task;
+
+    public String execute() throws Exception {
         logger.trace(String.format("Task uuid [%s]", uuid));
         this.task = (TaskEntity)session.createQuery("from TaskEntity where uuid=:uuid").setParameter("uuid", this.getUuid()).list().get(0);
         logger.trace(String.format("Get task with finished [%s]", task.getFinished().toString()));
+        fvc2006Task = new FVC2006Task(task);
         return SUCCESS;
     }
 }
