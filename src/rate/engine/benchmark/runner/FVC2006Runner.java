@@ -36,6 +36,14 @@ public class FVC2006Runner
     private String imageFilePath;
     private String resultFilePath;
     private String errorRateFilePath;
+    private String rocFilePath;
+    private String genuineFilePath;
+    private String imposterFilePath;
+    private String fmrFilePath;
+    private String fnmrFilePath;
+    private double EER_l;
+    private double EER_h;
+    private double EER;
 
     public FVC2006Runner() {
     }
@@ -49,6 +57,23 @@ public class FVC2006Runner
 
         this.prepare();
 
+        logger.trace("Begin: run commands");
+        this.runCommands();
+        logger.trace("Finished: run commands");
+
+        this.cleanUp();
+
+        logger.trace("Begin: calculation");
+        this.analyzeAll();
+        logger.trace("Finished: calculation");
+
+        task.setFinished(HibernateUtil.getCurrentTimestamp());
+        session.beginTransaction();
+        session.update(task);
+        session.getTransaction().commit();
+    }
+
+    private void runCommands() throws Exception {
         // TODO: Read the whole txt into memory may lead to OutOfMemoryException.
         List<String> lines = FileUtils.readLines(new File(benchmark.filePath()));
 
@@ -60,7 +85,7 @@ public class FVC2006Runner
         logger.debug(String.format("ResultFilePath [%s]", task.getResultFilePath()));
 
         boolean enrollFailed = false;
-        logger.trace(String.format("Begin to run [%s] commands", lines.size()/2));
+
         for (int i=0; i<lines.size(); i+=2) {
             String line1 = StringUtils.strip(lines.get(i));
             String line2 = StringUtils.strip(lines.get(i + 1));
@@ -125,32 +150,17 @@ public class FVC2006Runner
                 }
             }
         }
-        logger.trace("Commands finished");
-
-        this.cleanUp();
-
-        logger.trace("Begin calculation");
-        this.analyzeAll();
-        logger.trace("Calculation finished");
-
-        task.setFinished(HibernateUtil.getCurrentTimestamp());
-        session.beginTransaction();
-        session.update(task);
-        session.getTransaction().commit();
     }
 
     public void prepare() throws Exception {
         super.prepare();
-
         outputFilePath = FilenameUtils.concat(task.getTempDirPath(), "output.txt");
-
         enrollExeFilePath = FilenameUtils.concat(algorithmVersion.dirPath(), "enroll.exe");
         matchExeFilePath = FilenameUtils.concat(algorithmVersion.dirPath(), "match.exe");
-
         templateFilePath = FilenameUtils.concat(task.getTempDirPath(), "template");
-
         resultFilePath = task.getResultFilePath();
         errorRateFilePath = FilenameUtils.concat(task.getDirPath(), "rate.txt");
+        rocFilePath = FilenameUtils.concat(task.getDirPath(), "roc.txt");
     }
 
     private String genCmdFromLines(String line1, String line2) {
@@ -182,20 +192,21 @@ public class FVC2006Runner
 
     public void analyzeAll() throws Exception {
         this.splitAndSortResult();
-        logger.trace("Begin to calc FMR");
+        logger.trace("Begin: calc FMR");
         this.calcFMR();
-        logger.trace("Finished calc FMR");
-        logger.trace("Begin to calc FNMR");
+        logger.trace("Finished: calc FMR");
+        logger.trace("Begin: calc FNMR");
         this.calcFNMR();
-        logger.trace("Finished calc FNMR");
-        logger.trace("Begin to calc error rates");
+        logger.trace("Finished: calc FNMR");
+        logger.trace("Begin: calc error rates");
         this.calcErrorRates();
-        logger.trace("Finished calc error rates");
+        logger.trace("Finished: calc error rates");
+        logger.trace("Begin: calc roc");
+        this.calcRoc();
+        logger.trace("Finished: calc roc");
     }
 
-    private String genuineFilePath;
-    private String imposterFilePath;
-
+    // for sorting genuine.txt and imposter.txt
     public int compare(String s1, String s2) {
         String ss1[] = s1.split(" ");
         String ss2[] = s2.split(" ");
@@ -207,9 +218,10 @@ public class FVC2006Runner
     private void splitAndSortResult() throws Exception {
         genuineFilePath = FilenameUtils.concat(task.getDirPath(), "genuine.txt");
         imposterFilePath = FilenameUtils.concat(task.getDirPath(), "imposter.txt");
-        logger.trace(String.format("Result file [%s]", resultFilePath));
-        logger.trace(String.format("Genuine file [%s]", genuineFilePath));
-        logger.trace(String.format("Imposter file [%s]", imposterFilePath));
+
+//        logger.trace(String.format("Result file [%s]", resultFilePath));
+//        logger.trace(String.format("Genuine file [%s]", genuineFilePath));
+//        logger.trace(String.format("Imposter file [%s]", imposterFilePath));
 
         // split and store in List<String>
         BufferedReader resultReader = new BufferedReader(new FileReader(resultFilePath));
@@ -257,8 +269,6 @@ public class FVC2006Runner
         imposterPw.close();
     }
 
-    private String fmrFilePath;
-
     private void calcFMR() throws Exception {
         this.fmrFilePath = FilenameUtils.concat(task.getDirPath(), "fmr.txt");
 //        logger.trace(String.format("fmrFilePath is set to [%s]", fmrFilePath));
@@ -288,8 +298,6 @@ public class FVC2006Runner
         fmrPw.println(String.format("%f 0", matchScore));
         fmrPw.close();
     }
-
-    private String fnmrFilePath;
 
     private void calcFNMR() throws Exception {
         fnmrFilePath = FilenameUtils.concat(task.getDirPath(), "fnmr.txt");
@@ -338,7 +346,6 @@ public class FVC2006Runner
     }
 
     private double getFMRonThreshold(double thresholdIn) throws Exception {
-//        logger.trace(String.format("fmrFilePath is now [%s]", fmrFilePath));
         return getErrorRateOnThreshold(thresholdIn, this.fmrFilePath);
     }
 
@@ -389,9 +396,7 @@ public class FVC2006Runner
         return getFNMRonThreshold(threshold);
     }
 
-    private double EER_l;
-    private double EER_h;
-    private double EER;
+
     // copy from Old source
     private void calcEER() throws Exception {
         Scanner fIn1 = new Scanner(new FileInputStream(fmrFilePath));
@@ -513,6 +518,105 @@ public class FVC2006Runner
         errorRatePw.println(zeroFMR);
         errorRatePw.println(zeroFNMR);
         errorRatePw.close();
+    }
+
+    private void calcRoc() throws Exception {
+        Scanner fIn1 = new Scanner(new FileInputStream(fmrFilePath));
+        Scanner fIn2 = new Scanner(new FileInputStream(fnmrFilePath));
+
+        PrintWriter fOut = new PrintWriter(
+                new FileWriter(new File(rocFilePath)));
+
+        double t1 = 0.0, r1 = 1.0;
+        double t2 = 0.0, r2 = 1.0;
+        double t3 = 0.0, r3 = 0.0;
+        double t4 = 0.0, r4 = 0.0;
+        double fmr, fnmr;
+
+        while (t2 < 1.0 || t4 < 1.0) {
+
+            if (t2 < t4) {
+                if (fIn1.hasNext()) {
+                    t1 = t2;
+                    r1 = r2;
+                    t2 = fIn1.nextDouble();
+                    r2 = fIn1.nextDouble();
+
+                } else if (t2 < 1.0) {
+                    t1 = t2;
+                    r1 = r2;
+                    t2 = 1.0;
+                    r2 = 0.0;
+                }
+
+            } else if (t2 > t4) {
+
+                if (fIn2.hasNext()) {
+                    t3 = t4;
+                    r3 = r4;
+                    t4 = fIn2.nextDouble();
+                    r4 = fIn2.nextDouble();
+                } else if (t4 < 1.0) {
+                    t3 = t4;
+                    r3 = r4;
+                    t4 = 1.0;
+                    r4 = 1.0;
+                }
+            }
+
+            if (t2 == t4) {
+
+                if (fIn1.hasNext()) {
+                    t1 = t2;
+                    r1 = r2;
+                    t2 = fIn1.nextDouble();
+                    r2 = fIn1.nextDouble();
+                } else if (t2 < 1.0) {
+                    t1 = t2;
+                    r1 = r2;
+                    t2 = 1.0;
+                    r2 = 0.0;
+                }
+                if (t2 == 0.0) {
+                    r1 = r2;
+                    continue;
+                }
+
+                if (fIn2.hasNext()) {
+                    t3 = t4;
+                    r3 = r4;
+                    t4 = fIn2.nextDouble();
+                    r4 = fIn2.nextDouble();
+                } else if (t4 < 1.0) {
+                    t3 = t4;
+                    r3 = r4;
+                    t4 = 1.0;
+                    r4 = 1.0;
+                }
+                if (t4 == 0.0) {
+                    r3 = r4;
+                    continue;
+                }
+
+                fmr = r1;
+                fnmr = r3;
+                fOut.println(fmr + " " + fnmr);
+            }
+
+            if (t2 < t4) {
+                fmr = r2;
+                fnmr = (t2 - t3) * (r4 - r3) / (t4 - t3) + r3;
+            } else {
+                fmr = (t4 - t1) * (r2 - r1) / (t2 - t1) + r1;
+                fnmr = r4;
+            }
+
+            fOut.println(fmr + " " + fnmr);
+        }
+
+        fOut.close();
+        fIn2.close();
+        fIn1.close();
     }
 }
 
