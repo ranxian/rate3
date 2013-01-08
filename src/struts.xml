@@ -139,8 +139,8 @@
         </action>
     </package>
 
-    <package name="rate.controller.chart" namespace="/chart" extends="struts-default">
-        <action name="score"  class="rate.controller.chart.ScoreAction" method="excute">
+    <package name="rate.controller.chart" namespace="/chart" extends="jfreechart-default">
+        <action name="score"  class="rate.controller.chart.ScoreAction" method="execute">
             <result name="success" type="chart">
                 <param name="value">chart</param>
                 <param name="type">png</param>

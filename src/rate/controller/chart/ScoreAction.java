@@ -44,7 +44,6 @@ public class ScoreAction extends ActionSupport {
                         false);
         chart.setBackgroundPaint(java.awt.Color.white);
 
-
         return SUCCESS;
     }
 }

@@ -8,13 +8,15 @@
           <element id="module-output" name="rate3" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="struts2-2.3.4" />
           <element id="library" level="project" name="commons-configuration:commons-configuration:1.9" />
           <element id="library" level="project" name="commons-codec:commons-codec:1.6" />
           <element id="library" level="project" name="apache-log4j:log4j:1.2.15" />
           <element id="library" level="project" name="hibernate-4.1.1" />
           <element id="library" level="project" name="mysql:mysql-connector-java:5.1.22" />
           <element id="library" level="project" name="org.freemarker:freemarker:2.3.19" />
+          <element id="library" level="project" name="jfree:jfreechart:1.0.9" />
+          <element id="library" level="project" name="org.apache.struts:struts2-core:2.3.8" />
+          <element id="library" level="project" name="org.apache.struts:struts2-jfreechart-plugin:2.3.8" />
         </element>
       </element>
     </root>
