@@ -41,9 +41,9 @@ public class ShowAction extends ActionSupport {
     private FVC2006Task fvc2006Task;
 
     public String execute() throws Exception {
-        logger.trace(String.format("Task uuid [%s]", uuid));
+//        logger.trace(String.format("Task uuid [%s]", uuid));
         this.task = (TaskEntity)session.createQuery("from TaskEntity where uuid=:uuid").setParameter("uuid", this.getUuid()).list().get(0);
-        logger.trace(String.format("Get task with finished [%s]", task.getFinished().toString()));
+//        logger.trace(String.format("Get task with finished [%s]", task.getFinished().toString()));
         fvc2006Task = new FVC2006Task(task);
         return SUCCESS;
     }

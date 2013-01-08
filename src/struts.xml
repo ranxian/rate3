@@ -139,4 +139,15 @@
         </action>
     </package>
 
+    <package name="rate.controller.chart" namespace="/chart" extends="struts-default">
+        <action name="score"  class="rate.controller.chart.ScoreAction" method="excute">
+            <result name="success" type="chart">
+                <param name="value">chart</param>
+                <param name="type">png</param>
+                <param name="width">640</param>
+                <param name="height">480</param>
+            </result>
+        </action>
+    </package>
+
 </struts>
