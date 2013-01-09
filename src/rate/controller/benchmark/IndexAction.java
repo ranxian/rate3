@@ -18,29 +18,14 @@ import java.util.Collection;
 public class IndexAction extends ActionSupport {
     private final Session session = HibernateUtil.getSession();
 
-    private String viewUuid;
-
-    public ViewEntity getView() {
-        return view;
-    }
-
-    private ViewEntity view;
-
     public Collection<BenchmarkEntity> getBenchmarks() {
         return benchmarks;
     }
 
     private Collection<BenchmarkEntity> benchmarks;
 
-    public void setViewUuid(String viewUuid) {
-        this.viewUuid = viewUuid;
-        this.view = (ViewEntity)session.createQuery("from ViewEntity where uuid=:uuid")
-                .setParameter("uuid", viewUuid)
-                .list().get(0);
-        this.benchmarks = this.view.getBenchmarksByUuid();
-    }
-
     public String execute() {
+        benchmarks = session.createQuery("from BenchmarkEntity order by created desc").list();
         return SUCCESS;
     }
 }
