@@ -22,9 +22,11 @@ public class BenchmarkRunnerTest {
     public static void main(String[] args) throws Exception {
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
-        Query query = session.createQuery("from BenchmarkEntity ");
+        Query query = session.createQuery("from BenchmarkEntity where uuid=:uuid")
+                .setParameter("uuid", "662b4b7b-7b2c-405c-b420-31098719ee69");
         BenchmarkEntity benchmark = (BenchmarkEntity)query.list().get(0);
-        query = session.createQuery("from AlgorithmVersionEntity ");
+        query = session.createQuery("from AlgorithmVersionEntity where uuid=:uuid")
+                .setParameter("uuid", "644d9d4e-97d9-424b-9508-cf02c4381254");
         AlgorithmVersionEntity algorithmVersion = (AlgorithmVersionEntity)query.list().get(0);
         RunnerInvoker.run(benchmark, algorithmVersion);
     }

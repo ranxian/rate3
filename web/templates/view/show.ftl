@@ -1,8 +1,17 @@
-<h3>${view.name}</h3>
+<#include "../base.ftl" />
+
+<#macro main_container>
+
+<h1>${view.name}</h1>
 <hr>
-<p>type:${view.type}</p>
-<p>generator:${view.generator}</p>
+<p>Type: ${view.type}</p>
+<p>Generator: ${view.generator}</p>
 <!-- no such info in database schema? <p>created:</p> -->
-<p><a href="<@s.url action="edit"><@s.param name="uuid">${uuid}</@s.param></@s.url>">Edit Me</a></p>
-</body>
-</html>
+<p><a class="btn" href="<@s.url action="edit"><@s.param name="uuid">${uuid}</@s.param></@s.url>">Edit Me</a></p>
+
+<hr>
+<h3>Tasks on this View</h3>
+
+<#include "../task/table.ftl" />
+
+</#macro>
