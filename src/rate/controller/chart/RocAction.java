@@ -9,8 +9,10 @@ import com.opensymphony.xwork2.ActionSupport;
  * Time: 上午12:41
  * To change this template use File | Settings | File Templates.
  */
-public class RocAction extends ActionSupport {
+public class RocAction extends TaskChartActionBase {
+
     public String execute() {
+
         return SUCCESS;
     }
 }

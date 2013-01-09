@@ -10,5 +10,6 @@
 <p>zeroFNMR: ${fvc2006Task.zeroFNMR*100}%</p>
 
 <img src="/chart/score?taskUuid=${task.uuid}" />
+<img src="/chart/fmrfnmr?taskUuid=${task.uuid}" />
 
 </#macro>
