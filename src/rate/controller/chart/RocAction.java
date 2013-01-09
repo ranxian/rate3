@@ -54,7 +54,7 @@ public class RocAction extends TaskChartActionBase {
     public String execute() throws Exception {
         XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
 
-        addROCCurve(xySeriesCollection, fvc2006Task.getRocFilePath(), "thisisname", true);
+        addROCCurve(xySeriesCollection, fvc2006Task.getRocFilePath(), "ROC Curve", true);
 
         String labelX = "FMR", labelY = "FNMR";
         chart = ChartFactory.createXYLineChart(

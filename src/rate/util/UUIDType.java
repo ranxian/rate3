@@ -57,7 +57,7 @@ public class UUIDType implements UserType
     }
 
     public Object deepCopy (Object value) throws HibernateException {
-        if (!UUID.class.isAssignableFrom (value.getClass ())) {
+        if (!String.class.isAssignableFrom (value.getClass ())) {
             throw new HibernateException (value.getClass ().toString () + CAST_EXCEPTION_TEXT) ;
         }
         return value;

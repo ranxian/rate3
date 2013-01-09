@@ -6,6 +6,7 @@
         <th>Benchmark</th>
         <th>Created</th>
         <th>Finished</th>
+        <th>For debug use</th>
     </tr>
     </thead>
     <tbody>
@@ -16,6 +17,7 @@
         <td><a href="/benchmark/show?uuid=${benchmarkByBenchmarkUuid.uuid}">${benchmarkByBenchmarkUuid.name}</a></td>
         <td>${created}</td>
         <td><a href="/task/show?uuid=${uuid}">${finished!"running"}</a></td>
+        <td><a href="/task/delete?uuid=${uuid}">delete</a></td>
     </tr>
     </@s.iterator>
     </tbody>
