@@ -112,6 +112,9 @@
         <action name="index" class="rate.controller.algorithm_version.IndexAction" method="execute">
             <result name="success" type="freemarker">/templates/algorithm_version/index.ftl</result>
         </action>
+        <action name="show" class="rate.controller.algorithm_version.ShowAction" method="execute">
+            <result name="success" type="freemarker">/templates/algorithm_version/show.ftl</result>
+        </action>
         <action name="new" class="rate.controller.algorithm_version.NewAction" method="execute">
             <result name="success" type="freemarker">/templates/algorithm_version/new.ftl</result>
         </action>

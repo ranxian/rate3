@@ -2,7 +2,7 @@
 
 <#macro main_container>
 
-<h3>${algorithm.name}</h3>
+<h1>${algorithm.name}</h1>
 <hr>
 <p>type: ${algorithm.type}</p>
 <p>desc: ${algorithm.description}</p>
@@ -11,6 +11,10 @@
 <hr>
 
 <p><span> Versions </span><a class="btn" href="/algorithm_version/new?algorithmUuid=${algorithm.uuid}">Add a new version</a></p>
+
+<hr>
+
+<h3>List of Versions</h3>
 
 <#include "../algorithm_version/table.ftl" />
 

@@ -13,7 +13,7 @@
     <@s.iterator value="tasks">
     <tr>
         <td><a href="/algorithm/show?uuid=${algorithmVersionByAlgorithmVersionUuid.algorithmByAlgorithmUuid.uuid}">${algorithmVersionByAlgorithmVersionUuid.algorithmByAlgorithmUuid.name}</a></td>
-        <td><a href="">${algorithmVersionByAlgorithmVersionUuid.created}</a></td>
+        <td><a href="/algorithm_version/show?uuid=${algorithmVersionByAlgorithmVersionUuid.uuid}">${algorithmVersionByAlgorithmVersionUuid.created}</a></td>
         <td><a href="/benchmark/show?uuid=${benchmarkByBenchmarkUuid.uuid}">${benchmarkByBenchmarkUuid.name}</a></td>
         <td>${created}</td>
         <td><a href="/task/show?uuid=${uuid}">${finished!"running"}</a></td>
