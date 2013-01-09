@@ -13,4 +13,8 @@
 
 <#include "../task/table.ftl" />
 
+<hr>
+<h3>Usable algorithm versions</h3>
+<#include "./algorithmVersionTable.ftl" />
+
 </#macro>

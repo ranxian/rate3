@@ -24,17 +24,19 @@ public class BenchmarkRunnerTest {
         session.beginTransaction();
 
         // small
-//        Query query = session.createQuery("from BenchmarkEntity where uuid=:uuid")
-//                .setParameter("uuid", "662b4b7b-7b2c-405c-b420-31098719ee69");
+//        BenchmarkEntity benchmark = (BenchmarkEntity)session.createQuery("from BenchmarkEntity where uuid=:uuid")
+//                .setParameter("uuid", "662b4b7b-7b2c-405c-b420-31098719ee69")
+//                .list().get(0);
 
         // medium
-        Query query = session.createQuery("from BenchmarkEntity where uuid=:uuid")
-                .setParameter("uuid", "54accea9-8f52-42b9-ac54-02ad580e1c9d");
+        BenchmarkEntity benchmark = (BenchmarkEntity)session.createQuery("from BenchmarkEntity where uuid=:uuid")
+                .setParameter("uuid", "54accea9-8f52-42b9-ac54-02ad580e1c9d")
+                .list().get(0);
 
-        BenchmarkEntity benchmark = (BenchmarkEntity)query.list().get(0);
-        query = session.createQuery("from AlgorithmVersionEntity where uuid=:uuid")
-                .setParameter("uuid", "644d9d4e-97d9-424b-9508-cf02c4381254");
-        AlgorithmVersionEntity algorithmVersion = (AlgorithmVersionEntity)query.list().get(0);
+        AlgorithmVersionEntity algorithmVersion = (AlgorithmVersionEntity)session.createQuery("from AlgorithmVersionEntity where uuid=:uuid")
+                .setParameter("uuid", "986f0a57-7b96-40e7-93b3-b3bc383fc9aa")
+                .list().get(0);
+
         RunnerInvoker.run(benchmark, algorithmVersion);
     }
 }

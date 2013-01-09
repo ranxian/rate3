@@ -183,5 +183,14 @@
         </action>
     </package>
 
+    <package name="rate.controller.runner" extends="struts-default">
+        <action name="run" class="rate.controller.RunnerAction" method="execute">
+            <result name="success" type="redirectAction">
+                <param name="namespace">/task</param>
+                <param name="actionName">index</param>
+            </result>
+        </action>
+    </package>
+
 
 </struts>

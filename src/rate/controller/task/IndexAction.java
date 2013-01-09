@@ -24,7 +24,6 @@ public class IndexAction extends ActionSupport {
 
     public String execute() {
         tasks = HibernateUtil.getSession().createQuery("from TaskEntity order by created desc").list();
-        logger.debug(tasks.size());
         return SUCCESS;
     }
 }
