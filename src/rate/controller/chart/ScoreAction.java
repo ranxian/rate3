@@ -24,10 +24,6 @@ import java.util.List;
  */
 public class ScoreAction extends TaskChartActionBase {
 
-
-
-    private JFreeChart chart;
-
     private void addDistribution(XYSeriesCollection xySeriesCollection,
                                  String distributionName, String filePath, double interval)
             throws Exception {

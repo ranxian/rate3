@@ -11,5 +11,6 @@
 
 <img src="/chart/score?taskUuid=${task.uuid}" />
 <img src="/chart/fmrfnmr?taskUuid=${task.uuid}" />
+<img src="/chart/roc?taskUuid=${task.uuid}" />
 
 </#macro>
