@@ -174,4 +174,14 @@
         </action>
     </package>
 
+    <package name="rate.controller.benchmark" namespace="/benchmark" extends="struts-default">
+        <action name="show"  class="rate.controller.benchmark.ShowAction" method="execute">
+            <result name="success" type="freemarker">/templates/benchmark/show.ftl</result>
+        </action>
+        <action name="index"  class="rate.controller.benchmark.IndexAction" method="execute">
+            <result name="success" type="freemarker">/templates/benchmark/index.ftl</result>
+        </action>
+    </package>
+
+
 </struts>

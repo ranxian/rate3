@@ -3,6 +3,7 @@ package rate.controller.view;
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
 import rate.model.ViewEntity;
 import rate.util.HibernateUtil;
@@ -41,6 +42,10 @@ public class ShowAction extends ActionSupport {
     }
 
     private final Session session = HibernateUtil.getSession();
+
+    public Collection<BenchmarkEntity> getBenchmarks() {
+        return this.view.getBenchmarksByUuid();
+    }
 
     public String execute() throws Exception {
 

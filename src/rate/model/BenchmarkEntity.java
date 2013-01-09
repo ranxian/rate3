@@ -179,4 +179,10 @@ public class BenchmarkEntity {
     public void setTasksByUuid(Collection<TaskEntity> tasksByUuid) {
         this.tasksByUuid = tasksByUuid;
     }
+
+    @Transient
+    public int getNumOfTasks() {
+        return this.getTasksByUuid().size();
+    }
+    private void setNumOfTasks(int nonsense) {}
 }
