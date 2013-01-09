@@ -185,4 +185,5 @@ public class BenchmarkEntity {
         return this.getTasksByUuid().size();
     }
     private void setNumOfTasks(int nonsense) {}
+
 }
