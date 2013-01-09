@@ -33,7 +33,9 @@ public class BenchmarkActionBase extends ActionSupport {
     }
 
     public Collection<TaskEntity> getTasks() {
-        return benchmark.getTasksByUuid();
+        return session.createQuery("from TaskEntity where benchmarkByBenchmarkUuid=:benchmark order by created desc")
+                .setParameter("benchmark", benchmark)
+                .list();
     }
 
     protected BenchmarkEntity benchmark;

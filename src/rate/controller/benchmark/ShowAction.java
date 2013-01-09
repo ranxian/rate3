@@ -3,6 +3,7 @@ package rate.controller.benchmark;
 import rate.model.AlgorithmVersionEntity;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,8 +15,10 @@ import java.util.Collection;
 public class ShowAction extends BenchmarkActionBase {
 
     public Collection<AlgorithmVersionEntity> getAlgorithmVersions() {
-        return session.createQuery("from AlgorithmVersionEntity where algorithmByAlgorithmUuid.protocol=:protocol")
+        Collection<AlgorithmVersionEntity> algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithmByAlgorithmUuid.protocol=:protocol order by created desc")
                 .setParameter("protocol", benchmark.getProtocol()).list();
+
+        return algorithmVersions;
     }
 
     public String execute() {
