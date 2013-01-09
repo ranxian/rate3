@@ -18,45 +18,16 @@ import java.io.IOException;
  * Time: 下午3:45
  * To change this template use File | Settings | File Templates.
  */
-public class DeleteAction extends ActionSupport {
+public class DeleteAction extends AlgorithmVersionActionBase {
 
     private static final Logger logger = Logger.getLogger(DeleteAction.class);
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    private String uuid;
-
-
-    public AlgorithmEntity getAlgorithm() {
-        return algorithm;
-    }
-
-    private AlgorithmEntity algorithm;
-
-    public String execute() {
-        try {
-            Session session = HibernateUtil.getSession();
-            session.beginTransaction();
-
-            AlgorithmVersionEntity algorithmVersion = (AlgorithmVersionEntity)session
-                    .createQuery("from AlgorithmVersionEntity where uuid=:uuid")
-                    .setParameter("uuid", uuid)
-                    .list().get(0);
-            this.algorithm = algorithmVersion.getAlgorithmByAlgorithmUuid();
-
-            FileUtils.deleteDirectory(new File(algorithmVersion.dirPath()));
-
-            session.delete(algorithmVersion);
-
-            session.getTransaction().commit();
-
-            return SUCCESS;
-        }
-        catch (IOException ex) {
-            logger.error(ex);
-            return ERROR;
-        }
+    public String execute() throws Exception {
+        session.beginTransaction();
+        this.algorithm = algorithmVersion.getAlgorithmByAlgorithmUuid();
+        FileUtils.deleteDirectory(new File(algorithmVersion.dirPath()));
+        session.delete(algorithmVersion);
+        session.getTransaction().commit();
+        return SUCCESS;
     }
 }
