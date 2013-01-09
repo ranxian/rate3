@@ -14,6 +14,8 @@ import java.util.UUID;
  * Time: 下午9:25
  */
 public class UpdateAction extends ActionSupport {
+    private final Session session = HibernateUtil.getSession();
+
     private ViewEntity view;
 
     public ViewEntity getView() {
@@ -25,12 +27,15 @@ public class UpdateAction extends ActionSupport {
     }
 
     public String execute() throws Exception {
-        Session session = HibernateUtil.getSession();
+
+        ViewEntity updated = (ViewEntity)session.createQuery("from ViewEntity where uuid=:uuid")
+                .setParameter("uuid", view.getUuid())
+                .list().get(0);
+
+        updated.setName(view.getName());
 
         session.beginTransaction();
-
-        session.update(view);
-
+        session.update(updated);
         session.getTransaction().commit();
 
         return SUCCESS;

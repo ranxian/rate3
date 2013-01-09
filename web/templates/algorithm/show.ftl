@@ -2,7 +2,7 @@
 
 <#macro main_container>
 
-<h1>${algorithm.name}</h1>
+<h1>Algorithm <em>${algorithm.name}</em></h1>
 <hr>
 <p>type: ${algorithm.type}</p>
 <p>desc: ${algorithm.description}</p>

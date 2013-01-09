@@ -1,3 +1,5 @@
+<#if (algorithms?size>0) >
+
 <table class="table table-hover" id="algorithm-list">
     <thead>
     <tr>
@@ -16,7 +18,7 @@
         <td><a href="<@s.url action="show"><@s.param name="uuid">${uuid}</@s.param></@s.url>"><@s.property value="name" /></a></td>
         <td><@s.property value="type" /></td>
         <td><@s.property value="protocol" /></td>
-        <td><@s.property value="description"></@s.property></td>
+        <td><#if (description=="")>no description<#else>${description}</#if></td>
         <td>${created}</td>
         <td>${updated}</td>
         <td><@s.property value="numOfVersions"></@s.property></td>
@@ -24,3 +26,9 @@
     </@s.iterator>
     </tbody>
 </table>
+
+<#else>
+
+<p>No algorithms yet.</p>
+
+</#if>

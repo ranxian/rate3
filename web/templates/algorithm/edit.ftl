@@ -12,7 +12,7 @@
                       headerValue="Choose a algorithm type"
                     ></@s.select>
             <@s.select label="Protocal"
-                      name="algorithm.protocal"
+                      name="algorithm.protocol"
                       list="{'FVC2006', 'FVC2004', 'RATE'}"
                     ></@s.select>
             <@s.textarea label="Description"

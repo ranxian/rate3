@@ -1,6 +1,7 @@
 package rate.model;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -27,7 +28,7 @@ import java.util.Collection;
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class BenchmarkEntity {
 
-    //private static final Logger logger = Logger.getLogger(BenchmarkEntity.class);
+    private static final Logger logger = Logger.getLogger(BenchmarkEntity.class);
 
     private String uuid;
 
@@ -42,6 +43,7 @@ public class BenchmarkEntity {
 
 
     public void setUuid(String uuid) {
+        logger.trace(String.format("setUuid [%s] -> [%s]", this.getUuid(), uuid));
         this.uuid = uuid;
     }
 
@@ -60,7 +62,7 @@ public class BenchmarkEntity {
 
     private String protocol;
 
-    @Column(name = "protocol", nullable = false, insertable = true, updatable = true, length = 8, precision = 0)
+    @Column(name = "protocol", nullable = false, insertable = true, updatable = false, length = 8, precision = 0)
     @Basic
     public String getProtocol() {
         return protocol;
@@ -79,6 +81,7 @@ public class BenchmarkEntity {
     }
 
     public void setName(String name) {
+        logger.trace(String.format("setName [%s] [%s]", this.getUuid(), name));
         this.name = name;
     }
 
@@ -103,12 +106,13 @@ public class BenchmarkEntity {
     }
 
     public void setDescription(String description) {
+        logger.trace(String.format("setDescription uuid [%s] [%s]", this.uuid, description));
         this.description = description;
     }
 
     private String generator;
 
-    @Column(name = "generator", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
+    @Column(name = "generator", nullable = false, insertable = true, updatable = false, length = 45, precision = 0)
     @Basic
     public String getGenerator() {
         return generator;

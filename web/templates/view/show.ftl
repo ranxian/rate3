@@ -2,8 +2,10 @@
 
 <#macro main_container>
 
-<h1>${view.name}</h1>
-<hr>
+<h1>View <em>${view.name}</em></h1>
+
+<div class="ratehr"></div>
+
 <p>Type: ${view.type}</p>
 <p>Generator: ${view.generator}</p>
 <!-- no such info in database schema? <p>created:</p> -->
@@ -17,5 +19,7 @@
 <h3>Tasks on this View</h3>
 
 <#include "../task/table.ftl" />
+
+<div class="ratehr"></div>
 
 </#macro>

@@ -6,4 +6,6 @@
 
 <#include "./table.ftl" />
 
+<div class="ratehr"></div>
+
 </#macro>

@@ -181,6 +181,16 @@
         <action name="index"  class="rate.controller.benchmark.IndexAction" method="execute">
             <result name="success" type="freemarker">/templates/benchmark/index.ftl</result>
         </action>
+        <action name="edit"  class="rate.controller.benchmark.EditAction" method="execute">
+            <result name="success" type="freemarker">/templates/benchmark/edit.ftl</result>
+        </action>
+        <action name="update"  class="rate.controller.benchmark.UpdateAction" method="execute">
+            <result name="success" type="redirectAction">
+                <param name="namespace">/benchmark</param>
+                <param name="actionName">show</param>
+                <param name="uuid">${benchmark.uuid}</param>
+            </result>
+        </action>
     </package>
 
     <package name="rate.controller.runner" extends="struts-default">
@@ -191,6 +201,5 @@
             </result>
         </action>
     </package>
-
 
 </struts>

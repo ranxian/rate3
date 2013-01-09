@@ -2,19 +2,22 @@
 
 <#macro main_container>
 
-<h1>Version: ${algorithmVersion.created}</h1>
-<h3>Algorithm name: ${algorithm.name}</h3>
+<h1>Version <em>${algorithmVersion.uuidShort}</em></h1>
+<h3>Algorithm <a href="/algorithm/show?uuid=${algorithm.uuid}"><em>${algorithm.name}</em></a></h3>
+
+<div class="ratehr"></div>
+
+<p>Type: ${algorithm.type}</p>
+<p>Desc: <#if !(algorithm.description=="")>${algorithm.description}<#else>No description</#if></p>
+<p>Algorithm created at: ${algorithm.created}</p>
 
 <hr>
 
-<p>type: ${algorithm.type}</p>
-<p>desc: ${algorithm.description}</p>
-<p>Algorithm Created at: ${algorithm.created}</p>
-
-<hr>
+<h3>Tasks by this algorithm version</h3>
 
 <#include "../task/table.ftl" />
 
+<div class="ratehr"></div>
+
 </#macro>
 
-<p><a href="<@s.url action="edit"><@s.param name="uuid">${uuid}</@s.param></@s.url>">Edit Me</a></p>

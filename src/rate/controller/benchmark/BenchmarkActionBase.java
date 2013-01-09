@@ -22,6 +22,7 @@ public class BenchmarkActionBase extends ActionSupport {
 
     private String uuid;
     public void setUuid(String uuid) {
+        logger.trace(String.format("setUuid [%s]", uuid));
         this.uuid = uuid;
         benchmark = (BenchmarkEntity)session.createQuery("from BenchmarkEntity where uuid=:uuid")
                 .setParameter("uuid", uuid)
@@ -29,6 +30,7 @@ public class BenchmarkActionBase extends ActionSupport {
     }
 
     public BenchmarkEntity getBenchmark() {
+        logger.trace(String.format("getBenchmark [%s]", benchmark.getUuid()));
         return benchmark;
     }
 

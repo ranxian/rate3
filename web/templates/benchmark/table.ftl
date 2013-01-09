@@ -1,3 +1,7 @@
+<#if (benchmarks?size<=0)>
+<p>No benchmarks yet.</p>
+<#else>
+
 <table class="table table-hover" id="algorithm-version-list">
     <thead>
     <tr>
@@ -22,3 +26,5 @@
     </@s.iterator>
     </tbody>
 </table>
+
+</#if>

@@ -28,10 +28,6 @@ public class ShowAction extends ActionSupport {
         return algorithmVersions;
     }
 
-    public void setAlgorithmVersions(Collection<AlgorithmVersionEntity> algorithmVersions) {
-        this.algorithmVersions = algorithmVersions;
-    }
-
     private Collection<AlgorithmVersionEntity> algorithmVersions;
 
     private String uuid;

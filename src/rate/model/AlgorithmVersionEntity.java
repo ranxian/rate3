@@ -122,4 +122,10 @@ public class AlgorithmVersionEntity {
         this.description = description;
     }
 
+    @Transient
+    public String getUuidShort() {
+        return uuid.split("-")[0];
+    }
+    private void setUuidShort(String nonsense) {}
+
 }
