@@ -1,7 +1,7 @@
 <#include "../base.ftl" />
 <#macro main_container>
 
-<h1>This is your views' list</h1>
+<h1>All Views</h1>
 
 <#--<a class="btn" class="title-addition" href="/view/new">Import Views</a>-->
 

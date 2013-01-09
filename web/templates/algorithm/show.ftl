@@ -18,6 +18,8 @@
 
 <#include "../algorithm_version/table.ftl" />
 
+<hr>
+
 </#macro>
 
 <p><a href="<@s.url action="edit"><@s.param name="uuid">${uuid}</@s.param></@s.url>">Edit Me</a></p>

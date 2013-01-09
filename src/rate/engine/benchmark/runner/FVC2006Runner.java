@@ -102,7 +102,7 @@ public class FVC2006Runner
             }
             else if (line1.startsWith("M")) {
                 if (!(new File(templateFilePath).exists()) || enrollFailed) {
-                    resultPw.println(String.format("%s -1", line1));
+                    //resultPw.println(String.format("%s -1", line1));
                     continue;
                 }
             }
@@ -224,6 +224,9 @@ public class FVC2006Runner
             if (line==null) break;
 
             line = StringUtils.strip(line);
+
+            logger.trace(String.format("splitting: [%s]", line));
+
             String rs[] = line.split(" ");
             if (rs[0].equals("E")) continue;
             else if (! rs[0].equals("M")) throw new Exception("Unknown operator type in result.txt");
