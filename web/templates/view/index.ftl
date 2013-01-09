@@ -12,7 +12,7 @@
             <a href="<@s.url action="show"><@s.param name="uuid">${uuid}</@s.param></@s.url>"><@s.property value="name" /></a>
             <p class="view-type pull-right"><@s.property value="type" /></p>
             <div class="view-inner-box">
-                <p class="view-info">Created on: <b><@s.property value="generated" /></b></p>
+                <p class="view-info">Created on: <b>${generated}</b></p>
                 <p class="view-info">Generate by: <b><@s.property value="generator" /></b></p>
                 <div class="view-inner-box">
                     <p class="view-info">Number of classes: <b><@s.property value="numOfClasses" /></b></p>

@@ -5,7 +5,7 @@
         <th>Protocol</th>
         <th>Description</th>
         <th>Created</th>
-        <th>Generator</th>
+        <#--<th>Generator</th>-->
         <th>Num of Tasks</th>
     </tr>
     </thead>
@@ -16,7 +16,7 @@
         <td>${protocol}</td>
         <td>${description!"no description"}</td>
         <td>${created}</td>
-        <td>${generator}</td>
+        <#--<td>${generator}</td>-->
         <td>${numOfTasks}</td>
     </tr>
     </@s.iterator>

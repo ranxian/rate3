@@ -17,8 +17,8 @@
         <td><@s.property value="type" /></td>
         <td><@s.property value="protocol" /></td>
         <td><@s.property value="description"></@s.property></td>
-        <td><@s.property value="created"></@s.property></td>
-        <td><@s.property value="updated"></@s.property></td>
+        <td>${created}</td>
+        <td>${updated}</td>
         <td><@s.property value="numOfVersions"></@s.property></td>
     </tr>
     </@s.iterator>

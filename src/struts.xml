@@ -153,7 +153,7 @@
                 <param name="value">chart</param>
                 <param name="type">png</param>
                 <param name="width">420</param>
-                <param name="height">240</param>
+                <param name="height">300</param>
             </result>
         </action>
         <action name="fmrfnmr"  class="rate.controller.chart.FmrFnmrAction" method="execute">
@@ -161,7 +161,7 @@
                 <param name="value">chart</param>
                 <param name="type">png</param>
                 <param name="width">420</param>
-                <param name="height">240</param>
+                <param name="height">300</param>
             </result>
         </action>
         <action name="roc"  class="rate.controller.chart.RocAction" method="execute">
@@ -169,7 +169,7 @@
                 <param name="value">chart</param>
                 <param name="type">png</param>
                 <param name="width">420</param>
-                <param name="height">240</param>
+                <param name="height">300</param>
             </result>
         </action>
     </package>
