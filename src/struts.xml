@@ -145,6 +145,9 @@
                 <param name="actionName">index</param>
             </result>
         </action>
+        <action name="bybenchmark" class="rate.controller.task.ByBenchmarkAction" method="execute">
+            <result name="success" type="freemarker">/templates/task/bybenchmark.ftl</result>
+        </action>
     </package>
 
     <package name="rate.controller.chart" namespace="/chart" extends="jfreechart-default">
