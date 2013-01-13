@@ -3,6 +3,7 @@ package rate.controller.benchmark;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
 import rate.util.HibernateUtil;
@@ -16,7 +17,7 @@ import java.util.Collection;
  * Time: 下午12:37
  * To change this template use File | Settings | File Templates.
  */
-public class BenchmarkActionBase extends ActionSupport {
+public class BenchmarkActionBase extends RateActionBase {
     private static final Logger logger = Logger.getLogger(BenchmarkActionBase.class);
     protected final Session session = HibernateUtil.getSession();
 
@@ -37,6 +38,7 @@ public class BenchmarkActionBase extends ActionSupport {
     public Collection<TaskEntity> getTasks() {
         return session.createQuery("from TaskEntity where benchmarkByBenchmarkUuid=:benchmark order by created desc")
                 .setParameter("benchmark", benchmark)
+                .setMaxResults(itemPerPage)
                 .list();
     }
 

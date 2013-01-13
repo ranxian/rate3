@@ -5,6 +5,7 @@
 <div class="ratehr"></div>
 
 <#include "./table.ftl" />
+<#include "../pagination.ftl" />
 
 <div class="ratehr"></div>
 
