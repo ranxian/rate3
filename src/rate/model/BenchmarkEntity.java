@@ -43,7 +43,7 @@ public class BenchmarkEntity {
 
 
     public void setUuid(String uuid) {
-        logger.trace(String.format("setUuid [%s] -> [%s]", this.getUuid(), uuid));
+//        logger.trace(String.format("setUuid [%s] -> [%s]", this.getUuid(), uuid));
         this.uuid = uuid;
     }
 
@@ -81,7 +81,7 @@ public class BenchmarkEntity {
     }
 
     public void setName(String name) {
-        logger.trace(String.format("setName [%s] [%s]", this.getUuid(), name));
+//        logger.trace(String.format("setName [%s] [%s]", this.getUuid(), name));
         this.name = name;
     }
 
@@ -106,7 +106,7 @@ public class BenchmarkEntity {
     }
 
     public void setDescription(String description) {
-        logger.trace(String.format("setDescription uuid [%s] [%s]", this.uuid, description));
+//        logger.trace(String.format("setDescription uuid [%s] [%s]", this.uuid, description));
         this.description = description;
     }
 
