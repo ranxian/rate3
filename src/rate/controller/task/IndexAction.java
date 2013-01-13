@@ -2,6 +2,8 @@ package rate.controller.task;
 
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.TaskEntity;
 import rate.util.HibernateUtil;
 
@@ -12,9 +14,10 @@ import java.util.Collection;
  * Created by XianRan
  * Time: 下午12:41
  */
-public class IndexAction extends ActionSupport {
+public class IndexAction extends RateActionBase {
 
     private static final Logger logger = Logger.getLogger(IndexAction.class);
+    private final Session session = HibernateUtil.getSession();
 
     public Collection<TaskEntity> getTasks() {
         return tasks;
@@ -23,7 +26,11 @@ public class IndexAction extends ActionSupport {
     private Collection<TaskEntity> tasks;
 
     public String execute() {
-        tasks = HibernateUtil.getSession().createQuery("from TaskEntity order by created desc").list();
+        tasks = session.createQuery("from TaskEntity order by created desc")
+                .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
+                .list();
+        setNumOfItems((Long)session.createQuery("select count(*) from TaskEntity ")
+                .list().get(0));
         return SUCCESS;
     }
 }
