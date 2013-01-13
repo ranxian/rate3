@@ -19,6 +19,7 @@
 <h3>Tasks on this View</h3>
 
 <#include "../task/table.ftl" />
+<a href="/task/byview?uuid=${view.uuid}">Show All</a>
 
 <div class="ratehr"></div>
 

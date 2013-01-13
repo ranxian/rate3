@@ -3,6 +3,7 @@ package rate.controller.view;
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
 import rate.model.ViewEntity;
@@ -17,7 +18,7 @@ import java.util.UUID;
  * Created by XianRan
  * Time: 下午12:39
  */
-public class ShowAction extends ActionSupport {
+public class ShowAction extends RateActionBase {
     private ViewEntity view;
     private String uuid;
 
@@ -49,8 +50,10 @@ public class ShowAction extends ActionSupport {
 
     public String execute() throws Exception {
 
-        tasks = session.createQuery("from TaskEntity where benchmarkByBenchmarkUuid.viewByViewUuid=:view")
-                .setParameter("view", this.view).list();
+        tasks = session.createQuery("from TaskEntity where benchmarkByBenchmarkUuid.viewByViewUuid=:view order by created desc")
+                .setParameter("view", this.view)
+                .setMaxResults(itemPerPage)
+                .list();
 
         return SUCCESS;
     }
