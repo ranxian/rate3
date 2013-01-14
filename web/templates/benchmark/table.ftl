@@ -18,7 +18,7 @@
     <@s.iterator value="benchmarks">
     <tr>
         <td><a href="/benchmark/show?uuid=${uuid}">${name}</td>
-        <td><a href="/view/show?uuid=${viewByViewUuid.uuid}">${viewByViewUuid.name}</a></td>
+        <td><a href="/view/show?uuid=${view.uuid}">${view.name}</a></td>
         <td>${protocol}</td>
         <td>${description!"no description"}</td>
         <td>${created}</td>

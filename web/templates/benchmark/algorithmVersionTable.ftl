@@ -12,7 +12,7 @@
     <tbody>
     <@s.iterator value="algorithmVersions">
     <tr>
-        <td><a href="/algorithm/show?uuid=${algorithmByAlgorithmUuid.uuid}">${algorithmByAlgorithmUuid.name}</a></td>
+        <td><a href="/algorithm/show?uuid=${algorithm.uuid}">${algorithm.name}</a></td>
         <td><a href="/algorithm_version/show?uuid=${uuid}">${created}</a></td>
         <td><#if (description=="")>no description<#else>${description}</#if></td>
         <td><@s.property value="numOfResults" /></td>
