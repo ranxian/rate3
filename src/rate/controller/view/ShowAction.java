@@ -1,7 +1,5 @@
 package rate.controller.view;
 
-import com.opensymphony.xwork2.ActionSupport;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.controller.RateActionBase;
 import rate.model.BenchmarkEntity;
@@ -10,9 +8,6 @@ import rate.model.ViewEntity;
 import rate.util.HibernateUtil;
 
 import java.util.Collection;
-import java.util.List;
-
-import java.util.UUID;
 
 /**
  * Created by XianRan
@@ -45,7 +40,7 @@ public class ShowAction extends RateActionBase {
     private final Session session = HibernateUtil.getSession();
 
     public Collection<BenchmarkEntity> getBenchmarks() {
-        return this.view.getBenchmarksByUuid();
+        return this.view.getBenchmarks();
     }
 
     public String execute() throws Exception {

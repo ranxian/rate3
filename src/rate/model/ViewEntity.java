@@ -109,31 +109,31 @@ public class ViewEntity {
         this.generated = generated;
     }
 
-    private Collection<BenchmarkEntity> benchmarksByUuid;
+    private Collection<BenchmarkEntity> benchmarks;
 
     @OneToMany(mappedBy = "view")
-    public Collection<BenchmarkEntity> getBenchmarksByUuid() {
-        return benchmarksByUuid;
+    public Collection<BenchmarkEntity> getBenchmarks() {
+        return benchmarks;
     }
 
-    public void setBenchmarksByUuid(Collection<BenchmarkEntity> benchmarksByUuid) {
-        this.benchmarksByUuid = benchmarksByUuid;
+    public void setBenchmarks(Collection<BenchmarkEntity> benchmarks) {
+        this.benchmarks = benchmarks;
     }
 
-    private Collection<ViewSampleEntity> viewSamplesByUuid;
+    private Collection<ViewSampleEntity> viewSamples;
 
     @OneToMany(mappedBy = "view")
-    public Collection<ViewSampleEntity> getViewSamplesByUuid() {
-        return viewSamplesByUuid;
+    public Collection<ViewSampleEntity> getViewSamples() {
+        return viewSamples;
     }
 
-    public void setViewSamplesByUuid(Collection<ViewSampleEntity> viewSamplesByUuid) {
-        this.viewSamplesByUuid = viewSamplesByUuid;
+    public void setViewSamples(Collection<ViewSampleEntity> viewSamples) {
+        this.viewSamples = viewSamples;
     }
 
     @Transient
     public int getNumOfBenchmarks() {
-        return getBenchmarksByUuid().size();
+        return getBenchmarks().size();
     }
 
     private void setNumOfBenchmarks(int noneSense) {
@@ -144,7 +144,7 @@ public class ViewEntity {
     public int getNumOfClasses() {
         // TODO: The performance should be improved in the future. Maybe put a field in the table.
         Set<String> clazzUuids = new HashSet<String>();
-        for (ViewSampleEntity viewSample : getViewSamplesByUuid()) {
+        for (ViewSampleEntity viewSample : getViewSamples()) {
               clazzUuids.add(viewSample.getSample().getClazz().getUuid());
         }
         return clazzUuids.size();
@@ -156,7 +156,7 @@ public class ViewEntity {
 
     @Transient
     public int getNumOfSamples() {
-        return getViewSamplesByUuid().size();
+        return getViewSamples().size();
     }
 
     private void setNumOfSamples(int noneSense) {

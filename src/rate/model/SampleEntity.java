@@ -148,14 +148,14 @@ public class SampleEntity {
         this.clazzByClassUuid = clazzByClassUuid;
     }
 
-    private Collection<ViewSampleEntity> viewSamplesByUuid;
+    private Collection<ViewSampleEntity> view;
 
     @OneToMany(mappedBy = "sample")
-    public Collection<ViewSampleEntity> getViewSamplesByUuid() {
-        return viewSamplesByUuid;
+    public Collection<ViewSampleEntity> getView() {
+        return view;
     }
 
-    public void setViewSamplesByUuid(Collection<ViewSampleEntity> viewSamplesByUuid) {
-        this.viewSamplesByUuid = viewSamplesByUuid;
+    public void setView(Collection<ViewSampleEntity> view) {
+        this.view = view;
     }
 }

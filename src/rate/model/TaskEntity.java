@@ -116,16 +116,16 @@ public class TaskEntity {
         return result;
     }
 
-    private BenchmarkEntity benchmarkByBenchmarkUuid;
+    private BenchmarkEntity benchmark;
 
     @ManyToOne
     @JoinColumn(name = "benchmark_uuid", referencedColumnName = "uuid")
     public BenchmarkEntity getBenchmark() {
-        return benchmarkByBenchmarkUuid;
+        return benchmark;
     }
 
     public void setBenchmark(BenchmarkEntity benchmarkByBenchmarkUuid) {
-        this.benchmarkByBenchmarkUuid = benchmarkByBenchmarkUuid;
+        this.benchmark = benchmarkByBenchmarkUuid;
     }
 
     private AlgorithmVersionEntity algorithmVersion;

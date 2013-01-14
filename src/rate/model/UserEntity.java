@@ -124,14 +124,14 @@ public class UserEntity {
         return result;
     }
 
-    private Collection<UserAlgorithmEntity> userAlgorithmsByUuid;
+    private Collection<UserAlgorithmEntity> userAlgorithms;
 
     @OneToMany(mappedBy = "user")
-    public Collection<UserAlgorithmEntity> getUserAlgorithmsByUuid() {
-        return userAlgorithmsByUuid;
+    public Collection<UserAlgorithmEntity> getUserAlgorithms() {
+        return userAlgorithms;
     }
 
-    public void setUserAlgorithmsByUuid(Collection<UserAlgorithmEntity> userAlgorithmsByUuid) {
-        this.userAlgorithmsByUuid = userAlgorithmsByUuid;
+    public void setUserAlgorithms(Collection<UserAlgorithmEntity> userAlgorithms) {
+        this.userAlgorithms = userAlgorithms;
     }
 }
