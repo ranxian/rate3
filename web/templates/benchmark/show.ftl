@@ -1,7 +1,7 @@
 <#include "../base.ftl" />
 <#macro main_container>
 
-<h1>Benchmark <em>${benchmark.name}</em></h1>
+<h1 class="title">Benchmark <em>${benchmark.name}</em></h1>
 
 <div class="ratehr"></div>
 

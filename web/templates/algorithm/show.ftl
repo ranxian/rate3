@@ -2,15 +2,13 @@
 
 <#macro main_container>
 
-<h1>Algorithm <em>${algorithm.name}</em></h1>
+<h1 class="title">Algorithm <em>${algorithm.name}</em></h1>
 <hr>
 <p>type: ${algorithm.type}</p>
 <p>desc: ${algorithm.description}</p>
 <p>Created at: ${algorithm.created}</p>
 
-<hr>
-
-<p><span> Versions </span><a class="btn" href="/algorithm_version/new?algorithmUuid=${algorithm.uuid}">Add a new version</a></p>
+<p><a href="/algorithm/edit?uuid=${algorithm.uuid}" class="btn">Edit</a></p>
 
 <hr>
 
@@ -18,8 +16,9 @@
 
 <#include "../algorithm_version/table.ftl" />
 
+<p><a class="btn" href="/algorithm_version/new?algorithmUuid=${algorithm.uuid}">Add a new version</a></p>
+
 <hr>
 
 </#macro>
 
-<p><a href="<@s.url action="edit"><@s.param name="uuid">${uuid}</@s.param></@s.url>">Edit Me</a></p>

@@ -2,7 +2,7 @@
 
 <#macro main_container>
 
-<h1>View <em>${view.name}</em></h1>
+<h1 class="title">View <em>${view.name}</em></h1>
 
 <div class="ratehr"></div>
 

@@ -6,7 +6,7 @@
             <@s.hidden name="algorithm.uuid" id="id"></@s.hidden>
             <@s.textfield name="algorithm.name" label="Name"></@s.textfield>
             <@s.select label="Type"
-                      name="algorithm.typ3e"
+                      name="algorithm.type"
                       list="{'FINGERVEIN', 'FINGERVEIN'}"
                       headerKey="0"
                       headerValue="Choose a algorithm type"
@@ -19,5 +19,4 @@
                         name="algorithm.description" ></@s.textarea>
             <@s.submit></@s.submit>
         </@s.form>
-        <@s.debug/>
     </#macro>

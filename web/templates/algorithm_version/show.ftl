@@ -2,7 +2,7 @@
 
 <#macro main_container>
 
-<h1>Version <em>${algorithmVersion.uuidShort}</em></h1>
+<h1 class="title">Version <em>${algorithmVersion.uuidShort}</em></h1>
 <h3>Algorithm <a href="/algorithm/show?uuid=${algorithm.uuid}"><em>${algorithm.name}</em></a></h3>
 
 <div class="ratehr"></div>
