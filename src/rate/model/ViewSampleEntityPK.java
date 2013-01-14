@@ -36,7 +36,7 @@ public class ViewSampleEntityPK implements Serializable {
 
     private ViewEntity view;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn(name = "view_uuid", referencedColumnName = "uuid")
     @Id
     public ViewEntity getView() {
@@ -49,7 +49,7 @@ public class ViewSampleEntityPK implements Serializable {
 
     private SampleEntity sample;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn(name = "sample_uuid", referencedColumnName = "uuid")
     @Id
     public SampleEntity getSample() {

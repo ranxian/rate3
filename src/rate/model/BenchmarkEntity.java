@@ -145,7 +145,7 @@ public class BenchmarkEntity {
 
     private ViewEntity view;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "view_uuid", referencedColumnName = "uuid", nullable = false)
     public ViewEntity getView() {
         return view;

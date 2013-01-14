@@ -38,7 +38,7 @@ public class UserAlgorithmEntity {
 
     private UserEntity user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn(name = "user_uuid", referencedColumnName = "uuid")
     @Id
     public UserEntity getUser() {
@@ -51,7 +51,7 @@ public class UserAlgorithmEntity {
 
     private AlgorithmEntity algorithm;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn(name = "algorithm_uuid", referencedColumnName = "uuid")
     @Id
     public AlgorithmEntity getAlgorithm() {

@@ -98,7 +98,7 @@ public class ClazzEntity {
 
     private PersonEntity person;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_uuid", referencedColumnName = "uuid")
     public PersonEntity getPerson() {
         return person;

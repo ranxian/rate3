@@ -126,7 +126,7 @@ public class SampleEntity {
 
     private DeviceTypeEntity device;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "device_type", referencedColumnName = "uuid")
     public DeviceTypeEntity getDevice() {
         return device;
@@ -136,21 +136,21 @@ public class SampleEntity {
         this.device = deviceTypeByDeviceType;
     }
 
-    private ClazzEntity clazzByClassUuid;
+    private ClazzEntity clazz;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_uuid", referencedColumnName = "uuid")
     public ClazzEntity getClazz() {
-        return clazzByClassUuid;
+        return clazz;
     }
 
     public void setClazz(ClazzEntity clazzByClassUuid) {
-        this.clazzByClassUuid = clazzByClassUuid;
+        this.clazz = clazzByClassUuid;
     }
 
     private Collection<ViewSampleEntity> view;
 
-    @OneToMany(mappedBy = "sample")
+    @OneToMany(mappedBy = "sample", fetch = FetchType.LAZY)
     public Collection<ViewSampleEntity> getView() {
         return view;
     }

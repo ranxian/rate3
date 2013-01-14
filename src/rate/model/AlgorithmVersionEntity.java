@@ -72,7 +72,7 @@ public class AlgorithmVersionEntity {
 
     private AlgorithmEntity algorithm;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "algorithm_uuid", referencedColumnName = "uuid", nullable = false)
     public AlgorithmEntity getAlgorithm() {
         return algorithm;

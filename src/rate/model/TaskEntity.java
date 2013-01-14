@@ -118,7 +118,7 @@ public class TaskEntity {
 
     private BenchmarkEntity benchmark;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "benchmark_uuid", referencedColumnName = "uuid")
     public BenchmarkEntity getBenchmark() {
         return benchmark;
@@ -130,7 +130,7 @@ public class TaskEntity {
 
     private AlgorithmVersionEntity algorithmVersion;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "algorithm_version_uuid", referencedColumnName = "uuid")
     public AlgorithmVersionEntity getAlgorithmVersion() {
         return algorithmVersion;

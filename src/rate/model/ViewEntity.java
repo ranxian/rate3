@@ -122,7 +122,7 @@ public class ViewEntity {
 
     private Collection<ViewSampleEntity> viewSamples;
 
-    @OneToMany(mappedBy = "view")
+    @OneToMany(mappedBy = "view", fetch = FetchType.LAZY)
     public Collection<ViewSampleEntity> getViewSamples() {
         return viewSamples;
     }
@@ -140,27 +140,28 @@ public class ViewEntity {
         // make JPA happy
     }
 
-    @Transient
+    private int numOfClasses;
+
+    @Column(name = "numOfClasses", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
+    @Basic
     public int getNumOfClasses() {
-        // TODO: The performance should be improved in the future. Maybe put a field in the table.
-        Set<String> clazzUuids = new HashSet<String>();
-        for (ViewSampleEntity viewSample : getViewSamples()) {
-              clazzUuids.add(viewSample.getSample().getClazz().getUuid());
-        }
-        return clazzUuids.size();
+        return this.numOfClasses;
     }
 
-    private void setNumOfClasses(int noneSense) {
-        // make JPA happy
+    private void setNumOfClasses(int numOfClasses) {
+        this.numOfClasses = numOfClasses;
     }
 
-    @Transient
+    private int numOfSamples;
+
+    @Column(name = "numOfSamples", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
+    @Basic
     public int getNumOfSamples() {
-        return getViewSamples().size();
+        return numOfSamples;
     }
 
-    private void setNumOfSamples(int noneSense) {
-        // make JPA happy
+    private void setNumOfSamples(int numOfSamples) {
+        this.numOfSamples = numOfSamples;
     }
 
 }

@@ -3,6 +3,7 @@ package rate.model;
 import org.hibernate.annotations.TypeDef;
 import rate.util.UUIDType;
 
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -38,7 +39,7 @@ public class UserAlgorithmEntityPK implements Serializable {
 
     private UserEntity userByUserUuid;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", nullable = false)
     @Id
     public UserEntity getUser() {
@@ -51,7 +52,7 @@ public class UserAlgorithmEntityPK implements Serializable {
 
     private AlgorithmEntity algorithm;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "algorithm_uuid", referencedColumnName = "uuid", nullable = false)
     @Id
     public AlgorithmEntity getAlgorithm() {
