@@ -1,7 +1,11 @@
 package rate.engine.benchmark.generator;
 
+import org.hibernate.Session;
 import rate.model.BenchmarkEntity;
 import rate.model.ViewEntity;
+import rate.util.HibernateUtil;
+
+import java.io.File;
 
 /**
  * User:    Yu Yuankai
@@ -10,6 +14,8 @@ import rate.model.ViewEntity;
  * Time:    下午9:04
  */
 abstract public class AbstractGenerator {
+
+    protected final Session session = HibernateUtil.getSession();
 
     public String getBenchmarkName() {
         return benchmarkName;
@@ -52,4 +58,19 @@ abstract public class AbstractGenerator {
     private String protocol = "";
 
     abstract public BenchmarkEntity generate() throws Exception;
+
+    protected BenchmarkEntity prepareBenchmark() {
+        session.beginTransaction();
+        BenchmarkEntity benchmarkEntity = null;
+        benchmarkEntity = new BenchmarkEntity();
+        benchmarkEntity.setView(this.getView());
+        benchmarkEntity.setGenerator(this.getGeneratorName());
+        benchmarkEntity.setName(getBenchmarkName());
+        benchmarkEntity.setProtocol(this.getProtocol());
+        session.save(benchmarkEntity);
+        // create the directory
+        File dir = new File(benchmarkEntity.dirPath());
+        dir.mkdirs();
+        return benchmarkEntity;
+    }
 }

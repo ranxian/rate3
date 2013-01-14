@@ -24,69 +24,53 @@ import java.util.Map;
  * Date:    12-12-9
  * Time:    下午9:04
  */
-public class GeneralFVC2006Generator extends AbstractGenerator {
-    private static final Logger logger = Logger.getLogger(GeneralFVC2006Generator.class);
+public class ImposterTestGenerator extends AbstractGenerator {
+    private static final Logger logger = Logger.getLogger(ImposterTestGenerator.class);
 
-    public GeneralFVC2006Generator() {
+    public ImposterTestGenerator() {
         this.setProtocol("FVC2006");
-        this.setGeneratorName("GeneralFVC2006Generator");
+        this.setGeneratorName("ImposterTestGenerator");
     }
 
-    public int getClassCount() {
-        return classCount;
+    public void setImposterClassAndSamples(List<Pair<ClazzEntity, List<SampleEntity>>> imposterClassAndSamples) {
+        this.imposterClassAndSamples = imposterClassAndSamples;
     }
 
-    public void setClassCount(int classCount) {
-        this.classCount = classCount;
+    protected List<Pair<ClazzEntity, List<SampleEntity>>> imposterClassAndSamples=null;
+
+    public void setImpostedClassAndSamples(List<Pair<ClazzEntity, List<SampleEntity>>> impostedClassAndSamples) {
+        this.impostedClassAndSamples = impostedClassAndSamples;
     }
 
-    private int classCount = 0;
-
-    public int getSampleCount() {
-        return sampleCount;
-    }
-
-    public void setSampleCount(int sampleCount) {
-        this.sampleCount = sampleCount;
-    }
-
-    private int sampleCount = 0;
+    protected List<Pair<ClazzEntity, List<SampleEntity>>> impostedClassAndSamples=null;
 
     public BenchmarkEntity generate() throws Exception {
-        if (classCount==0 || sampleCount==0 || getView()==null || getGeneratorName()==null || getBenchmarkName()==null) {
-            throw new GeneratorException("No classCount or sampleCount or view or generator name specified");
+        if ( imposterClassAndSamples==null || impostedClassAndSamples==null
+                || getView()==null || getGeneratorName()==null || getBenchmarkName()==null) {
+            throw new GeneratorException("Parameters not specified");
         }
 
-        BenchmarkEntity benchmarkEntity = null;
-
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
-
-        benchmarkEntity = new BenchmarkEntity();
-        benchmarkEntity.setView(this.getView());
-        benchmarkEntity.setGenerator(this.getGeneratorName());
-        benchmarkEntity.setName(getBenchmarkName());
-        benchmarkEntity.setProtocol("FVC2006");
-
-        session.save(benchmarkEntity);
-
-        // create the directory
-        // TODO: This step should be put in BenchmarkEntity
-        File dir = new File(benchmarkEntity.dirPath());
-
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+        BenchmarkEntity benchmarkEntity = this.prepareBenchmark();
 
         File benchmarkFile = new File(benchmarkEntity.filePath());
         benchmarkFile.createNewFile();
         PrintWriter pw = new PrintWriter(new FileOutputStream(benchmarkFile));
 
+        // imposter and imposted
+
+        for (int i=0; i<imposterClassAndSamples.size(); i++) {
+              // TODO: not done yet
+        }
+
+        /*
         Query query = session.createQuery("select distinct clazz from ViewSampleEntity where view=:view order by RAND()");
         query.setParameter("view", this.getView());
 
         Iterator<ClazzEntity> clazzIterator = query.iterate();
-        List<ClazzEntity> selectedClasses = new ArrayList<ClazzEntity>();
+        List<ClazzEntity> imposterClasses = new ArrayList<ClazzEntity>();
+
+        // select imposter classes
+        //
 
         List<Pair<ClazzEntity, List<SampleEntity>>> selectedMap = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
 
@@ -154,6 +138,7 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
             }
         }
         pw.close();
+        */
 
         session.getTransaction().commit();
 
