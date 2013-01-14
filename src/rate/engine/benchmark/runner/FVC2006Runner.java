@@ -225,7 +225,7 @@ public class FVC2006Runner
 
             line = StringUtils.strip(line);
 
-            logger.trace(String.format("splitting: [%s]", line));
+//            logger.trace(String.format("splitting: [%s]", line));
 
             String rs[] = line.split(" ");
             if (rs[0].equals("E")) continue;

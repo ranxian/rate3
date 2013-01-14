@@ -26,6 +26,7 @@
 <div id="navbar">
     <div class="container">
         <ul>
+            <li><a href="/index">Home</a></li>
             <li><a href="/view/index">Views</a></li>
             <li><a href="/benchmark/index">Benchmarks</a></li>
             <li><a href="/algorithm/index">Algorithms</a></li>
