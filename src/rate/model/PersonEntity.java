@@ -9,7 +9,6 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -110,14 +109,14 @@ public class PersonEntity {
         return result;
     }
 
-    private Collection<ClazzEntity> clazzsByUuid;
+    private Collection<ClazzEntity> clazz;
 
-    @OneToMany(mappedBy = "personByPersonUuid")
-    public Collection<ClazzEntity> getClazzsByUuid() {
-        return clazzsByUuid;
+    @OneToMany(mappedBy = "person")
+    public Collection<ClazzEntity> getClazz() {
+        return clazz;
     }
 
-    public void setClazzsByUuid(Collection<ClazzEntity> clazzsByUuid) {
-        this.clazzsByUuid = clazzsByUuid;
+    public void setClazz(Collection<ClazzEntity> clazz) {
+        this.clazz = clazz;
     }
 }

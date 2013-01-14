@@ -105,7 +105,7 @@ public class SampleEntity {
 
         if (getClazz() != null ? !getClazz().equals(that.getClazz()) : that.getClazz() != null) return false;
         if (created != null ? !created.equals(that.created) : that.created != null) return false;
-        if (!(getDeviceTypeByDeviceType() == that.getDeviceTypeByDeviceType())) return false;
+        if (!(getDevice() == that.getDevice())) return false;
         if (file != null ? !file.equals(that.file) : that.file != null) return false;
         if (importTag != null ? !importTag.equals(that.importTag) : that.importTag != null) return false;
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
@@ -119,21 +119,21 @@ public class SampleEntity {
         result = 31 * result + (getClazz() != null ? getClazz().hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (file != null ? file.hashCode() : 0);
-        result = 31 * result + (getDeviceTypeByDeviceType() != null ? getDeviceTypeByDeviceType().hashCode() : 0);
+        result = 31 * result + (getDevice() != null ? getDevice().hashCode() : 0);
         result = 31 * result + (importTag != null ? importTag.hashCode() : 0);
         return result;
     }
 
-    private DeviceTypeEntity deviceTypeByDeviceType;
+    private DeviceTypeEntity device;
 
     @ManyToOne
     @JoinColumn(name = "device_type", referencedColumnName = "uuid")
-    public DeviceTypeEntity getDeviceTypeByDeviceType() {
-        return deviceTypeByDeviceType;
+    public DeviceTypeEntity getDevice() {
+        return device;
     }
 
-    public void setDeviceTypeByDeviceType(DeviceTypeEntity deviceTypeByDeviceType) {
-        this.deviceTypeByDeviceType = deviceTypeByDeviceType;
+    public void setDevice(DeviceTypeEntity deviceTypeByDeviceType) {
+        this.device = deviceTypeByDeviceType;
     }
 
     private ClazzEntity clazzByClassUuid;

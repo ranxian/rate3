@@ -8,7 +8,6 @@ import rate.util.UUIDType;
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -123,14 +122,14 @@ public class DeviceTypeEntity {
         return result;
     }
 
-    private Collection<SampleEntity> samplesByUuid;
+    private Collection<SampleEntity> samples;
 
-    @OneToMany(mappedBy = "deviceTypeByDeviceType")
-    public Collection<SampleEntity> getSamplesByUuid() {
-        return samplesByUuid;
+    @OneToMany(mappedBy = "device")
+    public Collection<SampleEntity> getSamples() {
+        return samples;
     }
 
-    public void setSamplesByUuid(Collection<SampleEntity> samplesByUuid) {
-        this.samplesByUuid = samplesByUuid;
+    public void setSamples(Collection<SampleEntity> samplesByUuid) {
+        this.samples = samplesByUuid;
     }
 }
