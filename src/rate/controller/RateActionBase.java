@@ -56,8 +56,8 @@ public class RateActionBase extends ActionSupport {
         String uri = ServletActionContext.getRequest().getRequestURI();
         String parameter =  ServletActionContext.getRequest().getQueryString();
         if (parameter==null) parameter = "";
-//        logger.trace(String.format("Request uri [%s]", uri));
-//        logger.trace(String.format("Request parameter [%s]", parameter));
+        logger.trace(String.format("Request uri [%s]", uri));
+        logger.trace(String.format("Request parameter [%s]", parameter));
 
         String newURL = null;
 
@@ -90,5 +90,5 @@ public class RateActionBase extends ActionSupport {
 
     protected int numOfPages = -1;
 
-    protected int itemPerPage = 5;
+    protected int itemPerPage = 10;
 }
