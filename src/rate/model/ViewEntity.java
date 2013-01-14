@@ -1,6 +1,5 @@
 package rate.model;
 
-import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -11,7 +10,6 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -124,7 +122,7 @@ public class ViewEntity {
 
     private Collection<ViewSampleEntity> viewSamplesByUuid;
 
-    @OneToMany(mappedBy = "viewByViewUuid")
+    @OneToMany(mappedBy = "view")
     public Collection<ViewSampleEntity> getViewSamplesByUuid() {
         return viewSamplesByUuid;
     }
@@ -147,7 +145,7 @@ public class ViewEntity {
         // TODO: The performance should be improved in the future. Maybe put a field in the table.
         Set<String> clazzUuids = new HashSet<String>();
         for (ViewSampleEntity viewSample : getViewSamplesByUuid()) {
-              clazzUuids.add(viewSample.getSampleBySampleUuid().getClazzByClassUuid().getUuid());
+              clazzUuids.add(viewSample.getSample().getClazzByClassUuid().getUuid());
         }
         return clazzUuids.size();
     }

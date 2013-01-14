@@ -9,7 +9,6 @@ import rate.model.ViewSampleEntity;
 import rate.util.HibernateUtil;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -19,6 +18,8 @@ import java.util.UUID;
  */
 public class Generator {
     private static final Logger logger = Logger.getLogger(Generator.class);
+
+    private final Session session = HibernateUtil.getSession();
 
     public AbstractGenerateStrategy getGenerateStrategy() {
         return generateStrategy;
@@ -35,33 +36,37 @@ public class Generator {
             throw new Exception("No generate strategy specified");
         }
         List<SampleEntity> samples = generateStrategy.getSamples();
+
+        logger.trace(String.format("generateStrategy return [%d] samples", samples.size()));
+
         if (samples.size()==0) {
             return null;
         }
 
-        try {
-            Session session = HibernateUtil.getSession();
-            session.beginTransaction();
+        session.beginTransaction();
 
-            ViewEntity view = new ViewEntity();
-            logger.debug("new view" + view.getUuid());
+        ViewEntity view = new ViewEntity();
 
-            view.setName(generateStrategy.getViewName());
-            view.setGenerator(generateStrategy.getGenerator());
-            view.setType("FINGERVEIN"); // TODO: maybe treat it like name and generator
-            session.save(view);
-            for (SampleEntity sample: samples) {
-                ViewSampleEntity toBeInsert = new ViewSampleEntity();
-                toBeInsert.setViewUuid(view.getUuid());
-                toBeInsert.setSampleUuid(sample.getUuid());
-                session.save(toBeInsert);
-            }
-            session.getTransaction().commit();
-            return view;
+        view.setName(generateStrategy.getViewName());
+        view.setGenerator(generateStrategy.getGenerator());
+        view.setType("FINGERVEIN"); // TODO: maybe treat it like name and generator
+        session.save(view);
+
+        logger.debug(String.format("New view [%s]", view.getUuid()));
+
+        int count=0;
+        for (SampleEntity sample: samples) {
+            ViewSampleEntity toBeInsert = new ViewSampleEntity();
+            logger.trace(String.format("[%d] Sample [%s]", ++count, sample.getUuid()));
+            toBeInsert.setView(view);
+            toBeInsert.setSample(sample);
+//            toBeInsert.setViewUuid(view.getUuid());
+//            toBeInsert.setSampleUuid(sample.getUuid());
+            session.save(toBeInsert);
+//            session.getTransaction().commit();
         }
-        catch (Exception ex) {
-            logger.debug(ex);
-            throw ex;
-        }
+
+        session.getTransaction().commit();
+        return view;
     }
 }

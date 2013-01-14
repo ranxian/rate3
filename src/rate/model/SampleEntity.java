@@ -7,9 +7,7 @@ import rate.util.UUIDType;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -152,7 +150,7 @@ public class SampleEntity {
 
     private Collection<ViewSampleEntity> viewSamplesByUuid;
 
-    @OneToMany(mappedBy = "sampleBySampleUuid")
+    @OneToMany(mappedBy = "sample")
     public Collection<ViewSampleEntity> getViewSamplesByUuid() {
         return viewSamplesByUuid;
     }

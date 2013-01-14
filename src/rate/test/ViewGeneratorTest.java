@@ -1,5 +1,7 @@
 package rate.test;
 
+import rate.engine.view.GenerateStrategy.AbstractGenerateStrategy;
+import rate.engine.view.GenerateStrategy.GenerateAllStrategy;
 import rate.engine.view.GenerateStrategy.GenerateByImportTagStrategy;
 import rate.engine.view.Generator;
 
@@ -11,10 +13,10 @@ import rate.engine.view.Generator;
  */
 public class ViewGeneratorTest {
     public static void main(String[] args) throws Exception {
-        GenerateByImportTagStrategy strategy = new GenerateByImportTagStrategy();
-        strategy.setImportTag("20121209test");
+        AbstractGenerateStrategy strategy = new GenerateAllStrategy();
         Generator generator = new Generator();
         generator.setGenerateStrategy(strategy);
+        //strategy.getViewName();
         generator.generate();
     }
 }

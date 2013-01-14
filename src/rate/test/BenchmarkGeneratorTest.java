@@ -21,7 +21,7 @@ import java.util.List;
 public class BenchmarkGeneratorTest {
     public static void main(String[] args) throws Exception {
         Session session = HibernateUtil.getSession();
-        Query query = session.createQuery("from ViewEntity ");
+        Query query = session.createQuery("from ViewEntity");
         ViewEntity view = (ViewEntity)query.list().get(0);
 
 //        GeneralFVC2006Generator generator = new SmallFVC2006Generator();
@@ -32,6 +32,7 @@ public class BenchmarkGeneratorTest {
         GeneralFVC2006Generator generator = new MediumFVC2006Generator();
         generator.setView(view);
         generator.setBenchmarkName("Test for MediumFVC2006Generator");
+
         generator.generate();
     }
 }
