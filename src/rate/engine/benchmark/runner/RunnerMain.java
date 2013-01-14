@@ -30,7 +30,7 @@ public class RunnerMain {
 
             TaskEntity task = (TaskEntity)query.list().get(0);
             BenchmarkEntity benchmark = task.getBenchmarkByBenchmarkUuid();
-            AlgorithmVersionEntity algorithmVersion = task.getAlgorithmVersionByAlgorithmVersionUuid();
+            AlgorithmVersionEntity algorithmVersion = task.getAlgorithmVersion();
 
             if (!benchmark.getProtocol().equals(algorithmVersion.getAlgorithm().getProtocol())) {
                 throw new Exception("Protocol does not match");

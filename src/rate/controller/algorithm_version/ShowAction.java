@@ -21,7 +21,7 @@ public class ShowAction extends AlgorithmVersionActionBase {
 
 
     public String execute() {
-        tasks = algorithmVersion.getTasksByUuid();
+        tasks = algorithmVersion.getTasks();
 
         return SUCCESS;
     }

@@ -18,8 +18,8 @@ public class FVC2006Task extends TaskEntity {
     private TaskEntity task;
     public FVC2006Task(TaskEntity taskEntity) throws Exception {
         this.task = taskEntity;
-        enrollExeFilePath = FilenameUtils.concat(task.getAlgorithmVersionByAlgorithmVersionUuid().dirPath(), "enroll.exe");
-        matchExeFilePath = FilenameUtils.concat(task.getAlgorithmVersionByAlgorithmVersionUuid().dirPath(), "match.exe");
+        enrollExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "enroll.exe");
+        matchExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "match.exe");
 
         resultFilePath = task.getResultFilePath();
         errorRateFilePath = FilenameUtils.concat(task.getDirPath(), "rate.txt");

@@ -54,8 +54,8 @@ public class AlgorithmVersionEntity {
 
         AlgorithmVersionEntity that = (AlgorithmVersionEntity) o;
 
-//        if (algorithmUuid != null ? !algorithmUuid.equals(that.algorithmUuid) : that.algorithmUuid != null)
-//            return false;
+        if (algorithm != null ? !algorithm.equals(that.algorithm) : that.algorithm != null)
+            return false;
         if (created != null ? !created.equals(that.created) : that.created != null) return false;
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
 
@@ -82,15 +82,15 @@ public class AlgorithmVersionEntity {
         this.algorithm = algorithmByAlgorithmUuid;
     }
 
-    private Collection<TaskEntity> tasksByUuid;
+    private Collection<TaskEntity> tasks;
 
-    @OneToMany(mappedBy = "algorithmVersionByAlgorithmVersionUuid")
-    public Collection<TaskEntity> getTasksByUuid() {
-        return tasksByUuid;
+    @OneToMany(mappedBy = "algorithmVersion")
+    public Collection<TaskEntity> getTasks() {
+        return tasks;
     }
 
-    public void setTasksByUuid(Collection<TaskEntity> tasksByUuid) {
-        this.tasksByUuid = tasksByUuid;
+    public void setTasks(Collection<TaskEntity> tasksByUuid) {
+        this.tasks = tasksByUuid;
     }
 
     public String dirPath() {
@@ -100,7 +100,7 @@ public class AlgorithmVersionEntity {
 
     @Transient
     public int getNumOfResults() {
-        return this.getTasksByUuid().size();
+        return this.getTasks().size();
     }
 
     private void setNumOfResults(int nonsense) {

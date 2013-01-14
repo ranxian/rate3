@@ -22,7 +22,7 @@ abstract public class AbstractRunner {
     public void setTask(TaskEntity task) throws Exception {
         this.task = task;
         this.benchmark = task.getBenchmarkByBenchmarkUuid();
-        this.algorithmVersion = task.getAlgorithmVersionByAlgorithmVersionUuid();
+        this.algorithmVersion = task.getAlgorithmVersion();
     }
 
     protected void prepare() throws Exception {

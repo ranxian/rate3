@@ -10,7 +10,6 @@ import rate.util.UUIDType;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -129,16 +128,16 @@ public class TaskEntity {
         this.benchmarkByBenchmarkUuid = benchmarkByBenchmarkUuid;
     }
 
-    private AlgorithmVersionEntity algorithmVersionByAlgorithmVersionUuid;
+    private AlgorithmVersionEntity algorithmVersion;
 
     @ManyToOne
     @JoinColumn(name = "algorithm_version_uuid", referencedColumnName = "uuid")
-    public AlgorithmVersionEntity getAlgorithmVersionByAlgorithmVersionUuid() {
-        return algorithmVersionByAlgorithmVersionUuid;
+    public AlgorithmVersionEntity getAlgorithmVersion() {
+        return algorithmVersion;
     }
 
-    public void setAlgorithmVersionByAlgorithmVersionUuid(AlgorithmVersionEntity algorithmVersionByAlgorithmVersionUuid) {
-        this.algorithmVersionByAlgorithmVersionUuid = algorithmVersionByAlgorithmVersionUuid;
+    public void setAlgorithmVersion(AlgorithmVersionEntity algorithmVersionByAlgorithmVersionUuid) {
+        this.algorithmVersion = algorithmVersionByAlgorithmVersionUuid;
     }
 
     @Transient
