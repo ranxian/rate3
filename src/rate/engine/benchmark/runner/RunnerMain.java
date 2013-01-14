@@ -29,7 +29,7 @@ public class RunnerMain {
             Query query = session.createQuery("from TaskEntity where uuid = :uuid").setParameter("uuid", taskUuid);
 
             TaskEntity task = (TaskEntity)query.list().get(0);
-            BenchmarkEntity benchmark = task.getBenchmarkByBenchmarkUuid();
+            BenchmarkEntity benchmark = task.getBenchmark();
             AlgorithmVersionEntity algorithmVersion = task.getAlgorithmVersion();
 
             if (!benchmark.getProtocol().equals(algorithmVersion.getAlgorithm().getProtocol())) {

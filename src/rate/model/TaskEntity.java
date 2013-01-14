@@ -120,11 +120,11 @@ public class TaskEntity {
 
     @ManyToOne
     @JoinColumn(name = "benchmark_uuid", referencedColumnName = "uuid")
-    public BenchmarkEntity getBenchmarkByBenchmarkUuid() {
+    public BenchmarkEntity getBenchmark() {
         return benchmarkByBenchmarkUuid;
     }
 
-    public void setBenchmarkByBenchmarkUuid(BenchmarkEntity benchmarkByBenchmarkUuid) {
+    public void setBenchmark(BenchmarkEntity benchmarkByBenchmarkUuid) {
         this.benchmarkByBenchmarkUuid = benchmarkByBenchmarkUuid;
     }
 

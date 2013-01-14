@@ -50,7 +50,7 @@ public class ShowAction extends RateActionBase {
 
     public String execute() throws Exception {
 
-        tasks = session.createQuery("from TaskEntity where benchmarkByBenchmarkUuid.viewByViewUuid=:view order by created desc")
+        tasks = session.createQuery("from TaskEntity where benchmark.view=:view order by created desc")
                 .setParameter("view", this.view)
                 .setMaxResults(itemPerPage)
                 .list();

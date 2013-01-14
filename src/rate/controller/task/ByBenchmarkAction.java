@@ -42,11 +42,11 @@ public class ByBenchmarkAction extends RateActionBase {
     private Collection<TaskEntity> tasks;
 
     public String execute() {
-        tasks = session.createQuery("from TaskEntity where benchmarkByBenchmarkUuid=:benchmark order by created desc")
+        tasks = session.createQuery("from TaskEntity where benchmark=:benchmark order by created desc")
                 .setParameter("benchmark", benchmark)
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
-        setNumOfItems((Long)session.createQuery("select count(*) from TaskEntity where benchmarkByBenchmarkUuid=:benchmark")
+        setNumOfItems((Long)session.createQuery("select count(*) from TaskEntity where benchmark=:benchmark")
                 .setParameter("benchmark", benchmark)
                 .list().get(0));
         return SUCCESS;

@@ -63,7 +63,7 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
             session.beginTransaction();
 
             benchmarkEntity = new BenchmarkEntity();
-            benchmarkEntity.setViewByViewUuid(this.getView());
+            benchmarkEntity.setView(this.getView());
             benchmarkEntity.setGenerator(this.getGeneratorName());
             benchmarkEntity.setName(getBenchmarkName());
             benchmarkEntity.setProtocol("FVC2006");

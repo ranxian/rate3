@@ -111,7 +111,7 @@ public class ViewEntity {
 
     private Collection<BenchmarkEntity> benchmarksByUuid;
 
-    @OneToMany(mappedBy = "viewByViewUuid")
+    @OneToMany(mappedBy = "view")
     public Collection<BenchmarkEntity> getBenchmarksByUuid() {
         return benchmarksByUuid;
     }

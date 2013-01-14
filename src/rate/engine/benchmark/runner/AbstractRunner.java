@@ -21,7 +21,7 @@ abstract public class AbstractRunner {
 
     public void setTask(TaskEntity task) throws Exception {
         this.task = task;
-        this.benchmark = task.getBenchmarkByBenchmarkUuid();
+        this.benchmark = task.getBenchmark();
         this.algorithmVersion = task.getAlgorithmVersion();
     }
 

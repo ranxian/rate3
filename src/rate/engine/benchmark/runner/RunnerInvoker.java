@@ -35,7 +35,7 @@ public class RunnerInvoker {
 
         TaskEntity task = new TaskEntity();
         task.setAlgorithmVersion(algorithmVersion);
-        task.setBenchmarkByBenchmarkUuid(benchmark);
+        task.setBenchmark(benchmark);
         task.setCreated(HibernateUtil.getCurrentTimestamp());
         session.save(task);
         session.getTransaction().commit();

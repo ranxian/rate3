@@ -11,11 +11,6 @@ import rate.util.UUIDType;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.UUID;
-
-import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.Collection;
 
 /**
  * User:    Yu Yuankai
@@ -45,19 +40,6 @@ public class BenchmarkEntity {
     public void setUuid(String uuid) {
 //        logger.trace(String.format("setUuid [%s] -> [%s]", this.getUuid(), uuid));
         this.uuid = uuid;
-    }
-
-    private String viewUuid;
-
-    @Type(type="UUIDType")
-    @Column(name = "view_uuid", nullable = false, insertable = false, updatable = false, length = 16, precision = 0)
-    @Basic
-    public String getViewUuid() {
-        return viewUuid;
-    }
-
-    public void setViewUuid(String viewUuid) {
-        this.viewUuid = viewUuid;
     }
 
     private String protocol;
@@ -135,7 +117,7 @@ public class BenchmarkEntity {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (protocol != null ? !protocol.equals(that.protocol) : that.protocol != null) return false;
         if (!(uuid == that.uuid)) return false;
-        if (!(viewUuid == that.viewUuid)) return false;
+        if (!(view.equals(that.view))) return false;
 
         return true;
     }
@@ -143,7 +125,7 @@ public class BenchmarkEntity {
     @Override
     public int hashCode() {
         int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (viewUuid != null ? viewUuid.hashCode() : 0);
+        result = 31 * result + (view != null ? view.hashCode() : 0);
         result = 31 * result + (protocol != null ? protocol.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
@@ -161,32 +143,32 @@ public class BenchmarkEntity {
          return FilenameUtils.separatorsToUnix(FilenameUtils.concat(this.dirPath(), "benchmark.txt"));
     }
 
-    private ViewEntity viewByViewUuid;
+    private ViewEntity view;
 
     @ManyToOne
     @JoinColumn(name = "view_uuid", referencedColumnName = "uuid", nullable = false)
-    public ViewEntity getViewByViewUuid() {
-        return viewByViewUuid;
+    public ViewEntity getView() {
+        return view;
     }
 
-    public void setViewByViewUuid(ViewEntity viewByViewUuid) {
-        this.viewByViewUuid = viewByViewUuid;
+    public void setView(ViewEntity viewByViewUuid) {
+        this.view = viewByViewUuid;
     }
 
-    private Collection<TaskEntity> tasksByUuid;
+    private Collection<TaskEntity> tasks;
 
-    @OneToMany(mappedBy = "benchmarkByBenchmarkUuid")
-    public Collection<TaskEntity> getTasksByUuid() {
-        return tasksByUuid;
+    @OneToMany(mappedBy = "benchmark")
+    public Collection<TaskEntity> getTasks() {
+        return tasks;
     }
 
-    public void setTasksByUuid(Collection<TaskEntity> tasksByUuid) {
-        this.tasksByUuid = tasksByUuid;
+    public void setTasks(Collection<TaskEntity> tasks) {
+        this.tasks = tasks;
     }
 
     @Transient
     public int getNumOfTasks() {
-        return this.getTasksByUuid().size();
+        return this.getTasks().size();
     }
     private void setNumOfTasks(int nonsense) {}
 
