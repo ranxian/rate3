@@ -35,7 +35,7 @@ public class GenerateAllStrategy extends AbstractGenerateStrategy {
             throw new GenerateStrategyException("No viewName or no generator name specified");
         }
 
-        Query query = HibernateUtil.getSession().createQuery("from SampleEntity").setMaxResults(20);
+        Query query = HibernateUtil.getSession().createQuery("from SampleEntity");
 
         return query.list();
     }
