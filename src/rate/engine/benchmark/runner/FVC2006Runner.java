@@ -53,7 +53,7 @@ public class FVC2006Runner
     public void run() throws Exception {
         logger.debug(String.format("%s invoked with task [%s]", this.getClass().getName(), task.getUuid()));
 
-        if (! benchmark.getProtocol().equals(algorithmVersion.getAlgorithmByAlgorithmUuid().getProtocol())) {
+        if (! benchmark.getProtocol().equals(algorithmVersion.getAlgorithm().getProtocol())) {
             throw new RunnerException("Protocol does not match.");
         }
 

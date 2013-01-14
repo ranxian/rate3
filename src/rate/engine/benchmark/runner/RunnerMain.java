@@ -1,6 +1,5 @@
 package rate.engine.benchmark.runner;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -33,7 +32,7 @@ public class RunnerMain {
             BenchmarkEntity benchmark = task.getBenchmarkByBenchmarkUuid();
             AlgorithmVersionEntity algorithmVersion = task.getAlgorithmVersionByAlgorithmVersionUuid();
 
-            if (!benchmark.getProtocol().equals(algorithmVersion.getAlgorithmByAlgorithmUuid().getProtocol())) {
+            if (!benchmark.getProtocol().equals(algorithmVersion.getAlgorithm().getProtocol())) {
                 throw new Exception("Protocol does not match");
             }
 

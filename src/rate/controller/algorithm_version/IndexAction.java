@@ -41,7 +41,7 @@ public class IndexAction extends ActionSupport {
     }
 
     public Collection<AlgorithmVersionEntity> getAlgorithmVersions() {
-        return session.createQuery("from AlgorithmVersionEntity where algorithmByAlgorithmUuid=:algorithm order by created desc")
+        return session.createQuery("from AlgorithmVersionEntity where algorithm=:algorithm order by created desc")
                 .setParameter("algorithm", algorithm)
                 .list();
         //return this.algorithm.getAlgorithmVersionsByUuid();

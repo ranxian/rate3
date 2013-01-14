@@ -46,11 +46,11 @@ public class ByBenchmarkAction extends RateActionBase {
     }
 
     public String execute() throws Exception {
-        algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithmByAlgorithmUuid.protocol=:protocol order by created desc")
+        algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.protocol=:protocol order by created desc")
                 .setParameter("protocol", benchmark.getProtocol())
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
-        setNumOfItems((Long)session.createQuery("select count(*) from AlgorithmVersionEntity where algorithmByAlgorithmUuid.protocol=:protocol")
+        setNumOfItems((Long)session.createQuery("select count(*) from AlgorithmVersionEntity where algorithm.protocol=:protocol")
                 .setParameter("protocol", benchmark.getProtocol())
                 .list().get(0));
         return SUCCESS;

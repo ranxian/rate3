@@ -53,7 +53,7 @@ public class ShowAction extends ActionSupport {
         q.setParameter("uuid", uuid);
         List<AlgorithmEntity> list = q.list();
         algorithm = list.get(0);
-        algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithmByAlgorithmUuid=:algorithm order by created desc")
+        algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm=:algorithm order by created desc")
                 .setParameter("algorithm", algorithm)
                 .list();
         return SUCCESS;

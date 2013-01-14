@@ -141,31 +141,31 @@ public class AlgorithmEntity {
         return FilenameUtils.separatorsToUnix(dir);
     }
 
-    private Collection<AlgorithmVersionEntity> algorithmVersionsByUuid;
+    private Collection<AlgorithmVersionEntity> algorithmVersions;
 
-    @OneToMany(mappedBy = "algorithmByAlgorithmUuid")
-    public Collection<AlgorithmVersionEntity> getAlgorithmVersionsByUuid() {
-        return algorithmVersionsByUuid;
+    @OneToMany(mappedBy = "algorithm")
+    public Collection<AlgorithmVersionEntity> getAlgorithmVersions() {
+        return algorithmVersions;
     }
 
-    public void setAlgorithmVersionsByUuid(Collection<AlgorithmVersionEntity> algorithmVersionsByUuid) {
-        this.algorithmVersionsByUuid = algorithmVersionsByUuid;
+    public void setAlgorithmVersions(Collection<AlgorithmVersionEntity> algorithmVersionsByUuid) {
+        this.algorithmVersions = algorithmVersionsByUuid;
     }
 
-    private Collection<UserAlgorithmEntity> userAlgorithmsByUuid;
+    private Collection<UserAlgorithmEntity> userAlgorithms;
 
-    @OneToMany(mappedBy = "algorithmByAlgorithmUuid")
-    public Collection<UserAlgorithmEntity> getUserAlgorithmsByUuid() {
-        return userAlgorithmsByUuid;
+    @OneToMany(mappedBy = "algorithm")
+    public Collection<UserAlgorithmEntity> getUserAlgorithms() {
+        return userAlgorithms;
     }
 
-    public void setUserAlgorithmsByUuid(Collection<UserAlgorithmEntity> userAlgorithmsByUuid) {
-        this.userAlgorithmsByUuid = userAlgorithmsByUuid;
+    public void setUserAlgorithms(Collection<UserAlgorithmEntity> userAlgorithmsByUuid) {
+        this.userAlgorithms = userAlgorithmsByUuid;
     }
 
     @Transient
     public int getNumOfVersions() {
-        return this.getAlgorithmVersionsByUuid().size();
+        return this.getAlgorithmVersions().size();
     }
 
     private void setNumOfVersions(int nonsense) {

@@ -23,7 +23,7 @@ public class AlgorithmVersionActionBase extends ActionSupport {
                 .createQuery("from AlgorithmVersionEntity where uuid=:uuid")
                 .setParameter("uuid", uuid)
                 .list().get(0);
-        algorithm = algorithmVersion.getAlgorithmByAlgorithmUuid();
+        algorithm = algorithmVersion.getAlgorithm();
     }
 
     private String uuid;

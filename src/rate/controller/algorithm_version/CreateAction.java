@@ -67,7 +67,7 @@ public class CreateAction extends ActionSupport {
     public String execute() {
         try {
             session.beginTransaction();
-            this.algorithmVersion.setAlgorithmByAlgorithmUuid(this.algorithm);
+            this.algorithmVersion.setAlgorithm(this.algorithm);
             session.save(algorithmVersion);
 
             File dir = new File(algorithmVersion.dirPath());

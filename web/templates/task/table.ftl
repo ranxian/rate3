@@ -12,7 +12,7 @@
     <tbody>
     <@s.iterator value="tasks">
     <tr>
-        <td><a href="/algorithm/show?uuid=${algorithmVersionByAlgorithmVersionUuid.algorithmByAlgorithmUuid.uuid}">${algorithmVersionByAlgorithmVersionUuid.algorithmByAlgorithmUuid.name}</a></td>
+        <td><a href="/algorithm/show?uuid=${algorithmVersionByAlgorithmVersionUuid.algorithm.uuid}">${algorithmVersionByAlgorithmVersionUuid.algorithm.name}</a></td>
         <td><a href="/algorithm_version/show?uuid=${algorithmVersionByAlgorithmVersionUuid.uuid}">${algorithmVersionByAlgorithmVersionUuid.uuidShort}</a></td>
         <td><a href="/benchmark/show?uuid=${benchmarkByBenchmarkUuid.uuid}">${benchmarkByBenchmarkUuid.name}</a></td>
         <td>${created}</td>

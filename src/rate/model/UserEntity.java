@@ -1,21 +1,14 @@
 package rate.model;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-import rate.util.UUIDGenerator;
 import rate.util.UUIDType;
 
 import javax.persistence.*;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -133,7 +126,7 @@ public class UserEntity {
 
     private Collection<UserAlgorithmEntity> userAlgorithmsByUuid;
 
-    @OneToMany(mappedBy = "userByUserUuid")
+    @OneToMany(mappedBy = "user")
     public Collection<UserAlgorithmEntity> getUserAlgorithmsByUuid() {
         return userAlgorithmsByUuid;
     }

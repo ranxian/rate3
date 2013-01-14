@@ -1,17 +1,14 @@
 package rate.model;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-import rate.util.RateConfig;
 import rate.util.UUIDType;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -68,21 +65,21 @@ public class AlgorithmVersionEntity {
     @Override
     public int hashCode() {
         int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (getAlgorithmByAlgorithmUuid() != null ? getAlgorithmByAlgorithmUuid().hashCode() : 0);
+        result = 31 * result + (getAlgorithm() != null ? getAlgorithm().hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
         return result;
     }
 
-    private AlgorithmEntity algorithmByAlgorithmUuid;
+    private AlgorithmEntity algorithm;
 
     @ManyToOne
     @JoinColumn(name = "algorithm_uuid", referencedColumnName = "uuid", nullable = false)
-    public AlgorithmEntity getAlgorithmByAlgorithmUuid() {
-        return algorithmByAlgorithmUuid;
+    public AlgorithmEntity getAlgorithm() {
+        return algorithm;
     }
 
-    public void setAlgorithmByAlgorithmUuid(AlgorithmEntity algorithmByAlgorithmUuid) {
-        this.algorithmByAlgorithmUuid = algorithmByAlgorithmUuid;
+    public void setAlgorithm(AlgorithmEntity algorithmByAlgorithmUuid) {
+        this.algorithm = algorithmByAlgorithmUuid;
     }
 
     private Collection<TaskEntity> tasksByUuid;
@@ -97,7 +94,7 @@ public class AlgorithmVersionEntity {
     }
 
     public String dirPath() {
-        String dir = FilenameUtils.concat(getAlgorithmByAlgorithmUuid().dirPath(), this.getUuid());
+        String dir = FilenameUtils.concat(getAlgorithm().dirPath(), this.getUuid());
         return FilenameUtils.separatorsToUnix(dir);
     }
 

@@ -24,8 +24,8 @@ public class RunnerInvoker {
 
     public static void run(BenchmarkEntity benchmark, AlgorithmVersionEntity algorithmVersion) throws Exception {
         // TODO
-        if (! benchmark.getProtocol().equals(algorithmVersion.getAlgorithmByAlgorithmUuid().getProtocol())) {
-            throw new Exception(String.format("Protocol does not match, benchmark: %s algorithmVersion: %s", benchmark.getProtocol(), algorithmVersion.getAlgorithmByAlgorithmUuid().getProtocol()));
+        if (! benchmark.getProtocol().equals(algorithmVersion.getAlgorithm().getProtocol())) {
+            throw new Exception(String.format("Protocol does not match, benchmark: %s algorithmVersion: %s", benchmark.getProtocol(), algorithmVersion.getAlgorithm().getProtocol()));
         }
 
         logger.info(String.format("Invoke with benchmark: %s algorithmVersion: %s", benchmark.getUuid(), algorithmVersion.getUuid()));

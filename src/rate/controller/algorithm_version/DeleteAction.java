@@ -1,15 +1,9 @@
 package rate.controller.algorithm_version;
 
-import com.opensymphony.xwork2.ActionSupport;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import rate.model.AlgorithmEntity;
-import rate.model.AlgorithmVersionEntity;
-import rate.util.HibernateUtil;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +18,7 @@ public class DeleteAction extends AlgorithmVersionActionBase {
 
     public String execute() throws Exception {
         session.beginTransaction();
-        this.algorithm = algorithmVersion.getAlgorithmByAlgorithmUuid();
+        this.algorithm = algorithmVersion.getAlgorithm();
         FileUtils.deleteDirectory(new File(algorithmVersion.dirPath()));
         session.delete(algorithmVersion);
         session.getTransaction().commit();

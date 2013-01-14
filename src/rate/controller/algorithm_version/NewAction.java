@@ -43,7 +43,7 @@ public class NewAction extends ActionSupport {
                 .setParameter("uuid", algorithmUuid)
                 .list().get(0);
 
-        algorithmVersion.setAlgorithmByAlgorithmUuid(algorithm);
+        algorithmVersion.setAlgorithm(algorithm);
 
         return SUCCESS;
     }
