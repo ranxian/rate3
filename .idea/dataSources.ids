@@ -75,6 +75,7 @@
       <column name="device_type" sqlType="BINARY" length="16" precision="0" nullable="true" jdbcType="-2" />
       <column name="import_tag" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" remarks="V2l0aCBlYWNoIGltcG9ydCwgeW91IG11c3QgcHJvdmlkZSBhIGltcG9ydF90YWcuIEl0IGlzIHVzZWQgZm9yIHJvbGxiYWNrIGZ1bmN0aW9ucy4=" />
       <primary-key name="PRIMARY" columns="uuid" />
+      <index name="class_uuid_index" unique="false" columns="class_uuid" />
     </table>
     <table name="task" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
@@ -113,6 +114,7 @@
     <table name="view_sample" schema="" catalog="rate3" type="TABLE">
       <column name="view_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="sample_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
+      <column name="class_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" remarks="VGhpcyBjb2x1bW4gaXMgZm9yIHBlcmZvcm1hbmNlLg==" />
       <primary-key name="PRIMARY" columns="view_uuid,sample_uuid" />
     </table>
   </data-source>

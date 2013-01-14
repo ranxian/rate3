@@ -7,9 +7,11 @@
 
 <div class="ratehr"></div>
 
+    <@s.iterator value="views">
     <div class="view-box">
-        <@s.iterator value="views">
-            <a href="<@s.url action="show"><@s.param name="uuid">${uuid}</@s.param></@s.url>"><@s.property value="name" /></a>
+
+            <a href="/view/show?uuid=${uuid}" class="view-title">${name}</a>
+
             <p class="view-type pull-right"><@s.property value="type" /></p>
             <div class="view-inner-box">
                 <p class="view-info">Created on: <b>${generated}</b></p>
@@ -20,7 +22,10 @@
                     <p class="view-info">Number of benchmarks: <b><@s.property value="numOfBenchmarks" /></b></p>
                 </div>
             </div>
-        </@s.iterator>
+
     </div>
+    </@s.iterator>
+
+
 
 </#macro>

@@ -71,19 +71,6 @@ public class SampleEntity {
         this.file = file;
     }
 
-//    private UUID deviceType;
-//
-//    @Type(type="rate.util.UUIDType")
-//    @Column(name = "device_type", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
-//    @Basic
-//    public UUID getDeviceType() {
-//        return deviceType;
-//    }
-//
-//    public void setDeviceType(UUID deviceType) {
-//        this.deviceType = deviceType;
-//    }
-
     private String importTag;
 
     @Column(name = "import_tag", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)

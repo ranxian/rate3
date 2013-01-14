@@ -51,5 +51,5 @@ abstract public class AbstractGenerator {
 
     private String protocol = "";
 
-    abstract public BenchmarkEntity generate() throws GeneratorException;
+    abstract public BenchmarkEntity generate() throws Exception;
 }

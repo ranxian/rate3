@@ -6,8 +6,8 @@
 
 <div class="ratehr"></div>
 
-<p>Type: ${view.type}</p>
-<p>Generator: ${view.generator}</p>
+<p>Type: <b>${view.type}</b></p>
+<p>Generator: <b>${view.generator}</b></p>
 <!-- no such info in database schema? <p>created:</p> -->
 <p><a class="btn" href="<@s.url action="edit"><@s.param name="uuid">${uuid}</@s.param></@s.url>">Edit Me</a></p>
 

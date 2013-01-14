@@ -59,4 +59,17 @@ public class ViewSampleEntityPK implements Serializable {
     public void setSample(SampleEntity sampleBySampleUuid) {
         this.sample = sampleBySampleUuid;
     }
+
+    private ClazzEntity clazz;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "class_uuid", referencedColumnName = "uuid")
+    @Id
+    public ClazzEntity getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(ClazzEntity clazzByClazzUuid) {
+        this.clazz = clazzByClazzUuid;
+    }
 }
