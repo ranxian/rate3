@@ -103,7 +103,7 @@ public class SampleEntity {
 
         SampleEntity that = (SampleEntity) o;
 
-        if (getClazzByClassUuid() != null ? !getClazzByClassUuid().equals(that.getClazzByClassUuid()) : that.getClazzByClassUuid() != null) return false;
+        if (getClazz() != null ? !getClazz().equals(that.getClazz()) : that.getClazz() != null) return false;
         if (created != null ? !created.equals(that.created) : that.created != null) return false;
         if (!(getDeviceTypeByDeviceType() == that.getDeviceTypeByDeviceType())) return false;
         if (file != null ? !file.equals(that.file) : that.file != null) return false;
@@ -116,7 +116,7 @@ public class SampleEntity {
     @Override
     public int hashCode() {
         int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (getClazzByClassUuid() != null ? getClazzByClassUuid().hashCode() : 0);
+        result = 31 * result + (getClazz() != null ? getClazz().hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (file != null ? file.hashCode() : 0);
         result = 31 * result + (getDeviceTypeByDeviceType() != null ? getDeviceTypeByDeviceType().hashCode() : 0);
@@ -140,11 +140,11 @@ public class SampleEntity {
 
     @ManyToOne
     @JoinColumn(name = "class_uuid", referencedColumnName = "uuid")
-    public ClazzEntity getClazzByClassUuid() {
+    public ClazzEntity getClazz() {
         return clazzByClassUuid;
     }
 
-    public void setClazzByClassUuid(ClazzEntity clazzByClassUuid) {
+    public void setClazz(ClazzEntity clazzByClassUuid) {
         this.clazzByClassUuid = clazzByClassUuid;
     }
 

@@ -145,7 +145,7 @@ public class ViewEntity {
         // TODO: The performance should be improved in the future. Maybe put a field in the table.
         Set<String> clazzUuids = new HashSet<String>();
         for (ViewSampleEntity viewSample : getViewSamplesByUuid()) {
-              clazzUuids.add(viewSample.getSample().getClazzByClassUuid().getUuid());
+              clazzUuids.add(viewSample.getSample().getClazz().getUuid());
         }
         return clazzUuids.size();
     }

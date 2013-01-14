@@ -8,7 +8,6 @@ import rate.util.UUIDType;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.UUID;
 
 /**
  * User:    Yu Yuankai
@@ -34,18 +33,6 @@ public class ClazzEntity {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
-
-//    private String personUuid;
-//
-//    @Column(name = "person_uuid", nullable = true, insertable = true, updatable = true, length = 16, precision = 0)
-//    @Basic
-//    public String getPersonUuid() {
-//        return personUuid;
-//    }
-//
-//    public void setPersonUuid(String personUuid) {
-//        this.personUuid = personUuid;
-//    }
 
     private String type;
 
@@ -92,7 +79,7 @@ public class ClazzEntity {
 
         if (created != null ? !created.equals(that.created) : that.created != null) return false;
         if (importTag != null ? !importTag.equals(that.importTag) : that.importTag != null) return false;
-        if (getPersonByPersonUuid() != null ? !getPersonByPersonUuid().equals(that.getPersonByPersonUuid()) : that.getPersonByPersonUuid() != null) return false;
+        if (getPerson() != null ? !getPerson().equals(that.getPerson()) : that.getPerson() != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
 
@@ -102,33 +89,33 @@ public class ClazzEntity {
     @Override
     public int hashCode() {
         int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (getPersonByPersonUuid() != null ? getPersonByPersonUuid().hashCode() : 0);
+        result = 31 * result + (getPerson() != null ? getPerson().hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (importTag != null ? importTag.hashCode() : 0);
         return result;
     }
 
-    private PersonEntity personByPersonUuid;
+    private PersonEntity person;
 
     @ManyToOne
     @JoinColumn(name = "person_uuid", referencedColumnName = "uuid")
-    public PersonEntity getPersonByPersonUuid() {
-        return personByPersonUuid;
+    public PersonEntity getPerson() {
+        return person;
     }
 
-    public void setPersonByPersonUuid(PersonEntity personByPersonUuid) {
-        this.personByPersonUuid = personByPersonUuid;
+    public void setPerson(PersonEntity person) {
+        this.person = person;
     }
 
-    private Collection<SampleEntity> samplesByUuid;
+    private Collection<SampleEntity> samples;
 
-    @OneToMany(mappedBy = "clazzByClassUuid")
-    public Collection<SampleEntity> getSamplesByUuid() {
-        return samplesByUuid;
+    @OneToMany(mappedBy = "clazz")
+    public Collection<SampleEntity> getSamples() {
+        return samples;
     }
 
-    public void setSamplesByUuid(Collection<SampleEntity> samplesByUuid) {
-        this.samplesByUuid = samplesByUuid;
+    public void setSamples(Collection<SampleEntity> samples) {
+        this.samples = samples;
     }
 }

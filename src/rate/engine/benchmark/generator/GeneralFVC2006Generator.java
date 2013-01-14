@@ -85,7 +85,7 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
             benchmarkFile.createNewFile();
             PrintWriter pw = new PrintWriter(new FileOutputStream(benchmarkFile));
 
-            Query query = session.createQuery("select distinct V.sample.clazzByClassUuid from ViewSampleEntity as V where V.view=:view order by RAND()");
+            Query query = session.createQuery("select distinct V.sample.clazz from ViewSampleEntity as V where V.view=:view order by RAND()");
             //logger.debug(this.getView().getUuid());
             query.setParameter("view", this.getView());
             query.setMaxResults(this.classCount);
@@ -100,7 +100,7 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
             List<Pair<ClazzEntity, List<SampleEntity>>> selectedMap = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
             for (int i=0; i<selectedClasses.size(); i++) {
                 ClazzEntity classEntity = selectedClasses.get(i);
-                query = session.createQuery("select V.sample from ViewSampleEntity as V where V.sample.clazzByClassUuid=:clazz order by rand()");
+                query = session.createQuery("select V.sample from ViewSampleEntity as V where V.sample.clazz=:clazz order by rand()");
                 query.setMaxResults(this.sampleCount);
                 query.setParameter("clazz", classEntity);
                 List<SampleEntity> selectedSamples = (List<SampleEntity>)query.list();
