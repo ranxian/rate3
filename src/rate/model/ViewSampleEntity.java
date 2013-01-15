@@ -60,6 +60,7 @@ public class ViewSampleEntity {
 
     public void setSample(SampleEntity sampleBySampleUuid) {
         this.sample = sampleBySampleUuid;
+        this.clazz = this.sample.getClazz();
     }
 
     private ClazzEntity clazz;

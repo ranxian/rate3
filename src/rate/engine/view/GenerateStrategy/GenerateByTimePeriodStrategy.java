@@ -50,6 +50,7 @@ public class GenerateByTimePeriodStrategy extends AbstractGenerateStrategy {
         List<SampleEntity> samples = session.createQuery("from SampleEntity as S where S.created>:start and S.created<:end")
                 .setParameter("start", startTimeStamp)
                 .setParameter("end", endTimeStamp)
+                //.setMaxResults(100)
                 .list();
 
         return samples;

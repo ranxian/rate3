@@ -86,6 +86,8 @@ public class GeneralImposterGenerator extends AbstractGenerator {
             }
         }
 
+        // TODO: I think we should add inner-class for imposters.
+
         pw.close();
 
         benchmark.setDescription(String.format("Num of imposter classes: %d, num of imposted classes: %d, total matches: %d",

@@ -1768,8 +1768,8 @@ body {
 .add-page {
   margin: auto;
   float: left;
-  margin-left: 200px;
-  margin-top: 40px;
+  /*margin-left: 200px;
+  margin-top: 40px;*/
   clear: both;
 }
 #footer {

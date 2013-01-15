@@ -22,9 +22,9 @@ public class GenerateByTimePeriodViewGeneratorTest {
 
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
-        Timestamp start = new Timestamp(format.parse("01-02-2012").getTime());
+        Timestamp start = new Timestamp(format.parse("01-09-2011").getTime());
         strategy.setStartTimeStamp(start);
-        Timestamp end = new Timestamp(format.parse("01-07-2012").getTime());
+        Timestamp end = new Timestamp(format.parse("01-02-2012").getTime());
         strategy.setEndTimeStamp(end);
 
         Generator generator = new Generator();

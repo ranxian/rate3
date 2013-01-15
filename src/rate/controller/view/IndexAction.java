@@ -23,7 +23,7 @@ public class    IndexAction extends ActionSupport   {
     private List<ViewEntity> views;
 
     public String execute() throws Exception {
-        Query q = HibernateUtil.getSession().createQuery("from ViewEntity");
+        Query q = HibernateUtil.getSession().createQuery("from ViewEntity order by generated desc");
         views = q.list();
         return SUCCESS;
     }

@@ -57,6 +57,8 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
             throw new GeneratorException("No classCount or sampleCount or view or generator name specified");
         }
 
+        logger.trace(String.format("Class count [%d], sample count [%d]", this.classCount, this.sampleCount));
+
         BenchmarkEntity benchmarkEntity = null;
 
         Session session = HibernateUtil.getSession();
@@ -69,6 +71,7 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
         benchmarkEntity.setProtocol("FVC2006");
 
         session.save(benchmarkEntity);
+        logger.trace(String.format("Benchmark [%s], view [%s], benchmark name [%s]", benchmarkEntity.getUuid(), getView().getUuid(), benchmarkEntity.getName()));
 
         // create the directory
         // TODO: This step should be put in BenchmarkEntity
@@ -91,6 +94,7 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
         List<Pair<ClazzEntity, List<SampleEntity>>> selectedMap = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
 
         int countIgnored = 0;
+        int totalGenuineCount = 0, totalImposterCount = 0;
 
         while (clazzIterator.hasNext() && selectedClasses.size()<this.classCount) {
             ClazzEntity clazz = clazzIterator.next();
@@ -132,6 +136,7 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
                     SampleEntity sample2 = samples.get(j);
                     pw.println(String.format("M %s %s %s %s", clazzEntity.getUuid(), sample1.getUuid(), clazzEntity.getUuid(), sample2.getUuid()));
                     pw.println(sample2.getFile());
+                    totalGenuineCount++;
                 }
             }
         }
@@ -151,9 +156,15 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
                 SampleEntity sample2 = pair2.getValue().get(0);
                 pw.println(String.format("M %s %s %s %s", class1.getUuid(), sample1.getUuid(), class2.getUuid(), sample2.getUuid()));
                 pw.println(sample2.getFile());
+                totalImposterCount++;
             }
         }
         pw.close();
+
+        benchmarkEntity.setDescription(String.format("Num of classes: %d, num of samples in each class: %d, num of genuine attempts %d, num of imposter attempts",
+                this.classCount, this.sampleCount, totalGenuineCount, totalImposterCount));
+
+        session.update(benchmarkEntity);
 
         session.getTransaction().commit();
 

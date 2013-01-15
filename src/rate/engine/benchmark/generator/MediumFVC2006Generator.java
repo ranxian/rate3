@@ -14,9 +14,9 @@ public class MediumFVC2006Generator extends GeneralFVC2006Generator {
     private static final Logger logger = Logger.getLogger(MediumFVC2006Generator.class);
 
     public MediumFVC2006Generator() {
-        this.setGeneratorName("MediumFVC2006Generator");
+        this.setGeneratorName("Medium");
         this.setClassCount(20);
         this.setSampleCount(8);
-        logger.info("ClassCount:20 SampleCount:8");
+//        logger.info("ClassCount:20 SampleCount:8");
     }
 }

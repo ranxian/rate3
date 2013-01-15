@@ -58,6 +58,7 @@ public class ViewSampleEntityPK implements Serializable {
 
     public void setSample(SampleEntity sampleBySampleUuid) {
         this.sample = sampleBySampleUuid;
+        this.clazz = this.sample.getClazz();
     }
 
     private ClazzEntity clazz;
