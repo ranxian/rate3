@@ -92,7 +92,6 @@ public class GeneralImposterGenerator extends AbstractGenerator {
                 imposterClassAndSamples.size(), impostedClassAndSamples.size(), countOfMatches);
 
         session.getTransaction().commit();
-        session.close();
 
         logger.trace(String.format("Finished generation for benchmark [%s]", benchmark.getUuid()));
 
