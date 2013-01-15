@@ -14,8 +14,8 @@ public class LargeFVC2006Generator extends GeneralFVC2006Generator {
     private static final Logger logger = Logger.getLogger(LargeFVC2006Generator.class);
 
     public LargeFVC2006Generator() {
-        this.setGeneratorName("Large");
-        this.setClassCount(100);
+        this.setGeneratorName(LargeFVC2006Generator.class.getSimpleName());
+        this.setClassCount(300);
         this.setSampleCount(10);
 //        logger.info("ClassCount:100 SampleCount:10");
     }

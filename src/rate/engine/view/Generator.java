@@ -50,6 +50,7 @@ public class Generator {
         view.setName(generateStrategy.getViewName());
         view.setGenerator(generateStrategy.getGenerator());
         view.setType("FINGERVEIN"); // TODO: maybe treat it like name and generator
+        view.setDescription(generateStrategy.getDescription());
         session.save(view);
 
         logger.debug(String.format("New view [%s]", view.getUuid()));

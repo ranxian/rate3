@@ -14,7 +14,7 @@ public class SmallFVC2006Generator extends GeneralFVC2006Generator {
     private static final Logger logger = Logger.getLogger(SmallFVC2006Generator.class);
 
     public SmallFVC2006Generator() {
-        this.setGeneratorName("Small");
+        this.setGeneratorName(SmallFVC2006Generator.class.getSimpleName());
         this.setClassCount(10);
         this.setSampleCount(5);
 //        logger.info("ClassCount:10 SampleCount:5");

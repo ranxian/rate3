@@ -32,6 +32,11 @@ public class GenerateByTimePeriodStrategy extends AbstractGenerateStrategy {
 
     private Timestamp endTimeStamp;
 
+    public String getDescription() {
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        return String.format("Period start time: %s, end time: %s", format.format(startTimeStamp), format.format(endTimeStamp));
+    }
+
     @Override
     public String getViewName() {
         SimpleDateFormat format = new SimpleDateFormat("dd_MM_yyyy");

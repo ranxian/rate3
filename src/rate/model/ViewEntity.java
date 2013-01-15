@@ -82,6 +82,7 @@ public class ViewEntity {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (generator != null ? generator.hashCode() : 0);
         result = 31 * result + (generated != null ? generated.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
@@ -162,6 +163,18 @@ public class ViewEntity {
 
     private void setNumOfSamples(int numOfSamples) {
         this.numOfSamples = numOfSamples;
+    }
+
+    private String description;
+
+    @Column(name = "description", nullable = false, insertable = true, updatable = true, length = 65535, precision = 0)
+    @Basic
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

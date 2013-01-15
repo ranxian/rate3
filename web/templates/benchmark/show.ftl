@@ -2,6 +2,7 @@
 <#macro main_container>
 
 <h1 class="title">Benchmark <em>${benchmark.name}</em></h1>
+<h3>On View <em><a href="/view/show?uuid=${benchmark.view.uuid}">${benchmark.view.name}</a></em></h3>
 
 <div class="ratehr"></div>
 
@@ -26,7 +27,7 @@
 
 <hr>
 <h3>Usable algorithm versions</h3>
-<#include "./algorithmVersionTable.ftl" />
+<#include "../algorithm_version/table.ftl" />
 <a href="/algorithm_version/bybenchmark?uuid=${benchmark.uuid}">Show All</a>
 
 <div class="ratehr"></div>

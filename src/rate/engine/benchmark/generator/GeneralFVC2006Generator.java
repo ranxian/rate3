@@ -29,7 +29,7 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
 
     public GeneralFVC2006Generator() {
         this.setProtocol("FVC2006");
-        this.setGeneratorName("GeneralFVC2006Generator");
+        this.setGeneratorName(GeneralFVC2006Generator.class.getSimpleName());
     }
 
     public int getClassCount() {

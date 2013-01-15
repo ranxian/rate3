@@ -30,7 +30,7 @@ public class BenchmarkActionBase extends RateActionBase {
     }
 
     public BenchmarkEntity getBenchmark() {
-        logger.trace(String.format("getBenchmark [%s]", benchmark.getUuid()));
+//        logger.trace(String.format("getBenchmark [%s]", benchmark.getUuid()));
         return benchmark;
     }
 

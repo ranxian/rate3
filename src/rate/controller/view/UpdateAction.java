@@ -33,6 +33,8 @@ public class UpdateAction extends ActionSupport {
                 .list().get(0);
 
         updated.setName(view.getName());
+        updated.setDescription(view.getDescription());
+
 
         session.beginTransaction();
         session.update(updated);

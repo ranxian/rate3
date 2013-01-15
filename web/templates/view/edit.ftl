@@ -9,6 +9,7 @@
 <@s.form action="update">
    <@s.hidden name="view.uuid" id="id"></@s.hidden>
     <@s.textfield name="view.name" label="Name"></@s.textfield>
+    <@s.textarea name="view.description" label="Description"></@s.textarea>
 
     <#--
     <@s.select label="Generator"

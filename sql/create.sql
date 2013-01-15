@@ -205,6 +205,7 @@ CREATE TABLE `view` (
   `generated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `numOfClasses` int(11) NOT NULL DEFAULT '0',
   `numOfSamples` int(11) NOT NULL DEFAULT '0',
+  `description` text NOT NULL,
   PRIMARY KEY (`uuid`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -235,4 +236,4 @@ CREATE TABLE `view_sample` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-15 12:53:53
+-- Dump completed on 2013-01-15 17:43:18
