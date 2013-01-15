@@ -60,7 +60,7 @@ abstract public class AbstractGenerator {
     abstract public BenchmarkEntity generate() throws Exception;
 
     protected BenchmarkEntity prepareBenchmark() {
-        session.beginTransaction();
+        //session.beginTransaction();
         BenchmarkEntity benchmarkEntity = null;
         benchmarkEntity = new BenchmarkEntity();
         benchmarkEntity.setView(this.getView());

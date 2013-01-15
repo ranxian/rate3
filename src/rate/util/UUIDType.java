@@ -17,6 +17,7 @@ import java.sql.Types;
 import java.util.UUID;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException ;
 import org.hibernate.engine.spi.SessionImplementor;
@@ -64,7 +65,7 @@ public class UUIDType implements UserType
     }
 
     public Serializable disassemble (Object value) throws HibernateException {
-        return UUID2ByteArray(UUID.fromString((String)value));
+        return UUID2ByteArray(UUID.fromString(StringUtils.lowerCase((String)value)));
     }
 
     public boolean equals (Object x, Object y) throws HibernateException {
@@ -112,7 +113,7 @@ public class UUIDType implements UserType
             throw new HibernateException (value.getClass ().toString () + CAST_EXCEPTION_TEXT) ;
         }
 
-        st.setBytes(index, UUID2ByteArray(UUID.fromString((String) value)));
+        st.setBytes(index, UUID2ByteArray(UUID.fromString(StringUtils.lowerCase((String) value))));
     }
 
     public Object replace (Object original, Object target, Object owner) throws HibernateException {

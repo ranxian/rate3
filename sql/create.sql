@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `algorithm`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `algorithm` (
   `uuid` binary(16) NOT NULL,
-  `name` varchar(45) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `type` enum('FINGERVEIN') NOT NULL,
   `protocol` enum('FVC2006') NOT NULL,
   `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -61,7 +61,7 @@ CREATE TABLE `benchmark` (
   `uuid` binary(16) NOT NULL,
   `view_uuid` binary(16) NOT NULL,
   `protocol` enum('FVC2006') NOT NULL,
-  `name` varchar(45) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `description` text,
   `generator` varchar(45) NOT NULL,
@@ -135,7 +135,8 @@ CREATE TABLE `sample` (
   `file` varchar(256) NOT NULL COMMENT 'this should be a path with UNIX seperator \\''/\\'' to avoid strange behaviors',
   `device_type` binary(16) DEFAULT NULL,
   `import_tag` varchar(45) NOT NULL COMMENT 'With each import, you must provide a import_tag. It is used for rollback functions.',
-  PRIMARY KEY (`uuid`)
+  PRIMARY KEY (`uuid`),
+  KEY `class_uuid_index` (`class_uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -198,8 +199,8 @@ DROP TABLE IF EXISTS `view`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `view` (
   `uuid` binary(16) NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `generator` varchar(45) NOT NULL COMMENT 'With each import, you must provide a import_tag. It is used for rollback functions.',
+  `name` varchar(255) NOT NULL,
+  `generator` varchar(255) NOT NULL COMMENT 'With each import, you must provide a import_tag. It is used for rollback functions.',
   `type` enum('FINGERVEIN') NOT NULL,
   `generated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `numOfClasses` int(11) NOT NULL DEFAULT '0',
@@ -219,7 +220,9 @@ DROP TABLE IF EXISTS `view_sample`;
 CREATE TABLE `view_sample` (
   `view_uuid` binary(16) NOT NULL,
   `sample_uuid` binary(16) NOT NULL,
-  PRIMARY KEY (`view_uuid`,`sample_uuid`)
+  `class_uuid` binary(16) NOT NULL COMMENT 'This column is for performance.',
+  PRIMARY KEY (`view_uuid`,`sample_uuid`),
+  KEY `class_uuid_index` (`class_uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -232,4 +235,4 @@ CREATE TABLE `view_sample` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-15  1:40:14
+-- Dump completed on 2013-01-15 12:45:12

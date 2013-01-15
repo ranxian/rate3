@@ -157,6 +157,6 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
 
         session.getTransaction().commit();
 
-        return null;
+        return benchmarkEntity;
     }
 }
