@@ -19,7 +19,6 @@ import java.util.Collection;
  */
 public class BenchmarkActionBase extends RateActionBase {
     private static final Logger logger = Logger.getLogger(BenchmarkActionBase.class);
-    protected final Session session = HibernateUtil.getSession();
 
     private String uuid;
     public void setUuid(String uuid) {

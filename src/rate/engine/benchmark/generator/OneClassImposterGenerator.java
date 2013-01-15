@@ -4,6 +4,7 @@ import com.sun.corba.se.spi.orb.ParserImplBase;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.model.BenchmarkEntity;
 import rate.model.ClazzEntity;
@@ -38,9 +39,16 @@ public class OneClassImposterGenerator extends GeneralImposterGenerator {
 
     private ClazzEntity imposterClazz;
 
+    public void setImpostedClassCountLimit(int impostedClassCountLimit) {
+        this.impostedClassCountLimit = impostedClassCountLimit;
+    }
+
+    private int impostedClassCountLimit=0;
+
+
     public BenchmarkEntity generate() throws Exception {
 
-        this.setBenchmarkName(String.format("Imposter[%s]", this.imposterClazz.getUuid()));
+        this.setBenchmarkName(String.format("Imposter-[%s]", this.imposterClazz.getUuid()));
         logger.trace(String.format("Imposter class [%s]", this.imposterClazz.getUuid()));
 
         // imposter
@@ -55,11 +63,12 @@ public class OneClassImposterGenerator extends GeneralImposterGenerator {
 
         // imposted
         List<Pair<ClazzEntity, List<SampleEntity>>> impostedClassAndSamples = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
+        Query query =session.createQuery("from ClazzEntity where uuid!=:uuid order by rand()")
+                .setParameter("uuid", this.imposterClazz.getUuid());
+        if (impostedClassCountLimit!=0) query.setMaxResults(impostedClassCountLimit);
         List<ClazzEntity> impostedClasses = new ArrayList<ClazzEntity>(
-                session.createQuery("from ClazzEntity where uuid!=:uuid")
-                        .setParameter("uuid", this.imposterClazz.getUuid())
-                        .list()
-        );
+                query.list());
+
         for (ClazzEntity impostedClazz: impostedClasses) {
             List<SampleEntity> impostedSamples = new ArrayList<SampleEntity>(
                     session.createQuery("from SampleEntity where clazz=:clazz order by rand()")

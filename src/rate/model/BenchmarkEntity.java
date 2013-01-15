@@ -56,7 +56,7 @@ public class BenchmarkEntity {
 
     private String name;
 
-    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
+    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 255, precision = 0)
     @Basic
     public String getName() {
         return name;
@@ -94,7 +94,7 @@ public class BenchmarkEntity {
 
     private String generator;
 
-    @Column(name = "generator", nullable = false, insertable = true, updatable = false, length = 45, precision = 0)
+    @Column(name = "generator", nullable = false, insertable = true, updatable = false, length = 255, precision = 0)
     @Basic
     public String getGenerator() {
         return generator;

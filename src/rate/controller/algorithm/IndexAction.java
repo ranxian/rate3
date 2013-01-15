@@ -15,8 +15,6 @@ import java.util.List;
  */
 public class IndexAction extends RateActionBase {
 
-    private final Session session = HibernateUtil.getSession();
-
     public List<AlgorithmEntity> getAlgorithms() {
         return algorithms;
     }

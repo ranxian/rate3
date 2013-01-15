@@ -35,6 +35,7 @@ public class RunnerAction extends ActionSupport {
     public String execute() throws Exception {
 
         RunnerInvoker.run(benchmark, algorithmVersion);
+        session.close();
 
         return SUCCESS;
     }

@@ -37,8 +37,6 @@ public class ShowAction extends RateActionBase {
         return view;
     }
 
-    private final Session session = HibernateUtil.getSession();
-
     public Collection<BenchmarkEntity> getBenchmarks() {
         return this.view.getBenchmarks();
     }

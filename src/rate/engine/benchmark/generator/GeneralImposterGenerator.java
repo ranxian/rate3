@@ -57,6 +57,7 @@ public class GeneralImposterGenerator extends AbstractGenerator {
 
         // imposter and imposted
         Iterator imposterClassAndSamplesIterator = imposterClassAndSamples.iterator();
+        int countOfMatches=0;
         while (imposterClassAndSamplesIterator.hasNext()) {
             Map.Entry<ClazzEntity, List<SampleEntity>> imposter = (Map.Entry<ClazzEntity, List<SampleEntity>>)imposterClassAndSamplesIterator.next();
             ClazzEntity imposterClazz = imposter.getKey();
@@ -79,6 +80,7 @@ public class GeneralImposterGenerator extends AbstractGenerator {
                         logger.trace(String.format("Match [%s]", impostedSample.getUuid()));
                         pw.println(String.format("M %s %s %s %s", imposterClazz.getUuid(), imposterSample.getUuid(), impostedClazz.getUuid(), impostedSample.getUuid()));
                         pw.println(impostedSample.getFile());
+                        countOfMatches++;
                     }
                 }
             }
@@ -86,7 +88,11 @@ public class GeneralImposterGenerator extends AbstractGenerator {
 
         pw.close();
 
+        benchmark.setDescription(String.format("Num of imposter classes: %d, num of imposted classes: %d, total matches: %d",
+                imposterClassAndSamples.size(), impostedClassAndSamples.size(), countOfMatches);
+
         session.getTransaction().commit();
+        session.close();
 
         logger.trace(String.format("Finished generation for benchmark [%s]", benchmark.getUuid()));
 

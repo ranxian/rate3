@@ -18,7 +18,6 @@ import java.util.Collection;
 public class ByBenchmarkAction extends RateActionBase {
 
     private static final Logger logger = Logger.getLogger(ByBenchmarkAction.class);
-    private final Session session = HibernateUtil.getSession();
 
     public Collection<TaskEntity> getTasks() {
         return tasks;

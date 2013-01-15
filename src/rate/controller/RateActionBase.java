@@ -4,6 +4,8 @@ import com.opensymphony.xwork2.ActionSupport;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
+import org.hibernate.Session;
+import rate.util.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.List;
 public class RateActionBase extends ActionSupport {
 
     private static final Logger logger = Logger.getLogger(RateActionBase.class);
+    protected final Session session = HibernateUtil.getSession();
 
     public int getFirstResult() {
         return (getPage()-1)*itemPerPage;
