@@ -48,7 +48,7 @@ public class OneClassImposterGenerator extends GeneralImposterGenerator {
 
     public BenchmarkEntity generate() throws Exception {
 
-        this.setBenchmarkName(String.format("Imposter-[%s]", this.imposterClazz.getUuid()));
+        this.setBenchmarkName(String.format("Imposter-[%s]", this.imposterClazz.getUuidShort()));
         logger.trace(String.format("Imposter class [%s]", this.imposterClazz.getUuid()));
 
         // imposter

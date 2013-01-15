@@ -1,6 +1,8 @@
 package rate.engine.view.GenerateStrategy;
 
+import org.hibernate.Session;
 import rate.model.SampleEntity;
+import rate.util.HibernateUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +15,7 @@ import java.util.UUID;
  */
 abstract public class AbstractGenerateStrategy {
     abstract public List<SampleEntity> getSamples() throws GenerateStrategyException;
+    protected final Session session = HibernateUtil.getSession();
 
     public String getViewName() {
         return viewName;

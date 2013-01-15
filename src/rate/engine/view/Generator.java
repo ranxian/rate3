@@ -60,10 +60,7 @@ public class Generator {
             logger.trace(String.format("[%d] Sample [%s]", ++count, sample.getUuid()));
             toBeInsert.setView(view);
             toBeInsert.setSample(sample);
-//            toBeInsert.setViewUuid(view.getUuid());
-//            toBeInsert.setSampleUuid(sample.getUuid());
             session.save(toBeInsert);
-//            session.getTransaction().commit();
         }
 
         session.getTransaction().commit();

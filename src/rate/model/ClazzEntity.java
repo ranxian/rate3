@@ -118,4 +118,10 @@ public class ClazzEntity {
     public void setSamples(Collection<SampleEntity> samples) {
         this.samples = samples;
     }
+
+    @Transient
+    public String getUuidShort() {
+        return this.uuid.split("-")[0];
+    }
+    private void setUuidShort(String nonsense) {}
 }

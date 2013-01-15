@@ -89,7 +89,7 @@ public class GeneralImposterGenerator extends AbstractGenerator {
         pw.close();
 
         benchmark.setDescription(String.format("Num of imposter classes: %d, num of imposted classes: %d, total matches: %d",
-                imposterClassAndSamples.size(), impostedClassAndSamples.size(), countOfMatches);
+                imposterClassAndSamples.size(), impostedClassAndSamples.size(), countOfMatches));
 
         session.getTransaction().commit();
 
