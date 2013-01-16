@@ -6,10 +6,10 @@
 
 <div class="ratehr"></div>
 
-<p>Protocol: ${benchmark.protocol}</p>
-<p>Created: ${benchmark.created}</p>
-<p>Generator: ${benchmark.generator}</p>
-<p>Description: ${benchmark.description!"No description"}</p>
+<p>Protocol: <b>${benchmark.protocol}</b></p>
+<p>Created: <b>${benchmark.created}</b></p>
+<p>Generator: <b>${benchmark.generator}</b></p>
+<p>Description: <b>${benchmark.description!"No description"}</b></p>
 
 <a class="btn" href="/benchmark/edit?uuid=${benchmark.uuid}">Edit</a>
 

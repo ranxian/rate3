@@ -39,31 +39,6 @@ public class TaskEntity {
         this.uuid = uuid;
     }
 
-    private String algorithmVersionUuid;
-
-    @Type(type="UUIDType")
-    @Column(name = "algorithm_version_uuid", nullable = true, insertable = false, updatable = false, length = 16, precision = 0)
-    @Basic
-    public String getAlgorithmVersionUuid() {
-        return algorithmVersionUuid;
-    }
-
-    public void setAlgorithmVersionUuid(String algorithmVersionUuid) {
-        this.algorithmVersionUuid = algorithmVersionUuid;
-    }
-
-    private String benchmarkUuid;
-
-    @Column(name = "benchmark_uuid", nullable = true, insertable = false, updatable = false, length = 16, precision = 0)
-    @Basic
-    public String getBenchmarkUuid() {
-        return benchmarkUuid;
-    }
-
-    public void setBenchmarkUuid(String benchmarkUuid) {
-        this.benchmarkUuid = benchmarkUuid;
-    }
-
     private Timestamp created;
 
     @Column(name = "created", nullable = true, insertable = true, updatable = true, length = 19, precision = 0)
@@ -95,9 +70,9 @@ public class TaskEntity {
 
         TaskEntity that = (TaskEntity) o;
 
-        if (algorithmVersionUuid != null ? !algorithmVersionUuid.equals(that.algorithmVersionUuid) : that.algorithmVersionUuid != null)
+        if (algorithmVersion != null ? !algorithmVersion.equals(that.algorithmVersion) : that.algorithmVersion != null)
             return false;
-        if (benchmarkUuid != null ? !benchmarkUuid.equals(that.benchmarkUuid) : that.benchmarkUuid != null)
+        if (benchmark != null ? !benchmark.equals(that.benchmark) : that.benchmark != null)
             return false;
         if (created != null ? !created.equals(that.created) : that.created != null) return false;
         if (finished != null ? !finished.equals(that.finished) : that.finished != null) return false;
@@ -109,8 +84,8 @@ public class TaskEntity {
     @Override
     public int hashCode() {
         int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (algorithmVersionUuid != null ? algorithmVersionUuid.hashCode() : 0);
-        result = 31 * result + (benchmarkUuid != null ? benchmarkUuid.hashCode() : 0);
+        result = 31 * result + (algorithmVersion != null ? algorithmVersion.hashCode() : 0);
+        result = 31 * result + (benchmark != null ? benchmark.hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (finished != null ? finished.hashCode() : 0);
         return result;
