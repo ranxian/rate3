@@ -21,7 +21,9 @@ public class ShowAction extends AlgorithmVersionActionBase {
 
 
     public String execute() {
-        tasks = algorithmVersion.getTasks();
+        tasks = session.createQuery("from TaskEntity where algorithmVersion=:algorithmVersion order by created desc")
+                .setParameter("algorithmVersion", getAlgorithmVersion())
+                .list();
 
         return SUCCESS;
     }

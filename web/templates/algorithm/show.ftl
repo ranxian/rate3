@@ -4,9 +4,9 @@
 
 <h1 class="title">Algorithm <em>${algorithm.name}</em></h1>
 <hr>
-<p>type: ${algorithm.type}</p>
-<p>desc: ${algorithm.description}</p>
-<p>Created at: ${algorithm.created}</p>
+<p>Type: <b>${algorithm.type}</b></p>
+<p>Desc: <b>${algorithm.description}</b></p>
+<p>Created at: <b>${algorithm.created}</b></p>
 
 <p><a href="/algorithm/edit?uuid=${algorithm.uuid}" class="btn">Edit</a></p>
 
