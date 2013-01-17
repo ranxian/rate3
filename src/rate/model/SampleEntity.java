@@ -1,8 +1,10 @@
 package rate.model;
 
+import org.apache.commons.io.FilenameUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import rate.util.RateConfig;
 import rate.util.UUIDType;
 
 import javax.persistence.*;
@@ -67,7 +69,7 @@ public class SampleEntity {
         return file;
     }
 
-    public void setFile(String file) {
+    public void setFile(String f) {
         this.file = file;
     }
 
@@ -144,5 +146,10 @@ public class SampleEntity {
 
     public void setView(Collection<ViewSampleEntity> view) {
         this.view = view;
+    }
+
+    @Transient
+    public String getFilePath() {
+        return FilenameUtils.separatorsToUnix(FilenameUtils.concat(RateConfig.getSampleRootDir(), this.getFile())) ;
     }
 }
