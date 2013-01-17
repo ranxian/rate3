@@ -36,6 +36,17 @@ public class SampleEntity {
         this.uuid = uuid;
     }
 
+    @Column(name = "md5", nullable = false, insertable = true, updatable = true, length = 16, precision = 0)
+    private byte[] md5;
+
+    public byte[] getMd5() {
+        return md5;
+    }
+
+    public void setMd5(byte[] md5) {
+        this.md5 = md5;
+    }
+
 //    private String classUuid;
 //
 //    @Type(type="UUIDType")
@@ -70,7 +81,7 @@ public class SampleEntity {
     }
 
     public void setFile(String f) {
-        this.file = file;
+        this.file = f;
     }
 
     private String importTag;
