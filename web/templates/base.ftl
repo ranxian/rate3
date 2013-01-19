@@ -2,8 +2,10 @@
 <html>
 <head>
     <title>RATE3</title>
-    <link rel="stylesheet" type="text/css" href="/css/rate.css">
+
+    <link rel="stylesheet/less" type="text/css" href="/less/rate.less">
     <script type="text/javascript" src="/js/rate.js"></script>
+    <script type="text/javascript" src="/js/less-1.3.3.min.js"></script>
 </head>
 <body>
 <div id="header">
@@ -31,6 +33,7 @@
             <li><a href="/benchmark/index">Benchmarks</a></li>
             <li><a href="/algorithm/index">Algorithms</a></li>
             <li><a href="/task/index">Tasks</a></li>
+            <li><a href="#">Import Database</a></li>
         </ul>
     </div>
 </div>

@@ -2,7 +2,6 @@
 <#macro main_container>
 
 <h1 class="title">All Views</h1>
-<a class="btn" class="title-addition" href="/view/new">Import Views</a>
 
 <#--<a class="btn" class="title-addition" href="/view/new">Import Views</a>-->
 
