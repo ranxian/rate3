@@ -4,31 +4,35 @@
 <h1 class="title">New Algorithm Version for ${algorithm.name}</h1>
 <div class="ratehr"></div>
 
-<@s.form action="/algorithm_version/create" cssClass="form-horizontal add-page" enctype="multipart/form-data">
+<form action="/algorithm_version/create" Class="form-horizontal add-page" enctype="multipart/form-data">
 
-    <@s.hidden name="algorithmUuid" value="${algorithm.uuid}" id="algorithmUuid"></@s.hidden>
+    <@s.hidden name="algorithmUuid" value="${algorithm.uuid}" id="algorithmUuid" cssStyle="display: none;"></@s.hidden>
 
     <div class="control-group">
+        <label class="control-label">Description</label>
         <div class="controls">
-            <@s.textarea label="Description"
-            name="algorithmVersion.description" ></@s.textarea>
+            <@s.textarea name="algorithmVersion.description" ></@s.textarea>
         </div>
     </div>
 
 <div class="control-group">
+    <label class="control-label">Enroll.exe</label>
     <div class="controls">
-        <@s.file name ="enrollExe" label ="Enroll.exe" />
+        <@s.file name ="enrollExe" />
     </div>
 </div>
 
 <div class="control-group">
+    <label class="control-label">Match.exe</label>
     <div class="controls">
-        <@s.file name ="matchExe" label ="Match.exe" />
+        <@s.file name ="matchExe" />
     </div>
 </div>
-
-
-    <@s.submit></@s.submit>
-</@s.form>
+<div class="control-group">
+    <div class="controls">
+        <button type="submit" class="btn">Import</button>
+    </div>
+</div>
+<form>
 
 </#macro>
