@@ -19,7 +19,7 @@
         <label class="control-label">Type</label>
         <div class="controls">
             <@s.select
-                      name="view.type"
+                      name="type"
             list="{'FINGERVEIN', 'FINGERVEIN'}"
             headerKey="0"
             headerValue="Choose a view type"
@@ -29,7 +29,7 @@
     <div class="control-group">
         <label class="control-label">Import Tag</label>
         <div class="controls">
-            <@s.textfield name="importTag"></@s.textfield>
+            <@s.textfield name="importTag" value="${currentTime}"></@s.textfield>
         </div>
     </div>
     <div class="control-group">

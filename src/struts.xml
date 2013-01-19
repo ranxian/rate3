@@ -217,7 +217,7 @@
         </action>
         <action name="create" class="rate.controller.database.CreateAction" method="execute">
             <result name="success" type="redirectAction">
-                <param name="namespace">/database</param>
+                <param name="namespace">/view</param>
                 <param name="actionName">show</param>
                 <param name="uuid">${view.uuid}</param>
             </result>

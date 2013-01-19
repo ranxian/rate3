@@ -25,7 +25,7 @@ public class ZipImporterTest {
         // Generate view
         ViewEntity view = new ViewEntity();
         GenerateByImportTagStrategy strategy = new GenerateByImportTagStrategy();
-        strategy.setImportTag("testTag");
+        strategy.setImportTag("testTag2");
         Generator generator = new Generator();
         generator.setGenerateStrategy(strategy);
 
@@ -33,7 +33,7 @@ public class ZipImporterTest {
         System.out.print(zipPath);
 
         // Import zip, add samples to view
-        importer.main("testTag", "FINGERVEIN", zipPath);
+        importer.main("testTag2", "FINGERVEIN", zipPath);
 
         view = generator.generate();
     }

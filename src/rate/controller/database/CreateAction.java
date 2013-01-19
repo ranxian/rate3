@@ -1,11 +1,13 @@
 package rate.controller.database;
 
 import com.opensymphony.xwork2.ActionSupport;
+import org.hibernate.Session;
 import org.omg.PortableInterceptor.SUCCESSFUL;
 import rate.engine.database.ZipImorter;
 import rate.engine.view.GenerateStrategy.GenerateByImportTagStrategy;
 import rate.engine.view.Generator;
 import rate.model.ViewEntity;
+import rate.util.HibernateUtil;
 import rate.util.RateConfig;
 
 /**
@@ -37,6 +39,13 @@ public class CreateAction extends ActionSupport {
     public void setType(String type) {
         this.type = type;
     }
+    public ViewEntity getView() {
+        return view;
+    }
+
+    public void setView(ViewEntity view) {
+        this.view = view;
+    }
 
     private String importTag;
     private String zipPath;
@@ -50,6 +59,9 @@ public class CreateAction extends ActionSupport {
         Generator generator = new Generator();
         generator.setGenerateStrategy(strategy);
 
+        zipPath = RateConfig.getZipRootDir() + "/" + zipPath;
+
+        System.out.println(zipPath);
         // Import zip, add samples
         this.importer.main(importTag, type, zipPath);
 

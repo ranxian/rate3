@@ -33,13 +33,16 @@ public class ZipImorter {
             return;
         }
 
-        String destDir = RateConfig.getSampleRootDir();
+        String destDir = RateConfig.getSampleRootDir() + "/" + zipFileBaseName;
 
         zipFile.extractAll(destDir);
-        destDir += "/" + zipFileBaseName;
         File sampleDir = new File(destDir);
 ;
         File[] clazzdirs = sampleDir.listFiles();
+        if (clazzdirs == null) {
+            logger.trace("No class directory in .zip");
+            return;
+        }
 
         session.beginTransaction();
 
@@ -51,6 +54,10 @@ public class ZipImorter {
 
             File[] sampleFiles = clazzdirs[i].listFiles();
 
+            if (sampleFiles == null) {
+                logger.trace("No samples in some class");
+                return;
+            }
             for (int j = 0; j < sampleFiles.length; j++) {
                 File sampleFile = sampleFiles[j];
                 String samplePath = zipFileBaseName + "/" + sampleFile.getParentFile().getName() + "/" +
