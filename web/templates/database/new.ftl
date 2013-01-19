@@ -9,7 +9,7 @@
         <div class="controls">
             <@s.select
                 name="zipPath"
-                list="{'1', '2'}"
+                list="zipFilePaths"
                 headerKey = 0
                 headerValue="choose your .zip file path"
             ></@s.select>
