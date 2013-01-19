@@ -6,4 +6,4 @@
 
 out/
 workspace.xml
-rate.properties
+src/rate.properties
