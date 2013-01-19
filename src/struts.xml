@@ -211,4 +211,17 @@
         </action>
     </package>
 
+    <package name="rate.controller.database" extends="struts-default" namespace="/database">
+        <action name="new" class="rate.controller.database.NewAction" method="execute">
+            <result name="success" type="freemarker">/templates/database/new.ftl</result>
+        </action>
+        <action name="create" class="rate.controller.database.CreateAction" method="execute">
+            <result name="success" type="redirectAction">
+                <param name="namespace">/database</param>
+                <param name="actionName">show</param>
+                <param name="uuid">${view.uuid}</param>
+            </result>
+        </action>
+    </package>
+
 </struts>

@@ -72,4 +72,11 @@ public class ZipImorter {
         }
         session.getTransaction().commit();
     }
+
+    public static String[] getZipFilePath() throws Exception {
+        File zipRoot = new File(RateConfig.getZipRootDir());
+        String[] filePaths = zipRoot.list();
+
+        return filePaths;
+    }
 }

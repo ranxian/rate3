@@ -33,7 +33,7 @@
             <li><a href="/benchmark/index">Benchmarks</a></li>
             <li><a href="/algorithm/index">Algorithms</a></li>
             <li><a href="/task/index">Tasks</a></li>
-            <li><a href="#">Import Database</a></li>
+            <li><a href="/database/new">Import Database</a></li>
         </ul>
     </div>
 </div>

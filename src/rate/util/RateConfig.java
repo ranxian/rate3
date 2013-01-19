@@ -61,6 +61,10 @@ public class RateConfig {
         return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getRootDir(), "tasks"));
     }
 
+    public static String getZipRootDir() {
+        return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getRootDir(), "zips"));
+    }
+
     // TODO: should not be here, for convenient now
     public static String getLastLine(String filePath) throws IOException {
         RandomAccessFile raf = new RandomAccessFile(filePath, "r");
