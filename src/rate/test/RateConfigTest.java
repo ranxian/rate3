@@ -12,5 +12,6 @@ public class RateConfigTest {
     public static void main(String[] args) throws Exception {
         System.out.println(RateConfig.getRootDir());
         System.out.println(RateConfig.getSampleRootDir());
+        System.out.println(RateConfig.getZipRootDir());
     }
 }
