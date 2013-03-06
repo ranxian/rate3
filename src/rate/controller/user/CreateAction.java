@@ -1,9 +1,12 @@
 package rate.controller.user;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import rate.model.UserEntity;
 import rate.util.HibernateUtil;
+
+import java.util.Map;
 
 /**
  * Created by XianRan
@@ -25,6 +28,7 @@ public class CreateAction extends ActionSupport {
             session.beginTransaction();
             session.save(user);
             session.getTransaction().commit();
+            ActionContext.getContext().getSession().put("user-uuid", user.getUuid());
         }
         catch (HibernateException ex) {
             throw ex;

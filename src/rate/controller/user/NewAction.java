@@ -1,6 +1,7 @@
 package rate.controller.user;
 
 import com.opensymphony.xwork2.ActionSupport;
+import rate.model.UserEntity;
 import rate.model.ViewEntity;
 
 /**
@@ -8,15 +9,15 @@ import rate.model.ViewEntity;
  * Time: 下午9:16
  */
 public class NewAction extends ActionSupport {
-    public ViewEntity getView() {
-        return view;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setView(ViewEntity view) {
-        this.view = view;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
-    ViewEntity view;
+    UserEntity user;
 
     public String execute() throws Exception {
         return SUCCESS;

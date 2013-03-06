@@ -5,6 +5,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.interceptor.SessionAware;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.model.AlgorithmEntity;
@@ -22,10 +23,14 @@ import java.util.Map;
  * Time: 上午2:21
  * To change this template use File | Settings | File Templates.
  */
-public class RateActionBase extends ActionSupport {
+public class RateActionBase extends ActionSupport implements SessionAware {
 
     private static final Logger logger = Logger.getLogger(RateActionBase.class);
-    protected final Session session = HibernateUtil.getSession();
+    protected final Session hsession = HibernateUtil.getSession();
+    private Map session;
+    public void setSession(Map session) {
+        this.session = session;
+    }
 
     public UserEntity getCurrentUser() {
         Map session = ActionContext.getContext().getSession();
@@ -39,8 +44,8 @@ public class RateActionBase extends ActionSupport {
     }
 
     public boolean getIsUserSignedIn() {
-        Map session = ActionContext.getContext().getSession();
-        return (session.get("user-uuid") != null);
+        Map hsession = ActionContext.getContext().getSession();
+        return (hsession.get("user-uuid") != null);
     }
 
     public int getFirstResult() {

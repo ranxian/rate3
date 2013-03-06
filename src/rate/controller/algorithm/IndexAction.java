@@ -26,10 +26,10 @@ public class IndexAction extends RateActionBase {
     private List<AlgorithmEntity> algorithms;
 
     public String execute() throws Exception {
-        algorithms = session.createQuery("from AlgorithmEntity order by updated desc")
+        algorithms = hsession.createQuery("from AlgorithmEntity order by updated desc")
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
-         setNumOfItems((Long)session.createQuery("select count(*) from AlgorithmEntity").list().get(0));
+         setNumOfItems((Long)hsession.createQuery("select count(*) from AlgorithmEntity").list().get(0));
         return SUCCESS;
     }
 }

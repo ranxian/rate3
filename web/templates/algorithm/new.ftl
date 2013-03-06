@@ -4,15 +4,21 @@
 <h1 class="title">New Algorithm</h1>
 <div class="ratehr"></div>
 
-<@s.form action="create" cssClass="form-horizontal add-page" enctype="multipart/form-data">
+<@s.form action="create" cssClass="add-page form-horizontal" enctype="multipart/form-data" theme="simple">
     <@s.hidden name="algorithm.uuid" id="id"></@s.hidden>
     <div class="control-group">
+        <div class="control-label">
+            <label>Name</label>
+        </div>
         <div class="controls">
             <@s.textfield name="algorithm.name" label="Name"></@s.textfield>
         </div>
     </div>
 
     <div class="control-group">
+        <div class="control-label">
+            <label>Type</label>
+        </div>
         <div class="controls">
             <@s.select label="Type"
             name="algorithm.type"
@@ -24,6 +30,9 @@
     </div>
 
     <div class="control-group">
+        <div class="control-label">
+            <label>Protocol</label>
+        </div>
         <div class="controls">
             <@s.select label="Protocol"
             name="algorithm.protocol"
@@ -33,12 +42,18 @@
     </div>
 
     <div class="control-group">
+        <div class="control-label">
+            <label>Description</label>
+        </div>
         <div class="controls">
             <@s.textarea label="Description"
             name="algorithm.description" ></@s.textarea>
         </div>
     </div>
 
-    <@s.submit></@s.submit>
+    <div class="form-actions">
+        <@s.submit cssClass="btn"></@s.submit>
+    </div>
+
 </@s.form>
 </#macro>

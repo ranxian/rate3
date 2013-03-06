@@ -33,7 +33,7 @@ public class ByBenchmarkAction extends RateActionBase {
 
     public void setUuid(String benchmarkUuid) {
         this.benchmarkUuid = benchmarkUuid;
-        this.benchmark = (BenchmarkEntity)session.createQuery("from BenchmarkEntity where uuid=:uuid")
+        this.benchmark = (BenchmarkEntity)hsession.createQuery("from BenchmarkEntity where uuid=:uuid")
                 .setParameter("uuid", benchmarkUuid)
                 .list().get(0);
     }
@@ -41,11 +41,11 @@ public class ByBenchmarkAction extends RateActionBase {
     private Collection<TaskEntity> tasks;
 
     public String execute() {
-        tasks = session.createQuery("from TaskEntity where benchmark=:benchmark order by created desc")
+        tasks = hsession.createQuery("from TaskEntity where benchmark=:benchmark order by created desc")
                 .setParameter("benchmark", benchmark)
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
-        setNumOfItems((Long)session.createQuery("select count(*) from TaskEntity where benchmark=:benchmark")
+        setNumOfItems((Long)hsession.createQuery("select count(*) from TaskEntity where benchmark=:benchmark")
                 .setParameter("benchmark", benchmark)
                 .list().get(0));
         return SUCCESS;

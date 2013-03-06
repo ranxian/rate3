@@ -32,10 +32,8 @@
             <@s.textfield name="importTag" value="${currentTime}"></@s.textfield>
         </div>
     </div>
-    <div class="control-group">
-        <div class="controls">
-            <button type="submit" class="btn">Import</button>
-        </div>
+    <div class="form-actions">
+        <button type="submit" class="btn">Import</button>
     </div>
 </form>
 </#macro>

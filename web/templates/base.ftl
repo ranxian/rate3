@@ -17,7 +17,8 @@
         </a>
 
         <div id="border-div"></div>
-        <@s.form action="login" id="login_form" theme="simple">
+        <#if true >
+        <@s.form action="login" namespace="/" id="login_form" theme="simple">
             <@s.textfield name="username" cssClass="nav-input" placeholder="Username" />
             <@s.password name="password" cssClass="nav-input" placeholder="Password" />
 
@@ -25,6 +26,8 @@
             <@s.submit cssClass="btn btn-mini pull-right" value="Login" />
             <a href="/user/new" class="white pull-right">Register</a>
         </@s.form>
+        <#else>
+        </#if>
     </div>
 </div>
 <div id="navbar">

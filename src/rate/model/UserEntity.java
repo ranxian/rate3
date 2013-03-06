@@ -60,7 +60,7 @@ public class UserEntity {
     }
 
     public void setPassword(String password) throws Exception {
-        this.password = DigestUtils.md5Hex(password);
+        this.password = password;
     }
 
     private Timestamp registered;
@@ -142,10 +142,16 @@ public class UserEntity {
         org.hibernate.Query q = HibernateUtil.getSession().createQuery("from UserEntity where name=:name");
         q.setParameter("name", name);
         List<UserEntity> list = q.list();
+        if (list.isEmpty()) return null;
         UserEntity user = list.get(0);
 
-        if (user == null) return null;
-        if (user.getPassword() == DigestUtils.md5Hex(password)) return user;
-        else return null;
+        // Why Digested password cannot match?
+
+        if (user.getPassword().equals(password)) {
+           return user;
+        }
+        else {
+            return null;
+        }
     }
 }
