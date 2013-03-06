@@ -23,7 +23,7 @@
             <@s.textfield name="username" cssClass="nav-input" placeholder="Username" />
             <@s.password name="password" cssClass="nav-input" placeholder="Password" />
 
-
+            <@s.hidden name="referUrl" value="${currentPageUrl}" />
             <@s.submit cssClass="btn btn-mini pull-right" value="Login" />
             <a href="/user/new" class="white pull-right">Register</a>
         </@s.form>
@@ -31,7 +31,7 @@
             <div class="welcome">
                 <p class="title">Welcome!</p>
                 <p class="username">${currentUser.name}</p>
-                <a href="/logout" class="btn btn-mini">Sign Out</a>
+                <a href="/logout?referUrl=${currentPageUrl}" class="btn btn-mini">Sign Out</a>
             </div>
         </#if>
     </div>

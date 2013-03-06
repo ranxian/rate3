@@ -28,6 +28,17 @@ public class RateActionBase extends ActionSupport {
     private static final Logger logger = Logger.getLogger(RateActionBase.class);
     protected final Session session = HibernateUtil.getSession();
 
+    public String getReferUrl() {
+        return referUrl;
+    }
+
+    public void setReferUrl(String referUrl) {
+        referUrl = (referUrl == null) ? "index" : referUrl;
+        this.referUrl = referUrl;
+    }
+
+    private String referUrl;
+
     public UserEntity getCurrentUser() {
         Map session = ActionContext.getContext().getSession();
         if (session.get("user-uuid") == null) return null;
@@ -72,6 +83,13 @@ public class RateActionBase extends ActionSupport {
 
     public boolean getIsCurrentPageValid() {
         return hasPage(page);
+    }
+
+    public String getCurrentPageUrl() {
+        String url = ServletActionContext.getRequest().getRequestURI();
+        url = url.substring(1);
+        System.out.println(url);
+        return url;
     }
 
     public String getPageUrl(int pageIn) {

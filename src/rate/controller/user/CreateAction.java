@@ -1,6 +1,7 @@
 package rate.controller.user;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import rate.controller.RateActionBase;
@@ -25,10 +26,12 @@ public class CreateAction extends RateActionBase {
 
     public String execute() throws Exception {
         try {
+            user.setPassword(DigestUtils.md5Hex(user.getPassword()));
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
             session.save(user);
             session.getTransaction().commit();
+
             ActionContext.getContext().getSession().put("user-uuid", user.getUuid());
         }
         catch (HibernateException ex) {

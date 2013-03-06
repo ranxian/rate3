@@ -60,6 +60,7 @@ public class UserEntity {
     }
 
     public void setPassword(String password) throws Exception {
+        System.out.println("set password: " + password);
         this.password = password;
     }
 
@@ -146,8 +147,7 @@ public class UserEntity {
         UserEntity user = list.get(0);
 
         // Why Digested password cannot match?
-
-        if (user.getPassword().equals(password)) {
+        if (user.getPassword().equals(DigestUtils.md5Hex(password))) {
            return user;
         }
         else {

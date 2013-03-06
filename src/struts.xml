@@ -21,7 +21,8 @@
         </action>
         <action name="create" class="rate.controller.user.CreateAction">
             <result name="success" type="redirectAction">
-                <param name="actionName">${user.uuid}</param>
+                <param name="namespace">/</param>
+                <param name="actionName">index</param>
             </result>
             <result name="input" type="freemarker">/templates/user/new.ftl</result>
         </action>
@@ -227,16 +228,17 @@
     <package name="rate.controller.sessions" extends="struts-default">
         <action name="login" class="rate.controller.sessions.CreateAction" method="execute">
             <result name="success" type="redirectAction">
-                <param name="namespace">/view</param>
-                <param name="actionName">index</param>
+                <param name="namespace">/</param>
+                <param name="actionName">${referUrl}</param>
             </result>
             <result name="error" type="freemarker">
                 /templates/user/error.ftl
             </result>
         </action>
         <action name="logout" class="rate.controller.sessions.DeleteAction" method="execute">
-            <result name="success" type="freemarker">
-                /templates/index.ftl
+            <result name="success" type="redirectAction">
+                <param name="namespace">/</param>
+                <param name="actionName">${referUrl}</param>
             </result>
         </action>
     </package>

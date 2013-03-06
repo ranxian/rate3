@@ -32,6 +32,16 @@ public class CreateAction extends RateActionBase {
 
     private String password;
 
+    public String getRefer_url() {
+        return refer_url;
+    }
+
+    public void setRefer_url(String refer_url) {
+        this.refer_url = refer_url;
+    }
+
+    private String refer_url;
+
     public String execute() throws Exception {
         Map session = ActionContext.getContext().getSession();
         UserEntity user = UserEntity.authenticate(username, password);
