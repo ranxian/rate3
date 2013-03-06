@@ -2,6 +2,7 @@ package rate.controller.benchmark;
 
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.BenchmarkEntity;
 import rate.model.ViewEntity;
 import rate.util.HibernateUtil;
@@ -15,7 +16,7 @@ import java.util.Collection;
  * Time: 下午12:44
  * To change this template use File | Settings | File Templates.
  */
-public class IndexAction extends ActionSupport {
+public class IndexAction extends RateActionBase {
     private final Session session = HibernateUtil.getSession();
 
     public Collection<BenchmarkEntity> getBenchmarks() {

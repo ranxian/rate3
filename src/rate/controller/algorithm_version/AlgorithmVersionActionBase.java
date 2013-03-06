@@ -2,6 +2,7 @@ package rate.controller.algorithm_version;
 
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
 import rate.util.HibernateUtil;
@@ -13,7 +14,7 @@ import rate.util.HibernateUtil;
  * Time: 上午11:45
  * To change this template use File | Settings | File Templates.
  */
-public class AlgorithmVersionActionBase extends ActionSupport {
+public class AlgorithmVersionActionBase extends RateActionBase {
 
     protected final Session session = HibernateUtil.getSession();
 

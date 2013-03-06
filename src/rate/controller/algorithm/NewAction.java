@@ -1,6 +1,7 @@
 package rate.controller.algorithm;
 
 import com.opensymphony.xwork2.ActionSupport;
+import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
 
 /**
@@ -9,7 +10,7 @@ import rate.model.AlgorithmEntity;
  * Date: 12-12-18
  * Time: 下午9:43
  */
-public class NewAction extends ActionSupport {
+public class NewAction extends RateActionBase {
     public AlgorithmEntity getAlgorithm() {
         return algorithm;
     }

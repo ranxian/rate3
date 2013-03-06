@@ -3,6 +3,7 @@ package rate.controller.task;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.engine.task.FVC2006Task;
 import rate.model.TaskEntity;
 import rate.util.HibernateUtil;
@@ -14,7 +15,7 @@ import rate.util.HibernateUtil;
  * Time: 上午11:42
  * To change this template use File | Settings | File Templates.
  */
-public class TaskActionBase extends ActionSupport {
+public class TaskActionBase extends RateActionBase {
 
     private static final Logger logger = Logger.getLogger(TaskActionBase.class);
     protected final Session session = HibernateUtil.getSession();

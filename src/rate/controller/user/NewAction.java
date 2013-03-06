@@ -1,6 +1,7 @@
 package rate.controller.user;
 
 import com.opensymphony.xwork2.ActionSupport;
+import rate.controller.RateActionBase;
 import rate.model.UserEntity;
 import rate.model.ViewEntity;
 
@@ -8,7 +9,7 @@ import rate.model.ViewEntity;
  * Created by XianRan
  * Time: 下午9:16
  */
-public class NewAction extends ActionSupport {
+public class NewAction extends RateActionBase {
     public UserEntity getUser() {
         return user;
     }

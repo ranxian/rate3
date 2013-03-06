@@ -1,5 +1,7 @@
 package rate.controller.benchmark;
 
+import rate.controller.RateActionBase;
+
 /**
  * Created with IntelliJ IDEA.
  * User: yyk
@@ -7,7 +9,7 @@ package rate.controller.benchmark;
  * Time: 下午6:08
  * To change this template use File | Settings | File Templates.
  */
-public class EditAction extends BenchmarkActionBase {
+public class EditAction extends RateActionBase {
     public String execute() {
         return SUCCESS;
     }

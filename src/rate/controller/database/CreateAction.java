@@ -3,6 +3,7 @@ package rate.controller.database;
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Session;
 import org.omg.PortableInterceptor.SUCCESSFUL;
+import rate.controller.RateActionBase;
 import rate.engine.database.ZipImorter;
 import rate.engine.view.GenerateStrategy.GenerateByImportTagStrategy;
 import rate.engine.view.Generator;
@@ -15,7 +16,7 @@ import rate.util.RateConfig;
  * Date: 13-1-19
  * Time: 下午5:44
  */
-public class CreateAction extends ActionSupport {
+public class CreateAction extends RateActionBase {
     public String getImportTag() {
         return importTag;
     }

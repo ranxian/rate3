@@ -1,6 +1,7 @@
 package rate.controller.database;
 
 import com.opensymphony.xwork2.ActionSupport;
+import rate.controller.RateActionBase;
 import rate.engine.database.ZipImorter;
 
 import java.util.Date;
@@ -10,7 +11,7 @@ import java.util.Date;
  * Date: 13-1-19
  * Time: 下午5:44
  */
-public class NewAction extends ActionSupport {
+public class NewAction extends RateActionBase {
     public String[] getZipFilePaths() throws Exception {
         return ZipImorter.getZipFilePath();
     }

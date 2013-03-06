@@ -11,7 +11,7 @@ import rate.util.HibernateUtil;
  * Created by XianRan
  * Time: 下午12:43
  */
-public class RunnerAction extends ActionSupport {
+public class RunnerAction extends RateActionBase {
 
     private final Session session = HibernateUtil.getSession();
     private String benchmarkUuid;

@@ -3,6 +3,7 @@ package rate.controller.view;
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.ViewEntity;
 import rate.util.HibernateUtil;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
  * Created by XianRan
  * Time: 下午9:25
  */
-public class UpdateAction extends ActionSupport {
+public class UpdateAction extends RateActionBase {
     private final Session session = HibernateUtil.getSession();
 
     private ViewEntity view;

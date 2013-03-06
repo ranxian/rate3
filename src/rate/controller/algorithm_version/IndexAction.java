@@ -4,6 +4,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
 import rate.util.HibernateUtil;
@@ -17,7 +18,7 @@ import java.util.Collection;
  * Time: 下午3:11
  * To change this template use File | Settings | File Templates.
  */
-public class IndexAction extends ActionSupport {
+public class IndexAction extends RateActionBase {
 
     private final static Logger logger = Logger.getLogger(IndexAction.class);
     private final Session session = HibernateUtil.getSession();

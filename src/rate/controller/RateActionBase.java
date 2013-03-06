@@ -23,14 +23,10 @@ import java.util.Map;
  * Time: 上午2:21
  * To change this template use File | Settings | File Templates.
  */
-public class RateActionBase extends ActionSupport implements SessionAware {
+public class RateActionBase extends ActionSupport {
 
     private static final Logger logger = Logger.getLogger(RateActionBase.class);
-    protected final Session hsession = HibernateUtil.getSession();
-    private Map session;
-    public void setSession(Map session) {
-        this.session = session;
-    }
+    protected final Session session = HibernateUtil.getSession();
 
     public UserEntity getCurrentUser() {
         Map session = ActionContext.getContext().getSession();
@@ -44,8 +40,8 @@ public class RateActionBase extends ActionSupport implements SessionAware {
     }
 
     public boolean getIsUserSignedIn() {
-        Map hsession = ActionContext.getContext().getSession();
-        return (hsession.get("user-uuid") != null);
+        Map session = ActionContext.getContext().getSession();
+        return (session.get("user-uuid") != null);
     }
 
     public int getFirstResult() {

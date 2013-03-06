@@ -3,6 +3,7 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  * Created by XianRan
  * Time: 下午12:39
  */
-public class CreateAction extends ActionSupport {
+public class CreateAction extends RateActionBase {
     private UserEntity user;
     public UserEntity getUser() {
         return user;

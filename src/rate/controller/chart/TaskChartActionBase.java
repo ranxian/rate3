@@ -3,6 +3,7 @@ package rate.controller.chart;
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Session;
 import org.jfree.chart.JFreeChart;
+import rate.controller.RateActionBase;
 import rate.engine.task.FVC2006Task;
 import rate.model.TaskEntity;
 import rate.util.HibernateUtil;
@@ -14,7 +15,7 @@ import rate.util.HibernateUtil;
  * Time: 上午10:54
  * To change this template use File | Settings | File Templates.
  */
-public class TaskChartActionBase extends ActionSupport {
+public class TaskChartActionBase extends RateActionBase {
 
     protected JFreeChart chart;
     private String taskUuid;

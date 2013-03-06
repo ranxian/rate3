@@ -2,6 +2,7 @@ package rate.controller.view;
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.ViewEntity;
 import rate.util.HibernateUtil;
 
@@ -11,7 +12,7 @@ import java.util.UUID;
  * Created by XianRan
  * Time: 下午12:40
  */
-public class DeleteAction extends ActionSupport {
+public class DeleteAction extends RateActionBase {
     private String uuid;
 
     public String getUuid() {

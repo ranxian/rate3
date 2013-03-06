@@ -34,7 +34,7 @@ public class ByViewAction extends RateActionBase {
 
     public void setUuid(String uuid) {
         this.viewUuid = uuid;
-        this.view = (ViewEntity)hsession.createQuery("from ViewEntity where uuid=:uuid")
+        this.view = (ViewEntity)session.createQuery("from ViewEntity where uuid=:uuid")
                 .setParameter("uuid", uuid)
                 .list().get(0);
     }
@@ -42,11 +42,11 @@ public class ByViewAction extends RateActionBase {
     private Collection<TaskEntity> tasks;
 
     public String execute() {
-        tasks = hsession.createQuery("from TaskEntity where benchmark.view=:view order by created desc")
+        tasks = session.createQuery("from TaskEntity where benchmark.view=:view order by created desc")
                 .setParameter("view", view)
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
-        setNumOfItems((Long)hsession.createQuery("select count(*) from TaskEntity where benchmark.view=:view")
+        setNumOfItems((Long)session.createQuery("select count(*) from TaskEntity where benchmark.view=:view")
                 .setParameter("view", view)
                 .list().get(0));
         return SUCCESS;

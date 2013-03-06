@@ -17,7 +17,8 @@
         </a>
 
         <div id="border-div"></div>
-        <#if true >
+        <#if !isUserSignedIn >
+
         <@s.form action="login" namespace="/" id="login_form" theme="simple">
             <@s.textfield name="username" cssClass="nav-input" placeholder="Username" />
             <@s.password name="password" cssClass="nav-input" placeholder="Password" />
@@ -27,6 +28,11 @@
             <a href="/user/new" class="white pull-right">Register</a>
         </@s.form>
         <#else>
+            <div class="welcome">
+                <p class="title">Welcome!</p>
+                <p class="username">${currentUser.name}</p>
+                <a href="/logout" class="btn btn-mini">Sign Out</a>
+            </div>
         </#if>
     </div>
 </div>

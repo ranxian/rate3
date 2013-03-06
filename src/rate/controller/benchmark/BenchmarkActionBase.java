@@ -24,7 +24,7 @@ public class BenchmarkActionBase extends RateActionBase {
     public void setUuid(String uuid) {
         logger.trace(String.format("setUuid [%s]", uuid));
         this.uuid = uuid;
-        benchmark = (BenchmarkEntity)hsession.createQuery("from BenchmarkEntity where uuid=:uuid")
+        benchmark = (BenchmarkEntity)session.createQuery("from BenchmarkEntity where uuid=:uuid")
                 .setParameter("uuid", uuid)
                 .list().get(0);
     }
@@ -35,7 +35,7 @@ public class BenchmarkActionBase extends RateActionBase {
     }
 
     public Collection<TaskEntity> getTasks() {
-        return hsession.createQuery("from TaskEntity where benchmark=:benchmark order by created desc")
+        return session.createQuery("from TaskEntity where benchmark=:benchmark order by created desc")
                 .setParameter("benchmark", benchmark)
                 .setMaxResults(itemPerPage)
                 .list();

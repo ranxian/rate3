@@ -28,7 +28,7 @@ public class UpdateAction extends RateActionBase {
     private AlgorithmEntity algorithm;
 
     public String execute() {
-        AlgorithmEntity updated = (AlgorithmEntity)hsession.createQuery("from AlgorithmEntity where uuid=:uuid")
+        AlgorithmEntity updated = (AlgorithmEntity)session.createQuery("from AlgorithmEntity where uuid=:uuid")
                 .setParameter("uuid", algorithm.getUuid())
                 .list().get(0);
 
@@ -36,9 +36,9 @@ public class UpdateAction extends RateActionBase {
         updated.setDescription(algorithm.getDescription());
         updated.setUpdated(HibernateUtil.getCurrentTimestamp());
 
-        hsession.beginTransaction();
-        hsession.update(updated);
-        hsession.getTransaction().commit();
+        session.beginTransaction();
+        session.update(updated);
+        session.getTransaction().commit();
 
         return SUCCESS;
     }

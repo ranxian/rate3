@@ -4,6 +4,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
 import rate.util.HibernateUtil;
@@ -17,7 +18,7 @@ import java.util.UUID;
  * Created by XianRan
  * Time: 下午12:39
  */
-public class ShowAction extends ActionSupport {
+public class ShowAction extends RateActionBase {
 
     private static final Logger logger = Logger.getLogger(ShowAction.class);
     private final Session session = HibernateUtil.getSession();

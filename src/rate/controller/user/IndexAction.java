@@ -2,6 +2,7 @@ package rate.controller.user;
 
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Query;
+import rate.controller.RateActionBase;
 import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * Created by XianRan
  * Time: 下午12:38
  */
-public class    IndexAction extends ActionSupport   {
+public class    IndexAction extends RateActionBase {
     private List<UserEntity> users;
 
     public String execute() throws Exception {

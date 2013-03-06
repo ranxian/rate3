@@ -3,6 +3,7 @@ package rate.controller.algorithm_version;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
 import rate.util.HibernateUtil;
@@ -14,7 +15,7 @@ import rate.util.HibernateUtil;
  * Time: 下午3:45
  * To change this template use File | Settings | File Templates.
  */
-public class NewAction extends ActionSupport {
+public class NewAction extends RateActionBase {
 
     private static final Logger logger = Logger.getLogger(NewAction.class);
 

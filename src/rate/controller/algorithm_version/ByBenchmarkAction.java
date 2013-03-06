@@ -33,7 +33,7 @@ public class ByBenchmarkAction extends RateActionBase {
 
     public void setUuid(String uuid) {
         benchmarkUuid = uuid;
-        benchmark = (BenchmarkEntity)hsession.createQuery("from BenchmarkEntity where uuid=:uuid")
+        benchmark = (BenchmarkEntity)session.createQuery("from BenchmarkEntity where uuid=:uuid")
                 .setParameter("uuid", uuid)
                 .list().get(0);
     }
@@ -45,11 +45,11 @@ public class ByBenchmarkAction extends RateActionBase {
     }
 
     public String execute() throws Exception {
-        algorithmVersions = hsession.createQuery("from AlgorithmVersionEntity where algorithm.protocol=:protocol order by created desc")
+        algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.protocol=:protocol order by created desc")
                 .setParameter("protocol", benchmark.getProtocol())
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
-        setNumOfItems((Long)hsession.createQuery("select count(*) from AlgorithmVersionEntity where algorithm.protocol=:protocol")
+        setNumOfItems((Long)session.createQuery("select count(*) from AlgorithmVersionEntity where algorithm.protocol=:protocol")
                 .setParameter("protocol", benchmark.getProtocol())
                 .list().get(0));
         return SUCCESS;

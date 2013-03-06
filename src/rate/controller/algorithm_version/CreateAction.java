@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
 import rate.util.HibernateUtil;
@@ -20,7 +21,7 @@ import java.io.IOException;
  * Time: 下午4:18
  * To change this template use File | Settings | File Templates.
  */
-public class CreateAction extends ActionSupport {
+public class CreateAction extends RateActionBase {
     private final static Logger logger = Logger.getLogger(CreateAction.class);
 
     private final Session session = HibernateUtil.getSession();

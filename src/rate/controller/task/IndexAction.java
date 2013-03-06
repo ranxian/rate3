@@ -25,10 +25,10 @@ public class IndexAction extends RateActionBase {
     private Collection<TaskEntity> tasks;
 
     public String execute() {
-        tasks = hsession.createQuery("from TaskEntity order by created desc")
+        tasks = session.createQuery("from TaskEntity order by created desc")
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
-        setNumOfItems((Long)hsession.createQuery("select count(*) from TaskEntity ")
+        setNumOfItems((Long)session.createQuery("select count(*) from TaskEntity ")
                 .list().get(0));
         return SUCCESS;
     }

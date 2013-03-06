@@ -4,6 +4,7 @@ package rate.controller.benchmark;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.BenchmarkEntity;
 import rate.util.HibernateUtil;
 
@@ -14,7 +15,7 @@ import rate.util.HibernateUtil;
  * Time: 下午6:18
  * To change this template use File | Settings | File Templates.
  */
-public class UpdateAction extends ActionSupport {
+public class UpdateAction extends RateActionBase {
 
     private static final Logger logger = Logger.getLogger(UpdateAction.class);
     private final Session session = HibernateUtil.getSession();

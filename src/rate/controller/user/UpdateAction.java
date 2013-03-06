@@ -2,6 +2,7 @@ package rate.controller.user;
 
 import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 
@@ -9,7 +10,7 @@ import rate.util.HibernateUtil;
  * Created by XianRan
  * Time: 下午9:25
  */
-public class UpdateAction extends ActionSupport {
+public class UpdateAction extends RateActionBase {
     private UserEntity user;
 
     public UserEntity getUser() {
