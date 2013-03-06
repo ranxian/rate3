@@ -17,12 +17,14 @@
         </a>
 
         <div id="border-div"></div>
-        <form id="login_form">
-            <input type="text" placeholder="Username" class="nav-input"/>
-            <input type="password" placeholder="Password" class="nav-input"/>
-            <input type="submit" value="Login" class="btn btn-mini pull-right"/>
-            <a class="white pull-right" href="#">Register</a>
-        </form>
+        <@s.form action="login" id="login_form" theme="simple">
+            <@s.textfield name="username" cssClass="nav-input" placeholder="Username" />
+            <@s.password name="password" cssClass="nav-input" placeholder="Password" />
+
+
+            <@s.submit cssClass="btn btn-mini pull-right" value="Login" />
+            <a href="/user/new" class="white pull-right">Register</a>
+        </@s.form>
     </div>
 </div>
 <div id="navbar">

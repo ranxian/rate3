@@ -1,14 +1,17 @@
 package rate.model;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.hibernate.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import rate.util.HibernateUtil;
 import rate.util.UUIDType;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * User:    Yu Yuankai
@@ -133,5 +136,16 @@ public class UserEntity {
 
     public void setUserAlgorithms(Collection<UserAlgorithmEntity> userAlgorithms) {
         this.userAlgorithms = userAlgorithms;
+    }
+
+    public static UserEntity authenticate(String name, String password) {
+        org.hibernate.Query q = HibernateUtil.getSession().createQuery("from UserEntity where name=:name");
+        q.setParameter("name", name);
+        List<UserEntity> list = q.list();
+        UserEntity user = list.get(0);
+
+        if (user == null) return null;
+        if (user.getPassword() == DigestUtils.md5Hex(password)) return user;
+        else return null;
     }
 }

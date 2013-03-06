@@ -1,14 +1,19 @@
 package rate.controller;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import rate.model.AlgorithmEntity;
+import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,6 +26,22 @@ public class RateActionBase extends ActionSupport {
 
     private static final Logger logger = Logger.getLogger(RateActionBase.class);
     protected final Session session = HibernateUtil.getSession();
+
+    public UserEntity getCurrentUser() {
+        Map session = ActionContext.getContext().getSession();
+        if (session.get("user-uuid") == null) return null;
+        Query q = HibernateUtil.getSession().createQuery("from UserEntity where uuid=:uuid");
+
+        q.setParameter("uuid", session.get("user-uuid"));
+        List<UserEntity> list = q.list();
+        UserEntity user = list.get(0);
+        return user;
+    }
+
+    public boolean getIsUserSignedIn() {
+        Map session = ActionContext.getContext().getSession();
+        return (session.get("user-uuid") != null);
+    }
 
     public int getFirstResult() {
         return (getPage()-1)*itemPerPage;

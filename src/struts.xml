@@ -224,4 +224,14 @@
         </action>
     </package>
 
+    <package name="rate.controller.sessions" extends="struts-default">
+        <action name="login" class="rate.controller.sessions.CreateAction" method="execute">
+            <result name="success" type="redirectAction">
+            </result>
+            <result name="error" type="freemarker">
+                /templates/user/error.ftl
+            </result>
+        </action>
+    </package>
+
 </struts>
