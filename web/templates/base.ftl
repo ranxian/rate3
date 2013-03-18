@@ -6,6 +6,7 @@
     <link rel="stylesheet/less" type="text/css" href="/less/rate.less">
     <script type="text/javascript" src="/js/rate.js"></script>
     <script type="text/javascript" src="/js/less-1.3.3.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div id="header">
@@ -30,7 +31,7 @@
         <#else>
             <div class="welcome">
                 <p class="title">Welcome!</p>
-                <p class="username">${currentUser.name}</p>
+                <p class="username"><a href="/user/algorithms">${currentUser.name}</a></p>
                 <a href="/logout?referUrl=${currentPageUrl}">Sign Out</a>
             </div>
         </#if>

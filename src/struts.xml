@@ -35,11 +35,15 @@
             </result>
             <result name="input" type="freemarker">/templates/user/edit.ftl</result>
         </action>
-        <action name="*"
-                class="rate.controller.user.ShowAction"
+        <action name="algorithms"
+                class="rate.controller.user.AlgorithmsAction"
                 method="execute">
-            <param name="uuid">{1}</param>
-            <result name="success" type="freemarker">/templates/user/show.ftl</result>
+            <result name="success" type="freemarker">/templates/user/algorithms.ftl</result>
+        </action>
+        <action name="tasks"
+                class="rate.controller.user.AlgorithmsAction"
+                method="execute">
+            <result name="success" type="freemarker">/templates/user/tasks.ftl</result>
         </action>
     </package>
     <package name="basicstruts2" extends="struts-default">
