@@ -101,19 +101,9 @@ public class UserEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
         UserEntity that = (UserEntity) o;
 
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (organization != null ? !organization.equals(that.organization) : that.organization != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (registered != null ? !registered.equals(that.registered) : that.registered != null) return false;
-        if (uuid !=that.uuid) return false;
-
-        return true;
+        return uuid.equals(that.uuid);
     }
 
     @Override

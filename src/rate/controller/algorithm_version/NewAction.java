@@ -15,37 +15,12 @@ import rate.util.HibernateUtil;
  * Time: 下午3:45
  * To change this template use File | Settings | File Templates.
  */
-public class NewAction extends RateActionBase {
+public class NewAction extends AlgorithmVersionActionBase {
 
     private static final Logger logger = Logger.getLogger(NewAction.class);
 
-    public String getAlgorithmUuid() {
-        return algorithmUuid;
-    }
-
-    public void setAlgorithmUuid(String algorithmUuid) {
-        this.algorithmUuid = algorithmUuid;
-    }
-
-    private AlgorithmVersionEntity algorithmVersion;
-
-    private String algorithmUuid;
-
-    public AlgorithmEntity getAlgorithm() {
-        return algorithm;
-    }
-
-    private AlgorithmEntity algorithm;
-
     public String execute() {
-        algorithmVersion = new AlgorithmVersionEntity();
-        Session session = HibernateUtil.getSession();
-        algorithm = (AlgorithmEntity)session.createQuery("from AlgorithmEntity where uuid=:uuid")
-                .setParameter("uuid", algorithmUuid)
-                .list().get(0);
-
-        algorithmVersion.setAlgorithm(algorithm);
-
+        if (!isAuthor()) return "eNotAuthor";
         return SUCCESS;
     }
 }

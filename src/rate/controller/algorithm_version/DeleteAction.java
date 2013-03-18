@@ -17,6 +17,8 @@ public class DeleteAction extends AlgorithmVersionActionBase {
     private static final Logger logger = Logger.getLogger(DeleteAction.class);
 
     public String execute() throws Exception {
+        if (!isAuthor()) return "eNotAuthor";
+
         session.beginTransaction();
         this.algorithm = algorithmVersion.getAlgorithm();
         FileUtils.deleteDirectory(new File(algorithmVersion.dirPath()));

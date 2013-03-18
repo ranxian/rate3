@@ -11,17 +11,9 @@ import rate.model.AlgorithmEntity;
  * Time: 下午9:43
  */
 public class NewAction extends RateActionBase {
-    public AlgorithmEntity getAlgorithm() {
-        return algorithm;
-    }
+   public String execute() throws Exception {
+        if (!getIsUserSignedIn()) return "eLogin";
 
-    public void setAlgorithm(AlgorithmEntity algorithm) {
-        this.algorithm = algorithm;
-    }
-
-    AlgorithmEntity algorithm;
-
-    public String execute() throws Exception {
         return SUCCESS;
     }
 }

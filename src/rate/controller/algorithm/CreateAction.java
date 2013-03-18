@@ -13,18 +13,11 @@ import rate.util.HibernateUtil;
  * Time: 下午12:37
  */
 public class CreateAction extends AlgorithmActionBase {
-    private AlgorithmEntity algorithm;
     private UserAlgorithmEntity userAlgorithm;
 
-    public AlgorithmEntity getAlgorithm() {
-        return algorithm;
-    }
-
-    public void setAlgorithm(AlgorithmEntity algorithm) {
-        this.algorithm = algorithm;
-    }
-
     public String execute() throws Exception {
+        if (!getIsUserSignedIn()) return "eLogin";
+
         try {
             Session session = HibernateUtil.getSession();
             session.beginTransaction();

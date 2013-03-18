@@ -29,6 +29,16 @@ public class RateActionBase extends ActionSupport {
     private static final Logger logger = Logger.getLogger(RateActionBase.class);
     protected final Session session = HibernateUtil.getSession();
 
+    public void setFlashMsg(String msg) {
+        Map session = ActionContext.getContext().getSession();
+        session.put("msg", msg);
+    }
+
+    public String getFlashMsg() {
+        Map session = ActionContext.getContext().getSession();
+        return (String)session.get("msg");
+    }
+
     public String getReferUrl() {
         return referUrl;
     }

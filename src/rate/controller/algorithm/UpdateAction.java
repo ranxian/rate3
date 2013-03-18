@@ -15,18 +15,7 @@ import java.util.Date;
  * Date: 12-12-18
  * Time: 下午9:43
  */
-public class UpdateAction extends RateActionBase {
-
-    public AlgorithmEntity getAlgorithm() {
-        return algorithm;
-    }
-
-    public void setAlgorithm(AlgorithmEntity algorithm) {
-        this.algorithm = algorithm;
-    }
-
-    private AlgorithmEntity algorithm;
-
+public class UpdateAction extends AlgorithmActionBase {
     public String execute() {
         AlgorithmEntity updated = (AlgorithmEntity)session.createQuery("from AlgorithmEntity where uuid=:uuid")
                 .setParameter("uuid", algorithm.getUuid())

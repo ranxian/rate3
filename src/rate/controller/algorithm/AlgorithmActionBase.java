@@ -23,4 +23,36 @@ public class AlgorithmActionBase extends RateActionBase {
         session.save(userAlgorithm);
         session.getTransaction().commit();
     }
+
+    protected String uuid;
+    protected AlgorithmEntity algorithm;
+
+    public AlgorithmEntity getAlgorithm() {
+        return algorithm;
+    }
+
+    public void setAlgorithm(AlgorithmEntity algorithm) {
+        this.algorithm = algorithm;
+    }
+
+    public void setUuid(String uuid) {
+        this.algorithm = (AlgorithmEntity)session.createQuery("from AlgorithmEntity where uuid=:uuid").setParameter("uuid", uuid)
+                .list().get(0);
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    protected UserEntity getAuthor() {
+        UserAlgorithmEntity userAlgorithm = (UserAlgorithmEntity)session.createQuery("from UserAlgorithmEntity where algorithm=:algorithm").setParameter("algorithm", algorithm)
+                .list().get(0);
+        return userAlgorithm.getUser();
+    }
+
+    protected boolean isAuthor() {
+        UserEntity user = getAuthor();
+
+        return user.equals(getCurrentUser());
+    }
 }

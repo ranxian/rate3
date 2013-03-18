@@ -33,10 +33,10 @@ public class EditAction extends RateActionBase {
     }
 
     public String execute() throws Exception {
-        Query q = HibernateUtil.getSession().createQuery("from UserEntity where uuid=:uuid");
-        q.setParameter("uuid", uuid);
-        List<UserEntity> list = q.list();
-        user = list.get(0);
+        user = getCurrentUser();
+
+        if (user == null) return "eLogin";
+
         return SUCCESS;
     }
 }

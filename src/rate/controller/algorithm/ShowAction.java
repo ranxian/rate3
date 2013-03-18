@@ -20,41 +20,13 @@ import java.util.UUID;
  * Time: 下午12:39
  */
 public class ShowAction extends AlgorithmActionBase {
-
-    private static final Logger logger = Logger.getLogger(ShowAction.class);
-    private final Session session = HibernateUtil.getSession();
-
-    private AlgorithmEntity algorithm;
-
     public Collection<AlgorithmVersionEntity> getAlgorithmVersions() {
         return algorithmVersions;
     }
 
     private Collection<AlgorithmVersionEntity> algorithmVersions;
 
-    private String uuid;
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public AlgorithmEntity getAlgorithm() {
-        return algorithm;
-    }
-
-    public void setAlgorithm(AlgorithmEntity algorithm) {
-        this.algorithm = algorithm;
-    }
-
     public String execute() throws Exception {
-        Query q = session.createQuery("from AlgorithmEntity where uuid=:uuid");
-        q.setParameter("uuid", uuid);
-        List<AlgorithmEntity> list = q.list();
-        algorithm = list.get(0);
         algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm=:algorithm order by created desc")
                 .setParameter("algorithm", algorithm)
                 .list();

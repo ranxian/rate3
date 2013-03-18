@@ -21,37 +21,8 @@ import java.io.IOException;
  * Time: 下午4:18
  * To change this template use File | Settings | File Templates.
  */
-public class CreateAction extends RateActionBase {
+public class CreateAction extends AlgorithmVersionActionBase {
     private final static Logger logger = Logger.getLogger(CreateAction.class);
-
-    private final Session session = HibernateUtil.getSession();
-
-    public AlgorithmVersionEntity getAlgorithmVersion() {
-        return algorithmVersion;
-    }
-
-    public void setAlgorithmVersion(AlgorithmVersionEntity algorithmVersion) {
-        this.algorithmVersion = algorithmVersion;
-    }
-
-    private AlgorithmVersionEntity algorithmVersion;
-
-    private AlgorithmEntity algorithm;
-
-    public AlgorithmEntity getAlgorithm() {
-        return algorithm;
-    }
-
-    public void setAlgorithmUuid(String uuid) {
-        this.algorithm = (AlgorithmEntity) session
-                .createQuery("from AlgorithmEntity where uuid=:uuid")
-                .setParameter("uuid", uuid)
-                .list().get(0);
-    }
-
-    public void setAlgorithm(AlgorithmEntity algorithm) {
-        this.algorithm = algorithm;
-    }
 
     public void setEnrollExe(File enrollExe) {
         this.enrollExe = enrollExe;

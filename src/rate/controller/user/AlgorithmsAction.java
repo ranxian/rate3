@@ -19,6 +19,8 @@ public class AlgorithmsAction extends RateActionBase {
     public String execute() throws Exception {
         user = getCurrentUser();
 
+        if (user == null) return "eLogin";
+
         algorithms = session.createQuery("from UserAlgorithmEntity where user=:user").setParameter("user", user).list();
         setNumOfItems(Long.parseLong(String.valueOf(algorithms.size())));
 

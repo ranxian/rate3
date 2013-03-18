@@ -8,7 +8,15 @@
     <constant name="struts.devMode" value="true" />
     <constant name="struts.action.extension" value=""/>
     <constant name="struts.action.excludePattern" value="/css/.*,/js/.*,/less/.*"/>
-    <package name="rate.controller.user" namespace="/user" extends="struts-default">
+
+    <package name="rate-base-package" extends="struts-default">
+        <global-results>
+            <result name="eLogin" type="freemarker">/templates/error/eLogin.ftl</result>
+            <result name="eNotAuthor" type="freemarker">/templates/error/eNotAuthor.ftl</result>
+        </global-results>
+    </package>
+
+    <package name="rate.controller.user" namespace="/user" extends="rate-base-package">
         <action name="index"
                 class="rate.controller.user.IndexAction"
                 method="execute">
@@ -51,7 +59,7 @@
             <result name="success" type="freemarker">/templates/index.ftl</result>
         </action>
     </package>
-    <package name="rate.controller.view" namespace="/view" extends="struts-default">
+    <package name="rate.controller.view" namespace="/view" extends="rate-base-package">
         <action name="index" class="rate.controller.view.IndexAction" method="execute">
             <result name="success" type="freemarker">/templates/view/index.ftl</result>
         </action>
@@ -85,7 +93,7 @@
             <result name="error" type="freemarker">/templates/view/show.ftl</result>
         </action>
     </package>
-    <package name="rate.controller.algorithm" namespace="/algorithm" extends="struts-default">
+    <package name="rate.controller.algorithm" namespace="/algorithm" extends="rate-base-package">
         <action name="index" class="rate.controller.algorithm.IndexAction" method="execute">
             <result name="success" type="freemarker">/templates/algorithm/index.ftl</result>
         </action>
@@ -113,7 +121,7 @@
             <result name="success" type="freemarker">/templates/algorithm/show.ftl</result>
         </action>
     </package>
-    <package name="rate.controller.algorithm_version" namespace="/algorithm_version" extends="struts-default">
+    <package name="rate.controller.algorithm_version" namespace="/algorithm_version" extends="rate-base-package">
         <action name="index" class="rate.controller.algorithm_version.IndexAction" method="execute">
             <result name="success" type="freemarker">/templates/algorithm_version/index.ftl</result>
         </action>
@@ -141,7 +149,7 @@
             </result>
         </action>
     </package>
-    <package name="rate.controller.task" namespace="/task" extends="struts-default">
+    <package name="rate.controller.task" namespace="/task" extends="rate-base-package">
         <action name="index" class="rate.controller.task.IndexAction" method="execute">
             <result name="success" type="freemarker">/templates/task/index.ftl</result>
         </action>
@@ -188,7 +196,7 @@
         </action>
     </package>
 
-    <package name="rate.controller.benchmark" namespace="/benchmark" extends="struts-default">
+    <package name="rate.controller.benchmark" namespace="/benchmark" extends="rate-base-package">
         <action name="show"  class="rate.controller.benchmark.ShowAction" method="execute">
             <result name="success" type="freemarker">/templates/benchmark/show.ftl</result>
         </action>
@@ -207,7 +215,7 @@
         </action>
     </package>
 
-    <package name="rate.controller.runner" extends="struts-default">
+    <package name="rate.controller.runner" extends="rate-base-package">
         <action name="run" class="rate.controller.RunnerAction" method="execute">
             <result name="success" type="redirectAction">
                 <param name="namespace">/task</param>
@@ -216,7 +224,7 @@
         </action>
     </package>
 
-    <package name="rate.controller.database" extends="struts-default" namespace="/database">
+    <package name="rate.controller.database" extends="rate-base-package" namespace="/database">
         <action name="new" class="rate.controller.database.NewAction" method="execute">
             <result name="success" type="freemarker">/templates/database/new.ftl</result>
         </action>

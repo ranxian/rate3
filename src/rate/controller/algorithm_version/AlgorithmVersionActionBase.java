@@ -5,6 +5,8 @@ import org.hibernate.Session;
 import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
+import rate.model.UserAlgorithmEntity;
+import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
 /**
@@ -39,5 +41,22 @@ public class AlgorithmVersionActionBase extends RateActionBase {
         return algorithm;
     }
 
+    public void setAlgorithmUuid(String uuid) {
+        this.algorithm = (AlgorithmEntity) session
+                .createQuery("from AlgorithmEntity where uuid=:uuid")
+                .setParameter("uuid", uuid)
+                .list().get(0);
+        algorithmVersion.setAlgorithm(algorithm);
+    }
+
     protected AlgorithmEntity algorithm;
+
+    protected boolean isAuthor() {
+        UserAlgorithmEntity userAlgorithm = (UserAlgorithmEntity)session.createQuery("from UserAlgorithmEntity where algorithm=:algorithm")
+                .setParameter("algorithm", algorithm)
+                .list().get(0);
+        DebugUtil.debug(getCurrentUser().getUuid()+ " != " + userAlgorithm.getUser().getUuid());
+
+        return userAlgorithm.getUser().equals(getCurrentUser());
+    }
 }

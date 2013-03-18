@@ -22,6 +22,8 @@ public class UpdateAction extends RateActionBase {
     }
 
     public String execute() throws Exception {
+        if (!getIsUserSignedIn()) return "eLogin";
+
         Session session = HibernateUtil.getSession();
 
         session.beginTransaction();
