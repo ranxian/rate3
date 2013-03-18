@@ -1,7 +1,8 @@
 <#include "../base.ftl" />
 <#macro main_container>
 
-<h1 class="title">Detail of Task #${task.uuidShort}</b> </h1>
+<h1 class="title">Detail of Task #</b> </h1>
+
 
 <p>EER: ${fvc2006Task.EER*100}% (${fvc2006Task.EER_l*100}% - ${fvc2006Task.EER_h*100}%) </p>
 <p>FMR100: ${fvc2006Task.FMR100*100}%) </p>

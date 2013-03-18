@@ -13,5 +13,6 @@ public class RateConfigTest {
         System.out.println(RateConfig.getRootDir());
         System.out.println(RateConfig.getSampleRootDir());
         System.out.println(RateConfig.getZipRootDir());
+        System.out.println(RateConfig.getClassPath());
     }
 }

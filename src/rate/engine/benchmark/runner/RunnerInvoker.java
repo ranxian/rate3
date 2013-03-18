@@ -37,6 +37,7 @@ public class RunnerInvoker {
         task.setAlgorithmVersion(algorithmVersion);
         task.setBenchmark(benchmark);
         task.setCreated(HibernateUtil.getCurrentTimestamp());
+        // TODO: task 需要记录执行任务的人
         session.save(task);
         session.getTransaction().commit();
 

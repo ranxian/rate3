@@ -15,15 +15,12 @@ import rate.util.HibernateUtil;
  * Time: 上午11:42
  * To change this template use File | Settings | File Templates.
  */
-public class TaskActionBase extends RateActionBase {
-
-    private static final Logger logger = Logger.getLogger(TaskActionBase.class);
-    protected final Session session = HibernateUtil.getSession();
-
+public class TaskActionBase extends RateActionBase  {
     public void setUuid(String uuid) throws Exception {
         this.uuid = uuid;
         this.task = (TaskEntity)session.createQuery("from TaskEntity where uuid=:uuid").setParameter("uuid", uuid).list().get(0);
         fvc2006Task = new FVC2006Task(task);
+        System.out.println("uuid and task prepared");
     }
 
     private String uuid;

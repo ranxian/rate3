@@ -4,12 +4,16 @@ import org.apache.commons.io.FilenameUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import rate.controller.RateActionBase;
+import rate.controller.algorithm.AlgorithmActionBase;
+import rate.util.HibernateUtil;
 import rate.util.RateConfig;
 import rate.util.UUIDType;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * User:    Yu Yuankai
@@ -165,10 +169,22 @@ public class AlgorithmEntity {
 
     @Transient
     public int getNumOfVersions() {
-        return this.getAlgorithmVersions().size();
+        // 这里的 version 包括算法本身，理论上说一个算法创建的时候 version 数是 0，但本质上我们应该展示的是 1，也就是这个最初的 version
+        return this.getAlgorithmVersions().size()+1;
     }
 
     private void setNumOfVersions(int nonsense) {
         // make JPA happy
     }
+    @Transient
+    public String getAuthorName() {
+        List<UserAlgorithmEntity> userAlgorithms = (List<UserAlgorithmEntity>)
+                HibernateUtil.getSession().createQuery("from UserAlgorithmEntity where algorithm=:algorithm")
+                        .setParameter("algorithm", this)
+                        .list();
+        if (userAlgorithms.isEmpty()) return "Unknown";
+        else return userAlgorithms.get(0).getUser().getName();
+    }
+
+    private void setAuthorName(String none) {}
 }

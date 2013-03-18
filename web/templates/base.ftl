@@ -31,7 +31,7 @@
             <div class="welcome">
                 <p class="title">Welcome!</p>
                 <p class="username">${currentUser.name}</p>
-                <a href="/logout?referUrl=${currentPageUrl}" class="btn btn-mini">Sign Out</a>
+                <a href="/logout?referUrl=${currentPageUrl}">Sign Out</a>
             </div>
         </#if>
     </div>

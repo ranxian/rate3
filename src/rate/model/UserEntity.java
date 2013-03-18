@@ -60,7 +60,6 @@ public class UserEntity {
     }
 
     public void setPassword(String password) throws Exception {
-        System.out.println("set password: " + password);
         this.password = password;
     }
 

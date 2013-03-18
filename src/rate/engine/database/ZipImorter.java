@@ -25,6 +25,7 @@ public class ZipImorter {
     private final Session session = HibernateUtil.getSession();
 
     public void main(String importTag, String type, String zipPath) throws Exception {
+        logger.trace("Begin import " + zipPath + " into database");
         ZipFile zipFile = new ZipFile(new File(zipPath));
         String zipFileName = zipFile.getFile().getName();
         String zipFileBaseName = zipFileName.substring(0, zipFileName.length() - 4);
@@ -37,7 +38,7 @@ public class ZipImorter {
 
         zipFile.extractAll(destDir);
         File sampleDir = new File(destDir);
-;
+
         File[] clazzdirs = sampleDir.listFiles();
         if (clazzdirs == null) {
             logger.trace("No class directory in .zip");
@@ -78,6 +79,7 @@ public class ZipImorter {
             session.save(clazz);
         }
         session.getTransaction().commit();
+        logger.trace("Import successfully");
     }
 
     public static String[] getZipFilePath() throws Exception {

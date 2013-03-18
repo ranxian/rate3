@@ -12,6 +12,7 @@ import rate.model.AlgorithmEntity;
 import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,16 @@ public class RateActionBase extends ActionSupport {
         List<UserEntity> list = q.list();
         UserEntity user = list.get(0);
         return user;
+    }
+
+    public Object getSessionContent(Object key) {
+        Map session = ActionContext.getContext().getSession();
+        return session.get(key);
+    }
+
+    public void setSessionContent(String key, Object val) {
+        Map session = ActionContext.getContext().getSession();
+        session.put(key, val);
     }
 
     public boolean getIsUserSignedIn() {
@@ -88,7 +99,6 @@ public class RateActionBase extends ActionSupport {
     public String getCurrentPageUrl() {
         String url = ServletActionContext.getRequest().getRequestURI();
         url = url.substring(1);
-        System.out.println(url);
         return url;
     }
 

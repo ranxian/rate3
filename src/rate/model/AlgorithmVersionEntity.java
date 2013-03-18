@@ -125,4 +125,11 @@ public class AlgorithmVersionEntity {
     }
     private void setUuidShort(String nonsense) {}
 
+    @Transient
+    public String getAuthorName() {
+        return this.algorithm.getAuthorName();
+    }
+
+    private void setAuthorName(String nonsense) {}
+
 }

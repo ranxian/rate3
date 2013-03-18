@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
+import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 
 import java.util.Collection;
@@ -18,7 +19,7 @@ import java.util.UUID;
  * Created by XianRan
  * Time: 下午12:39
  */
-public class ShowAction extends RateActionBase {
+public class ShowAction extends AlgorithmActionBase {
 
     private static final Logger logger = Logger.getLogger(ShowAction.class);
     private final Session session = HibernateUtil.getSession();

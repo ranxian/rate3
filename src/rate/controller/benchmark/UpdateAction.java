@@ -15,7 +15,7 @@ import rate.util.HibernateUtil;
  * Time: 下午6:18
  * To change this template use File | Settings | File Templates.
  */
-public class UpdateAction extends RateActionBase {
+public class UpdateAction extends BenchmarkActionBase {
 
     private static final Logger logger = Logger.getLogger(UpdateAction.class);
     private final Session session = HibernateUtil.getSession();

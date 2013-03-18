@@ -9,7 +9,7 @@ import rate.controller.RateActionBase;
  * Time: 下午6:08
  * To change this template use File | Settings | File Templates.
  */
-public class EditAction extends RateActionBase {
+public class EditAction extends BenchmarkActionBase {
     public String execute() {
         return SUCCESS;
     }

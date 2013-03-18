@@ -96,4 +96,18 @@ public class RateConfig {
         return count;
     }
 
+    public static String getJdkRootDir() {
+        return config.getString("JDK_ROOT");
+    }
+
+    public static String getLibRootDir() {
+        return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getRootDir(), "lib"));
+    }
+
+    public static String getClassPath() {
+        String jdkPath = FilenameUtils.separatorsToWindows(getJdkRootDir());
+        String rateLibPath =FilenameUtils.separatorsToWindows(getLibRootDir());
+        String classpath = jdkPath + "\\jre\\lib\\charsets.jar;" + jdkPath + "\\jre\\lib\\deploy.jar;" + jdkPath + "\\jre\\lib\\javaws.jar;" + jdkPath + "\\jre\\lib\\jce.jar;" + jdkPath + "\\jre\\lib\\jfr.jar;" + jdkPath + "\\jre\\lib\\jfxrt.jar;" + jdkPath + "\\jre\\lib\\jsse.jar;" + jdkPath + "\\jre\\lib\\management-agent.jar;" + jdkPath + "\\jre\\lib\\plugin.jar;" + jdkPath + "\\jre\\lib\\resources.jar;" + jdkPath + "\\jre\\lib\\rt.jar;" + jdkPath + "\\jre\\lib\\ext\\access-bridge.jar;" + jdkPath + "\\jre\\lib\\ext\\dnsns.jar;" + jdkPath + "\\jre\\lib\\ext\\jaccess.jar;" + jdkPath + "\\jre\\lib\\ext\\localedata.jar;" + jdkPath + "\\jre\\lib\\ext\\sunec.jar;" + jdkPath + "\\jre\\lib\\ext\\sunjce_provider.jar;" + jdkPath + "\\jre\\lib\\ext\\sunmscapi.jar;" + jdkPath + "\\jre\\lib\\ext\\sunpkcs11.jar;" + jdkPath + "\\jre\\lib\\ext\\zipfs.jar;" + rateLibPath + "\\hibernate-core-4.1.1.Final.jar;" + rateLibPath + "\\hibernate-jpa-2.0-api-1.0.1.Final.jar;" + rateLibPath + "\\hibernate-commons-annotations-4.0.1.Final.jar;" + rateLibPath + "\\antlr-2.7.7.jar;" + rateLibPath + "\\dom4j-1.6.1.jar;" + rateLibPath + "\\javassist-3.15.0-GA.jar;" + rateLibPath + "\\jboss-logging-3.1.0.GA.jar;" + rateLibPath + "\\jboss-transaction-api_1.1_spec-1.0.0.Final.jar;" + rateLibPath + "\\commons-configuration-1.9.jar;" + rateLibPath + "\\commons-lang-2.6.jar;" + rateLibPath + "\\commons-logging-1.1.1.jar;" + rateLibPath + "\\servlet-api-2.4.jar;" + rateLibPath + "\\xml-apis-1.0.b2.jar;" + rateLibPath + "\\commons-codec-1.6.jar;" + rateLibPath + "\\log4j-1.2.15.jar;" + rateLibPath + "\\mysql-connector-java-5.1.22.jar;" + rateLibPath + "\\freemarker-2.3.19.jar;" + rateLibPath + "\\jfreechart-1.0.9.jar;" + rateLibPath + "\\jcommon-1.0.12.jar;" + rateLibPath + "\\struts2-jfreechart-plugin-2.3.8.jar;" + rateLibPath + "\\struts2-core-2.3.8.jar;" + rateLibPath + "\\xwork-core-2.3.8.jar;" + rateLibPath + "\\commons-lang3-3.1.jar;" + rateLibPath + "\\ognl-3.0.6.jar;" + rateLibPath + "\\javassist-3.11.0.GA.jar;" + rateLibPath + "\\asm-commons-3.3.jar;" + rateLibPath + "\\asm-tree-3.3.jar;" + rateLibPath + "\\commons-fileupload-1.2.2.jar;" + rateLibPath + "\\commons-io-2.0.1.jar;" + rateLibPath + "\\jsp-api-2.0.jar;E:\\Program Files\\JetBrains\\IntelliJ IDEA 11.1.4\\lib\\idea_rt.jar";
+        return classpath;
+    }
 }

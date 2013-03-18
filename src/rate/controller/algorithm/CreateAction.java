@@ -5,14 +5,17 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
+import rate.model.UserAlgorithmEntity;
 import rate.util.HibernateUtil;
 
 /**
  * Created by XianRan
  * Time: 下午12:37
  */
-public class CreateAction extends RateActionBase {
+public class CreateAction extends AlgorithmActionBase {
     private AlgorithmEntity algorithm;
+    private UserAlgorithmEntity userAlgorithm;
+
     public AlgorithmEntity getAlgorithm() {
         return algorithm;
     }
@@ -25,9 +28,9 @@ public class CreateAction extends RateActionBase {
         try {
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
-            algorithm.setCreated(HibernateUtil.getCurrentTimestamp());
             session.save(algorithm);
             session.getTransaction().commit();
+            setAlgorithmAuthor(algorithm, getCurrentUser());
         }
         catch (HibernateException ex) {
             throw ex;
