@@ -6,7 +6,7 @@
 <hr>
 <p>Type: <b>${algorithm.type}</b></p>
 <p>Desc: <b>${algorithm.description}</b></p>
-<p>Author: <b>${algorithm.authorName}</b></p>
+<p>Author: <strong><a href="/user/algorithms?uuid=${algorithm.author.uuid}">${algorithm.author.name}</a></strong></p>
 <p>Created at: <b>${algorithm.created}</b></p>
 <p><a href="/algorithm/edit?uuid=${algorithm.uuid}" class="btn">Edit</a></p>
 

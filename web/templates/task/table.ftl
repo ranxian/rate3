@@ -21,7 +21,13 @@
         <td><a href="/benchmark/show?uuid=${benchmark.uuid}">${benchmark.name}</a></td>
         <td><a href="/view/show?uuid=${benchmark.view.uuid}">${benchmark.view.name}</a></td>
         <td>${created}</td>
-        <td><a href="/task/show?uuid=${uuid}">${finished!"running"}</a></td>
+        <td><a href="/task/show?uuid=${uuid}">
+            <#if finished?exists>
+                <strong>${finished}</strong>
+            <#else>
+                <strong class="running">running(${generalPercentage*100}%)</strong>
+            </#if>
+        </a></td>
         <td class="tableHighlight">${runnerName}</td>
         <td><a href="/task/delete?uuid=${uuid}">delete</a></td>
     </tr>

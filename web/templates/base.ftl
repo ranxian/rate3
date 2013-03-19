@@ -31,7 +31,7 @@
         <#else>
             <div class="welcome">
                 <p class="title">Welcome!</p>
-                <p class="username"><a href="/user/algorithms">${currentUser.name}</a></p>
+                <p class="username"><a href="/user/algorithms?uuid=${currentUser.uuid}">${currentUser.name}</a></p>
                 <a href="/logout?referUrl=${currentPageUrl}">Sign Out</a>
             </div>
         </#if>

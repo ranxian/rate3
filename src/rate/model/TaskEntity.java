@@ -6,6 +6,8 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import rate.engine.task.FVC2006Task;
+import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 import rate.util.RateConfig;
 import rate.util.UUIDType;
@@ -151,4 +153,16 @@ public class TaskEntity {
         return this.algorithmVersion.getAlgorithm().getAuthorName();
     }
     public void setRunnerName(String nonsense) {}
+
+    @Transient
+    public Double getGeneralPercentage() throws Exception{
+        if (this.benchmark.getProtocol().equals("FVC2006")) {
+            FVC2006Task fvc2006Task = new FVC2006Task(this);
+            return fvc2006Task.getPercentage();
+        } else {
+            DebugUtil.debug(this.benchmark.getProtocol());
+            return 0.0;
+        }
+    }
+    private void setGeneralPercentage(Double nonsense) {}
 }

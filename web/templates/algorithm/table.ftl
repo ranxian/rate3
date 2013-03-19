@@ -23,7 +23,7 @@
         <td>${created}</td>
         <td>${updated}</td>
         <td>${numOfVersions}</td>
-        <td class="tableHighlight">${authorName}</td>
+        <td class="tableHighlight"><a href="/user/algorithms?uuid=${author.uuid}">${author.name}</a></td>
     </tr>
     </@s.iterator>
     </tbody>

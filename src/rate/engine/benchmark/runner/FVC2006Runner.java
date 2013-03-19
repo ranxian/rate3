@@ -27,6 +27,9 @@ public class FVC2006Runner
 {
 
     private static final Logger logger = Logger.getLogger(FVC2006Runner.class);
+    private static final int refreshFreq = 10;
+    private Date date = new Date();
+    private int totalTurn;
 
     private final Session session = HibernateUtil.getSession();
 
@@ -78,6 +81,8 @@ public class FVC2006Runner
     private void runCommands() throws Exception {
         // TODO: Read the whole txt into memory may lead to OutOfMemoryException.
         List<String> lines = FileUtils.readLines(new File(benchmark.filePath()));
+        totalTurn = lines.size();
+        int nRefreshTurn = totalTurn / refreshFreq    ;
 
         File resultFile = new File(fvc2006Task.getResultFilePath());
         resultFile.createNewFile();
@@ -88,7 +93,15 @@ public class FVC2006Runner
 
         boolean enrollFailed = false;
 
+        initTaskState();
+
         for (int i=0; i<lines.size(); i+=2) {
+            if (i % nRefreshTurn == 0 || (i+1) % nRefreshTurn == 0) {
+                analyzeAll();
+                updateTaskState(i+2, totalTurn, date.toString());
+            }
+            updateTaskState(i+2, totalTurn, null);
+
             String line1 = StringUtils.strip(lines.get(i));
             String line2 = StringUtils.strip(lines.get(i + 1));
 
@@ -152,6 +165,33 @@ public class FVC2006Runner
                 }
             }
         }
+    }
+
+    public void initTaskState() throws Exception {
+        File taskStateFile = new File(fvc2006Task.getTaskStatePath());
+        taskStateFile.createNewFile();
+        writeTaskState(0, totalTurn, date.toString());
+    }
+
+    public void updateTaskState(int finishedTurn, int totalTurn, String updated_time) throws Exception {
+        File taskStateFile = new File(fvc2006Task.getTaskStatePath());
+        if (updated_time == null) {
+            BufferedReader reader = new BufferedReader(new FileReader(taskStateFile));
+            updated_time = reader.readLine().split(" ")[0];
+        }
+        writeTaskState(finishedTurn, totalTurn, updated_time);
+    }
+
+    public void writeTaskState(int finishedTurn, int totalTurn, String updated_time) throws Exception {
+        File taskStateFile = new File(fvc2006Task.getTaskStatePath());
+        FileWriter writer = new FileWriter(taskStateFile);
+
+        // 清空原纪录
+        writer.write("");
+        writer.append(updated_time);
+        writer.append(" " + finishedTurn);
+        writer.append(" " + totalTurn);
+        writer.close();
     }
 
     public void prepare() throws Exception {

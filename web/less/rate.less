@@ -255,9 +255,33 @@ body {
     color: @ratered;
 }
 
-.privilege {
+.privilege, .percentage {
     color: @rategray;
     font-style: italic;
     margin: 0px;
     padding: 0px;
+}
+
+.percentage {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.finished {
+    color: green;
+    font-weight: bold;
+}
+
+.running {
+    color: @rategray;
+    font-weight: bold;
+}
+
+strong.running {
+    color: @green;
+}
+
+small.getdown {
+    padding-top: 15px;
+    color: @rategray;
 }

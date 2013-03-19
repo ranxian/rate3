@@ -187,4 +187,16 @@ public class AlgorithmEntity {
     }
 
     private void setAuthorName(String none) {}
+
+    @Transient
+    public UserEntity getAuthor() {
+        List<UserAlgorithmEntity> userAlgorithms = (List<UserAlgorithmEntity>)
+                HibernateUtil.getSession().createQuery("from UserAlgorithmEntity where algorithm=:algorithm")
+                        .setParameter("algorithm", this)
+                        .list();
+        if (userAlgorithms.isEmpty()) return null;
+        else return userAlgorithms.get(0).getUser();
+    }
+
+    private void setAuthor(){}
 }
