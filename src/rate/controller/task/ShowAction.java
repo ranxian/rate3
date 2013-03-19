@@ -7,6 +7,7 @@ import rate.controller.RateActionBase;
 import rate.engine.task.FVC2006Task;
 import rate.model.TaskEntity;
 import rate.util.HibernateUtil;
+import rate.util.StringUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,8 +19,6 @@ import rate.util.HibernateUtil;
 public class ShowAction extends RateActionBase {
 
     public String execute() throws Exception {
-        System.out.println("here");
-        System.out.println(uuid);
         return SUCCESS;
     }
 
@@ -33,6 +32,10 @@ public class ShowAction extends RateActionBase {
 
     public TaskEntity getTask() {
         return task;
+    }
+
+    public String getUuid() {
+        return StringUtil.shorterUuid(this.uuid);
     }
 
     protected TaskEntity task;

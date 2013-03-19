@@ -55,6 +55,8 @@ public class CreateAction extends RateActionBase {
     private ViewEntity view = new ViewEntity();
 
     public String execute() throws Exception {
+        if (!getIsUserSignedIn()) return "eLogin";
+
         GenerateByImportTagStrategy strategy = new GenerateByImportTagStrategy();
         strategy.setImportTag(importTag);
         Generator generator = new Generator();

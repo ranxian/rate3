@@ -25,6 +25,8 @@ public class NewAction extends RateActionBase {
     private String currentTime;
 
     public String execute() throws Exception {
+        if (!getIsUserSignedIn()) return "eLogin";
+
         Date date = new Date();
         currentTime = date.toString();
         return SUCCESS;

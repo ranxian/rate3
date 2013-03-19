@@ -18,4 +18,8 @@ public class StringUtil {
             return str;
         }
     }
+
+    public static String shorterUuid(String uuid) {
+        return uuid.split("-")[0];
+    }
 }

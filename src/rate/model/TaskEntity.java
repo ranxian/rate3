@@ -2,9 +2,11 @@ package rate.model;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import rate.util.HibernateUtil;
 import rate.util.RateConfig;
 import rate.util.UUIDType;
 
@@ -144,4 +146,9 @@ public class TaskEntity {
     }
     private void setUuidShort(String nonsense) {}
 
+    @Transient
+    public String getRunnerName() {
+        return this.algorithmVersion.getAlgorithm().getAuthorName();
+    }
+    public void setRunnerName(String nonsense) {}
 }

@@ -21,6 +21,7 @@ public class CreateAction extends RateActionBase {
     }
 
     public void setUser(UserEntity user) {
+        user.setPrivilege("plain");
         this.user = user;
     }
 

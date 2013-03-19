@@ -99,6 +99,17 @@ public class UserEntity {
         this.organization = organization;
     }
 
+    private String privilege;
+
+    @Column(name = "privilege", nullable = false, insertable = true, updatable = true, length = 45, precision = 0)
+    @Basic
+    public String getPrivilege() {
+        return privilege;
+    }
+
+    public void setPrivilege(String privilege) {
+        this.privilege = privilege;
+    }
     @Override
     public boolean equals(Object o) {
         UserEntity that = (UserEntity) o;

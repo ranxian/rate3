@@ -2,9 +2,8 @@
 
 <#macro main_container>
 
-<h1 class=title><b class="ratered">${user.name}</b>'s Info Center</h1>
-<div class="ratehr"></div>
+<h1 class=title><b class="ratered">${user.name}</b>'s Info Center
+    <small class="pull-right"><p class="privilege">${user.privilege}</p></small></h1>
 <#include "./algorithm_table.ftl" />
-<#include "../pagination.ftl" />
 
 </#macro>

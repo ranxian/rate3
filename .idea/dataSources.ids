@@ -3,7 +3,7 @@
     <extra-name-characters>#@</extra-name-characters>
     <identifier-quote-string>`</identifier-quote-string>
     <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-    <jdbc-url>jdbc:mysql://localhost:3306/rate3</jdbc-url>
+    <jdbc-url>jdbc:mysql://162.105.30.189:3306/rate3</jdbc-url>
     <user-name>root</user-name>
     <user-password>dfdedfcfdfd9dfdedfc3dfc4dfcd</user-password>
     <schema-pattern>rate3.*</schema-pattern>
@@ -16,26 +16,28 @@
     </libraries>
     <table name="algorithm" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
-      <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
+      <column name="name" sqlType="VARCHAR" length="255" precision="0" nullable="false" jdbcType="12" />
       <column name="type" sqlType="ENUM" length="11" precision="0" nullable="false" jdbcType="1" />
       <column name="protocol" sqlType="ENUM" length="8" precision="0" nullable="false" jdbcType="1" />
-      <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
+      <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" />
       <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="false" jdbcType="-1" />
+      <column name="updated" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
       <primary-key name="PRIMARY" columns="uuid" />
     </table>
     <table name="algorithm_version" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="algorithm_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" remarks="dGhpcyBjb2x1bW4gaXMgYWxzbyB1c2VkIHRvIGlkZW50aWZ5IGRpZmZlcmVudCB2ZXJzaW9ucyBvZiBhbiBhbGdvcml0aG0=" version="true" />
+      <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="true" jdbcType="-1" />
       <primary-key name="PRIMARY" columns="uuid" />
     </table>
     <table name="benchmark" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="view_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="protocol" sqlType="ENUM" length="8" precision="0" nullable="false" jdbcType="1" />
-      <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
+      <column name="name" sqlType="VARCHAR" length="255" precision="0" nullable="false" jdbcType="12" />
       <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
-      <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="false" jdbcType="-1" />
+      <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="true" jdbcType="-1" />
       <column name="generator" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
       <primary-key name="PRIMARY" columns="uuid" />
     </table>
@@ -73,6 +75,7 @@
       <column name="import_tag" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" remarks="V2l0aCBlYWNoIGltcG9ydCwgeW91IG11c3QgcHJvdmlkZSBhIGltcG9ydF90YWcuIEl0IGlzIHVzZWQgZm9yIHJvbGxiYWNrIGZ1bmN0aW9ucy4=" />
       <column name="md5" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <primary-key name="PRIMARY" columns="uuid" />
+      <index name="class_uuid_index" unique="false" columns="class_uuid" />
     </table>
     <table name="task" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
@@ -80,6 +83,7 @@
       <column name="benchmark_uuid" sqlType="BINARY" length="16" precision="0" nullable="true" jdbcType="-2" />
       <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="true" jdbcType="93" />
       <column name="finished" sqlType="TIMESTAMP" length="19" precision="0" nullable="true" jdbcType="93" />
+      <column name="user_uuid" sqlType="BINARY" length="16" precision="0" nullable="true" jdbcType="-2" />
       <primary-key name="PRIMARY" columns="uuid" />
     </table>
     <table name="user" schema="" catalog="rate3" type="TABLE">
@@ -89,6 +93,7 @@
       <column name="registered" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
       <column name="email" sqlType="VARCHAR" length="128" precision="0" nullable="false" jdbcType="12" remarks="RW5mb3JjZSB0aGUgdXNlciB0byBwcm92aWRlIGFuIGVtYWlsIGFkZHJlc3MgYW5kIG11c3QgYmUgdW5pcXVlLg==" />
       <column name="organization" sqlType="VARCHAR" length="128" precision="0" nullable="true" jdbcType="12" />
+      <column name="privilege" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" def="J3BsYWluJw==" />
       <primary-key name="PRIMARY" columns="uuid" />
       <index name="email_UNIQUE" unique="true" columns="email" />
     </table>
@@ -97,19 +102,29 @@
       <column name="algorithm_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <primary-key name="PRIMARY" columns="user_uuid,algorithm_uuid" />
     </table>
+    <table name="user_task" schema="" catalog="rate3" type="TABLE">
+      <column name="user_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
+      <column name="task_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
+      <primary-key name="PRIMARY" columns="task_uuid,user_uuid" />
+    </table>
     <table name="view" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
-      <column name="name" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
-      <column name="generator" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" remarks="V2l0aCBlYWNoIGltcG9ydCwgeW91IG11c3QgcHJvdmlkZSBhIGltcG9ydF90YWcuIEl0IGlzIHVzZWQgZm9yIHJvbGxiYWNrIGZ1bmN0aW9ucy4=" />
+      <column name="name" sqlType="VARCHAR" length="255" precision="0" nullable="false" jdbcType="12" />
+      <column name="generator" sqlType="VARCHAR" length="255" precision="0" nullable="false" jdbcType="12" remarks="V2l0aCBlYWNoIGltcG9ydCwgeW91IG11c3QgcHJvdmlkZSBhIGltcG9ydF90YWcuIEl0IGlzIHVzZWQgZm9yIHJvbGxiYWNrIGZ1bmN0aW9ucy4=" />
       <column name="type" sqlType="ENUM" length="11" precision="0" nullable="false" jdbcType="1" />
       <column name="generated" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" />
+      <column name="numOfClasses" sqlType="INT" length="10" precision="0" nullable="false" jdbcType="4" def="MA==" />
+      <column name="numOfSamples" sqlType="INT" length="10" precision="0" nullable="false" jdbcType="4" def="MA==" />
+      <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="false" jdbcType="-1" />
       <primary-key name="PRIMARY" columns="uuid" />
       <index name="name_UNIQUE" unique="true" columns="name" />
     </table>
     <table name="view_sample" schema="" catalog="rate3" type="TABLE">
       <column name="view_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="sample_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
+      <column name="class_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" remarks="VGhpcyBjb2x1bW4gaXMgZm9yIHBlcmZvcm1hbmNlLg==" />
       <primary-key name="PRIMARY" columns="view_uuid,sample_uuid" />
+      <index name="class_uuid_index" unique="false" columns="class_uuid" />
     </table>
   </data-source>
 </component>

@@ -26,7 +26,7 @@
         </@s.iterator>
     </tbody>
 </table>
-
+<#include "../pagination.ftl" />
 <#else>
 
 <p>No algorithms yet.</p>

@@ -2,9 +2,11 @@ package rate.engine.benchmark.runner;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import rate.controller.RateActionBase;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
+import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 import rate.util.JavaProcess;
 
@@ -37,7 +39,6 @@ public class RunnerInvoker {
         task.setAlgorithmVersion(algorithmVersion);
         task.setBenchmark(benchmark);
         task.setCreated(HibernateUtil.getCurrentTimestamp());
-        // TODO: task 需要记录执行任务的人
         session.save(task);
         session.getTransaction().commit();
 
