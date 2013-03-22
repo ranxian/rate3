@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.model.AlgorithmEntity;
 import rate.model.UserEntity;
+import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
 import java.security.PublicKey;
@@ -108,8 +109,10 @@ public class RateActionBase extends ActionSupport {
 
     public String getCurrentPageUrl() {
         String url = ServletActionContext.getRequest().getRequestURI();
-        url = url.substring(1);
-        return url;
+        String urlWithQuery = url + "?" + ServletActionContext.getRequest().getQueryString();
+        urlWithQuery = urlWithQuery.substring(1);
+        // DebugUtil.debug(urlWithQuery);
+        return urlWithQuery;
     }
 
     public String getPageUrl(int pageIn) {
