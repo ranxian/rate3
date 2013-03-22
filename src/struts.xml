@@ -169,6 +169,9 @@
         <action name="byview" class="rate.controller.task.ByViewAction" method="execute">
             <result name="success" type="freemarker">/templates/task/byview.ftl</result>
         </action>
+        <action name="badresult" class="rate.controller.task.BadResultAction" method="execute">
+            <result name="success" type="freemarker">/templates/task/badresult.ftl</result>
+        </action>
     </package>
 
     <package name="rate.controller.chart" namespace="/chart" extends="jfreechart-default">

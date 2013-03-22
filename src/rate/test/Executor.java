@@ -19,20 +19,7 @@ import java.util.List;
  */
 public class Executor {
     public static void main(String[] args) throws Exception {
-        Session session = HibernateUtil.getSession();
-        List<AlgorithmEntity> algorithms = session.createQuery("from AlgorithmEntity").list();
-        Iterator<AlgorithmEntity> it = algorithms.iterator();
-        UserEntity user = (UserEntity)session.createQuery("from UserEntity ").list().get(0);
-
-        session.getTransaction().begin();
-
-        while (it.hasNext()) {
-
-            UserAlgorithmEntity entity = new UserAlgorithmEntity();
-            entity.setAlgorithm(it.next());
-            entity.setUser(user);
-            session.save(entity);
-        }
-        session.getTransaction().commit();
+        String str = "asd\r\n";
+        DebugUtil.debug(str.replaceAll("\\r\\n", "<br />"));
     }
 }

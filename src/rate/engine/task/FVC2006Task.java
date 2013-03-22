@@ -7,6 +7,8 @@ import rate.model.TaskEntity;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,6 +32,9 @@ public class FVC2006Task extends TaskEntity {
         fnmrFilePath = FilenameUtils.concat(task.getDirPath(), "fnmr.txt");
         fmrFilePath = FilenameUtils.concat(task.getDirPath(), "fmr.txt");
         taskStatePath = FilenameUtils.concat(task.getDirPath(), "state.txt");
+        badResultDir = FilenameUtils.concat(task.getDirPath(), "bad-result");
+        genuineResultPath = FilenameUtils.concat(badResultDir, "genuine");
+        imposterResultPath = FilenameUtils.concat(badResultDir, "imposter");
 
         File stateFile = new File(getTaskStatePath());
         if (stateFile.exists()) {
@@ -47,7 +52,19 @@ public class FVC2006Task extends TaskEntity {
     private String fmrFilePath;
     private String fnmrFilePath;
     private String taskStatePath;
+    private String badResultDir;
+    private String genuineResultPath;
+    private String imposterResultPath;
     private long startTime;
+
+    public String getLogByTypeNumber(String type, String num) throws IOException{
+        String path = FilenameUtils.concat(badResultDir, type);
+        String logFilePath = FilenameUtils.concat(path, num+".txt");
+        Scanner scanner = new Scanner(new File(logFilePath)).useDelimiter("\\Z");
+        String log = scanner.next();
+        scanner.close();
+        return log;
+    }
 
     public String getTaskStatePath() {
         return taskStatePath;
