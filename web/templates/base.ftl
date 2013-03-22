@@ -12,7 +12,7 @@
 <body>
 <div id="header">
     <div class="container">
-        <a href="index.html">
+        <a href="/index">
             <h1 id="brand">RATE
                 <small>Recognition Algorithm Test Engine</small>
             </h1>
