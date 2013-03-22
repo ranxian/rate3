@@ -1,6 +1,6 @@
 <#if (tasks?size>0) >
 
-<table class="table table-hover" id="algorithm-version-list">
+<table class="table table-hover sortable" id="algorithm-version-list">
     <thead>
     <tr>
         <th>Algorithm</th>

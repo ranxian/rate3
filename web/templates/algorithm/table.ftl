@@ -1,6 +1,6 @@
 <#if (algorithms?size>0) >
 
-<table class="table table-hover" id="algorithm-list">
+<table class="table table-hover sortable" id="algorithm-list">
     <thead>
     <tr>
         <th>Name</th>

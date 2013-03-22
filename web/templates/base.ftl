@@ -7,6 +7,7 @@
     <script type="text/javascript" src="/js/rate.js"></script>
     <script type="text/javascript" src="/js/less-1.3.3.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/sortable.js"></script>
 </head>
 <body>
 <div id="header">

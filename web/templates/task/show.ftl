@@ -20,6 +20,7 @@
         <p>FMR1000: ${fvc2006Task.FMR1000*100}%</p>
         <p>zeroFMR: ${fvc2006Task.zeroFMR*100}%</p>
         <p>zeroFNMR: ${fvc2006Task.zeroFNMR*100}%</p>
+        <p>Estimate finish time: ${fvc2006Task.estimateLeftTime}</p>
     </div>
     <img src="/chart/score?taskUuid=${task.uuid}" />
     <img src="/chart/fmrfnmr?taskUuid=${task.uuid}" />

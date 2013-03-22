@@ -4,7 +4,7 @@
         <th>Name</th>
         <th>Created</th>
         <th>Description</th>
-        <th>Number of Results</th>
+        <th>#Results</th>
         <th>for debug use</th>
         <th>Run</th>
     </tr>

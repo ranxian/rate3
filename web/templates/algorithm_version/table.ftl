@@ -1,13 +1,13 @@
 <#if (algorithmVersions?size>0)>
 
 
-<table class="table table-hover" id="algorithm-version-list">
+<table class="table table-hover sortable" id="algorithm-version-list">
     <thead>
     <tr>
         <th>Version</th>
         <th>Created</th>
         <th>Description</th>
-        <th>Number of Results</th>
+        <th>#Results</th>
         <th>for debug use</th>
         <#if benchmark??><th>Run</th></#if>
     </tr>

@@ -2,7 +2,7 @@
 <p>No benchmarks yet.</p>
 <#else>
 
-<table class="table table-hover" id="algorithm-version-list">
+<table class="table table-hover sortable" id="algorithm-version-list">
     <thead>
     <tr>
         <th>Name</th>
@@ -11,7 +11,7 @@
         <th>Description</th>
         <th>Created</th>
         <#--<th>Generator</th>-->
-        <th>Num of Tasks</th>
+        <th>#Tasks</th>
     </tr>
     </thead>
     <tbody>

@@ -47,6 +47,7 @@ public class FVC2006Task extends TaskEntity {
     private String fmrFilePath;
     private String fnmrFilePath;
     private String taskStatePath;
+    private long startTime;
 
     public String getTaskStatePath() {
         return taskStatePath;
@@ -92,6 +93,19 @@ public class FVC2006Task extends TaskEntity {
         return fnmrFilePath;
     }
 
+    public String getEstimateLeftTime() {
+        long curTime = System.currentTimeMillis();
+        long timePast = curTime - startTime;
+        int estimateMinute = (int)(timePast / finishedTurn * (totalTurn - finishedTurn) / 1000 / 60);
+        int estimateHour = estimateMinute / 60;
+
+        if (estimateHour == 0) return  estimateMinute + "mins";
+        else {
+            estimateMinute %= estimateHour;
+            return estimateHour + "hrs " + estimateMinute + "mins";
+        }
+    }
+
     private double EER;
     private double EER_l;
     private double EER_h;
@@ -124,10 +138,11 @@ public class FVC2006Task extends TaskEntity {
 
     private void getTaskState() throws Exception{
         BufferedReader stateReader = new BufferedReader(new FileReader(getTaskStatePath()));
+        updated = StringUtils.strip(stateReader.readLine());
         String state[] = StringUtils.strip(stateReader.readLine()).split(" ");
-        updated = state[0];
-        finishedTurn = Double.parseDouble(state[1]);
-        totalTurn = Double.parseDouble(state[2]);
+        finishedTurn = Double.parseDouble(state[0]);
+        totalTurn = Double.parseDouble(state[1]);
+        startTime = Long.parseLong(state[2]);
     }
 
     public double getPercentage() {
