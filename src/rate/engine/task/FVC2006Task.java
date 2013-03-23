@@ -57,9 +57,14 @@ public class FVC2006Task extends TaskEntity {
     private String imposterResultPath;
     private long startTime;
 
-    public String getLogByTypeNumber(String type, String num) throws IOException{
+    public String getLogPathByTypeNumber(String type, String num) {
         String path = FilenameUtils.concat(badResultDir, type);
         String logFilePath = FilenameUtils.concat(path, num+".txt");
+        return logFilePath;
+    }
+
+    public String getLogByTypeNumber(String type, String num) throws IOException{
+        String logFilePath = getLogPathByTypeNumber(type, num);
         Scanner scanner = new Scanner(new File(logFilePath)).useDelimiter("\\Z");
         String log = scanner.next();
         scanner.close();

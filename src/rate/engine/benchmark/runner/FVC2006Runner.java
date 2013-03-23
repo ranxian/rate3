@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import rate.engine.task.FVC2006Task;
+import rate.model.SampleEntity;
 import rate.model.TaskEntity;
 import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
@@ -95,13 +96,9 @@ public class FVC2006Runner
         logger.debug(String.format("ResultFilePath [%s]", task.getResultFilePath()));
 
         boolean enrollFailed = false;
-        DebugUtil.debug("I am here");
         initTaskState();
-        DebugUtil.debug("I am here");
         startTime = System.currentTimeMillis();
 
-
-        DebugUtil.debug("I am here");
         for (int i=0; i<lines.size(); i+=2) {
             if (i % nRefreshTurn == 0 || (i+1) % nRefreshTurn == 0) {
                 analyzeAll();
@@ -219,7 +216,6 @@ public class FVC2006Runner
             return "";
         }
 
-
         // enroll.exe image template config output
         // match.exe image template config output
         // config is 0 now
@@ -232,6 +228,35 @@ public class FVC2006Runner
         list.add(tempOutputFilePath);
 
         return StringUtils.join(list, " ");
+    }
+
+    private String genLog(String s1, String s2, String config) throws Exception {
+        SampleEntity sample1 = (SampleEntity)session.createQuery("from SampleEntity where uuid=:uuid")
+                .setParameter("uuid", s1).list().get(0);
+        SampleEntity sample2 = (SampleEntity)session.createQuery("from SampleEntity where uuid=:uuid")
+                .setParameter("uuid", s2).list().get(0);
+        String filePath1 = FilenameUtils.concat(RateConfig.getSampleRootDir(), sample1.getFilePath());
+        String filePath2 = FilenameUtils.concat(RateConfig.getSampleRootDir(), sample2.getFilePath());
+        Random random = new Random();
+        String tempOutputPath = FilenameUtils.concat(RateConfig.getTempRootDir(), "temp-"+random.nextInt());
+        File file = new File(tempOutputPath);
+        // 为了满足程序需要的参数
+        file.createNewFile();
+        String cmd =  "match.exe " + filePath1 + " " + filePath2 + " " + config + " " + tempOutputPath;
+        Process process = Runtime.getRuntime().exec(cmd);
+
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        process.waitFor();
+        String lines = "";
+        String line;
+        while ((line = stdInput.readLine()) != null) {
+            lines += line + "\r\n";
+        }
+        lines += sample1.getFilePath() + "\r\n";
+        lines += sample2.getFilePath() + "\r\n";
+        stdInput.close();
+        file.delete();
+        return lines;
     }
 
     public void analyzeAll() throws Exception {
@@ -311,6 +336,7 @@ public class FVC2006Runner
         }
         genuinePw.close();
         imposterPw.close();
+        calcBadResult(genuineList, imposterList);
     }
 
     private void calcFMR() throws Exception {
@@ -660,6 +686,38 @@ public class FVC2006Runner
         fOut.close();
         fIn2.close();
         fIn1.close();
+    }
+
+    public void calcBadResult(List<String> genuineList, List<String> imposterList) throws Exception{
+        for (int i = 0; i < 10 && i < genuineList.size(); i++) {
+            File output = new File(fvc2006Task.getLogPathByTypeNumber("genuine", String.valueOf(i + 1)));
+            output.createNewFile();
+            output = new File(fvc2006Task.getLogPathByTypeNumber("imposter", String.valueOf(i + 1)));
+            output.createNewFile();
+        }
+        int i;
+        for (i = 0; i < 10 && i < genuineList.size(); i++) {
+            String line = genuineList.get(i);
+            String info[] = line.split(" ");
+            String s1 = info[2], s2 = info[4];
+
+            PrintWriter fileWriter = new PrintWriter(fvc2006Task.getLogPathByTypeNumber("genuine", String.valueOf(i)));
+            fileWriter.println(line);
+            String log = genLog(s1, s2, "0");
+            fileWriter.println(log);
+            fileWriter.close();
+        }
+        for (i = imposterList.size() - 1; i >= 0 && i >= imposterList.size() - 10; i--) {
+            String line = imposterList.get(i);
+            String info[] = line.split(" ");
+            String  s1 = info[2], s2 = info[4];
+
+            PrintWriter fileWriter = new PrintWriter(fvc2006Task.getLogPathByTypeNumber("imposter", String.valueOf(imposterList.size() - i)));
+            fileWriter.println(line);
+            String log = genLog(s1, s2, "0");
+            fileWriter.println(log);
+            fileWriter.close();
+        }
     }
 }
 
