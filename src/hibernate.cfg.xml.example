@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="show_sql">false</property>
+        <property name="connection.url">jdbc:mysql://162.105.30.189:3306/rate3</property>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">testing</property>
+        <mapping class="rate.model.AlgorithmEntity"/>
+        <mapping class="rate.model.AlgorithmVersionEntity"/>
+        <mapping class="rate.model.BenchmarkEntity"/>
+        <mapping class="rate.model.ClazzEntity"/>
+        <mapping class="rate.model.DeviceTypeEntity"/>
+        <mapping class="rate.model.PersonEntity"/>
+        <mapping class="rate.model.SampleEntity"/>
+        <mapping class="rate.model.TaskEntity"/>
+        <mapping class="rate.model.UserEntity"/>
+        <mapping class="rate.model.ViewEntity"/>
+        <mapping class="rate.model.ViewSampleEntity"/>
+        <mapping class="rate.model.UserAlgorithmEntity"/>
+        <!-- DB schema will be updated if needed -->
+        <!-- <property name="hbm2ddl.auto">update</property> -->
+    </session-factory>
+</hibernate-configuration>

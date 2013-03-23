@@ -6,7 +6,6 @@
 
 out/
 workspace.xml
-src/rate.properties
-src/log4j.properties
 .idea/compiler.xml
 src/rate.properties
+src/hibernate.cfg.xmls
