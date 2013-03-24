@@ -1,5 +1,7 @@
 package rate.controller.task;
 
+import rate.engine.task.FVC2006TaskResult;
+
 /**
  * Created by XianRan
  * Email: xranthoar@gmail.com
@@ -9,7 +11,8 @@ package rate.controller.task;
 public class BadResultAction extends TaskActionBase {
     private String resultType;
     private String num;
-    private String log;
+    // 应该有一个基类啥的
+    private FVC2006TaskResult result;
 
     public void setResultType(String resultType) {
         this.resultType = resultType;
@@ -19,13 +22,15 @@ public class BadResultAction extends TaskActionBase {
         this.num = num;
     }
 
-    public String getLog() {
-        return log;
+    public FVC2006TaskResult getResult() {
+        return this.result;
     }
-
     public String execute() throws Exception {
-        log = fvc2006Task.getLogByTypeNumber(resultType, num);
-        log.replaceAll("\\r\\n", "<br />").replaceAll("\\n", "<br />");
+        result = new FVC2006TaskResult();
+        result.setResultType(resultType);
+        result.setNum(num);
+        result.setFvc2006Task(fvc2006Task);
+        result.generateInfo();
         return SUCCESS;
     }
 }

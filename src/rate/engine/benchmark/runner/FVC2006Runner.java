@@ -32,6 +32,7 @@ public class FVC2006Runner
     private static final int refreshFreq = 10;
     private Date date = new Date();
     private int totalTurn;
+    private int passedTurn = 0;
     private long startTime = 0;
 
     private final Session session = HibernateUtil.getSession();
@@ -89,22 +90,21 @@ public class FVC2006Runner
         int nRefreshTurn = totalTurn / refreshFreq    ;
 
         File resultFile = new File(fvc2006Task.getResultFilePath());
-        resultFile.createNewFile();
         PrintWriter resultPw = new PrintWriter(resultFile);
 
         logger.debug(String.format("OutputFilePath [%s]", tempOutputFilePath));
         logger.debug(String.format("ResultFilePath [%s]", task.getResultFilePath()));
 
         boolean enrollFailed = false;
-        initTaskState();
         startTime = System.currentTimeMillis();
 
         for (int i=0; i<lines.size(); i+=2) {
-            if (i % nRefreshTurn == 0 || (i+1) % nRefreshTurn == 0) {
+            passedTurn = (i+2)/2;
+            if (passedTurn % nRefreshTurn == 0) {
                 analyzeAll();
-                updateTaskState((i+2)/2, totalTurn, date.toString());
+                updateTaskState(passedTurn, totalTurn, date.toString());
             } else {
-                updateTaskState((i+2)/2, totalTurn, null);
+                updateTaskState(passedTurn, totalTurn, null);
             }
             String line1 = StringUtils.strip(lines.get(i));
             String line2 = StringUtils.strip(lines.get(i + 1));
@@ -125,7 +125,7 @@ public class FVC2006Runner
             }
 
             String cmd = this.genCmdFromLines(line1, line2);
-            logger.trace("Run command ["+cmd+"]");
+            // logger.trace("Run command ["+cmd+"]");
 
             Process process = Runtime.getRuntime().exec(String.format("%s", cmd));
             process.waitFor();
@@ -171,18 +171,12 @@ public class FVC2006Runner
         }
     }
 
-    public void initTaskState() throws Exception {
-        File taskStateFile = new File(fvc2006Task.getTaskStatePath());
-        taskStateFile.createNewFile();
-        writeTaskState(0, totalTurn, date.toString());
-        analyzeAll();
-    }
-
     public void updateTaskState(int finishedTurn, int totalTurn, String updated_time) throws Exception {
         File taskStateFile = new File(fvc2006Task.getTaskStatePath());
         if (updated_time == null) {
             BufferedReader reader = new BufferedReader(new FileReader(taskStateFile));
             updated_time = reader.readLine();
+            reader.close();
         }
         writeTaskState(finishedTurn, totalTurn, updated_time);
     }
@@ -202,6 +196,32 @@ public class FVC2006Runner
 
     public void prepare() throws Exception {
         super.prepare();
+        prepareBadResultDir();
+        createResultFile();
+        prepareTaskState();
+    }
+
+    public void createResultFile() throws IOException{
+        File resultFile = new File(fvc2006Task.getResultFilePath());
+        resultFile.createNewFile();
+    }
+
+    public void prepareTaskState() throws Exception{
+        File taskStateFile = new File(fvc2006Task.getTaskStatePath());
+        taskStateFile.createNewFile();
+        writeTaskState(0, totalTurn, date.toString());
+        analyzeAll();
+    }
+
+    public void prepareBadResultDir() throws Exception {
+        logger.debug("preparing bad result path");
+        File genuineResultPath = new File(fvc2006Task.getGenuineResultPath());
+        File imposterResultPath = new File(fvc2006Task.getImposterResultPath());
+
+        FileUtils.forceMkdir(genuineResultPath);
+        FileUtils.forceMkdir(imposterResultPath);
+        logger.debug(genuineResultPath.getAbsolutePath());
+        logger.debug(imposterResultPath.getName());
     }
 
     private String genCmdFromLines(String line1, String line2) {
@@ -231,6 +251,7 @@ public class FVC2006Runner
     }
 
     private String genLog(String s1, String s2, String config) throws Exception {
+        logger.trace(String.format("Generate log for sample %s and %s", s1, s2));
         SampleEntity sample1 = (SampleEntity)session.createQuery("from SampleEntity where uuid=:uuid")
                 .setParameter("uuid", s1).list().get(0);
         SampleEntity sample2 = (SampleEntity)session.createQuery("from SampleEntity where uuid=:uuid")
@@ -238,41 +259,40 @@ public class FVC2006Runner
         String filePath1 = FilenameUtils.concat(RateConfig.getSampleRootDir(), sample1.getFilePath());
         String filePath2 = FilenameUtils.concat(RateConfig.getSampleRootDir(), sample2.getFilePath());
         Random random = new Random();
-        String tempOutputPath = FilenameUtils.concat(RateConfig.getTempRootDir(), "temp-"+random.nextInt());
+        String tempOutputPath = FilenameUtils.concat(RateConfig.getTempRootDir(), String.format("task-log-%d", random.nextInt()));
         File file = new File(tempOutputPath);
         // 为了满足程序需要的参数
         file.createNewFile();
-        String cmd =  "match.exe " + filePath1 + " " + filePath2 + " " + config + " " + tempOutputPath;
+        String cmd = fvc2006Task.getMatchExeFilePath() + " " + filePath1 + " " + filePath2 + " " + config + " " + tempOutputPath;
+        logger.debug("run command " + cmd);
         Process process = Runtime.getRuntime().exec(cmd);
 
         BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
         process.waitFor();
-        String lines = "";
+        StringBuffer lines = new StringBuffer();
         String line;
         while ((line = stdInput.readLine()) != null) {
-            lines += line + "\r\n";
+            lines.append(line).append("\r\n");
         }
-        lines += sample1.getFilePath() + "\r\n";
-        lines += sample2.getFilePath() + "\r\n";
         stdInput.close();
         file.delete();
-        return lines;
+        return lines.toString();
     }
 
     public void analyzeAll() throws Exception {
         this.splitAndSortResult();
-        logger.trace("Begin: calc FMR");
+        // logger.trace("Begin: calc FMR");
         this.calcFMR();
-        logger.trace("Finished: calc FMR");
-        logger.trace("Begin: calc FNMR");
+        // logger.trace("Finished: calc FMR");
+        // logger.trace("Begin: calc FNMR");
         this.calcFNMR();
-        logger.trace("Finished: calc FNMR");
-        logger.trace("Begin: calc error rates");
+        // logger.trace("Finished: calc FNMR");
+        //logger.trace("Begin: calc error rates");
         this.calcErrorRates();
-        logger.trace("Finished: calc error rates");
-        logger.trace("Begin: calc roc");
+//        logger.trace("Finished: calc error rates");
+//        logger.trace("Begin: calc roc");
         this.calcRoc();
-        logger.trace("Finished: calc roc");
+//        logger.trace("Finished: calc roc");
     }
 
     // for sorting genuine.txt and imposter.txt
@@ -336,7 +356,12 @@ public class FVC2006Runner
         }
         genuinePw.close();
         imposterPw.close();
-        calcBadResult(genuineList, imposterList);
+
+        // 各个事件之间有点开始纠缠了，重构的时候注意，比如下面产生 bad result 的活动应该从统计结果中抽出来
+        if (passedTurn == totalTurn) {
+            calcBadResult(genuineList, imposterList);
+            logger.debug("GenuineList length: " + genuineList.size());
+        }
     }
 
     private void calcFMR() throws Exception {
@@ -411,6 +436,7 @@ public class FVC2006Runner
 
             if (threshold>=thresholdIn) break;
         }
+        reader.close();
         return errorRate;
     }
 
@@ -689,28 +715,33 @@ public class FVC2006Runner
     }
 
     public void calcBadResult(List<String> genuineList, List<String> imposterList) throws Exception{
+        logger.debug("Begin Calculate bad result");
+        logger.debug("GenuineList size: " + genuineList.size());
         for (int i = 0; i < 10 && i < genuineList.size(); i++) {
             File output = new File(fvc2006Task.getLogPathByTypeNumber("genuine", String.valueOf(i + 1)));
             output.createNewFile();
             output = new File(fvc2006Task.getLogPathByTypeNumber("imposter", String.valueOf(i + 1)));
             output.createNewFile();
         }
+        logger.debug("Bad result file created");
         int i;
+        logger.debug("Begin calc genuine bad result");
         for (i = 0; i < 10 && i < genuineList.size(); i++) {
             String line = genuineList.get(i);
             String info[] = line.split(" ");
-            String s1 = info[2], s2 = info[4];
+            String s1 = info[1], s2 = info[3];
 
-            PrintWriter fileWriter = new PrintWriter(fvc2006Task.getLogPathByTypeNumber("genuine", String.valueOf(i)));
+            PrintWriter fileWriter = new PrintWriter(fvc2006Task.getLogPathByTypeNumber("genuine", String.valueOf(i + 1)));
             fileWriter.println(line);
             String log = genLog(s1, s2, "0");
             fileWriter.println(log);
             fileWriter.close();
         }
+        logger.debug("Begin calc imposter bad result");
         for (i = imposterList.size() - 1; i >= 0 && i >= imposterList.size() - 10; i--) {
             String line = imposterList.get(i);
             String info[] = line.split(" ");
-            String  s1 = info[2], s2 = info[4];
+            String  s1 = info[1], s2 = info[3];
 
             PrintWriter fileWriter = new PrintWriter(fvc2006Task.getLogPathByTypeNumber("imposter", String.valueOf(imposterList.size() - i)));
             fileWriter.println(line);
@@ -718,6 +749,7 @@ public class FVC2006Runner
             fileWriter.println(log);
             fileWriter.close();
         }
+        logger.debug("bad result generated successfully");
     }
 }
 

@@ -63,12 +63,12 @@ public class FVC2006Task extends TaskEntity {
         return logFilePath;
     }
 
-    public String getLogByTypeNumber(String type, String num) throws IOException{
-        String logFilePath = getLogPathByTypeNumber(type, num);
-        Scanner scanner = new Scanner(new File(logFilePath)).useDelimiter("\\Z");
-        String log = scanner.next();
-        scanner.close();
-        return log;
+    public String getGenuineResultPath() {
+        return this.genuineResultPath;
+    }
+
+    public String getImposterResultPath() {
+        return this.imposterResultPath;
     }
 
     public String getTaskStatePath() {
@@ -154,7 +154,7 @@ public class FVC2006Task extends TaskEntity {
         zeroFMR = Double.parseDouble(line);
         line = StringUtils.strip(errorRateReader.readLine());
         zeroFNMR = Double.parseDouble(line);
-
+        errorRateReader.close();
         getTaskState();
     }
 
@@ -165,6 +165,7 @@ public class FVC2006Task extends TaskEntity {
         finishedTurn = Double.parseDouble(state[0]);
         totalTurn = Double.parseDouble(state[1]);
         startTime = Long.parseLong(state[2]);
+        stateReader.close();
     }
 
     public double getPercentage() {

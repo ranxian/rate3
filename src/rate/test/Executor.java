@@ -18,8 +18,10 @@ import java.util.List;
  * Time: 下午12:41
  */
 public class Executor {
+    private static final Session session = HibernateUtil.getSession();
     public static void main(String[] args) throws Exception {
-        String str = "asd\r\n";
-        DebugUtil.debug(str.replaceAll("\\r\\n", "<br />"));
+        session.getTransaction().begin();
+        session.createQuery("delete from TaskEntity");
+        session.getTransaction().commit();
     }
 }
