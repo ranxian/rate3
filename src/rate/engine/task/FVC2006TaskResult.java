@@ -89,5 +89,6 @@ public class FVC2006TaskResult {
 
         this.log = logBuffer.toString();
         this.log = log.replaceAll("\\r\\n", "<br />").replaceAll("\\n", "<br />");
+        reader.close();
     }
 }
