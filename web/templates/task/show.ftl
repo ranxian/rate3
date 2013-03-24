@@ -27,4 +27,26 @@
     <img src="/chart/roc?taskUuid=${task.uuid}" />
 
 </div>
+<hr>
+<h1 class="title">Bad Result:</h1>
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <td><strong>Genuine</strong></td>
+        <#list 1..10 as i>
+            <td>
+                <a href="/task/badresult?uuid=${task.uuid}&resultType=genuine&num=${i}" target="_blank"><strong>G-${i}</strong></a>
+            </td>
+        </#list>
+    </tr>
+    <tr>
+        <td><strong>Imposter</strong></td>
+        <#list 1..10 as i>
+            <td>
+                <a href="/task/badresult?uuid=${task.uuid}&resultType=imposter&num=${i}" target="_blank"><strong>I-${i}</strong></a>
+            </td>
+        </#list>
+    </tr>
+    </tbody>
+</table>
 </#macro>
