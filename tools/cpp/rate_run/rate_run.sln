@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rate_run", "rate_run\rate_run.vcxproj", "{17ED1B0F-798C-4D3E-A0F3-B725616AAF90}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "guest_run", "guest_run\guest_run.vcxproj", "{E4C99240-762B-41A3-A7CF-EAFA8623C6C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{17ED1B0F-798C-4D3E-A0F3-B725616AAF90}.Debug|Win32.Build.0 = Debug|Win32
 		{17ED1B0F-798C-4D3E-A0F3-B725616AAF90}.Release|Win32.ActiveCfg = Release|Win32
 		{17ED1B0F-798C-4D3E-A0F3-B725616AAF90}.Release|Win32.Build.0 = Release|Win32
+		{E4C99240-762B-41A3-A7CF-EAFA8623C6C5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E4C99240-762B-41A3-A7CF-EAFA8623C6C5}.Debug|Win32.Build.0 = Debug|Win32
+		{E4C99240-762B-41A3-A7CF-EAFA8623C6C5}.Release|Win32.ActiveCfg = Release|Win32
+		{E4C99240-762B-41A3-A7CF-EAFA8623C6C5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

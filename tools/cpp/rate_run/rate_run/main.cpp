@@ -44,6 +44,12 @@ int ParseCommandLine(int argc, char* argv[], char *cmd, char *args, char *cmdlin
 
 int main(int argc, char* argv[])
 {	
+	USES_CONVERSION;
+
+	wchar_t cwd[MAX_PATH];
+	_tgetcwd(cwd, MAX_PATH);
+	cerr << "current_dir is: " << T2A(cwd) << endl;
+
 	SetErrorMode(0xFFFF);
 
 	if (argc<4) {
@@ -63,8 +69,8 @@ int main(int argc, char* argv[])
 	ZeroMemory(&accounting, sizeof(accounting));
 
 	HANDLE hstdoutf = NULL, hstderrf = NULL;
-	MakeOutputFileHandle(&hstdoutf, L"user_stdout.txt");
-	MakeOutputFileHandle(&hstderrf, L"user_stderr.txt");	
+	MakeOutputFileHandle(&hstdoutf, "user_stdout.txt");
+	MakeOutputFileHandle(&hstderrf, "user_stderr.txt");	
 
 	//////////
 	DWORD runresult;

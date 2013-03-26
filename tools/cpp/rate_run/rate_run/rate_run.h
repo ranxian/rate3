@@ -40,7 +40,7 @@ typedef struct _ACCOUNTING{
 	int return_value;
 } ACCOUNTING, *PACCOUNTING;
 
-HANDLE MakeOutputFileHandle(HANDLE* h, wchar_t* filename);
+HANDLE MakeOutputFileHandle(HANDLE* h, const char* filename);
 int SetUpLog(const char* path);
 DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCOUNTING accounting, HANDLE user_stdout, HANDLE user_stderr);
 int LogPerformance(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmd, const char* args, const ACCOUNTING &accounting, const char* filename);
