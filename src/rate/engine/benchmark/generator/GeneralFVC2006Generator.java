@@ -51,8 +51,80 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
     }
 
     private int sampleCount = 0;
+    private BenchmarkEntity benchmarkEntity;
+    private int totalGenuineCount = 0;
+    private int totalImposterCount = 0;
+    List<ClazzEntity> selectedClasses = new ArrayList<ClazzEntity>();
+    List<Pair<ClazzEntity, List<SampleEntity>>> selectedMap = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
+
+    public void generateInnerClazz(PrintWriter writer, List<Pair<ClazzEntity, List<SampleEntity>>> selected) throws Exception {
+        Iterator iterator = selected.iterator();
+        // inner class
+        while (iterator.hasNext()) {
+            Map.Entry entry = (Map.Entry) iterator.next();
+            ClazzEntity clazzEntity = (ClazzEntity)entry.getKey();
+            List<SampleEntity> samples = (List<SampleEntity>)entry.getValue();
+            for (int i=0; i<samples.size()-1; i++) {
+                // Enroll
+                SampleEntity sample1 = samples.get(i);
+                writer.println(String.format("E %s %s", clazzEntity.getUuid(), sample1.getUuid()));
+                writer.println(sample1.getFile());
+                // Match with remaining
+                for (int j=i+1; j<samples.size(); j++) {
+                    SampleEntity sample2 = samples.get(j);
+                    writer.println(String.format("M %s %s %s %s", clazzEntity.getUuid(), sample1.getUuid(), clazzEntity.getUuid(), sample2.getUuid()));
+                    writer.println(sample2.getFile());
+                    totalGenuineCount++;
+                }
+            }
+        }
+    }
+
+    public void generateInterClazz(PrintWriter writer, List<Pair<ClazzEntity, List<SampleEntity>>> selected) throws Exception {
+        for (int i=0; i<selected.size()-1; i++) {
+            Pair<ClazzEntity, List<SampleEntity>> pair1 = selected.get(i);
+            ClazzEntity class1 = pair1.getKey();
+            SampleEntity sample1 = pair1.getValue().get(0);
+            // Enroll
+            writer.println(String.format("E %s %s", class1.getUuid(), sample1.getUuid()));
+            writer.println(sample1.getFile());
+            // Match with remaining
+            for (int j=i+1; j<selected.size(); j++) {
+                Pair<ClazzEntity, List<SampleEntity>> pair2 = selected.get(j);
+                ClazzEntity class2 = pair2.getKey();
+                SampleEntity sample2 = pair2.getValue().get(0);
+                writer.println(String.format("M %s %s %s %s", class1.getUuid(), sample1.getUuid(), class2.getUuid(), sample2.getUuid()));
+                writer.println(sample2.getFile());
+                totalImposterCount++;
+            }
+        }
+    }
 
     public BenchmarkEntity generate() throws Exception {
+        Session session = HibernateUtil.getSession();
+        session.beginTransaction();
+        // 检查参数，建立文件夹，按照 sampleCount 和 classCount 生成备选样本空间
+        prepare();
+        // 生成类内匹配
+
+
+        PrintWriter writer = new PrintWriter(benchmarkEntity.filePath());
+        generateInnerClazz(writer, selectedMap);
+        // 生成类间匹配
+        generateInterClazz(writer, selectedMap);
+        writer.close();
+
+        benchmarkEntity.setDescription(String.format("Num of classes: %d, num of samples in each class: %d, num of genuine attempts %d, num of imposter attempts",
+                this.classCount, this.sampleCount, totalGenuineCount, totalImposterCount));
+
+        session.update(benchmarkEntity);
+
+        session.getTransaction().commit();
+
+        return benchmarkEntity;
+    }
+
+    public void prepare() throws Exception{
         if (classCount==0 || sampleCount==0 || getView()==null || getGeneratorName()==null || getBenchmarkName()==null) {
             throw new GeneratorException("No classCount or sampleCount or view or generator name specified");
         }
@@ -60,9 +132,6 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
         logger.trace(String.format("Class count [%d], sample count [%d]", this.classCount, this.sampleCount));
 
         BenchmarkEntity benchmarkEntity = null;
-
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
 
         benchmarkEntity = new BenchmarkEntity();
         benchmarkEntity.setView(this.getView());
@@ -80,21 +149,16 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-
         File benchmarkFile = new File(benchmarkEntity.filePath());
         benchmarkFile.createNewFile();
-        PrintWriter pw = new PrintWriter(new FileOutputStream(benchmarkFile));
 
         Query query = session.createQuery("select distinct clazz from ViewSampleEntity where view=:view order by RAND()");
         query.setParameter("view", this.getView());
 
         Iterator<ClazzEntity> clazzIterator = query.iterate();
-        List<ClazzEntity> selectedClasses = new ArrayList<ClazzEntity>();
-
-        List<Pair<ClazzEntity, List<SampleEntity>>> selectedMap = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
 
         int countIgnored = 0;
-        int totalGenuineCount = 0, totalImposterCount = 0;
+
 
         while (clazzIterator.hasNext() && selectedClasses.size()<this.classCount) {
             ClazzEntity clazz = clazzIterator.next();
@@ -119,55 +183,5 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
         if (selectedClasses.size() < this.classCount) {
             throw new GeneratorException("Not enough classes");
         }
-
-        Iterator iterator = selectedMap.iterator();
-        // inner class
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            ClazzEntity clazzEntity = (ClazzEntity)entry.getKey();
-            List<SampleEntity> samples = (List<SampleEntity>)entry.getValue();
-            for (int i=0; i<samples.size()-1; i++) {
-                // Enroll
-                SampleEntity sample1 = samples.get(i);
-                pw.println(String.format("E %s %s", clazzEntity.getUuid(), sample1.getUuid()));
-                pw.println(sample1.getFile());
-                // Match with remaining
-                for (int j=i+1; j<samples.size(); j++) {
-                    SampleEntity sample2 = samples.get(j);
-                    pw.println(String.format("M %s %s %s %s", clazzEntity.getUuid(), sample1.getUuid(), clazzEntity.getUuid(), sample2.getUuid()));
-                    pw.println(sample2.getFile());
-                    totalGenuineCount++;
-                }
-            }
-        }
-
-        // inter class
-        for (int i=0; i<selectedMap.size()-1; i++) {
-            Pair<ClazzEntity, List<SampleEntity>> pair1 = selectedMap.get(i);
-            ClazzEntity class1 = pair1.getKey();
-            SampleEntity sample1 = pair1.getValue().get(0);
-            // Enroll
-            pw.println(String.format("E %s %s", class1.getUuid(), sample1.getUuid()));
-            pw.println(sample1.getFile());
-            // Match with remaining
-            for (int j=i+1; j<selectedMap.size(); j++) {
-                Pair<ClazzEntity, List<SampleEntity>> pair2 = selectedMap.get(j);
-                ClazzEntity class2 = pair2.getKey();
-                SampleEntity sample2 = pair2.getValue().get(0);
-                pw.println(String.format("M %s %s %s %s", class1.getUuid(), sample1.getUuid(), class2.getUuid(), sample2.getUuid()));
-                pw.println(sample2.getFile());
-                totalImposterCount++;
-            }
-        }
-        pw.close();
-
-        benchmarkEntity.setDescription(String.format("Num of classes: %d, num of samples in each class: %d, num of genuine attempts %d, num of imposter attempts",
-                this.classCount, this.sampleCount, totalGenuineCount, totalImposterCount));
-
-        session.update(benchmarkEntity);
-
-        session.getTransaction().commit();
-
-        return benchmarkEntity;
     }
 }

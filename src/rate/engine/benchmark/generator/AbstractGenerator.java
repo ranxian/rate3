@@ -1,11 +1,19 @@
 package rate.engine.benchmark.generator;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.model.BenchmarkEntity;
+import rate.model.ClazzEntity;
+import rate.model.SampleEntity;
 import rate.model.ViewEntity;
 import rate.util.HibernateUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * User:    Yu Yuankai
