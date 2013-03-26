@@ -9,3 +9,12 @@ workspace.xml
 .idea/compiler.xml
 src/rate.properties
 src/hibernate.cfg.xml
+
+[Dd]ebug*/
+[Rr]elease*/
+ipch*/
+*.sdf
+*.suo
+*.filters
+
+*.user

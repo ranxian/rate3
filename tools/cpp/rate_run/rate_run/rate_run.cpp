@@ -89,6 +89,9 @@ DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCO
 
 	SetErrorMode(0xFFFF); // important! 子程序出现exception的时候不会再弹窗
 
+	wchar_t cwd[MAX_PATH];
+	_tgetcwd(cwd, MAX_PATH);
+
 	// CreateProcessWithLogonW由svchost.exe生成新进程，并且默认assign to a job，然后这个进程就无法再assign到自定义的job
 	if( !CreateProcess(
 		NULL,   // No module name (use command line)
@@ -229,13 +232,15 @@ int LogPerformance(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmd, 
 	return 0;
 }
 
-HANDLE MakeOutputFileHandle(HANDLE* h, wchar_t* filename)
+HANDLE MakeOutputFileHandle(HANDLE* h, const char* filename)
 {
+	USES_CONVERSION;
+
 	SECURITY_ATTRIBUTES sec;
 	sec.nLength = sizeof(SECURITY_ATTRIBUTES);
 	sec.lpSecurityDescriptor = NULL;    
 	sec.bInheritHandle = TRUE;
-	*h = CreateFile(filename,
+	*h = CreateFile(A2T(filename),
 		GENERIC_WRITE,
 		FILE_SHARE_READ|FILE_SHARE_WRITE,
 		&sec,
