@@ -1,9 +1,11 @@
 package rate.engine.benchmark.runner;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
+import rate.util.RateConfig;
 
 import java.io.File;
 
@@ -23,6 +25,10 @@ abstract public class AbstractRunner {
         this.task = task;
         this.benchmark = task.getBenchmark();
         this.algorithmVersion = task.getAlgorithmVersion();
+    }
+
+    public static String getRateRunnerPath() {
+        return FilenameUtils.concat(RateConfig.getBinDir(), "rate_run.exe");
     }
 
     protected void prepare() throws Exception {

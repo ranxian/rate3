@@ -30,6 +30,9 @@ public class RateConfig {
             return null;
         }
     }
+    public static String getBinDir() {
+        return FilenameUtils.separatorsToUnix(FilenameUtils.concat(getRootDir(), "bin"));
+    }
 
     public static String getRootDir() {
         return config.getString("RATE_ROOT");
