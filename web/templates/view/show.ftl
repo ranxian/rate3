@@ -15,6 +15,7 @@
 <hr />
 <h3>Benchmarks on this View</h3>
 <#include "../benchmark/table.ftl" />
+<a href="/benchmark/new?viewUuid=${view.uuid}" class="btn">New Benchmark</a>
 
 <hr>
 <h3>Tasks on this View</h3>

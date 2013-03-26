@@ -2,7 +2,7 @@
 <#macro main_container>
 
 <h1 class="title">All Views</h1>
-
+<a href="/view/new" class="btn">Generate</a>
 <#--<a class="btn" class="title-addition" href="/view/new">Import Views</a>-->
 
 <div class="ratehr"></div>

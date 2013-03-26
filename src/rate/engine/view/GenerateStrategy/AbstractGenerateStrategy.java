@@ -25,7 +25,7 @@ abstract public class AbstractGenerateStrategy {
         this.viewName = viewName;
     }
 
-    private String viewName;
+    protected String viewName;
 
     public String getGenerator() {
         return generator;

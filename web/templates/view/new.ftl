@@ -15,19 +15,9 @@
         <div class="controls">
             <@s.select
                       name="view.type"
-                      list="{'FINGERVEIN', 'FINGERVEIN'}"
+                      list="{'FINGERVEIN'}"
                       headerKey="0"
                       headerValue="Choose a view type"
-            ></@s.select>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">Generator</label>
-        <div class="controls">
-            <@s.select name="view.generator"
-            list="{'FVC2004', 'FVC2006', 'RATE'}"
-            headerKey="0"
-            headerValue="Choose a view generating strategy"
             ></@s.select>
         </div>
     </div>
@@ -38,9 +28,10 @@
         </div>
     </div>
     <div class="control-group">
-        <label class="control-label">Zip</label>
+        <label class="control-label">Import Tag</label>
+
         <div class="controls">
-            <input type="file" />
+            <@s.textfield name="importTag"></@s.textfield>
         </div>
     </div>
     <div class="control-group">

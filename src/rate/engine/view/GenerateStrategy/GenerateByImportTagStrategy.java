@@ -27,7 +27,11 @@ public class GenerateByImportTagStrategy extends AbstractGenerateStrategy {
     }
 
     public String getViewName() {
-        return "ViewByImportTag-" + importTag;
+        if (viewName == null) {
+            return "ViewByImportTag-" + importTag;
+        } else {
+            return viewName;
+        }
     }
 
     String importTag;
