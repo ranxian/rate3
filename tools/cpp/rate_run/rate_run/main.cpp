@@ -61,7 +61,12 @@ int main(int argc, char* argv[])
 	unsigned int timelimit_ms = atoi(argv[1]);
 	SIZE_T memlimit = atoi(argv[2]);
 	char cmd[MAX_PATH], args[MAX_PATH], cmdline[MAX_PATH];
-	ParseCommandLine(argc-3, &argv[3], cmd, args, cmdline);
+	char stdoutPath[MAX_PATH], stderrPath[MAX_PATH], purfPath[MAX_PATH];
+	strcpy(stdoutPath, argv[3]);
+	strcpy(stderrPath, argv[4]);
+	strcpy(purfPath, argv[5]);
+
+	ParseCommandLine(argc-6, &argv[6], cmd, args, cmdline);
 	cerr << cmdline << endl;
 	cerr << "timelimit:" << timelimit_ms << "ms memlimit:" << memlimit << "byte(" << memlimit/1024 << "kb)" << endl;
 	
@@ -69,8 +74,8 @@ int main(int argc, char* argv[])
 	ZeroMemory(&accounting, sizeof(accounting));
 
 	HANDLE hstdoutf = NULL, hstderrf = NULL;
-	MakeOutputFileHandle(&hstdoutf, "user_stdout.txt");
-	MakeOutputFileHandle(&hstderrf, "user_stderr.txt");	
+	MakeOutputFileHandle(&hstdoutf, stdoutPath);
+	MakeOutputFileHandle(&hstderrf, stderrPath);	
 
 	//////////
 	DWORD runresult;
@@ -83,7 +88,7 @@ int main(int argc, char* argv[])
 		LogError(runresult);
 	}
 	
-	LogPerformance(timelimit_ms, memlimit, cmd, args, accounting, "perf.txt");	
+	LogPerformance(timelimit_ms, memlimit, cmd, args, accounting, purfPath);	
 
 	//LOG(INFO) << "finished" << endl; 
 

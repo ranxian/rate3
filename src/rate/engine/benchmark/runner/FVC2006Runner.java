@@ -42,6 +42,18 @@ public class FVC2006Runner
     private String tempOutputFilePath;
     private String templateFilePath;
     private String imageFilePath;
+    private String memLimit;
+    private String timeLimit;
+
+    public String getMemLimit() {
+        if (memLimit == null) return "52428800";
+        return memLimit;
+    }
+
+    public String getTimeLimit() {
+        if (timeLimit == null) return "3000";
+        return timeLimit;
+    }
 
     private double EER_l;
     private double EER_h;
@@ -240,6 +252,12 @@ public class FVC2006Runner
         // match.exe image template config output
         // config is 0 now
         List<String> list = new ArrayList<String>();
+        list.add(AbstractRunner.getRateRunnerPath());
+        list.add(getTimeLimit());
+        list.add(getMemLimit());
+        list.add(fvc2006Task.getStdoutPath());
+        list.add(fvc2006Task.getStderrPath());
+        list.add(fvc2006Task.getPurfPath());
         list.add(exe);
         imageFilePath = FilenameUtils.concat(RateConfig.getSampleRootDir(), StringUtils.strip(line2));
         list.add(imageFilePath);

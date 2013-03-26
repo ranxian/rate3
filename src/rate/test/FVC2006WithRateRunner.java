@@ -30,11 +30,12 @@ public class FVC2006WithRateRunner {
         DebugUtil.debug(templatePath);
         String stderrPath = FilenameUtils.concat(RateConfig.getTempRootDir(), random.nextInt() + "stderr.txt");
         String stdoutPath = FilenameUtils.concat(RateConfig.getTempRootDir(), random.nextInt() + "stdout.txt");
+        String purfPath = FilenameUtils.concat(RateConfig.getTempRootDir(), random.nextInt() + "purf.txt");
 
         String enrollArgs = enrollImgPath + " " + templatePath + " 0 " + tempOutputPath;
         String matchArgs = matchImgPath + " " + templatePath + " 0 " + tempOutputPath;
-        String matchCmds[] = {rateRunnerPath, "3000", "52428800", stdoutPath, stderrPath, matchExePath, matchArgs};
-        String enrollCmds[] = {rateRunnerPath, "3000", "52428800", stdoutPath, stderrPath, enrollExePath, enrollArgs};
+        String matchCmds[] = {rateRunnerPath, "3000", "52428800", stdoutPath, stderrPath, purfPath, matchExePath, matchArgs};
+        String enrollCmds[] = {rateRunnerPath, "3000", "52428800", stdoutPath, stderrPath, purfPath, enrollExePath, enrollArgs};
         DebugUtil.debug("start enroll");
         Process enroll = Runtime.getRuntime().exec(enrollCmds);
         enroll.waitFor();
@@ -43,8 +44,8 @@ public class FVC2006WithRateRunner {
         match.waitFor();
         DebugUtil.debug("match finished");
         File file = new File(tempOutputPath);
-        //file.delete();
+        file.delete();
         file = new File(templatePath);
-        //file.delete();
+        file.delete();
     }
 }

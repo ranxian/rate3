@@ -19,6 +19,19 @@ import java.util.Scanner;
  */
 public class FVC2006Task extends TaskEntity {
     private TaskEntity task;
+
+    public String getStdoutPath() {
+        return stdoutPath;
+    }
+
+    public String getStderrPath() {
+        return stderrPath;
+    }
+
+    public String getPurfPath() {
+        return purfPath;
+    }
+
     public FVC2006Task(TaskEntity taskEntity) throws Exception {
         this.task = taskEntity;
         enrollExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "enroll.exe");
@@ -35,6 +48,10 @@ public class FVC2006Task extends TaskEntity {
         badResultDir = FilenameUtils.concat(task.getDirPath(), "bad-result");
         genuineResultPath = FilenameUtils.concat(badResultDir, "genuine");
         imposterResultPath = FilenameUtils.concat(badResultDir, "imposter");
+        stdoutPath = FilenameUtils.concat(task.getDirPath(), "stdout.txt");
+        stderrPath = FilenameUtils.concat(task.getDirPath(), "stderr.txt");
+        purfPath = FilenameUtils.concat(task.getDirPath(), "purf.txt");
+
 
         File stateFile = new File(getTaskStatePath());
         if (stateFile.exists()) {
@@ -56,6 +73,9 @@ public class FVC2006Task extends TaskEntity {
     private String genuineResultPath;
     private String imposterResultPath;
     private long startTime;
+    private String stdoutPath;
+    private String stderrPath;
+    private String purfPath;
 
     public String getLogPathByTypeNumber(String type, String num) {
         String path = FilenameUtils.concat(badResultDir, type);
