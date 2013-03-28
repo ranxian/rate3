@@ -44,7 +44,7 @@ public class BenchmarkEntity {
 
     private String protocol;
 
-    @Column(name = "protocol", nullable = false, insertable = true, updatable = false, length = 8, precision = 0)
+    @Column(name = "protocol", nullable = true, insertable = true, updatable = false, length = 8, precision = 0)
     @Basic
     public String getProtocol() {
         return protocol;

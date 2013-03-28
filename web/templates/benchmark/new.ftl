@@ -30,7 +30,7 @@
             <div class="controls">
                 <@s.select
                 name="benchmark.generator"
-                list="{'SmallFVC2006Generator'}"
+                list="{'General-SMALL'}"
                 headerKey="0"
                 headerValue="Choose a algorithm type"
             ></@s.select>

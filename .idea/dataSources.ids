@@ -14,6 +14,7 @@
         <url>jar://$PROJECT_DIR$/lib/mysql-connector-java-5.1.22.jar!/</url>
       </library>
     </libraries>
+    <schema name="" catalog="rate3" />
     <table name="algorithm" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="name" sqlType="VARCHAR" length="255" precision="0" nullable="false" jdbcType="12" />
@@ -34,7 +35,7 @@
     <table name="benchmark" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="view_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
-      <column name="protocol" sqlType="ENUM" length="8" precision="0" nullable="false" jdbcType="1" />
+      <column name="protocol" sqlType="ENUM" length="8" precision="0" nullable="true" jdbcType="1" />
       <column name="name" sqlType="VARCHAR" length="255" precision="0" nullable="false" jdbcType="12" />
       <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
       <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="true" jdbcType="-1" />
@@ -83,7 +84,6 @@
       <column name="benchmark_uuid" sqlType="BINARY" length="16" precision="0" nullable="true" jdbcType="-2" />
       <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="true" jdbcType="93" />
       <column name="finished" sqlType="TIMESTAMP" length="19" precision="0" nullable="true" jdbcType="93" />
-      <column name="user_uuid" sqlType="BINARY" length="16" precision="0" nullable="true" jdbcType="-2" />
       <primary-key name="PRIMARY" columns="uuid" />
     </table>
     <table name="user" schema="" catalog="rate3" type="TABLE">
@@ -101,11 +101,6 @@
       <column name="user_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="algorithm_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <primary-key name="PRIMARY" columns="user_uuid,algorithm_uuid" />
-    </table>
-    <table name="user_task" schema="" catalog="rate3" type="TABLE">
-      <column name="user_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
-      <column name="task_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
-      <primary-key name="PRIMARY" columns="task_uuid,user_uuid" />
     </table>
     <table name="view" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
