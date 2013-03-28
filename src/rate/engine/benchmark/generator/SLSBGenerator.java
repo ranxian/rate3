@@ -18,16 +18,13 @@ import java.util.*;
  * Date: 13-3-26
  * Time: 下午4:35
  */
-public class SLSBGenerator extends GeneralFVC2006Generator {
+public class SLSBGenerator extends GeneralGenrator {
     private int B4Frr;
     private int B4Far;
 
     public BenchmarkEntity generate() throws Exception {
         prepare();
-
-        generateInnerClazz();
+        return benchmark;
     }
-
-
 }
 

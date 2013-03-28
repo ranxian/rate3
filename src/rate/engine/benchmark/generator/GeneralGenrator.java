@@ -8,10 +8,10 @@ import org.hibernate.Session;
 import rate.model.BenchmarkEntity;
 import rate.model.ClazzEntity;
 import rate.model.SampleEntity;
+import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,18 +19,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User:    Yu Yuankai
- * Email:   yykpku@gmail.com
- * Date:    12-12-9
- * Time:    下午9:04
+ * Created with IntelliJ IDEA.
+ * User: Xian Ran
+ * Date: 13-3-28
+ * Time: 下午12:06
+ * To change this template use File | Settings | File Templates.
  */
-public class GeneralFVC2006Generator extends AbstractGenerator {
-    private static final Logger logger = Logger.getLogger(GeneralFVC2006Generator.class);
-
-    public GeneralFVC2006Generator() {
-        this.setProtocol("FVC2006");
-        this.setGeneratorName(GeneralFVC2006Generator.class.getSimpleName());
-    }
+public class GeneralGenrator extends AbstractGenerator {
+    private static final Logger logger = Logger.getLogger(GeneralImposterGenerator.class);
 
     public int getClassCount() {
         return classCount;
@@ -51,7 +47,6 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
     }
 
     private int sampleCount = 0;
-    private BenchmarkEntity benchmarkEntity;
     private int totalGenuineCount = 0;
     private int totalImposterCount = 0;
     List<ClazzEntity> selectedClasses = new ArrayList<ClazzEntity>();
@@ -101,65 +96,48 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
     }
 
     public BenchmarkEntity generate() throws Exception {
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
         // 检查参数，建立文件夹，按照 sampleCount 和 classCount 生成备选样本空间
         prepare();
         // 生成类内匹配
-
-
-        PrintWriter writer = new PrintWriter(benchmarkEntity.filePath());
+        PrintWriter writer = new PrintWriter(benchmark.filePath());
         generateInnerClazz(writer, selectedMap);
         // 生成类间匹配
         generateInterClazz(writer, selectedMap);
         writer.close();
 
-        benchmarkEntity.setDescription(String.format("Num of classes: %d, num of samples in each class: %d, num of genuine attempts %d, num of imposter attempts",
+        benchmark.setDescription(String.format("Num of classes: %d, num of samples in each class: %d, num of genuine attempts %d, num of imposter attempts",
                 this.classCount, this.sampleCount, totalGenuineCount, totalImposterCount));
 
-        session.update(benchmarkEntity);
-
-        session.getTransaction().commit();
-
-        return benchmarkEntity;
+        return benchmark;
     }
 
-    public void prepare() throws Exception{
-        if (classCount==0 || sampleCount==0 || getView()==null || getGeneratorName()==null || getBenchmarkName()==null) {
+    public void prepare() throws Exception {
+        prepareBenchMark();
+        prepareSelectedClazz();
+    }
+
+    public void prepareBenchMark() throws Exception{
+        if (classCount==0 || sampleCount==0 || view ==null) {
             throw new GeneratorException("No classCount or sampleCount or view or generator name specified");
         }
 
         logger.trace(String.format("Class count [%d], sample count [%d]", this.classCount, this.sampleCount));
+        logger.trace(String.format("Benchmark [%s], view [%s], benchmark name [%s]", benchmark.getUuid(), this.view.getUuid(), benchmark.getName()));
 
-        BenchmarkEntity benchmarkEntity = null;
-
-        benchmarkEntity = new BenchmarkEntity();
-        benchmarkEntity.setView(this.getView());
-        benchmarkEntity.setGenerator(this.getGeneratorName());
-        benchmarkEntity.setName(getBenchmarkName());
-        benchmarkEntity.setProtocol("FVC2006");
-
-        session.save(benchmarkEntity);
-        logger.trace(String.format("Benchmark [%s], view [%s], benchmark name [%s]", benchmarkEntity.getUuid(), getView().getUuid(), benchmarkEntity.getName()));
-
-        // create the directory
-        // TODO: This step should be put in BenchmarkEntity
-        File dir = new File(benchmarkEntity.dirPath());
-
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        File benchmarkFile = new File(benchmarkEntity.filePath());
+        // create the benchmark file
+        File benchmarkDir = new File(benchmark.dirPath());
+        benchmarkDir.mkdir();
+        File benchmarkFile = new File(benchmark.filePath());
         benchmarkFile.createNewFile();
+    }
 
+    public void prepareSelectedClazz() throws Exception{
         Query query = session.createQuery("select distinct clazz from ViewSampleEntity where view=:view order by RAND()");
-        query.setParameter("view", this.getView());
+        query.setParameter("view", this.view);
 
         Iterator<ClazzEntity> clazzIterator = query.iterate();
 
         int countIgnored = 0;
-
-
         while (clazzIterator.hasNext() && selectedClasses.size()<this.classCount) {
             ClazzEntity clazz = clazzIterator.next();
             int sampleCountOfClazz = ((Long)session.createQuery("select count(*) from ViewSampleEntity as V where V.clazz=:clazz")
@@ -179,9 +157,21 @@ public class GeneralFVC2006Generator extends AbstractGenerator {
             Pair<ClazzEntity, List<SampleEntity>> newPair = new ImmutablePair<ClazzEntity, List<SampleEntity>>(clazz, selectedSamples);
             selectedMap.add(newPair);
         }
-
         if (selectedClasses.size() < this.classCount) {
             throw new GeneratorException("Not enough classes");
+        }
+    }
+
+    public void setScale(String scale) {
+        setClassCount(5);
+        if (scale.equals("SMALL")) {
+            setClassCount(10);
+        } else if (scale.equals("MEDIUM")) {
+            setClassCount(50);
+        } else if (scale.equals("LARGE")) {
+            setClassCount(100);
+        } else if (scale.equals("VERY_LARGE")) {
+            setClassCount(1000);
         }
     }
 }

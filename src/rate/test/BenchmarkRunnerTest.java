@@ -3,6 +3,7 @@ package rate.test;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import rate.engine.benchmark.generator.GeneralGenrator;
 import rate.engine.benchmark.runner.RunnerInvoker;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;

@@ -33,8 +33,7 @@ public class CreateAction extends BenchmarkActionBase {
     public String execute() throws Exception {
         String generatorStr = benchmark.getGenerator();
         AbstractGenerator generator = (AbstractGenerator) (Class.forName("rate.engine.benchmark.generator." + generatorStr).newInstance());
-        generator.setBenchmarkName(benchmark.getName());
-        generator.setView(view);
+
         benchmark = generator.generate();
         return SUCCESS;
     }

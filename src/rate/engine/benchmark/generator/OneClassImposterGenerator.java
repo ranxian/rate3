@@ -10,6 +10,7 @@ import rate.model.BenchmarkEntity;
 import rate.model.ClazzEntity;
 import rate.model.SampleEntity;
 import rate.model.ViewEntity;
+import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
 import java.io.File;
@@ -45,18 +46,14 @@ public class OneClassImposterGenerator extends GeneralImposterGenerator {
 
     private int impostedClassCountLimit=0;
 
-
-    public BenchmarkEntity generate() throws Exception {
-
-        this.setBenchmarkName(String.format("Imposter-[%s]", this.imposterClazz.getUuidShort()));
-        logger.trace(String.format("Imposter class [%s]", this.imposterClazz.getUuid()));
-
+    public void setClazzAndSample() {
         // imposter
+
         List<Pair<ClazzEntity, List<SampleEntity>>> imposterClassAndSamples = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
         List<SampleEntity> imposterSamples = new ArrayList<SampleEntity>(
                 session.createQuery("from SampleEntity where clazz=:clazz order by rand()")
-                .setParameter("clazz", this.imposterClazz)
-                .setMaxResults(2).list()
+                        .setParameter("clazz", this.imposterClazz)
+                        .setMaxResults(2).list()
         );
         imposterClassAndSamples.add(new ImmutablePair<ClazzEntity, List<SampleEntity>>(imposterClazz, imposterSamples));
         this.setImposterClassAndSamples(imposterClassAndSamples);
@@ -76,9 +73,18 @@ public class OneClassImposterGenerator extends GeneralImposterGenerator {
                             .setMaxResults(2).list()
             );
             impostedClassAndSamples.add(new ImmutablePair<ClazzEntity, List<SampleEntity>>(impostedClazz, impostedSamples));
+
             logger.trace(String.format("New imposted class [%s] [%d]", impostedClazz.getUuid(), impostedClassAndSamples.size()));
         }
+
         this.setImpostedClassAndSamples(impostedClassAndSamples);
+    }
+
+    public BenchmarkEntity generate() throws Exception {
+        benchmark.setName(String.format("Imposter-[%s]", this.imposterClazz.getUuidShort()));
+        logger.trace(String.format("Imposter class [%s]", this.imposterClazz.getUuid()));
+
+        setClazzAndSample();
 
         return super.generate();
     }

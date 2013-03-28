@@ -42,16 +42,15 @@ public class FVC2006Runner
     private String tempOutputFilePath;
     private String templateFilePath;
     private String imageFilePath;
-    private String memLimit;
-    private String timeLimit;
+    // Default 50m mem limit
+    private String memLimit = "52428800";
+    private String timeLimit = "3000";
 
     public String getMemLimit() {
-        if (memLimit == null) return "52428800";
         return memLimit;
     }
 
     public String getTimeLimit() {
-        if (timeLimit == null) return "3000";
         return timeLimit;
     }
 

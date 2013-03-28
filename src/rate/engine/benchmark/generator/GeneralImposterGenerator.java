@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import rate.model.BenchmarkEntity;
 import rate.model.ClazzEntity;
 import rate.model.SampleEntity;
+import rate.util.DebugUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,11 +23,6 @@ import java.util.Map;
 public class GeneralImposterGenerator extends AbstractGenerator {
     private static final Logger logger = Logger.getLogger(GeneralImposterGenerator.class);
 
-    public GeneralImposterGenerator() {
-        this.setProtocol("FVC2006");
-        this.setGeneratorName("GeneralImposterGenerator");
-    }
-
     public void setImposterClassAndSamples(List<Pair<ClazzEntity, List<SampleEntity>>> imposterClassAndSamples) {
         this.imposterClassAndSamples = imposterClassAndSamples;
     }
@@ -39,21 +35,22 @@ public class GeneralImposterGenerator extends AbstractGenerator {
 
     protected List<Pair<ClazzEntity, List<SampleEntity>>> impostedClassAndSamples=null;
 
-    public BenchmarkEntity generate() throws Exception {
-        if ( imposterClassAndSamples==null || impostedClassAndSamples==null
-                || getView()==null || getGeneratorName()==null || getBenchmarkName()==null) {
-            throw new GeneratorException("Parameters not specified");
-        }
-
-        session.beginTransaction();
-
-        BenchmarkEntity benchmark = this.prepareBenchmark();
-
+    public void prepare() throws Exception {
+        prepareBenchmarkDir();
         File benchmarkFile = new File(benchmark.filePath());
         benchmarkFile.createNewFile();
-        PrintWriter pw = new PrintWriter(new FileOutputStream(benchmarkFile));
+    }
 
-        logger.trace(String.format("Begin generation for benchmark [%s]", benchmark.getUuid()));
+    public BenchmarkEntity generate() throws Exception {
+        if ( imposterClassAndSamples==null || impostedClassAndSamples==null
+                || view==null) {
+            throw new GeneratorException("Parameters not specified");
+        }
+        DebugUtil.debug("here");
+        prepare();
+        PrintWriter pw = new PrintWriter(new FileOutputStream(benchmark.filePath()));
+
+        DebugUtil.debug(String.format("Begin generation for benchmark [%s]", benchmark.getUuid()));
 
         // imposter and imposted
         Iterator imposterClassAndSamplesIterator = imposterClassAndSamples.iterator();
@@ -92,10 +89,6 @@ public class GeneralImposterGenerator extends AbstractGenerator {
 
         benchmark.setDescription(String.format("Num of imposter classes: %d, num of imposted classes: %d, total matches: %d",
                 imposterClassAndSamples.size(), impostedClassAndSamples.size(), countOfMatches));
-
-        session.getTransaction().commit();
-
-        logger.trace(String.format("Finished generation for benchmark [%s]", benchmark.getUuid()));
 
         return benchmark;
     }
