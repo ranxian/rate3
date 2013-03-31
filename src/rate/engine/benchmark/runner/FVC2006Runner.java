@@ -1,5 +1,6 @@
 package rate.engine.benchmark.runner;
 
+import com.sun.org.apache.xml.internal.resolver.helpers.FileURL;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
@@ -40,10 +41,9 @@ public class FVC2006Runner
     private FVC2006Task fvc2006Task;
 
     private String tempOutputFilePath;
-    private String templateFilePath;
-    private String imageFilePath;
     // Default 50m mem limit
     private String memLimit = "52428800";
+    // Default 3secs time limit
     private String timeLimit = "3000";
 
     public String getMemLimit() {
@@ -65,7 +65,6 @@ public class FVC2006Runner
         super.setTask(task);
         fvc2006Task = new FVC2006Task(task);
         tempOutputFilePath = FilenameUtils.concat(task.getTempDirPath(), "output.txt");
-        templateFilePath = FilenameUtils.concat(task.getTempDirPath(), "template");
     }
 
     public void run() throws Exception {
@@ -97,7 +96,7 @@ public class FVC2006Runner
     private void runCommands() throws Exception {
         // TODO: Read the whole txt into memory may lead to OutOfMemoryException.
         List<String> lines = FileUtils.readLines(new File(benchmark.filePath()));
-        totalTurn = lines.size()/2;
+        totalTurn = lines.size()/3;
         int nRefreshTurn = totalTurn / refreshFreq    ;
 
         File resultFile = new File(fvc2006Task.getResultFilePath());
@@ -109,9 +108,9 @@ public class FVC2006Runner
         boolean enrollFailed = false;
         startTime = System.currentTimeMillis();
 
-        for (int i=0; i<lines.size(); i+=2) {
-            passedTurn = (i+2)/2;
-            if (passedTurn % nRefreshTurn == 0) {
+        for (int i=0; i<lines.size(); i+=3) {
+            passedTurn = (i+3)/3;
+            if (passedTurn % refreshFreq == 0) {
                 analyzeAll();
                 updateTaskState(passedTurn, totalTurn, date.toString());
             } else {
@@ -119,34 +118,26 @@ public class FVC2006Runner
             }
             String line1 = StringUtils.strip(lines.get(i));
             String line2 = StringUtils.strip(lines.get(i + 1));
-
+            String line3 = StringUtils.strip(lines.get(i + 2));
+            String outputLine;
             logger.trace(line1);
 
-            if (line1.startsWith("E")) {
-                // try to delete the template file generated last time
-                if (new File(templateFilePath).exists()) {
-                    new File(templateFilePath).delete();
-                }
-            }
-            else if (line1.startsWith("M")) {
-                if (!(new File(templateFilePath).exists()) || enrollFailed) {
-                    //resultPw.println(String.format("%s -1", line1));
-                    continue;
-                }
-            }
+            String s1uuid = line1.split(" ")[0];
+            String enrollImgPath = FilenameUtils.concat(RateConfig.getSampleRootDir(), line2);
+            String matchImgPath = FilenameUtils.concat(RateConfig.getSampleRootDir(), line3);
+            String templateFilePath = FilenameUtils.concat(task.getTempDirPath(), "template-"+s1uuid);
 
-            String cmd = this.genCmdFromLines(line1, line2);
-            // logger.trace("Run command ["+cmd+"]");
+            String enrollCmd = this.genCmdFromLines(enrollImgPath, templateFilePath, 0);
+            String matchCmd  = this.genCmdFromLines(matchImgPath, templateFilePath, 1);
 
-            Process process = Runtime.getRuntime().exec(String.format("%s", cmd));
-            process.waitFor();
-
-            String outputLine = StringUtils.strip(RateConfig.getLastLine(tempOutputFilePath));
-//            logger.trace(outputLine);
-            if (line1.startsWith("E")) {
+            if (!(new File(templateFilePath).exists())) {
+                // Enroll
+                Process process = Runtime.getRuntime().exec(enrollCmd);
+                process.waitFor();
+                outputLine = StringUtils.strip(RateConfig.getLastLine(tempOutputFilePath));
                 try {
                     String rs[] = StringUtils.split(outputLine, " ");
-                    if (rs[0].equals(imageFilePath)
+                    if (rs[0].equals(enrollImgPath)
                             && rs[1].equals(templateFilePath)
                             && rs[2].equals("OK")
                             ) {
@@ -162,22 +153,25 @@ public class FVC2006Runner
                     enrollFailed = true;
                 }
             }
-            else if (line1.startsWith("M")) {
-                try {
-                    String rs[] = StringUtils.split(outputLine, " ");
-                    if (rs[0].equals(imageFilePath)
-                            && rs[1].equals(templateFilePath)
-                            && rs[2].equals("OK")
-                            ) {
-                        double matchScore = Double.parseDouble(rs[3]);
-                        resultPw.println(String.format("%s 0 %s", line1, String.valueOf(matchScore)));
-                        resultPw.flush();
-                    }
+
+            // Match
+            Process process2 = Runtime.getRuntime().exec(matchCmd);
+            process2.waitFor();
+            outputLine = StringUtils.strip(RateConfig.getLastLine(tempOutputFilePath));
+            try {
+                String rs[] = StringUtils.split(outputLine, " ");
+                if (rs[0].equals(matchImgPath)
+                        && rs[1].equals(templateFilePath)
+                        && rs[2].equals("OK")
+                        ) {
+                    double matchScore = Double.parseDouble(rs[3]);
+                    resultPw.println(String.format("%s 0 %s", line1, String.valueOf(matchScore)));
+                    resultPw.flush();
                 }
-                catch (Exception ex) {
-                    logger.error("", ex);
-                    resultPw.println(String.format("%s -1", line1));
-                }
+            }
+            catch (Exception ex) {
+                logger.error("", ex);
+                resultPw.println(String.format("%s -1", line1));
             }
         }
     }
@@ -235,12 +229,13 @@ public class FVC2006Runner
         logger.debug(imposterResultPath.getName());
     }
 
-    private String genCmdFromLines(String line1, String line2) {
+    private String genCmdFromLines(String imgFilePath, String templateFilePath, int type) {
+        // type, 0 for enroll, 1 for match
         String exe = "";
-        if (line1.startsWith("E")) {
+        if (type == 0) {
             exe = fvc2006Task.getEnrollExeFilePath();
         }
-        else if (line1.startsWith("M")) {
+        else if (type == 1) {
             exe = fvc2006Task.getMatchExeFilePath();
         }
         else {
@@ -258,8 +253,7 @@ public class FVC2006Runner
         list.add(fvc2006Task.getStderrPath());
         list.add(fvc2006Task.getPurfPath());
         list.add(exe);
-        imageFilePath = FilenameUtils.concat(RateConfig.getSampleRootDir(), StringUtils.strip(line2));
-        list.add(imageFilePath);
+        list.add(imgFilePath);
         list.add(templateFilePath);
         list.add("0");
         list.add(tempOutputFilePath);
@@ -339,13 +333,13 @@ public class FVC2006Runner
 //            logger.trace(String.format("splitting: [%s]", line));
 
             String rs[] = line.split(" ");
-            if (rs[0].equals("E")) continue;
-            else if (! rs[0].equals("M")) throw new Exception("Unknown operator type in result.txt");
-            // rs[0] is "M", rs[5] is 0 on success match and -1 on failed match
-            String class1Uuid = rs[1], sample1Uuid = rs[2], class2Uuid = rs[3], sample2Uuid = rs[4];
-            double matchScore = Double.parseDouble(rs[6]);
-            String newLine = String.format("%s %s %s %s %f", class1Uuid, sample1Uuid, class2Uuid, sample2Uuid, matchScore);
-            if (class1Uuid.equals(class2Uuid)) {
+            if (rs.length == 4) continue;
+            if ((!rs[2].equals("G")) && (!rs[2].equals("I"))) throw new Exception("Genuine or Imposter not known in result.txt");
+
+            String sample1Uuid = rs[0], sample2Uuid = rs[1], type = rs[2];
+            double matchScore = Double.parseDouble(rs[4]);
+            String newLine = String.format("%s %s %f", sample1Uuid, sample2Uuid, matchScore);
+            if (type.equals("G")) {
                 genuineList.add(newLine);
             }
             else {
@@ -374,10 +368,9 @@ public class FVC2006Runner
         genuinePw.close();
         imposterPw.close();
 
-        // 各个事件之间有点开始纠缠了，重构的时候注意，比如下面产生 bad result 的活动应该从统计结果中抽出来
+        // 各个事件之间开始有点纠缠了，重构的时候注意，比如下面产生 bad result 的活动应该从统计结果中抽出来
         if (passedTurn == totalTurn) {
             calcBadResult(genuineList, imposterList);
-            logger.debug("GenuineList length: " + genuineList.size());
         }
     }
 
@@ -746,7 +739,7 @@ public class FVC2006Runner
         for (i = 0; i < 10 && i < genuineList.size(); i++) {
             String line = genuineList.get(i);
             String info[] = line.split(" ");
-            String s1 = info[1], s2 = info[3];
+            String s1 = info[0], s2 = info[1];
 
             PrintWriter fileWriter = new PrintWriter(fvc2006Task.getLogPathByTypeNumber("genuine", String.valueOf(i + 1)));
             fileWriter.println(line);
@@ -758,7 +751,7 @@ public class FVC2006Runner
         for (i = imposterList.size() - 1; i >= 0 && i >= imposterList.size() - 10; i--) {
             String line = imposterList.get(i);
             String info[] = line.split(" ");
-            String  s1 = info[1], s2 = info[3];
+            String  s1 = info[0], s2 = info[1];
 
             PrintWriter fileWriter = new PrintWriter(fvc2006Task.getLogPathByTypeNumber("imposter", String.valueOf(imposterList.size() - i)));
             fileWriter.println(line);

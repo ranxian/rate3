@@ -57,17 +57,15 @@ public class GeneralGenrator extends AbstractGenerator {
         // inner class
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
-            ClazzEntity clazzEntity = (ClazzEntity)entry.getKey();
             List<SampleEntity> samples = (List<SampleEntity>)entry.getValue();
             for (int i=0; i<samples.size()-1; i++) {
                 // Enroll
                 SampleEntity sample1 = samples.get(i);
-                writer.println(String.format("E %s %s", clazzEntity.getUuid(), sample1.getUuid()));
-                writer.println(sample1.getFile());
                 // Match with remaining
                 for (int j=i+1; j<samples.size(); j++) {
                     SampleEntity sample2 = samples.get(j);
-                    writer.println(String.format("M %s %s %s %s", clazzEntity.getUuid(), sample1.getUuid(), clazzEntity.getUuid(), sample2.getUuid()));
+                    writer.println(String.format("%s %s G", sample1.getUuid(), sample2.getUuid()));
+                    writer.println(sample1.getFile());
                     writer.println(sample2.getFile());
                     totalGenuineCount++;
                 }
@@ -78,17 +76,13 @@ public class GeneralGenrator extends AbstractGenerator {
     public void generateInterClazz(PrintWriter writer, List<Pair<ClazzEntity, List<SampleEntity>>> selected) throws Exception {
         for (int i=0; i<selected.size()-1; i++) {
             Pair<ClazzEntity, List<SampleEntity>> pair1 = selected.get(i);
-            ClazzEntity class1 = pair1.getKey();
             SampleEntity sample1 = pair1.getValue().get(0);
-            // Enroll
-            writer.println(String.format("E %s %s", class1.getUuid(), sample1.getUuid()));
-            writer.println(sample1.getFile());
             // Match with remaining
             for (int j=i+1; j<selected.size(); j++) {
                 Pair<ClazzEntity, List<SampleEntity>> pair2 = selected.get(j);
-                ClazzEntity class2 = pair2.getKey();
                 SampleEntity sample2 = pair2.getValue().get(0);
-                writer.println(String.format("M %s %s %s %s", class1.getUuid(), sample1.getUuid(), class2.getUuid(), sample2.getUuid()));
+                writer.println(String.format("%s %s G", sample1.getUuid(), sample2.getUuid()));
+                writer.println(sample1.getFile());
                 writer.println(sample2.getFile());
                 totalImposterCount++;
             }
