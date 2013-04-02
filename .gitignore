@@ -9,6 +9,7 @@ workspace.xml
 .idea/compiler.xml
 src/rate.properties
 src/hibernate.cfg.xml
+Executor.java
 
 [Dd]ebug*/
 [Rr]elease*/
