@@ -218,6 +218,11 @@
                 <param name="uuid">${benchmark.uuid}</param>
             </result>
         </action>
+        <action name="delete" class="rate.controller.benchmark.DeleteAction" method="execute">
+            <result name="success" type="redirectAction">
+                <param name="actionName">index</param>
+            </result>
+        </action>
         <action name="new" class="rate.controller.benchmark.NewAction" method="execute">
             <result name="success" type="freemarker">/templates/benchmark/new.ftl</result>
         </action>
