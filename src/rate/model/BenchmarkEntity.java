@@ -172,4 +172,10 @@ public class BenchmarkEntity {
     }
     private void setNumOfTasks(int nonsense) {}
 
+    @Transient
+    public String getType() {
+        return this.getView().getType();
+    }
+    private void setType(String nonsense) {};
+
 }
