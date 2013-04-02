@@ -8,6 +8,7 @@ import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
+import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
 import java.util.Collection;
@@ -45,12 +46,12 @@ public class ByBenchmarkAction extends RateActionBase {
     }
 
     public String execute() throws Exception {
-        algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.protocol=:protocol order by created desc")
-                .setParameter("protocol", benchmark.getProtocol())
+        algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.type=:type order by created desc")
+                .setParameter("type", benchmark.getView().getType())
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
-        setNumOfItems((Long)session.createQuery("select count(*) from AlgorithmVersionEntity where algorithm.protocol=:protocol")
-                .setParameter("protocol", benchmark.getProtocol())
+        setNumOfItems((Long) session.createQuery("select count(*) from AlgorithmVersionEntity where algorithm.type=:type")
+                .setParameter("type", benchmark.getView().getType())
                 .list().get(0));
         return SUCCESS;
     }

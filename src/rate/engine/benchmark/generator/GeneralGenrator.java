@@ -161,7 +161,7 @@ public class GeneralGenrator extends AbstractGenerator {
     }
 
     public void setScale(String scale) {
-        setClassCount(5);
+        setSampleCount(5);
         if (scale.equals("SMALL")) {
             setClassCount(10);
         } else if (scale.equals("MEDIUM")) {

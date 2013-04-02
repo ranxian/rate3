@@ -15,8 +15,8 @@ import java.util.Collections;
 public class ShowAction extends BenchmarkActionBase {
 
     public Collection<AlgorithmVersionEntity> getAlgorithmVersions() {
-        Collection<AlgorithmVersionEntity> algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.protocol=:protocol order by created desc")
-                .setParameter("protocol", benchmark.getProtocol())
+        Collection<AlgorithmVersionEntity> algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.type=:type order by created desc")
+                .setParameter("type", benchmark.getView().getType())
                 .setMaxResults(itemPerPage)
                 .list();
 

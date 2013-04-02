@@ -7,7 +7,6 @@
     <tr>
         <th>Name</th>
         <th>View</th>
-        <th>Protocol</th>
         <th>Description</th>
         <th>Created</th>
         <#--<th>Generator</th>-->
@@ -20,7 +19,6 @@
     <tr>
         <td><a href="/benchmark/show?uuid=${uuid}">${name}</td>
         <td><a href="/view/show?uuid=${view.uuid}">${view.name}</a></td>
-        <td>${protocol}</td>
         <td>${description!"no description"}</td>
         <td>${created}</td>
         <#--<td>${generator}</td>-->

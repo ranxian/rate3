@@ -6,7 +6,6 @@
 
 <div class="ratehr"></div>
 
-<p>Protocol: <b>${benchmark.protocol}</b></p>
 <p>Created: <b>${benchmark.created}</b></p>
 <p>Generator: <b>${benchmark.generator}</b></p>
 <p>Description: <b>${benchmark.description!"No description"}</b></p>

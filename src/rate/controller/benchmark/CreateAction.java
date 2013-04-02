@@ -5,6 +5,7 @@ import rate.engine.benchmark.generator.GeneralGenrator;
 import rate.engine.view.GenerateStrategy.AbstractGenerateStrategy;
 import rate.model.BenchmarkEntity;
 import rate.model.ViewEntity;
+import rate.util.DebugUtil;
 
 /**
  * Created by XianRan
@@ -29,17 +30,26 @@ public class CreateAction extends BenchmarkActionBase {
         this.viewUuid = viewUuid;
         view = (ViewEntity)session.createQuery("from ViewEntity where uuid=:uuid").setParameter("uuid", viewUuid)
         .list().get(0);
+        benchmark.setView(view);
     }
 
     public String execute() throws Exception {
+        session.beginTransaction();
+        session.save(benchmark);
+
         String generatorStr = benchmark.getGenerator();
-        if (generatorStr.startsWith("General-")) {
+        if (generatorStr.matches("(SMALL)|(MEDIUM)|((VERY_)?LARGE)")) {
             GeneralGenrator generator = new GeneralGenrator();
             generator.setBenchmark(benchmark);
             // This should depend on user's option
-            generator.setScale("SMALL");
+            generator.setScale(generatorStr);
             benchmark = generator.generate();
+        } else {
+            return "NOT_IMP";
         }
+
+        session.update(benchmark);
+        session.getTransaction().commit();
         return SUCCESS;
     }
 }
