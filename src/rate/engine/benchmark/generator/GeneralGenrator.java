@@ -64,6 +64,10 @@ public class GeneralGenrator extends AbstractGenerator {
                 // Match with remaining
                 for (int j=i+1; j<samples.size(); j++) {
                     SampleEntity sample2 = samples.get(j);
+                    if (sample1.getUuid().equals(sample2.getUuid())) {
+                        logger.trace("Match uuid should not be the same one");
+                        continue;
+                    }
                     writer.println(String.format("%s %s G", sample1.getUuid(), sample2.getUuid()));
                     writer.println(sample1.getFile());
                     writer.println(sample2.getFile());
@@ -81,7 +85,7 @@ public class GeneralGenrator extends AbstractGenerator {
             for (int j=i+1; j<selected.size(); j++) {
                 Pair<ClazzEntity, List<SampleEntity>> pair2 = selected.get(j);
                 SampleEntity sample2 = pair2.getValue().get(0);
-                writer.println(String.format("%s %s G", sample1.getUuid(), sample2.getUuid()));
+                writer.println(String.format("%s %s I", sample1.getUuid(), sample2.getUuid()));
                 writer.println(sample1.getFile());
                 writer.println(sample2.getFile());
                 totalImposterCount++;

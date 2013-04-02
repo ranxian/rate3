@@ -31,11 +31,11 @@ public class BenchmarkGeneratorTest {
         ViewEntity view = (ViewEntity)query.list().get(0);
         BenchmarkEntity benchmark = new BenchmarkEntity();
         benchmark.setView(view);
-        benchmark.setName("Sample benchmark");
+        benchmark.setName("LARGE");
         benchmark.setProtocol("FVC2006");
         // general
         GeneralGenrator generator = new GeneralGenrator();
-        generator.setClassCount(20);
+        generator.setClassCount(1000);
         generator.setSampleCount(5);
         benchmark.setGenerator("SMALL");
 
@@ -50,10 +50,10 @@ public class BenchmarkGeneratorTest {
         generator.generate();
         DebugUtil.debug("finished generate");
 
-        FileUtils.deleteDirectory(new File(benchmark.dirPath()));
-        session.beginTransaction();
-        session.delete(benchmark);
-        session.getTransaction().commit();
+//        FileUtils.deleteDirectory(new File(benchmark.dirPath()));
+//        session.beginTransaction();
+//        session.delete(benchmark);
+//        session.getTransaction().commit();
 
 
 //        GeneralFVC2006Generator generator = new SmallFVC2006Generator();
