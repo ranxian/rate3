@@ -13,10 +13,14 @@ import rate.engine.view.Generator;
  */
 public class ViewGeneratorTest {
     public static void main(String[] args) throws Exception {
-        AbstractGenerateStrategy strategy = new GenerateAllStrategy();
+        GenerateByImportTagStrategy strategy = new GenerateByImportTagStrategy();
+        strategy.setImportTag("newbioverify");
+        strategy.setDescription("yyk generated newbioveiry; not from webpage coz it said lock wait time out");
+        strategy.setViewName("newbioverify-2013-04-01");
+
         Generator generator = new Generator();
         generator.setGenerateStrategy(strategy);
-        //strategy.getViewName();
+
         generator.generate();
     }
 }

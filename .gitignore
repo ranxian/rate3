@@ -8,6 +8,7 @@ out/
 workspace.xml
 .idea/compiler.xml
 src/rate.properties
+src/log4j.properties
 src/hibernate.cfg.xml
 Executor.java
 

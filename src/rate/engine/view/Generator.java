@@ -64,6 +64,10 @@ public class Generator {
             session.save(toBeInsert);
         }
 
+        // update view set numOfClasses = (select count(distinct(class_uuid)) from view_sample where view_sample.view_uuid = view.uuid);
+        // update view set numOfSamples = (select count(distinct(sample_uuid)) from view_sample where view_sample.view_uuid = view.uuid);
+
+        logger.trace("now commit");
         session.getTransaction().commit();
         return view;
     }
