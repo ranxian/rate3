@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><component name="dataSourceStorage">
-  <data-source source="LOCAL" name="Data Source" product="MySQL" version="5.5.28" jdbc-version="4.0" driver-name="MySQL-AB JDBC Driver" driver-version="mysql-connector-java-5.1.22 ( Revision: ${bzr.revision-id} )" uuid="ab1babc8-a6e4-4bb5-90c6-ef2b9d39b3a3">
+  <data-source source="LOCAL" name="Data Source" product="MySQL" version="5.5.29-0ubuntu0.12.10.1-log" jdbc-version="4.0" driver-name="MySQL-AB JDBC Driver" driver-version="mysql-connector-java-5.1.22 ( Revision: ${bzr.revision-id} )" uuid="ab1babc8-a6e4-4bb5-90c6-ef2b9d39b3a3" case-sensitive="true">
     <extra-name-characters>#@</extra-name-characters>
     <identifier-quote-string>`</identifier-quote-string>
     <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-    <jdbc-url>jdbc:mysql://162.105.30.189:3306/rate3</jdbc-url>
+    <jdbc-url>jdbc:mysql://162.105.30.204:3306/rate3</jdbc-url>
     <user-name>root</user-name>
     <user-password>dfdedfcfdfd9dfdedfc3dfc4dfcd</user-password>
     <schema-pattern>rate3.*</schema-pattern>
@@ -14,7 +14,6 @@
         <url>jar://$PROJECT_DIR$/lib/mysql-connector-java-5.1.22.jar!/</url>
       </library>
     </libraries>
-    <schema name="" catalog="rate3" />
     <table name="algorithm" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="name" sqlType="VARCHAR" length="255" precision="0" nullable="false" jdbcType="12" />
@@ -73,6 +72,7 @@
       <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="true" jdbcType="93" />
       <column name="file" sqlType="VARCHAR" length="256" precision="0" nullable="false" jdbcType="12" remarks="dGhpcyBzaG91bGQgYmUgYSBwYXRoIHdpdGggVU5JWCBzZXBlcmF0b3IgXCcvXCcgdG8gYXZvaWQgc3RyYW5nZSBiZWhhdmlvcnM=" />
       <column name="device_type" sqlType="BINARY" length="16" precision="0" nullable="true" jdbcType="-2" />
+      <column name="device" sqlType="BINARY" length="16" precision="0" nullable="true" jdbcType="-2" />
       <column name="import_tag" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" remarks="V2l0aCBlYWNoIGltcG9ydCwgeW91IG11c3QgcHJvdmlkZSBhIGltcG9ydF90YWcuIEl0IGlzIHVzZWQgZm9yIHJvbGxiYWNrIGZ1bmN0aW9ucy4=" />
       <column name="md5" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <primary-key name="PRIMARY" columns="uuid" />
