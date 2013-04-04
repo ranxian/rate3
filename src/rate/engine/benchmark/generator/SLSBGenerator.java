@@ -78,11 +78,11 @@ public class SLSBGenerator extends GeneralGenrator {
     }
 
     public String getFarBenchmarkFilePath(int b) {
-        return FilenameUtils.concat(frrBenchmarkDir, b + ".txt");
+        return FilenameUtils.concat(farBenchmarkDir, b + ".txt");
     }
 
     public String getFrrBenchmarkFilePath(int b) {
-        return FilenameUtils.concat(farBenchmarkDir, b + ".txt");
+        return FilenameUtils.concat(frrBenchmarkDir, b + ".txt");
     }
 
     public void generateFrrBenchmark(PrintWriter generalPw) throws Exception {
@@ -115,8 +115,59 @@ public class SLSBGenerator extends GeneralGenrator {
         generateInnerClazz(generalPw, generalSelected);
     }
 
-    public void generateFarBenchmark(PrintWriter generalPw) {
+    public void generateFarBenchmark(PrintWriter generalPw) throws Exception {
+        int classCount = selectedMap.size();
+        DebugUtil.debug("classcount = " + classCount);
+        Set<Integer> generalSelectedSet = new HashSet<Integer>();
 
+        for (int i = 1; i <= B4Far; i++) {  // Generate S[1], S[2], ..., S[B4Far]
+            File benchmarkFile = new File(getFarBenchmarkFilePath(i));
+            PrintWriter pw = new PrintWriter(benchmarkFile);
+            List<Pair<ClazzEntity, List<SampleEntity>>> selectedThisTurn = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
+            Set<Integer> set = new HashSet<Integer>();
+
+            // 见论文中对划分子集的描述
+            if (classCount % 2 == 0) {
+                int modN = i % (classCount-1);
+                for (int j = 1; j <= modN/2 + 1; j++) {
+                    int k = modN - j;
+
+                    if (k >= 1) {
+                        set.add(j);
+                        set.add(k);
+                    }
+                }
+                for (int j = 1; i <= modN/2; i++) {
+                    if (2*j == modN) set.add(j);
+                }
+            } else {
+                int modN = (i-1) % classCount;
+
+                for (int j = 1; j <= modN/2 + 1; j++) {
+                    // j + k = (i-1) mod classCount;
+                    int k = modN - j;
+                    if (k >= 1) {
+                        set.add(k);
+                        set.add(j);
+                    }
+                }
+            }
+
+            // S[i] generated
+            for (int j : set) {
+                selectedThisTurn.add(selectedMap.get(j-1));  // (j-1) is right
+                generalSelectedSet.add(j);
+            }
+            generateInterClazz(pw, selectedThisTurn);
+            pw.close();
+        }
+
+        List<Pair<ClazzEntity, List<SampleEntity>>> generalSelected = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
+
+        for (int j : generalSelectedSet) {
+            generalSelected.add(selectedMap.get(j-1));
+        }
+        generateInterClazz(generalPw, generalSelected);
     }
 }
 
