@@ -1,11 +1,11 @@
 package rate.engine.benchmark.runner;
 
-import com.sun.org.apache.xml.internal.resolver.helpers.FileURL;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
+import rate.engine.benchmark.analyzer.FMRAnalyzer;
+import rate.engine.benchmark.analyzer.FNMRAnalyzer;
 import rate.engine.task.FVC2006Task;
 import rate.model.SampleEntity;
 import rate.model.TaskEntity;
@@ -36,23 +36,9 @@ public class FVC2006Runner
     private int passedTurn = 0;
     private long startTime = 0;
 
-    private final Session session = HibernateUtil.getSession();
-
     private FVC2006Task fvc2006Task;
 
     private String tempOutputFilePath;
-    // Default 50m mem limit
-    private String memLimit = "52428800";
-    // Default 3secs time limit
-    private String timeLimit = "3000";
-
-    public String getMemLimit() {
-        return memLimit;
-    }
-
-    public String getTimeLimit() {
-        return timeLimit;
-    }
 
     private double EER_l;
     private double EER_h;
@@ -293,11 +279,14 @@ public class FVC2006Runner
     public void analyzeAll() throws Exception {
         this.splitAndSortResult();
         // logger.trace("Begin: calc FMR");
-        this.calcFMR();
+        FMRAnalyzer fmrAnalyzer = new FMRAnalyzer(fvc2006Task.getImposterResultPath(), fvc2006Task.getFmrFilePath());
+        fmrAnalyzer.analyze();
         // logger.trace("Finished: calc FMR");
         // logger.trace("Begin: calc FNMR");
-        this.calcFNMR();
+        FNMRAnalyzer fnmrAnalyzer = new FNMRAnalyzer(fvc2006Task.getGenuineFilePath(), fvc2006Task.getFnmrFilePath());
+        fnmrAnalyzer.analyze();
         // logger.trace("Finished: calc FNMR");
+
         //logger.trace("Begin: calc error rates");
         this.calcErrorRates();
 //        logger.trace("Finished: calc error rates");
@@ -403,34 +392,6 @@ public class FVC2006Runner
         fmrPw.close();
     }
 
-    private void calcFNMR() throws Exception {
-
-        BufferedReader genuineReader = new BufferedReader(new FileReader(fvc2006Task.getGenuineFilePath()));
-        File fnmrFile = new File(fvc2006Task.getFnmrFilePath());
-        fnmrFile.createNewFile();
-        PrintWriter fmrPw = new PrintWriter(fnmrFile);
-
-        int countOfLines = RateConfig.getCountOfLines(fvc2006Task.getGenuineFilePath());
-        int i=0;
-        double p=-1, matchScore=0;
-        while (true) {
-            String line = genuineReader.readLine();
-            if (line==null) break;
-
-            line = StringUtils.strip(line);
-            String rs[] = line.split(" ");
-            matchScore = Double.parseDouble(rs[rs.length-1]);
-
-            if (matchScore>p) {
-                if (p!=-1)
-                    fmrPw.println(String.format("%f %f", p, (double)i/countOfLines));
-                p = matchScore;
-            }
-            i++;
-        }
-        fmrPw.println(String.format("%f 0", matchScore));
-        fmrPw.close();
-    }
 
     private double getErrorRateOnThreshold(double thresholdIn, String filePath) throws Exception {
 //        logger.trace(String.format("filePath [%s] thresholdIn [%f]", filePath, thresholdIn));

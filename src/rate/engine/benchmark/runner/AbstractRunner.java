@@ -2,9 +2,11 @@ package rate.engine.benchmark.runner;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.hibernate.Session;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
+import rate.util.HibernateUtil;
 import rate.util.RateConfig;
 
 import java.io.File;
@@ -20,6 +22,11 @@ abstract public class AbstractRunner {
     protected BenchmarkEntity benchmark;
     protected TaskEntity task;
     protected AlgorithmVersionEntity algorithmVersion;
+    protected final Session session = HibernateUtil.getSession();
+    // Default 50m mem limit
+    protected String memLimit = "52428800";
+    // Default 3secs time limit
+    protected String timeLimit = "3000";
 
     public void setTask(TaskEntity task) throws Exception {
         this.task = task;
@@ -46,5 +53,13 @@ abstract public class AbstractRunner {
 
     public void run() throws Exception {
 
+    }
+
+    public String getMemLimit() {
+        return memLimit;
+    }
+
+    public String getTimeLimit() {
+        return timeLimit;
     }
 }
