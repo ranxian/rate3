@@ -19,7 +19,7 @@ public class SLSBGeneratorTest extends BaseTest {
 //          .setParameter("uuid", "9e050473-9306-4d32-ba72-deed98d432cb"); // 2010-autumn
 //        .setParameter("uuid", "968d97c2-785f-4775-ad3f-f29ceb8c799c"); // 2011-spring
 //        .setParameter("uuid", "11f9ec0c-5380-4e8c-95c8-a586cae0ad3d"); // 2011-autumn
-                .setParameter("uuid", "6c9e94b7-bc50-4cdb-bd89-f115c4f0385c"); // 2012-spring
+                .setParameter("uuid", "9919088d-ef1e-4238-beee-15aecdfc10f8"); // 2012-spring
         ViewEntity view = (ViewEntity)query.list().get(0);
         BenchmarkEntity benchmark = new BenchmarkEntity();
         benchmark.setView(view);
@@ -41,6 +41,6 @@ public class SLSBGeneratorTest extends BaseTest {
         DebugUtil.debug("start generate");
         generator.generate();
         DebugUtil.debug("finished generate");
-        session.delete(benchmark);
+//        session.delete(benchmark);
     }
 }

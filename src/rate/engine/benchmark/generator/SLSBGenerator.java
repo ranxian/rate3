@@ -9,7 +9,9 @@ import rate.model.*;
 import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -41,6 +43,7 @@ public class SLSBGenerator extends GeneralGenrator {
 
     private String frrBenchmarkDir;
     private String farBenchmarkDir;
+    private String descFilePath;
     Random random = new Random();
     public SLSBGenerator() {
         // 运算量比较大，用 SMALL 测试
@@ -51,6 +54,7 @@ public class SLSBGenerator extends GeneralGenrator {
         super.setBenchmark(benchmark);
         frrBenchmarkDir = FilenameUtils.concat(benchmark.dirPath(), "FRR");
         farBenchmarkDir = FilenameUtils.concat(benchmark.dirPath(), "FAR");
+        descFilePath = FilenameUtils.concat(benchmark.dirPath(), "desc.txt");
     }
 
     public BenchmarkEntity generate() throws Exception {
@@ -74,11 +78,13 @@ public class SLSBGenerator extends GeneralGenrator {
         super.prepare();
         new File(frrBenchmarkDir).mkdir();
         new File(farBenchmarkDir).mkdir();
-
+        BufferedWriter wr = new BufferedWriter(new FileWriter(descFilePath));
+        wr.append(B4Frr + " " + B4Far + "\r\n");
+        wr.close();
     }
 
-    public String getFarBenchmarkFilePath(int b) {
-        return FilenameUtils.concat(farBenchmarkDir, b + ".txt");
+    public String getFarBenchmarkFilePath(int i, int j) {
+        return FilenameUtils.concat(farBenchmarkDir, i + "" + j + ".txt");
     }
 
     public String getFrrBenchmarkFilePath(int b) {
@@ -121,9 +127,6 @@ public class SLSBGenerator extends GeneralGenrator {
         Set<Integer> generalSelectedSet = new HashSet<Integer>();
 
         for (int i = 1; i <= B4Far; i++) {  // Generate S[1], S[2], ..., S[B4Far]
-            File benchmarkFile = new File(getFarBenchmarkFilePath(i));
-            PrintWriter pw = new PrintWriter(benchmarkFile);
-            List<Pair<ClazzEntity, List<SampleEntity>>> selectedThisTurn = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
             Set<Integer> set = new HashSet<Integer>();
 
             // 见论文中对划分子集的描述
@@ -152,14 +155,31 @@ public class SLSBGenerator extends GeneralGenrator {
                     }
                 }
             }
+            List<Pair<ClazzEntity, List<SampleEntity>>> selectedThisTurn = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
+            Set<Integer> innerSet = new HashSet<Integer>();
+            ArrayList<Integer> arrSet = new ArrayList<Integer>(set);
+            for (int j = 1; j <= B4Far; j++) {
+                selectedThisTurn.clear();
+                innerSet.clear();
+                File benchmarkFile = new File(getFarBenchmarkFilePath(i, j));
+                PrintWriter pw = new PrintWriter(benchmarkFile);
+
+                for (int k = 0; k < arrSet.size(); k++) {
+                    innerSet.add(random.nextInt(arrSet.size()));
+                }
+
+                for (int k : innerSet) {
+                    selectedThisTurn.add(selectedMap.get(arrSet.get(k)));
+                }
+                generateInterClazz(pw, selectedThisTurn);
+                pw.close();
+            }
 
             // S[i] generated
             for (int j : set) {
                 selectedThisTurn.add(selectedMap.get(j-1));  // (j-1) is right
                 generalSelectedSet.add(j);
             }
-            generateInterClazz(pw, selectedThisTurn);
-            pw.close();
         }
 
         List<Pair<ClazzEntity, List<SampleEntity>>> generalSelected = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();

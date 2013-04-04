@@ -21,6 +21,24 @@ public class SLSBTask extends TaskEntity {
     private String stdoutPath;
     private String stderrPath;
     private String purfPath;
+    private String farResultPath;
+    private String frrResultPath;
+
+    public String getFarResultPath() {
+        return farResultPath;
+    }
+
+    public void setFarResultPath(String farResultPath) {
+        this.farResultPath = farResultPath;
+    }
+
+    public String getFrrResultPath() {
+        return frrResultPath;
+    }
+
+    public void setFrrResultPath(String frrResultPath) {
+        this.frrResultPath = frrResultPath;
+    }
 
     public String getStdoutPath() {
         return stdoutPath;
@@ -54,6 +72,14 @@ public class SLSBTask extends TaskEntity {
         this.task = task;
     }
 
+    public String getFarResultPathByNum(int i, int j) {
+        return FilenameUtils.concat(farResultDir,i+""+j+".txt" );
+    }
+
+    public String getFrrResultPathByNum(int i) {
+        return FilenameUtils.concat(frrResultDir,i+".txt" );
+    }
+
     private TaskEntity task;
 
     public SLSBTask(TaskEntity task) throws Exception {
@@ -64,6 +90,8 @@ public class SLSBTask extends TaskEntity {
         resultFilePath = FilenameUtils.concat(task.getDirPath(), "result.txt");
         enrollExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "enroll.exe");
         matchExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "match.exe");
+        farResultPath = FilenameUtils.concat(task.getDirPath(), "FAR.txt");
+        frrResultPath = FilenameUtils.concat(task.getDirPath(), "FRR.txt");
     }
 
     public String getFarResultDir() {

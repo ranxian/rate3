@@ -11,7 +11,7 @@ public class FARAnalyzer extends BasicAnalyzer {
         super(in, out);
     }
 
-    public void analyze() throws Exception {
+    public void analyze(double t) throws Exception {
         super.analyze();
     }
 }
