@@ -32,7 +32,7 @@ public class BenchmarkRunnerTest {
 
         // small
         BenchmarkEntity benchmark = (BenchmarkEntity)session.createQuery("from BenchmarkEntity where uuid=:uuid")
-                .setParameter("uuid", "f707b21c-9d05-436c-b8d1-e4c79f1fa4d7")
+                .setParameter("uuid", "927721fb-1e82-46f6-9076-215c084bb59b")
                 .list().get(0);
 
         // medium
@@ -41,7 +41,7 @@ public class BenchmarkRunnerTest {
 //                .list().get(0);
 
         AlgorithmVersionEntity algorithmVersion = (AlgorithmVersionEntity)session.createQuery("from AlgorithmVersionEntity where uuid=:uuid")
-                .setParameter("uuid", "986f0a57-7b96-40e7-93b3-b3bc383fc9aa")
+                .setParameter("uuid", "a686ed52-a008-4937-8350-dd5cad7ead6d")
                 .list().get(0);
 
         TaskEntity task = new TaskEntity();
