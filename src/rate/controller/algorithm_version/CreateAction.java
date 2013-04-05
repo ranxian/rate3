@@ -41,6 +41,7 @@ public class CreateAction extends AlgorithmVersionActionBase {
     public String execute() {
         try {
             session.beginTransaction();
+            //this.algorithmVersion = new AlgorithmVersionEntity();
             algorithmVersion.setAlgorithm(this.algorithm);
             session.save(algorithmVersion);
 

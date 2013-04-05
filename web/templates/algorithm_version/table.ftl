@@ -17,7 +17,7 @@
     <tr>
         <td><a href="/algorithm_version/show?uuid=${uuid}">${uuidShort}</a></td>
         <td>${created}</td>
-        <td><#if (description=="")>no description<#else>${description}</#if></td>
+        <td><#if description??>no description<#else>${description}</#if></td>
         <td><@s.property value="numOfResults" /></td>
         <td><a href="/algorithm_version/delete?uuid=${uuid}">delete</td>
         <#if benchmark??><td><a href="/run?benchmarkUuid=${benchmark.uuid}&algorithmVersionUuid=${uuid}" class="btn btn-small btn-success">Run Now!</a></td></#if>
