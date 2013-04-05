@@ -1,0 +1,20 @@
+from producer import RateProducer
+import sys
+
+# python engine_run.py ratedev-server /Volumes/RATE_ROOT/benchmarks/501764ba-5fa1-4c55-9374-e29a1e73c10b/benchmark.txt /Volumes/RATE_ROOT/temp/tasks/yyk-test/result.txt algorithms/01fc27c3-2284-448d-bc04-01e3de59951d/9f094597-4b6f-47e4-ba8a-7238d87501dc/enroll.exe algorithms/01fc27c3-2284-448d-bc04-01e3de59951d/9f094597-4b6f-47e4-ba8a-7238d87501dc/match.exe 1000 52428800
+
+if __name__=='__main__':
+    usage = """
+    %s host benchmark result enrollexe matchexe timelimit memlimit
+    host is the host where queue server is on
+    benchmark and result are absolute path
+    enrollexe and matchexe are relative path from RATE_ROOT (i.e. algorithms/algorithm-uuid/version-uuid/enroll.exe)
+    timelimit in ms
+    memlimit in byte
+    """ % (sys.argv[0])
+    if len(sys.argv)!=8:
+        print usage
+        exit()
+
+    p = RateProducer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7])
+    p.solve()
