@@ -18,10 +18,10 @@ import java.util.Random;
 public class FVC2006WithRateRunner {
     public static void main(String args[]) throws Exception {
         String rateRunnerPath = AbstractRunner.getRateRunnerPath();
-        String matchExePath = "C:\\RATE_ROOT\\algorithms\\1bf71dd1-c6f9-4f3a-b4c0-b28dba70ead5\\811007f1-2b78-43eb-af0d-69d95973747b\\match.exe";
-        String enrollExePath = "C:\\RATE_ROOT\\algorithms\\1bf71dd1-c6f9-4f3a-b4c0-b28dba70ead5\\811007f1-2b78-43eb-af0d-69d95973747b\\enroll.exe";
-        String enrollImgPath = FilenameUtils.concat(RateConfig.getSampleRootDir(), "00101153_V0_2013-03-17-18-50-18.bmp");
-        String matchImgPath = FilenameUtils.concat(RateConfig.getSampleRootDir(), "00101153_V0_2013-03-18-01-34-54.bmp");
+        String matchExePath = "G:\\RATE_ROOT\\algorithms\\1bf71dd1-c6f9-4f3a-b4c0-b28dba70ead5\\811007f1-2b78-43eb-af0d-69d95973747b\\match.exe";
+        String enrollExePath = "G:\\RATE_ROOT\\algorithms\\1bf71dd1-c6f9-4f3a-b4c0-b28dba70ead5\\811007f1-2b78-43eb-af0d-69d95973747b\\enroll.exe";
+        String enrollImgPath = FilenameUtils.concat(RateConfig.getSampleRootDir(), "00101153\\V0\\00101153_V0_2013-03-17-18-50-18.bmp");
+        String matchImgPath = FilenameUtils.concat(RateConfig.getSampleRootDir(), "00101153\\V0\\00101153_V0_2013-03-18-01-34-54.bmp");
 
         Random random = new Random();
         String tempOutputPath = FilenameUtils.concat(RateConfig.getTempRootDir(), random.nextInt() + ".txt");
@@ -43,9 +43,11 @@ public class FVC2006WithRateRunner {
         Process match = Runtime.getRuntime().exec(matchCmds);
         match.waitFor();
         DebugUtil.debug("match finished");
-        File file = new File(tempOutputPath);
-        file.delete();
-        file = new File(templatePath);
-        file.delete();
+
+        new File(tempOutputPath).delete();
+        new File(templatePath).delete();
+        new File(stderrPath).delete();
+        new File(stdoutPath).delete();
+        new File(purfPath).delete();
     }
 }

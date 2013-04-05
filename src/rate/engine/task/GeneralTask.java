@@ -17,7 +17,7 @@ import java.util.Scanner;
  * Time: 下午10:12
  * To change this template use File | Settings | File Templates.
  */
-public class FVC2006Task extends TaskEntity {
+public class GeneralTask extends TaskEntity {
     private TaskEntity task;
 
     public String getStdoutPath() {
@@ -32,7 +32,7 @@ public class FVC2006Task extends TaskEntity {
         return purfPath;
     }
 
-    public FVC2006Task(TaskEntity taskEntity) throws Exception {
+    public GeneralTask(TaskEntity taskEntity) throws Exception {
         this.task = taskEntity;
         enrollExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "enroll.exe");
         matchExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "match.exe");

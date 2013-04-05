@@ -15,6 +15,7 @@
             <result name="eNotAuthor" type="freemarker">/templates/error/eNotAuthor.ftl</result>
             <result name="eNoUser" type="freemarker">/templates/error/eNoUser.ftl</result>
             <result name="eNotVip" type="freemarker">/templates/error/eNotVip.ftl</result>
+            <result name="ERROR" type="freemarker">/templates/error/ERROR.ftl</result>
         </global-results>
     </package>
 

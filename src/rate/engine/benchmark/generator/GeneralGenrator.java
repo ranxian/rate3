@@ -110,6 +110,7 @@ public class GeneralGenrator extends AbstractGenerator {
     }
 
     public void prepare() throws Exception {
+        benchmark.setType("General");
         prepareBenchMark();
         prepareSelectedClazz();
     }

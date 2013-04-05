@@ -2,7 +2,7 @@ package rate.test;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import rate.engine.benchmark.runner.FVC2006Runner;
+import rate.engine.benchmark.runner.GeneralRunner;
 import rate.model.TaskEntity;
 import rate.util.HibernateUtil;
 
@@ -27,7 +27,7 @@ public class BenchmarkRunnerAnalyzeMethodTest {
                     .setParameter("uuid", taskUuid)
                     .list().get(0);
 
-            FVC2006Runner runner = new FVC2006Runner();
+            GeneralRunner runner = new GeneralRunner();
 
 
             logger.trace(String.format("Task [%s]", task.getUuid()));

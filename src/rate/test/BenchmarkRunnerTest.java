@@ -2,15 +2,11 @@ package rate.test;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import rate.engine.benchmark.generator.GeneralGenrator;
-import rate.engine.benchmark.runner.FVC2006Runner;
-import rate.engine.benchmark.runner.RunnerInvoker;
+import rate.engine.benchmark.runner.GeneralRunner;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
-import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
 import java.io.File;
@@ -50,7 +46,7 @@ public class BenchmarkRunnerTest {
         task.setCreated(HibernateUtil.getCurrentTimestamp());
         session.save(task);
 
-        FVC2006Runner runner = new FVC2006Runner();
+        GeneralRunner runner = new GeneralRunner();
 
         runner.setTask(task);
 

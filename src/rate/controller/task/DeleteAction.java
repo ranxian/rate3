@@ -1,12 +1,7 @@
 package rate.controller.task;
 
-import com.opensymphony.xwork2.ActionSupport;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import rate.engine.task.FVC2006Task;
-import rate.model.TaskEntity;
-import rate.util.HibernateUtil;
 
 import java.io.File;
 

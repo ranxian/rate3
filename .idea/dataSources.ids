@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><component name="dataSourceStorage">
-  <data-source source="LOCAL" name="Data Source" product="MySQL" version="5.5.29-0ubuntu0.12.10.1-log" jdbc-version="4.0" driver-name="MySQL-AB JDBC Driver" driver-version="mysql-connector-java-5.1.22 ( Revision: ${bzr.revision-id} )" uuid="ab1babc8-a6e4-4bb5-90c6-ef2b9d39b3a3" case-sensitive="true">
+  <data-source source="LOCAL" name="Data Source" product="MySQL" version="5.5.28" jdbc-version="4.0" driver-name="MySQL-AB JDBC Driver" driver-version="mysql-connector-java-5.1.22 ( Revision: ${bzr.revision-id} )" uuid="ab1babc8-a6e4-4bb5-90c6-ef2b9d39b3a3">
     <extra-name-characters>#@</extra-name-characters>
     <identifier-quote-string>`</identifier-quote-string>
     <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-    <jdbc-url>jdbc:mysql://162.105.30.204:3306/rate3</jdbc-url>
+    <jdbc-url>jdbc:mysql://localhost:3306/rate3</jdbc-url>
     <user-name>root</user-name>
     <user-password>dfdedfcfdfd9dfdedfc3dfc4dfcd</user-password>
     <schema-pattern>rate3.*</schema-pattern>
@@ -14,6 +14,7 @@
         <url>jar://$PROJECT_DIR$/lib/mysql-connector-java-5.1.22.jar!/</url>
       </library>
     </libraries>
+    <schema name="" catalog="rate3" />
     <table name="algorithm" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="name" sqlType="VARCHAR" length="255" precision="0" nullable="false" jdbcType="12" />
@@ -34,11 +35,11 @@
     <table name="benchmark" schema="" catalog="rate3" type="TABLE">
       <column name="uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
       <column name="view_uuid" sqlType="BINARY" length="16" precision="0" nullable="false" jdbcType="-2" />
-      <column name="protocol" sqlType="ENUM" length="8" precision="0" nullable="true" jdbcType="1" />
       <column name="name" sqlType="VARCHAR" length="255" precision="0" nullable="false" jdbcType="12" />
       <column name="created" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true" />
       <column name="description" sqlType="TEXT" length="65535" precision="0" nullable="true" jdbcType="-1" />
       <column name="generator" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" />
+      <column name="type" sqlType="VARCHAR" length="45" precision="0" nullable="false" jdbcType="12" def="J0dlbmVyYWwn" />
       <primary-key name="PRIMARY" columns="uuid" />
     </table>
     <table name="class" schema="" catalog="rate3" type="TABLE">

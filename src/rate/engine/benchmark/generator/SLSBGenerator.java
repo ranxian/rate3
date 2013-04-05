@@ -76,6 +76,7 @@ public class SLSBGenerator extends GeneralGenrator {
 
     public void prepare() throws Exception{
         super.prepare();
+        benchmark.setType("SLSB");
         new File(frrBenchmarkDir).mkdir();
         new File(farBenchmarkDir).mkdir();
         BufferedWriter wr = new BufferedWriter(new FileWriter(descFilePath));

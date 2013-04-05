@@ -1,13 +1,10 @@
 package rate.test;
 
 import org.apache.commons.io.FileUtils;
-import org.hibernate.Session;
-import rate.engine.benchmark.runner.FVC2006Runner;
 import rate.engine.benchmark.runner.SLSBRunner;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
-import rate.util.HibernateUtil;
 
 import java.io.File;
 

@@ -1,12 +1,8 @@
 package rate.controller.task;
 
-import com.opensymphony.xwork2.ActionSupport;
-import org.apache.log4j.Logger;
-import org.hibernate.Session;
 import rate.controller.RateActionBase;
-import rate.engine.task.FVC2006Task;
+import rate.engine.task.GeneralTask;
 import rate.model.TaskEntity;
-import rate.util.HibernateUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +15,7 @@ public class TaskActionBase extends RateActionBase  {
     public void setUuid(String uuid) throws Exception {
         this.uuid = uuid;
         this.task = (TaskEntity)session.createQuery("from TaskEntity where uuid=:uuid").setParameter("uuid", uuid).list().get(0);
-        fvc2006Task = new FVC2006Task(task);
+        GeneralTask = new GeneralTask(task);
         System.out.println("uuid and task prepared");
     }
 
@@ -31,9 +27,9 @@ public class TaskActionBase extends RateActionBase  {
 
     protected TaskEntity task;
 
-    public FVC2006Task getFvc2006Task() {
-        return fvc2006Task;
+    public GeneralTask getGeneralTask() {
+        return GeneralTask;
     }
 
-    protected FVC2006Task fvc2006Task;
+    protected GeneralTask GeneralTask;
 }

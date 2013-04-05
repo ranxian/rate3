@@ -42,18 +42,6 @@ public class BenchmarkEntity {
         this.uuid = uuid;
     }
 
-    private String protocol;
-
-    @Column(name = "protocol", nullable = true, insertable = true, updatable = false, length = 8, precision = 0)
-    @Basic
-    public String getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
-    }
-
     private String name;
 
     @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 255, precision = 0)
@@ -65,6 +53,18 @@ public class BenchmarkEntity {
     public void setName(String name) {
 //        logger.trace(String.format("setName [%s] [%s]", this.getUuid(), name));
         this.name = name;
+    }
+
+    private String type;
+
+    @Column(name ="type", nullable = false, insertable = true, updatable = false, length = 45, precision = 0)
+    @Basic
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     private Timestamp created;
@@ -115,7 +115,6 @@ public class BenchmarkEntity {
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (generator != null ? !generator.equals(that.generator) : that.generator != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (protocol != null ? !protocol.equals(that.protocol) : that.protocol != null) return false;
         if (!(uuid == that.uuid)) return false;
         if (!(view.equals(that.view))) return false;
 
@@ -126,7 +125,6 @@ public class BenchmarkEntity {
     public int hashCode() {
         int result = uuid != null ? uuid.hashCode() : 0;
         result = 31 * result + (view != null ? view.hashCode() : 0);
-        result = 31 * result + (protocol != null ? protocol.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
@@ -171,11 +169,4 @@ public class BenchmarkEntity {
         return this.getTasks().size();
     }
     private void setNumOfTasks(int nonsense) {}
-
-    @Transient
-    public String getType() {
-        return this.getView().getType();
-    }
-    private void setType(String nonsense) {};
-
 }

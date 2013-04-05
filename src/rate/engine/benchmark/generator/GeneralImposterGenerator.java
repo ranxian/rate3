@@ -36,6 +36,7 @@ public class GeneralImposterGenerator extends AbstractGenerator {
     protected List<Pair<ClazzEntity, List<SampleEntity>>> impostedClassAndSamples=null;
 
     public void prepare() throws Exception {
+        benchmark.setType("GeneralImposter");
         prepareBenchmarkDir();
         File benchmarkFile = new File(benchmark.filePath());
         benchmarkFile.createNewFile();

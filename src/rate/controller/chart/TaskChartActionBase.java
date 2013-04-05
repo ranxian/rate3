@@ -1,10 +1,9 @@
 package rate.controller.chart;
 
-import com.opensymphony.xwork2.ActionSupport;
 import org.hibernate.Session;
 import org.jfree.chart.JFreeChart;
 import rate.controller.RateActionBase;
-import rate.engine.task.FVC2006Task;
+import rate.engine.task.GeneralTask;
 import rate.model.TaskEntity;
 import rate.util.HibernateUtil;
 
@@ -20,7 +19,7 @@ public class TaskChartActionBase extends RateActionBase {
     protected JFreeChart chart;
     private String taskUuid;
     protected TaskEntity task;
-    protected FVC2006Task fvc2006Task;
+    protected GeneralTask GeneralTask;
     protected final Session session = HibernateUtil.getSession();
 
     public void setTaskUuid(String taskUuid) throws Exception {
@@ -28,7 +27,7 @@ public class TaskChartActionBase extends RateActionBase {
         this.task = (TaskEntity)session.createQuery("from TaskEntity where uuid = :uuid")
                 .setParameter("uuid", taskUuid)
                 .list().get(0);
-        this.fvc2006Task = new FVC2006Task(task);
+        this.GeneralTask = new GeneralTask(task);
     }
 
     public JFreeChart getChart() {

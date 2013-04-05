@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
+import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
 import java.io.File;
@@ -36,10 +37,11 @@ public class CreateAction extends AlgorithmVersionActionBase {
 
     private File matchExe;
 
+
     public String execute() {
         try {
             session.beginTransaction();
-            this.algorithmVersion.setAlgorithm(this.algorithm);
+            algorithmVersion.setAlgorithm(this.algorithm);
             session.save(algorithmVersion);
 
             File dir = new File(algorithmVersion.dirPath());
@@ -54,11 +56,11 @@ public class CreateAction extends AlgorithmVersionActionBase {
             session.saveOrUpdate(algorithm);
 
             session.getTransaction().commit();
-
             return SUCCESS;
         }
         catch (IOException ex) {
             logger.error(ex);
+            DebugUtil.debug("error happens");
             return ERROR;
         }
     }

@@ -32,7 +32,6 @@ public class BenchmarkGeneratorTest {
         BenchmarkEntity benchmark = new BenchmarkEntity();
         benchmark.setView(view);
         benchmark.setName("LARGE");
-        benchmark.setProtocol("FVC2006");
         // general
         GeneralGenrator generator = new GeneralGenrator();
         generator.setClassCount(1000);

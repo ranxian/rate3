@@ -25,7 +25,6 @@ public class OneClassImposterBenchmarkGeneratorTest {
         ViewEntity view = (ViewEntity)query.list().get(0);
 
         BenchmarkEntity benchmark = new BenchmarkEntity();
-        benchmark.setProtocol("FVC2006");
         benchmark.setName("Imposter");
 
         session.save(benchmark);

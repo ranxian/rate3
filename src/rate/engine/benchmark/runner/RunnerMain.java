@@ -32,11 +32,15 @@ public class RunnerMain {
             BenchmarkEntity benchmark = task.getBenchmark();
             AlgorithmVersionEntity algorithmVersion = task.getAlgorithmVersion();
 
-            if (!benchmark.getProtocol().equals(algorithmVersion.getAlgorithm().getProtocol())) {
-                throw new Exception("Protocol does not match");
+            // FIXME: Consider more about benchmark type, algorithm type, sample type
+            Class<?> runnerClass;
+            if (benchmark.getType().matches("General|.*Imposter")) {
+                runnerClass = Class.forName("rate.engine.benchmark.runner.GeneralRunner");
+            } else if (benchmark.getType().equals("SLSB")) {
+                runnerClass = SLSBRunner.class;
+            } else {
+                throw new RunnerException("Benchmark runner not implemented!");
             }
-
-            Class<?> runnerClass = Class.forName("rate.engine.benchmark.runner."+benchmark.getProtocol()+"Runner");
 
             AbstractRunner runner = (AbstractRunner)runnerClass.newInstance();
             runner.setTask(task);

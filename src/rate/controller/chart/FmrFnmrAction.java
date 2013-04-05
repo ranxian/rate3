@@ -42,9 +42,9 @@ public class FmrFnmrAction extends TaskChartActionBase {
 
         XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
 
-        XYSeries xySeriesFMR = getXYSeries("FMR", fvc2006Task.getFmrFilePath());
+        XYSeries xySeriesFMR = getXYSeries("FMR", GeneralTask.getFmrFilePath());
         xySeriesCollection.addSeries(xySeriesFMR);
-        XYSeries xySeriesFNMR = getXYSeries("FNMR", fvc2006Task.getFnmrFilePath());
+        XYSeries xySeriesFNMR = getXYSeries("FNMR", GeneralTask.getFnmrFilePath());
         xySeriesCollection.addSeries(xySeriesFNMR);
 
         chart = ChartFactory.createXYLineChart(

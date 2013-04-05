@@ -14,7 +14,7 @@ import java.io.FileReader;
  * Date: 13-3-24
  * Time: 下午5:56
  */
-public class FVC2006TaskResult {
+public class GeneralTaskResult {
     private static final Session session = HibernateUtil.getSession();
     private String resultType;
     private String num;
@@ -24,7 +24,7 @@ public class FVC2006TaskResult {
     private ClazzEntity class2;
     private String score;
     private String log;
-    private FVC2006Task fvc2006Task;
+    private GeneralTask GeneralTask;
 
     public SampleEntity getSample1() {
         return sample1;
@@ -50,9 +50,9 @@ public class FVC2006TaskResult {
         return log;
     }
 
-    public void setFvc2006Task(FVC2006Task fvc2006Task) {
+    public void setGeneralTask(GeneralTask GeneralTask) {
 
-        this.fvc2006Task = fvc2006Task;
+        this.GeneralTask = GeneralTask;
     }
 
     public void setNum(String num) {
@@ -64,7 +64,7 @@ public class FVC2006TaskResult {
     }
 
     public void generateInfo() throws Exception{
-        String logFilePath = fvc2006Task.getLogPathByTypeNumber(resultType, num);
+        String logFilePath = GeneralTask.getLogPathByTypeNumber(resultType, num);
 
         BufferedReader reader = new BufferedReader(new FileReader(logFilePath));
         String result[] = reader.readLine().split(" ");

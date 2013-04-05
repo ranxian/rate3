@@ -59,8 +59,8 @@ public class ScoreAction extends TaskChartActionBase {
         double interval = 1.00/column;
         xySeriesCollection.setIntervalWidth(interval);
 
-        addDistribution(xySeriesCollection, "Genuine", fvc2006Task.getGenuineFilePath(), interval);
-        addDistribution(xySeriesCollection, "Imposter", fvc2006Task.getImposterFilePath(), interval);
+        addDistribution(xySeriesCollection, "Genuine", GeneralTask.getGenuineFilePath(), interval);
+        addDistribution(xySeriesCollection, "Imposter", GeneralTask.getImposterFilePath(), interval);
 
         this.chart = ChartFactory.createHistogram(
                 "", // title

@@ -169,8 +169,7 @@ public class AlgorithmEntity {
 
     @Transient
     public int getNumOfVersions() {
-        // 这里的 version 包括算法本身，理论上说一个算法创建的时候 version 数是 0，但本质上我们应该展示的是 1，也就是这个最初的 version
-        return this.getAlgorithmVersions().size()+1;
+        return this.getAlgorithmVersions().size();
     }
 
     private void setNumOfVersions(int nonsense) {

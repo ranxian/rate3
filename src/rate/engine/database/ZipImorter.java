@@ -10,6 +10,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 import rate.util.RateConfig;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -68,6 +70,7 @@ public class ZipImorter {
                 sample.setFile(samplePath);
                 sample.setImportTag(importTag);
 
+                DebugUtil.debug(samplePath);
                 InputStream in = new FileInputStream(sampleFile);
                 byte[] md5 = DigestUtils.md5(in);
 
