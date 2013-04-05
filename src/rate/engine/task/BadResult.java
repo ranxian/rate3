@@ -68,19 +68,15 @@ public class BadResult {
 
         BufferedReader reader = new BufferedReader(new FileReader(logFilePath));
         String result[] = reader.readLine().split(" ");
-        String class1uuid = result[0];
-        String sample1uuid = result[1];
-        String class2uuid = result[2];
-        String sample2uuid = result[3];
-        score = result[4];
-        class1 = (ClazzEntity)session.createQuery("from ClazzEntity where uuid=:uuid")
-                .setParameter("uuid", class1uuid).list().get(0);
-        class2 = (ClazzEntity)session.createQuery("from ClazzEntity where uuid=:uuid")
-                .setParameter("uuid", class2uuid).list().get(0);
+        String sample1uuid = result[0];
+        String sample2uuid = result[1];
+        score = result[2];
         sample1 = (SampleEntity) session.createQuery("from SampleEntity where uuid=:uuid")
                 .setParameter("uuid", sample1uuid).list().get(0);
         sample2 = (SampleEntity) session.createQuery("from SampleEntity where uuid=:uuid")
                 .setParameter("uuid", sample2uuid).list().get(0);
+        class1 = sample1.getClazz();
+        class2 = sample2.getClazz();
         String line;
         StringBuffer logBuffer = new StringBuffer();
         while ((line = reader.readLine()) != null) {

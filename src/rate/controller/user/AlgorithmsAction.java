@@ -31,7 +31,7 @@ public class AlgorithmsAction extends RateActionBase {
                 .list().get(0);
 
         if (user == null) return "eNoUser";
-        if (user != getCurrentUser()) {
+        if (!user.getUuid().equals(getCurrentUser().getUuid())) {
             if (!getCurrentUser().getPrivilege().equals("vip")) {
                 return "eNotVip";
             }

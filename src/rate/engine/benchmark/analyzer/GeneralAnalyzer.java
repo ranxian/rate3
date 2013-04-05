@@ -54,7 +54,6 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
         BufferedReader resultReader = new BufferedReader(new FileReader(generalTask.getResultFilePath()));
         List<String> genuineList = new ArrayList<String>();
         List<String> imposterList = new ArrayList<String>();
-        List<String> reverseImposterList = new ArrayList<String>();
         while (true) {
             String line = resultReader.readLine();
             if (line==null) break;
@@ -99,11 +98,8 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
         for (String line: imposterList) {
             imposterPw.println(line);
         }
-        int count = 10;
-        for (String line : reverseImposterList) {
-            if (count == 0) break;
-            revImposterPw.println(line);
-            count--;
+        for (int i = imposterList.size() - 1; i >= imposterList.size() - 10 && i >= 1; i--) {
+            revImposterPw.println(imposterList.get(i));
         }
         genuinePw.close();
         imposterPw.close();
@@ -156,7 +152,7 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
             fileWriter.close();
         }
         logger.debug("Begin calc imposter bad result");
-        for (i = imposterList.size() - 1; i >= 0 && i >= imposterList.size() - 10; i--) {
+        for (i = 0; i <= imposterList.size() && i < 10; i++) {
             String line = imposterList.get(i);
             String info[] = line.split(" ");
             String  s1 = info[0], s2 = info[1];
@@ -205,8 +201,6 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
             String rs[] = StringUtils.strip(line).split(" ");
             threshold = Double.parseDouble(rs[0]);
             errorRate = Double.parseDouble(rs[1]);
-
-//            logger.trace(String.format("finFMRonFNMR: filePath [%s] threshold [%f] errorRate [%f]", fnmrFilePath, threshold, errorRate));
 
             if (errorRate>=fnmr) break;
         }
@@ -304,6 +298,5 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
 
         File resultFile = new File(generalTask.getResultFilePath());
         resultFile.createNewFile();
-
     }
 }

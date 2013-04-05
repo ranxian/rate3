@@ -31,6 +31,10 @@ public class AlgorithmVersionActionBase extends RateActionBase {
 
     private String uuid;
 
+    public void setAlgorithmVersion(AlgorithmVersionEntity algorithmVersion) {
+        this.algorithmVersion = algorithmVersion;
+    }
+
     public AlgorithmVersionEntity getAlgorithmVersion() {
         return algorithmVersion;
     }
