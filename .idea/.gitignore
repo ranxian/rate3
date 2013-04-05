@@ -4,3 +4,6 @@ dictionaries
 
 misc.xml
 compiler.xml
+dataSources.ids
+dataSources.xml
+ant.xml
