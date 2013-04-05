@@ -3,6 +3,8 @@ package rate.test;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import rate.engine.benchmark.runner.AbstractRunner;
+import rate.model.AlgorithmVersionEntity;
+import rate.model.SampleEntity;
 import rate.util.DebugUtil;
 import rate.util.RateConfig;
 
@@ -15,13 +17,15 @@ import java.util.Random;
  * Date: 13-3-26
  * Time: 下午3:02
  */
-public class FVC2006WithRateRunner {
+public class FVC2006WithRateRunner extends BaseTest {
     public static void main(String args[]) throws Exception {
         String rateRunnerPath = AbstractRunner.getRateRunnerPath();
-        String matchExePath = "G:\\RATE_ROOT\\algorithms\\1bf71dd1-c6f9-4f3a-b4c0-b28dba70ead5\\811007f1-2b78-43eb-af0d-69d95973747b\\match.exe";
-        String enrollExePath = "G:\\RATE_ROOT\\algorithms\\1bf71dd1-c6f9-4f3a-b4c0-b28dba70ead5\\811007f1-2b78-43eb-af0d-69d95973747b\\enroll.exe";
-        String enrollImgPath = FilenameUtils.concat(RateConfig.getSampleRootDir(), "00101153\\V0\\00101153_V0_2013-03-17-18-50-18.bmp");
-        String matchImgPath = FilenameUtils.concat(RateConfig.getSampleRootDir(), "00101153\\V0\\00101153_V0_2013-03-18-01-34-54.bmp");
+        String matchExePath = algorithmVersion.dirPath() + "/match.exe";
+        String enrollExePath = algorithmVersion.dirPath() + "/enroll.exe";
+        SampleEntity sample1 = (SampleEntity)session.createQuery("from SampleEntity").list().get(0);
+        SampleEntity sample2 = (SampleEntity)session.createQuery("from SampleEntity").list().get(1);
+        String enrollImgPath = FilenameUtils.concat(RateConfig.getSampleRootDir(), sample1.getFilePath());
+        String matchImgPath = FilenameUtils.concat(RateConfig.getSampleRootDir(), sample2.getFilePath());
 
         Random random = new Random();
         String tempOutputPath = FilenameUtils.concat(RateConfig.getTempRootDir(), random.nextInt() + ".txt");

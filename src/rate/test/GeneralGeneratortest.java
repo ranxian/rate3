@@ -20,21 +20,22 @@ import java.util.List;
  * Date:    12-12-14
  * Time:    下午9:00
  */
-public class BenchmarkGeneratorTest {
+public class GeneralGeneratortest {
     public static void main(String[] args) throws Exception {
         Session session = HibernateUtil.getSession();
         Query query = session.createQuery("from ViewEntity where uuid=:uuid")
 //          .setParameter("uuid", "9e050473-9306-4d32-ba72-deed98d432cb"); // 2010-autumn
 //        .setParameter("uuid", "968d97c2-785f-4775-ad3f-f29ceb8c799c"); // 2011-spring
 //        .setParameter("uuid", "11f9ec0c-5380-4e8c-95c8-a586cae0ad3d"); // 2011-autumn
-        .setParameter("uuid", "6c9e94b7-bc50-4cdb-bd89-f115c4f0385c"); // 2012-spring
+        .setParameter("uuid", "797578ff-f40d-46d4-a6bb-930069f70705"); // 2012-spring
         ViewEntity view = (ViewEntity)query.list().get(0);
         BenchmarkEntity benchmark = new BenchmarkEntity();
         benchmark.setView(view);
         benchmark.setName("LARGE");
+        benchmark.setType("General");
         // general
         GeneralGenrator generator = new GeneralGenrator();
-        generator.setClassCount(1000);
+        generator.setClassCount(10);
         generator.setSampleCount(5);
         benchmark.setGenerator("SMALL");
 
@@ -49,10 +50,10 @@ public class BenchmarkGeneratorTest {
         generator.generate();
         DebugUtil.debug("finished generate");
 
-//        FileUtils.deleteDirectory(new File(benchmark.dirPath()));
-//        session.beginTransaction();
-//        session.delete(benchmark);
-//        session.getTransaction().commit();
+        FileUtils.deleteDirectory(new File(benchmark.dirPath()));
+        session.beginTransaction();
+        session.delete(benchmark);
+        session.getTransaction().commit();
 
 
 //        GeneralFVC2006Generator generator = new SmallFVC2006Generator();

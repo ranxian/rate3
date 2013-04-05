@@ -2,14 +2,18 @@ package rate.engine.benchmark.runner;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
+import rate.engine.task.TaskResult;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
 import rate.util.HibernateUtil;
 import rate.util.RateConfig;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,6 +25,7 @@ import java.io.File;
 abstract public class AbstractRunner {
     protected BenchmarkEntity benchmark;
     protected TaskEntity task;
+    protected TaskResult taskResult;
     protected AlgorithmVersionEntity algorithmVersion;
     protected final Session session = HibernateUtil.getSession();
     // Default 50m mem limit
@@ -30,6 +35,7 @@ abstract public class AbstractRunner {
 
     public void setTask(TaskEntity task) throws Exception {
         this.task = task;
+        this.taskResult = new TaskResult(task);
         this.benchmark = task.getBenchmark();
         this.algorithmVersion = task.getAlgorithmVersion();
     }

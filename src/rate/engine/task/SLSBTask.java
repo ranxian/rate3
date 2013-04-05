@@ -3,6 +3,8 @@ package rate.engine.task;
 import org.apache.commons.io.FilenameUtils;
 import rate.model.TaskEntity;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 
 /**
@@ -28,48 +30,18 @@ public class SLSBTask extends TaskEntity {
         return farResultPath;
     }
 
-    public void setFarResultPath(String farResultPath) {
-        this.farResultPath = farResultPath;
+    public int getB4Far() throws Exception {
+        BufferedReader rd = new BufferedReader(new FileReader(getBenchmark().dirPath()));
+        int res = Integer.parseInt(rd.readLine().split(" ")[1]);
+        rd.close();
+        return res;
     }
 
-    public String getFrrResultPath() {
-        return frrResultPath;
-    }
-
-    public void setFrrResultPath(String frrResultPath) {
-        this.frrResultPath = frrResultPath;
-    }
-
-    public String getStdoutPath() {
-        return stdoutPath;
-    }
-
-    public void setStdoutPath(String stdoutPath) {
-        this.stdoutPath = stdoutPath;
-    }
-
-    public String getStderrPath() {
-        return stderrPath;
-    }
-
-    public void setStderrPath(String stderrPath) {
-        this.stderrPath = stderrPath;
-    }
-
-    public String getPurfPath() {
-        return purfPath;
-    }
-
-    public void setPurfPath(String purfPath) {
-        this.purfPath = purfPath;
-    }
-
-    public TaskEntity getTask() {
-        return task;
-    }
-
-    public void setTask(TaskEntity task) {
-        this.task = task;
+    public int getB4Frr() throws Exception {
+        BufferedReader rd = new BufferedReader(new FileReader(getBenchmark().dirPath()));
+        int res = Integer.parseInt(rd.readLine().split(" ")[0]);
+        rd.close();
+        return res;
     }
 
     public String getFarResultPathByNum(int i, int j) {
@@ -88,6 +60,9 @@ public class SLSBTask extends TaskEntity {
         frrResultDir = FilenameUtils.concat(task.getDirPath(), "FRR");
         taskStateFilePath = FilenameUtils.concat(task.getDirPath(), "state.txt");
         resultFilePath = FilenameUtils.concat(task.getDirPath(), "result.txt");
+        stderrPath = FilenameUtils.concat(task.getDirPath(), "stderr.txt");
+        stdoutPath = FilenameUtils.concat(task.getDirPath(), "stdout.txt");
+        purfPath = FilenameUtils.concat(task.getDirPath(), "purf.txt") ;
         enrollExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "enroll.exe");
         matchExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "match.exe");
         farResultPath = FilenameUtils.concat(task.getDirPath(), "FAR.txt");

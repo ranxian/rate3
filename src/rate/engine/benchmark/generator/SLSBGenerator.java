@@ -62,8 +62,8 @@ public class SLSBGenerator extends GeneralGenrator {
 
         // Experimental way
         if (B4Frr == 0 || B4Far == 0) {
-            B4Frr = 20;
-            B4Far = 20;
+            B4Frr = 10;
+            B4Far = 10;
         }
 
         prepare();

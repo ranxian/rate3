@@ -17,70 +17,75 @@ import java.util.Scanner;
  * Time: 下午10:12
  * To change this template use File | Settings | File Templates.
  */
-public class GeneralTask extends TaskEntity {
-    private TaskEntity task;
-
-    public String getStdoutPath() {
-        return stdoutPath;
-    }
-
-    public String getStderrPath() {
-        return stderrPath;
-    }
-
-    public String getPurfPath() {
-        return purfPath;
-    }
-
+public class GeneralTask extends TaskResult {
     public GeneralTask(TaskEntity taskEntity) throws Exception {
-        this.task = taskEntity;
-        enrollExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "enroll.exe");
-        matchExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "match.exe");
+        super(taskEntity);
 
-        resultFilePath = task.getResultFilePath();
         errorRateFilePath = FilenameUtils.concat(task.getDirPath(), "rate.txt");
         rocFilePath = FilenameUtils.concat(task.getDirPath(), "roc.txt");
         genuineFilePath = FilenameUtils.concat(task.getDirPath(), "genuine.txt");
         imposterFilePath = FilenameUtils.concat(task.getDirPath(), "imposter.txt");
         fnmrFilePath = FilenameUtils.concat(task.getDirPath(), "fnmr.txt");
         fmrFilePath = FilenameUtils.concat(task.getDirPath(), "fmr.txt");
-        taskStatePath = FilenameUtils.concat(task.getDirPath(), "state.txt");
         badResultDir = FilenameUtils.concat(task.getDirPath(), "bad-result");
         genuineResultPath = FilenameUtils.concat(badResultDir, "genuine");
         imposterResultPath = FilenameUtils.concat(badResultDir, "imposter");
-        stdoutPath = FilenameUtils.concat(task.getDirPath(), "stdout.txt");
-        stderrPath = FilenameUtils.concat(task.getDirPath(), "stderr.txt");
-        purfPath = FilenameUtils.concat(task.getDirPath(), "purf.txt");
 
+        revImposterPath = FilenameUtils.concat(task.getDirPath(), "revImp.txt");
+        if (task.getFinished() != null) {
+            getStatistics();
+        }
 
-        File stateFile = new File(getTaskStatePath());
-        if (stateFile.exists()) {
-            this.getStatistics();
+        if (new File(getTaskStatePath()).exists()) {
+            getTaskState();
         }
     }
 
-    private String enrollExeFilePath;
-    private String matchExeFilePath;
-    private String resultFilePath;
+    public String getLogPathByTypeNumber(String type, String num) {
+        String path = FilenameUtils.concat(badResultDir, type);
+        String logFilePath = FilenameUtils.concat(path, num+".txt");
+        return logFilePath;
+    }
+
+    private void getStatistics() throws Exception {
+        BufferedReader errorRateReader = new BufferedReader(new FileReader(getErrorRateFilePath()));
+        String line = StringUtils.strip(errorRateReader.readLine());
+        String rs[] = line.split(" ");
+        EER = Double.parseDouble(rs[0]);
+        EER_l = Double.parseDouble(rs[1]);
+        EER_h = Double.parseDouble(rs[2]);
+        line = StringUtils.strip(errorRateReader.readLine());
+        FMR100 = Double.parseDouble(line);
+        line = StringUtils.strip(errorRateReader.readLine());
+        FMR1000 = Double.parseDouble(line);
+        line = StringUtils.strip(errorRateReader.readLine());
+        zeroFMR = Double.parseDouble(line);
+        line = StringUtils.strip(errorRateReader.readLine());
+        zeroFNMR = Double.parseDouble(line);
+        errorRateReader.close();
+    }
+
     private String errorRateFilePath;
     private String rocFilePath;
     private String genuineFilePath;
     private String imposterFilePath;
     private String fmrFilePath;
     private String fnmrFilePath;
-    private String taskStatePath;
     private String badResultDir;
     private String genuineResultPath;
     private String imposterResultPath;
-    private long startTime;
-    private String stdoutPath;
-    private String stderrPath;
-    private String purfPath;
+    private String revImposterPath;
 
-    public String getLogPathByTypeNumber(String type, String num) {
-        String path = FilenameUtils.concat(badResultDir, type);
-        String logFilePath = FilenameUtils.concat(path, num+".txt");
-        return logFilePath;
+    private double EER;
+    private double EER_l;
+    private double EER_h;
+    private double FMR100;
+    private double FMR1000;
+    private double zeroFMR;
+    private double zeroFNMR;
+
+    public String getRevImposterPath() {
+        return revImposterPath;
     }
 
     public String getGenuineResultPath() {
@@ -91,28 +96,8 @@ public class GeneralTask extends TaskEntity {
         return this.imposterResultPath;
     }
 
-    public String getTaskStatePath() {
-        return taskStatePath;
-    }
-
     public String getErrorRateFilePath() {
         return errorRateFilePath;
-    }
-
-    public TaskEntity getTask() {
-        return task;
-    }
-
-    public String getEnrollExeFilePath() {
-        return enrollExeFilePath;
-    }
-
-    public String getMatchExeFilePath() {
-        return matchExeFilePath;
-    }
-
-    public String getResultFilePath() {
-        return resultFilePath;
     }
 
     public String getRocFilePath() {
@@ -133,76 +118,6 @@ public class GeneralTask extends TaskEntity {
 
     public String getFnmrFilePath() {
         return fnmrFilePath;
-    }
-
-    public String getEstimateLeftTime() {
-        long curTime = System.currentTimeMillis();
-        long timePast = curTime - startTime;
-        int estimateMinute = (int)(timePast / finishedTurn * (totalTurn - finishedTurn) / 1000 / 60);
-        int estimateHour = estimateMinute / 60;
-
-        if (estimateHour == 0) return  estimateMinute + "mins";
-        else {
-            estimateMinute %= estimateHour;
-            return estimateHour + "hrs " + estimateMinute + "mins";
-        }
-    }
-
-    private double EER;
-    private double EER_l;
-    private double EER_h;
-    private double FMR100;
-    private double FMR1000;
-    private double zeroFMR;
-    private double zeroFNMR;
-    private double finishedTurn = 0;
-    private double totalTurn = 0;
-    private String updated;
-
-    private void getStatistics() throws Exception {
-        BufferedReader errorRateReader = new BufferedReader(new FileReader(getErrorRateFilePath()));
-        String line = StringUtils.strip(errorRateReader.readLine());
-        String rs[] = line.split(" ");
-        EER = Double.parseDouble(rs[0]);
-        EER_l = Double.parseDouble(rs[1]);
-        EER_h = Double.parseDouble(rs[2]);
-        line = StringUtils.strip(errorRateReader.readLine());
-        FMR100 = Double.parseDouble(line);
-        line = StringUtils.strip(errorRateReader.readLine());
-        FMR1000 = Double.parseDouble(line);
-        line = StringUtils.strip(errorRateReader.readLine());
-        zeroFMR = Double.parseDouble(line);
-        line = StringUtils.strip(errorRateReader.readLine());
-        zeroFNMR = Double.parseDouble(line);
-        errorRateReader.close();
-        getTaskState();
-    }
-
-    private void getTaskState() throws Exception{
-        BufferedReader stateReader = new BufferedReader(new FileReader(getTaskStatePath()));
-        updated = StringUtils.strip(stateReader.readLine());
-        String state[] = StringUtils.strip(stateReader.readLine()).split(" ");
-        finishedTurn = Double.parseDouble(state[0]);
-        totalTurn = Double.parseDouble(state[1]);
-        startTime = Long.parseLong(state[2]);
-        stateReader.close();
-    }
-
-    public double getPercentage() {
-        if (totalTurn == 0) return 0;
-        return finishedTurn / totalTurn;
-    }
-
-    public double getFinishedTurn() {
-        return finishedTurn;
-    }
-
-    public double getTotalTurn() {
-        return totalTurn;
-    }
-
-    public String getUpdated() {
-        return updated;
     }
 
     public double getEER() {

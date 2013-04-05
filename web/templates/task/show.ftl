@@ -2,12 +2,12 @@
 <#macro main_container>
 
 <h1 class="title">Detail of Task #</b> ${uuid}
-    <small class="pull-right getdown">(${GeneralTask.finishedTurn}/${GeneralTask.totalTurn})</small>
+    <small class="pull-right getdown">(${generalTask.finishedTurn}/${generalTask.totalTurn})</small>
     <#if task.finished?exists>
-        <small class="pull-right percentage finished">${GeneralTask.percentage*100}%</small>
+        <small class="pull-right percentage finished">${generalTask.percentage*100}%</small>
 
     <#else>
-        <small class="pull-right percentage running">${GeneralTask.percentage*100}%
+        <small class="pull-right percentage running">${generalTask.percentage*100}%
         </small>
     </#if>
 
@@ -15,12 +15,12 @@
 
 <div class="result-box">
     <div class="statics">
-        <p>EER: ${GeneralTask.EER*100}% (${GeneralTask.EER_l*100}% - ${GeneralTask.EER_h*100}%) </p>
-        <p>FMR100: ${GeneralTask.FMR100*100}%) </p>
-        <p>FMR1000: ${GeneralTask.FMR1000*100}%</p>
-        <p>zeroFMR: ${GeneralTask.zeroFMR*100}%</p>
-        <p>zeroFNMR: ${GeneralTask.zeroFNMR*100}%</p>
-        <p>Estimate finish time: ${GeneralTask.estimateLeftTime}</p>
+        <p>EER: ${generalTask.EER*100}% (${generalTask.EER_l*100}% - ${generalTask.EER_h*100}%) </p>
+        <p>FMR100: ${generalTask.FMR100*100}%) </p>
+        <p>FMR1000: ${generalTask.FMR1000*100}%</p>
+        <p>zeroFMR: ${generalTask.zeroFMR*100}%</p>
+        <p>zeroFNMR: ${generalTask.zeroFNMR*100}%</p>
+        <p>Estimate finish time: ${generalTask.estimateLeftTime}</p>
     </div>
     <img src="/chart/score?taskUuid=${task.uuid}" />
     <img src="/chart/fmrfnmr?taskUuid=${task.uuid}" />

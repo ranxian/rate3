@@ -14,7 +14,7 @@ import java.io.FileReader;
  * Date: 13-3-24
  * Time: 下午5:56
  */
-public class GeneralTaskResult {
+public class BadResult {
     private static final Session session = HibernateUtil.getSession();
     private String resultType;
     private String num;
