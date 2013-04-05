@@ -81,6 +81,9 @@ public class OneClassImposterGenerator extends GeneralImposterGenerator {
     }
 
     public BenchmarkEntity generate() throws Exception {
+        if (imposterClazz == null) {
+            imposterClazz = (ClazzEntity) session.createQuery("from ClazzEntity order by RAND()").list().get(0);
+        }
         benchmark.setName(String.format("Imposter-[%s]", this.imposterClazz.getUuidShort()));
         benchmark.setType("OneClassImposter");
         logger.trace(String.format("Imposter class [%s]", this.imposterClazz.getUuid()));

@@ -52,10 +52,6 @@ public class SLSBRunner extends AbstractRunner {
     public void run() throws Exception {
         DebugUtil.debug(String.format("%s invoked with task [%s]", this.getClass().getName(), task.getUuid()));
 
-        if (! benchmark.getType().equals(algorithmVersion.getAlgorithm().getType())) {
-            throw new RunnerException("Type does not match.");
-        }
-
         this.prepare();
 
         DebugUtil.debug("Begin: run commands");

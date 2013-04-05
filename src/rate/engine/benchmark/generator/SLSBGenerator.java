@@ -58,7 +58,13 @@ public class SLSBGenerator extends GeneralGenrator {
     }
 
     public BenchmarkEntity generate() throws Exception {
-        if (B4Frr == 0 || B4Far == 0) throw new GeneratorException("B for Far or Frr not set!");
+//        if (B4Frr == 0 || B4Far == 0) throw new GeneratorException("B for Far or Frr not set!");
+
+        // Experimental way
+        if (B4Frr == 0 || B4Far == 0) {
+            B4Frr = 20;
+            B4Far = 20;
+        }
 
         prepare();
 

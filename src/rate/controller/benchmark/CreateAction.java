@@ -1,7 +1,6 @@
 package rate.controller.benchmark;
 
-import rate.engine.benchmark.generator.AbstractGenerator;
-import rate.engine.benchmark.generator.GeneralGenrator;
+import rate.engine.benchmark.generator.*;
 import rate.engine.view.GenerateStrategy.AbstractGenerateStrategy;
 import rate.model.BenchmarkEntity;
 import rate.model.ViewEntity;
@@ -33,8 +32,18 @@ public class CreateAction extends BenchmarkActionBase {
         benchmark.setView(view);
     }
 
+    public void setBenchmarkType() {
+        String generatorStr = benchmark.getGenerator();
+        if (generatorStr.matches("(SMALL)|(MEDIUM)|((VERY_)?LARGE)|.*Imposter")) {
+            benchmark.setType("General");
+        } else if (generatorStr.equals("SLSB")) {
+            benchmark.setType("SLSB");
+        }
+    }
+
     public String execute() throws Exception {
         session.beginTransaction();
+        setBenchmarkType();
         session.save(benchmark);
 
         String generatorStr = benchmark.getGenerator();
@@ -44,8 +53,17 @@ public class CreateAction extends BenchmarkActionBase {
             // This should depend on user's option
             generator.setScale(generatorStr);
             benchmark = generator.generate();
+        } else if (generatorStr.equals("OneClassImposter")) {
+            OneClassImposterGenerator generator = new OneClassImposterGenerator();
+            generator.setBenchmark(benchmark);
+            benchmark = generator.generate();
         } else {
-            return "NOT_IMP";
+            return ERROR;
+//        } else if (generatorStr.equals("SLSB")) {
+//            SLSBGenerator generator = new SLSBGenerator();
+//            generator.setBenchmark(benchmark);
+//            generator.setScale("SMALL");
+//            benchmark = generator.generate();
         }
 
         session.update(benchmark);
