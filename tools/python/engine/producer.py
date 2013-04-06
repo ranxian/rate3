@@ -8,6 +8,8 @@ import uuid
 ENROLL_BLOCK_SIZE = 20
 MATCH_BLOCK_SIZE = 100
 
+PRODUCER_RATE_ROOT='/Volumes/RATE_ROOT/'
+
 class RateProducer:
     def __init__(self, host, benchmark_file_path, result_file_path, enrollEXE, matchEXE, timelimit, memlimit):
         self.benchmark_file_path = benchmark_file_path
@@ -25,6 +27,11 @@ class RateProducer:
         self.match_subtask_uuids = []
         self.enroll_finished_subtask_uuids = []
         self.match_finished_subtask_uuids = []
+        if not os.path.isdir(os.path.dirname(result_file_path)):
+            os.makedirs(os.path.dirname(result_file_path))
+        self.result_file = open(result_file_path, 'w')
+        self.failed_enroll_uuids = set()
+        self.failed_match_uuids = set()
 
     def submitEnrollBlock(self, l):
         subtask = self.genSubtask(l, 'enroll')
@@ -75,6 +82,8 @@ class RateProducer:
                 uuid_files[u1] = match[1].strip()
             if u2 not in uuid_files.keys():
                 uuid_files[u2] = match[2].strip()
+        print "%d matches" % len(matches)
+        print "%d enrolls" % len(uuid_files)
 
         # enroll all
         l = []
@@ -89,13 +98,16 @@ class RateProducer:
             l = []
 
         self.waitForEnrollResults()
+        print "enroll finished, failed %d" % len(self.failed_enroll_uuids)
 
         # match all
         l = []
         for match in matches:
             (u1,u2, gOrI) = match[0].strip().split(' ')[:3]
-            f1 = 'temp/%s/templates/%s.t' % (self.uuid, u1)
-            f2 = 'temp/%s/templates/%s.t' % (self.uuid, u2)
+            if u1 in self.failed_enroll_uuids or u2 in self.failed_enroll_uuids:
+                continue
+            f1 = 'temp/%s/%s/%s.t' % (self.uuid[-12:], u1[-12:-10], u1[-10:])
+            f2 = 'temp/%s/%s/%s.t' % (self.uuid[-12:], u2[-12:-10], u2[-10:])
             t = { 'uuid1':u1, 'uuid2':u2, 'file1':f1, 'file2':f2, 'match_type':gOrI }
             l.append(t)
             if len(l) == MATCH_BLOCK_SIZE:
@@ -107,6 +119,7 @@ class RateProducer:
 
         self.waitForMatchResults()
 
+
 #        self.generateResults()
 
 #        self.cleanUp()
@@ -115,6 +128,10 @@ class RateProducer:
     def submit(self, subtask):
         if subtask==None:
             return
+        for fpath in subtask['files']:
+            fpath = os.path.join(PRODUCER_RATE_ROOT, fpath)
+            if not os.path.exists(fpath):
+                raise Exception("file does not exists: %s" % fpath)
         self.ch.queue_declare(queue='jobs')
         self.ch.basic_publish(exchange='', routing_key='jobs', body=pickle.dumps(subtask))
 
@@ -125,6 +142,11 @@ class RateProducer:
         self.ch.basic_ack(delivery_tag=method.delivery_tag)
         if len(self.enroll_finished_subtask_uuids)==len(self.enroll_subtask_uuids):
             self.ch.stop_consuming()
+        for rawResult in result['results']:
+            print>>self.result_file, "E %s %s" % (rawResult['uuid'], rawResult['result'])
+            if rawResult['result']=='failed':
+                self.failed_enroll_uuids.add(rawResult['uuid'])
+        self.result_file.flush()
 
     def matchCallBack(self, ch, method, properties, body):
         result = pickle.loads(body)
@@ -133,6 +155,13 @@ class RateProducer:
         self.ch.basic_ack(delivery_tag=method.delivery_tag)
         if len(self.match_finished_subtask_uuids)==len(self.match_subtask_uuids):
             self.ch.stop_consuming()
+        for rawResult in result['results']:
+            if rawResult['result'] == 'ok':
+                print>>self.result_file, 'M %s %s %s ok %s' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'], rawResult['score'])
+            elif rawResult['result'] == 'failed':
+                print>>self.result_file, 'M %s %s %s failed' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'])
+        self.result_file.flush()
+
 
     def waitForEnrollResults(self):
         print 'waiting for enroll results'
