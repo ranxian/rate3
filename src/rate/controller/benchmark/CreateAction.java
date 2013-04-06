@@ -1,7 +1,7 @@
 package rate.controller.benchmark;
 
-import rate.engine.benchmark.generator.*;
-import rate.engine.view.GenerateStrategy.AbstractGenerateStrategy;
+import rate.engine.benchmark.GeneralBenchmark;
+import rate.engine.benchmark.OneClassImposterBenchmark;
 import rate.model.BenchmarkEntity;
 import rate.model.ViewEntity;
 import rate.util.DebugUtil;
@@ -48,19 +48,20 @@ public class CreateAction extends BenchmarkActionBase {
 
         String generatorStr = benchmark.getGenerator();
         if (generatorStr.matches("(SMALL)|(MEDIUM)|((VERY_)?LARGE)")) {
-            GeneralGenrator generator = new GeneralGenrator();
-            generator.setBenchmark(benchmark);
+            GeneralBenchmark generalBenchmark = new GeneralBenchmark();
+
+            generalBenchmark.setBenchmark(benchmark);
             // This should depend on user's option
-            generator.setScale(generatorStr);
-            benchmark = generator.generate();
+            generalBenchmark.setScale(generatorStr);
+            benchmark = generalBenchmark.generate();
         } else if (generatorStr.equals("OneClassImposter")) {
-            OneClassImposterGenerator generator = new OneClassImposterGenerator();
+            OneClassImposterBenchmark generator = new OneClassImposterBenchmark();
             generator.setBenchmark(benchmark);
             benchmark = generator.generate();
         } else {
             return ERROR;
 //        } else if (generatorStr.equals("SLSB")) {
-//            SLSBGenerator generator = new SLSBGenerator();
+//            SLSBBenchmark generator = new SLSBBenchmark();
 //            generator.setBenchmark(benchmark);
 //            generator.setScale("SMALL");
 //            benchmark = generator.generate();

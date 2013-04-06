@@ -3,7 +3,7 @@ package rate.test;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import rate.engine.benchmark.generator.OneClassImposterGenerator;
+import rate.engine.benchmark.OneClassImposterBenchmark;
 import rate.model.BenchmarkEntity;
 import rate.model.ViewEntity;
 import rate.util.DebugUtil;
@@ -29,7 +29,7 @@ public class OneClassImposterBenchmarkGeneratorTest {
 
         session.save(benchmark);
 
-        OneClassImposterGenerator generator = new OneClassImposterGenerator();
+        OneClassImposterBenchmark generator = new OneClassImposterBenchmark();
         generator.setBenchmark(benchmark);
         generator.setImposterClazzUuid("4FDC5715-C239-4FFB-9ED6-4F5FBA7B918D");
 

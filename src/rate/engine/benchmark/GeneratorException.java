@@ -1,10 +1,10 @@
-package rate.engine.benchmark.generator;
+package rate.engine.benchmark;
 
 /**
- * User:    Yu Yuankai
- * Email:   yykpku@gmail.com
- * Date:    12-12-9
- * Time:    下午9:10
+ * Created by XianRan
+ * Email: xranthoar@gmail.com
+ * Date: 13-4-6
+ * Time: 下午4:17
  */
 public class GeneratorException extends Exception {
     public GeneratorException(String message) {

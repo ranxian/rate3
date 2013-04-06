@@ -1,8 +1,7 @@
 package rate.test;
 
 import org.hibernate.Query;
-import rate.engine.benchmark.generator.GeneralGenrator;
-import rate.engine.benchmark.generator.SLSBGenerator;
+import rate.engine.benchmark.SLSBBenchmark;
 import rate.model.BenchmarkEntity;
 import rate.model.ViewEntity;
 import rate.util.DebugUtil;
@@ -26,9 +25,10 @@ public class SLSBGeneratorTest extends BaseTest {
         benchmark.setView(view);
         benchmark.setName("SLSB");
         // general
-        SLSBGenerator generator = new SLSBGenerator();
+        SLSBBenchmark generator = new SLSBBenchmark();
         generator.setB4Far(10);
         generator.setB4Frr(10);
+        generator.setK(10);
         benchmark.setGenerator("SLSB");
         benchmark.setType("SLSB");
 

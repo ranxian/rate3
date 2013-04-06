@@ -1,13 +1,12 @@
-package rate.engine.benchmark.generator;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
+package rate.engine.benchmark;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import rate.model.*;
+import rate.model.BenchmarkEntity;
+import rate.model.ClazzEntity;
+import rate.model.SampleEntity;
 import rate.util.DebugUtil;
-import rate.util.HibernateUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,10 +17,10 @@ import java.util.*;
 /**
  * Created by XianRan
  * Email: xranthoar@gmail.com
- * Date: 13-3-26
- * Time: 下午4:35
+ * Date: 13-4-6
+ * Time: 下午4:17
  */
-public class SLSBGenerator extends GeneralGenrator {
+public class SLSBBenchmark extends GeneralBenchmark {
     public int getB4Frr() {
         return B4Frr;
     }
@@ -38,17 +37,22 @@ public class SLSBGenerator extends GeneralGenrator {
         B4Far = b4Far;
     }
 
+    public void setK(int K) {
+        this.K = K;
+    }
+
+    public int getK() {
+        return K;
+    }
+
     private int B4Frr;
     private int B4Far;
+    private int K;
 
     private String frrBenchmarkDir;
     private String farBenchmarkDir;
     private String descFilePath;
     Random random = new Random();
-    public SLSBGenerator() {
-        // 运算量比较大，用 SMALL 测试
-        setScale("SMALL");
-    }
 
     public void setBenchmark(BenchmarkEntity benchmark) {
         super.setBenchmark(benchmark);
@@ -57,13 +61,24 @@ public class SLSBGenerator extends GeneralGenrator {
         descFilePath = FilenameUtils.concat(benchmark.dirPath(), "desc.txt");
     }
 
+    public void getBenchmarkDesc() throws Exception {
+        File descFile = new File(descFilePath);
+        if (descFile.exists()) {
+            String line = FileUtils.readFileToString(descFile);
+            String[] params = line.split(" ");
+            B4Frr = Integer.parseInt(params[0]);
+            B4Far = Integer.parseInt(params[1]);
+        }
+    }
+
     public BenchmarkEntity generate() throws Exception {
 //        if (B4Frr == 0 || B4Far == 0) throw new GeneratorException("B for Far or Frr not set!");
 
         // Experimental way
-        if (B4Frr == 0 || B4Far == 0) {
+        if (B4Frr == 0 || B4Far == 0 || K == 0) {
             B4Frr = 10;
             B4Far = 10;
+            K = 10;
         }
 
         prepare();
@@ -133,7 +148,7 @@ public class SLSBGenerator extends GeneralGenrator {
         DebugUtil.debug("classcount = " + classCount);
         Set<Integer> generalSelectedSet = new HashSet<Integer>();
 
-        for (int i = 1; i <= B4Far; i++) {  // Generate S[1], S[2], ..., S[B4Far]
+        for (int i = 1; i <= K; i++) {  // Generate S[1], S[2], ..., S[B4Far]
             Set<Integer> set = new HashSet<Integer>();
 
             // 见论文中对划分子集的描述
@@ -197,4 +212,3 @@ public class SLSBGenerator extends GeneralGenrator {
         generateInterClazz(generalPw, generalSelected);
     }
 }
-

@@ -4,7 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.jfree.io.FileUtilities;
-import rate.engine.benchmark.generator.*;
+import rate.engine.benchmark.GeneralBenchmark;
 import rate.model.BenchmarkEntity;
 import rate.model.ClazzEntity;
 import rate.model.ViewEntity;
@@ -34,7 +34,7 @@ public class GeneralGeneratortest {
         benchmark.setName("LARGE");
         benchmark.setType("General");
         // general
-        GeneralGenrator generator = new GeneralGenrator();
+        GeneralBenchmark generator = new GeneralBenchmark();
         generator.setClassCount(10);
         generator.setSampleCount(5);
         benchmark.setGenerator("SMALL");

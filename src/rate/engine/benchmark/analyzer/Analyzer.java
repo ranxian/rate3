@@ -5,6 +5,7 @@ import rate.model.TaskEntity;
 import rate.util.RateConfig;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**

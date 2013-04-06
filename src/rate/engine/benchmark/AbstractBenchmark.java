@@ -1,28 +1,19 @@
-package rate.engine.benchmark.generator;
+package rate.engine.benchmark;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.model.BenchmarkEntity;
-import rate.model.ClazzEntity;
-import rate.model.SampleEntity;
 import rate.model.ViewEntity;
 import rate.util.HibernateUtil;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
- * User:    Yu Yuankai
- * Email:   yykpku@gmail.com
- * Date:    12-12-9
- * Time:    下午9:04
+ * Created by XianRan
+ * Email: xranthoar@gmail.com
+ * Date: 13-4-6
+ * Time: 下午4:16
  */
-abstract public class AbstractGenerator {
-
+public abstract class AbstractBenchmark {
     protected final Session session = HibernateUtil.getSession();
 
     protected ViewEntity view = null;
