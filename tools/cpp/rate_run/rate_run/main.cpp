@@ -62,24 +62,24 @@ int main(int argc, char* argv[])
 	SIZE_T memlimit = atoi(argv[2]);
 	char cmd[MAX_PATH], args[MAX_PATH], cmdline[MAX_PATH];
 	char stdoutPath[MAX_PATH], stderrPath[MAX_PATH], purfPath[MAX_PATH];
-	strcpy(stdoutPath, argv[3]);
-	strcpy(stderrPath, argv[4]);
-	strcpy(purfPath, argv[5]);
+	//strcpy(stdoutPath, argv[3]);
+	//strcpy(stderrPath, argv[4]);
+	strcpy(purfPath, "rate_run_perf.txt");
 
-	ParseCommandLine(argc-6, &argv[6], cmd, args, cmdline);
+	ParseCommandLine(argc-3, &argv[3], cmd, args, cmdline);
 	cerr << cmdline << endl;
 	cerr << "timelimit:" << timelimit_ms << "ms memlimit:" << memlimit << "byte(" << memlimit/1024 << "kb)" << endl;
 	
 	ACCOUNTING accounting;
 	ZeroMemory(&accounting, sizeof(accounting));
 
-	HANDLE hstdoutf = NULL, hstderrf = NULL;
-	MakeOutputFileHandle(&hstdoutf, stdoutPath);
-	MakeOutputFileHandle(&hstderrf, stderrPath);	
+	//HANDLE hstdoutf = NULL, hstderrf = NULL;
+	//MakeOutputFileHandle(&hstdoutf, stdoutPath);
+	//MakeOutputFileHandle(&hstderrf, stderrPath);	
 
 	//////////
 	DWORD runresult;
-	runresult = run(timelimit_ms, memlimit, cmdline, &accounting, hstdoutf, hstderrf);
+	runresult = run(timelimit_ms, memlimit, cmdline, &accounting, GetStdHandle(STD_OUTPUT_HANDLE), NULL);
 	//////////
 	
 	if (runresult!=0) {
@@ -92,5 +92,5 @@ int main(int argc, char* argv[])
 
 	//LOG(INFO) << "finished" << endl; 
 
-	return 0;
+	return runresult;
 }

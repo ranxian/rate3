@@ -1,4 +1,6 @@
 import uuid
+import traceback
+import time
 import ftplib
 import subprocess
 import shutil
@@ -24,6 +26,7 @@ WORKER_RATE_ROOT=os.path.join('.', 'RATE_ROOT')
 file_lock = threading.Lock()
 dir_lock = threading.Lock()
 ftp_mkd_lock = threading.Lock()
+clean_lock = threading.Lock()
 semphore = threading.Semaphore(WORKER_NUM)
 
 class Worker:
@@ -84,6 +87,8 @@ class Worker:
 
     def doEnroll(self, subtask):
         enrollEXE = os.path.join(WORKER_RATE_ROOT, subtask['enrollEXE'])
+        timelimit = subtask['timelimit']
+        memlimit = subtask['memlimit']
         rawResults = []
         ftp = ftplib.FTP('ratedev-server', 'ratedev', 'Biometrics')
         ftpdir = 'RATE_ROOT/temp/%s/' % subtask['producer_uuid'][-12:]
@@ -107,12 +112,12 @@ class Worker:
             absImagePath = os.path.join(WORKER_RATE_ROOT, f).replace('/', os.path.sep)
             absTemplatePath = os.path.join(WORKER_RATE_ROOT,'temp',subtask['producer_uuid'][-12:],u[-12:-10], "%s.t" % u[-10:]).replace('/', os.path.sep)
             self.checkDir(os.path.dirname(absTemplatePath))
-            cmd = '%s %s %s' % (enrollEXE, absImagePath, absTemplatePath)
+            cmd = '.\\rate_run.exe %s %s %s %s %s' % (str(timelimit), str(memlimit), enrollEXE, absImagePath, absTemplatePath)
             cmdlogfile = open('./enrollcmd.log', 'a')
             print>>cmdlogfile, cmd
             cmdlogfile.close()
             try:
-                p = subprocess.Popen(cmd.split(' '))
+                p = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=open(os.devnull, "w"))
                 returncode = p.wait()
 #                print returncode
                 if returncode == 0 and os.path.exists(absTemplatePath):
@@ -134,6 +139,8 @@ class Worker:
 
     def doMatch(self, subtask):
         rawResults = []
+        timelimit = subtask['timelimit']
+        memlimit = subtask['memlimit']
         matchEXE = os.path.join(WORKER_RATE_ROOT, subtask['matchEXE']).replace('/', os.path.sep)
         for tinytask in subtask['tinytasks']:
             u1 = tinytask['uuid1']
@@ -147,12 +154,12 @@ class Worker:
             rawResult['uuid2'] = u2
             rawResult['match_type'] = tinytask['match_type']
             rawResult['result'] = 'failed'
-            cmd = '%s %s %s' % (matchEXE, f1, f2)
+            cmd = '.\\rate_run.exe %s %s %s %s %s' % (str(timelimit), str(memlimit), matchEXE, f1, f2)
             cmdlogfile = open('./matchcmd.log', 'a')
             print>>cmdlogfile, cmd
             cmdlogfile.close()
             try:
-                p = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE)
+                p = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=open(os.devnull, "w"))
                 returncode = p.wait()
                 if returncode != 0:
                     rawResult['result'] = 'failed'
@@ -203,14 +210,33 @@ class Worker:
             result['subtask_uuid'] = subtask['subtask_uuid']
             result['type'] = subtask['type']
             result_queue = 'results-%s-%s' % (subtask['type'], subtask['producer_uuid'])
+            #print 'result_queue:', result_queue
             self.ch.queue_declare(queue=result_queue)
             self.ch.basic_publish(exchange='', routing_key=result_queue, body=pickle.dumps(result))
             self.ch.basic_ack(delivery_tag=method.delivery_tag)
 
         except Exception, e:
-            print e
+            traceback.print_exc()
+            raise
         finally:
             semphore.release()
+
+    def doClean(self, ch, method, properties, body):
+        cleanpath = pickle.loads(body)
+        cleanpath = os.path.join(WORKER_RATE_ROOT, cleanpath)
+        if not os.path.exists(cleanpath):
+            return
+
+        try:
+            clean_lock.acquire()
+            if not os.path.exists(cleanpath):
+                return
+            print "%s: clean: %s" % (self.uuid[:8], cleanpath)
+            shutil.rmtree(cleanpath)
+        except Exception, e:
+            print e
+        finally:
+            clean_lock.release()
 
     def start(self):
         while True:
@@ -218,15 +244,23 @@ class Worker:
                 self.conn = pika.BlockingConnection(pika.ConnectionParameters(self.host))
                 self.ch = self.conn.channel()
                 print "[%d] [%s]" % (os.getpid(), self.uuid[:8]), 'queue server connected'
-                self.ch.queue_declare(queue = 'jobs')
                 self.ch.basic_qos(prefetch_count=1)
+
+                self.ch.exchange_declare(exchange='jobs-cleanup-exchange', type='fanout')
+                my_cleanup_queue_name = self.ch.queue_declare(exclusive=True).method.queue
+                self.ch.queue_bind(exchange='jobs-cleanup-exchange', queue=my_cleanup_queue_name)
+                self.ch.basic_consume(self.doClean, queue=my_cleanup_queue_name, no_ack=True)
+
+                self.ch.queue_declare(queue = 'jobs')
                 self.ch.basic_consume(self.doWork, queue='jobs')
+
                 self.ch.start_consuming()
             except AMQPConnectionError, e:
-                print e
+                print 'AMQPConnectionError: ', e
                 pass
             except socket.error, e:
-                print "[",os.getpid(),"]", e
+                print "socket error: [", os.getpid(),"]", e
+            time.sleep(1)
 
 def proc():
     while True:

@@ -1,4 +1,5 @@
 #coding:utf8
+import shutil
 import os
 import pika
 import pickle
@@ -123,8 +124,20 @@ class RateProducer:
 
 #        self.generateResults()
 
-#        self.cleanUp()
+        self.cleanUp()
 
+    def cleanUp(self):
+        print "cleaning up"
+        try:
+            temp_dir = os.path.join(PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:])
+            if os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
+        except Exception, e:
+            print e
+
+        self.ch.exchange_declare(exchange='jobs-cleanup-exchange', type='fanout')
+        cleanup_dir = os.path.join('temp', self.uuid[-12:])
+        self.ch.basic_publish(exchange='jobs-cleanup-exchange', routing_key='', body=pickle.dumps(cleanup_dir))
 
     def submit(self, subtask):
         if subtask==None:
@@ -144,7 +157,7 @@ class RateProducer:
         if len(self.enroll_finished_subtask_uuids)==len(self.enroll_subtask_uuids):
             self.ch.stop_consuming()
         for rawResult in result['results']:
-            print>>self.enroll_result_file, "E %s %s" % (rawResult['uuid'], rawResult['result'])
+            print>>self.enroll_result_file, "%s %s" % (rawResult['uuid'], rawResult['result'])
             if rawResult['result']=='failed':
                 self.failed_enroll_uuids.add(rawResult['uuid'])
         self.enroll_result_file.flush()
@@ -158,11 +171,10 @@ class RateProducer:
             self.ch.stop_consuming()
         for rawResult in result['results']:
             if rawResult['result'] == 'ok':
-                print>>self.match_result_file, 'M %s %s %s ok %s' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'], rawResult['score'])
+                print>>self.match_result_file, '%s %s %s ok %s' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'], rawResult['score'])
             elif rawResult['result'] == 'failed':
-                print>>self.match_result_file, 'M %s %s %s failed' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'])
+                print>>self.match_result_file, '%s %s %s failed' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'])
         self.match_result_file.flush()
-
 
     def waitForEnrollResults(self):
         print 'waiting for enroll results'
