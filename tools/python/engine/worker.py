@@ -18,7 +18,7 @@ import pickle
 SERVER='ratedev-server'
 WORKER_NUM=4
 #WORKER_RATE_ROOT='%s/RATE_ROOT' % (os.path.dirname(os.path.abspath(__file__)),)
-WORKER_RATE_ROOT='./RATE_ROOT'
+WORKER_RATE_ROOT=os.path.join('.', 'RATE_ROOT')
 #print WORKER_RATE_ROOT
 
 file_lock = threading.Lock()
@@ -97,13 +97,13 @@ class Worker:
             u = tinytask['uuid']
             rawResult = { 'uuid': u,'result':'failed' }
             f = tinytask['file']
-            absImagePath = os.path.join(WORKER_RATE_ROOT, f)
-            absTemplatePath = os.path.join(WORKER_RATE_ROOT,'temp',subtask['producer_uuid'][-12:],u[-12:-10], "%s.t" % u[-10:])
+            absImagePath = os.path.join(WORKER_RATE_ROOT, f).replace('/', os.path.sep)
+            absTemplatePath = os.path.join(WORKER_RATE_ROOT,'temp',subtask['producer_uuid'][-12:],u[-12:-10], "%s.t" % u[-10:]).replace('/', os.path.sep)
             self.checkDir(os.path.dirname(absTemplatePath))
-            cmd = "%s %s %s" % (enrollEXE, absImagePath, absTemplatePath)
-#            cmdlogfile = open('./cmd.log', 'a')
-#            print>>cmdlogfile, cmd
-#            cmdlogfile.close()
+            cmd = '%s %s %s' % (enrollEXE, absImagePath, absTemplatePath)
+            cmdlogfile = open('./enrollcmd.log', 'a')
+            print>>cmdlogfile, cmd
+            cmdlogfile.close()
             try:
                 p = subprocess.Popen(cmd.split(' '))
                 returncode = p.wait()
@@ -127,19 +127,21 @@ class Worker:
 
     def doMatch(self, subtask):
         rawResults = []
-        matchEXE = os.path.join(WORKER_RATE_ROOT, subtask['matchEXE'])
+        matchEXE = os.path.join(WORKER_RATE_ROOT, subtask['matchEXE']).replace('/', os.path.sep)
         for tinytask in subtask['tinytasks']:
             u1 = tinytask['uuid1']
             u2 = tinytask['uuid2']
-            f1 = tinytask['file1']
-            f2 = tinytask['file2']
+            f1 = tinytask['file1'].replace('/', os.path.sep)
+            f2 = tinytask['file2'].replace('/', os.path.sep)
+            f1 = os.path.join(WORKER_RATE_ROOT, f1)
+            f2 = os.path.join(WORKER_RATE_ROOT, f2)
             rawResult = {}
             rawResult['uuid1'] = u1
             rawResult['uuid2'] = u2
             rawResult['match_type'] = tinytask['match_type']
             rawResult['result'] = 'failed'
-            cmd = "%s %s %s" % (matchEXE, f1, f2)
-            cmdlogfile = open('./cmd.log', 'a')
+            cmd = '%s %s %s' % (matchEXE, f1, f2)
+            cmdlogfile = open('./matchcmd.log', 'a')
             print>>cmdlogfile, cmd
             cmdlogfile.close()
             try:
@@ -149,11 +151,12 @@ class Worker:
                     rawResult['result'] = 'failed'
                     print 'returncode: %d' % p.returncode
                 else:
-                    for line in p.stdout:
-                        print line
-                    score = float(p.stdout[0].strip())
+                    score = p.stdout.readline().strip()
+#                    print "score string: %s" % score
+                    score = float(score)
+#                    print "score float: %f" % score
                     rawResult['result'] = 'ok'
-                    rawResult['score'] = score
+                    rawResult['score'] = str(score)
             except Exception, e:
                 print e
                 rawResult['result'] = 'failed'

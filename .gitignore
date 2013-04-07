@@ -4,6 +4,7 @@
 *.war
 *.ear
 
+# intellij
 out/
 workspace.xml
 .idea/compiler.xml
@@ -12,6 +13,7 @@ src/log4j.properties
 src/hibernate.cfg.xml
 Executor.java
 
+# visual studio
 [Dd]ebug*/
 [Rr]elease*/
 ipch*/
@@ -21,3 +23,5 @@ ipch*/
 
 *.user
 *.pyc
+*.log
+*.swp
