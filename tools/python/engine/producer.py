@@ -11,10 +11,10 @@ MATCH_BLOCK_SIZE = 100
 PRODUCER_RATE_ROOT='/Volumes/RATE_ROOT/'
 
 class RateProducer:
-    def __init__(self, host, benchmark_file_path, result_file_path, enrollEXE, matchEXE, timelimit, memlimit):
-        self.benchmark_file_path = benchmark_file_path
-        self.enrollEXE = enrollEXE
-        self.matchEXE = matchEXE
+    def __init__(self, host, benchmark_file_dir, result_file_dir, algorithm_version_dir, timelimit, memlimit):
+        self.benchmark_file_path = os.path.join(benchmark_file_dir, 'benchmark.txt')
+        self.enrollEXE = os.path.join(algorithm_version_dir, 'enroll.exe')
+        self.matchEXE = os.path.join(algorithm_version_dir, 'match.exe')
         self.timelimit = timelimit
         self.memlimit = memlimit
 
@@ -27,9 +27,10 @@ class RateProducer:
         self.match_subtask_uuids = []
         self.enroll_finished_subtask_uuids = []
         self.match_finished_subtask_uuids = []
-        if not os.path.isdir(os.path.dirname(result_file_path)):
-            os.makedirs(os.path.dirname(result_file_path))
-        self.result_file = open(result_file_path, 'w')
+        if not os.path.isdir(result_file_dir):
+            os.makedirs(result_file_dir)
+        self.enroll_result_file = open(os.path.join(result_file_dir, 'enroll_result.txt'), 'w')
+        self.match_result_file = open(os.path.join(result_file_dir, 'match_result.txt'), 'w')
         self.failed_enroll_uuids = set()
         self.failed_match_uuids = set()
 
@@ -143,10 +144,10 @@ class RateProducer:
         if len(self.enroll_finished_subtask_uuids)==len(self.enroll_subtask_uuids):
             self.ch.stop_consuming()
         for rawResult in result['results']:
-            print>>self.result_file, "E %s %s" % (rawResult['uuid'], rawResult['result'])
+            print>>self.enroll_result_file, "E %s %s" % (rawResult['uuid'], rawResult['result'])
             if rawResult['result']=='failed':
                 self.failed_enroll_uuids.add(rawResult['uuid'])
-        self.result_file.flush()
+        self.enroll_result_file.flush()
 
     def matchCallBack(self, ch, method, properties, body):
         result = pickle.loads(body)
@@ -157,10 +158,10 @@ class RateProducer:
             self.ch.stop_consuming()
         for rawResult in result['results']:
             if rawResult['result'] == 'ok':
-                print>>self.result_file, 'M %s %s %s ok %s' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'], rawResult['score'])
+                print>>self.match_result_file, 'M %s %s %s ok %s' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'], rawResult['score'])
             elif rawResult['result'] == 'failed':
-                print>>self.result_file, 'M %s %s %s failed' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'])
-        self.result_file.flush()
+                print>>self.match_result_file, 'M %s %s %s failed' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'])
+        self.match_result_file.flush()
 
 
     def waitForEnrollResults(self):

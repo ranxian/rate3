@@ -23,6 +23,7 @@ WORKER_RATE_ROOT=os.path.join('.', 'RATE_ROOT')
 
 file_lock = threading.Lock()
 dir_lock = threading.Lock()
+ftp_mkd_lock = threading.Lock()
 semphore = threading.Semaphore(WORKER_NUM)
 
 class Worker:
@@ -85,13 +86,19 @@ class Worker:
         enrollEXE = os.path.join(WORKER_RATE_ROOT, subtask['enrollEXE'])
         rawResults = []
         ftp = ftplib.FTP('ratedev-server', 'ratedev', 'Biometrics')
+        ftpdir = 'RATE_ROOT/temp/%s/' % subtask['producer_uuid'][-12:]
         try:
-            ftpdir = 'RATE_ROOT/temp/%s/' % subtask['producer_uuid'][-12:]
             ftp.cwd(ftpdir)
         except ftplib.error_perm, e:
             if e.message.startswith('550'):
-                ftp.mkd(ftpdir)
-                ftp.cwd(ftpdir)
+                try:
+                    ftp_mkd_lock.acquire()
+                    ftp.cwd(ftpdir)
+                except ftplib.error_perm, e2:
+                    ftp.mkd(ftpdir)
+                    ftp.cwd(ftpdir)
+                finally:
+                    ftp_mkd_lock.release()
 
         for tinytask in subtask['tinytasks']:
             u = tinytask['uuid']
