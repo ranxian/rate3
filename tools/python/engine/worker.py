@@ -18,7 +18,7 @@ import pickle
 #TODO maybe we should use multilevel dirs for templates
 
 SERVER='ratedev-server'
-WORKER_NUM=4
+WORKER_NUM=8
 #WORKER_RATE_ROOT='%s/RATE_ROOT' % (os.path.dirname(os.path.abspath(__file__)),)
 WORKER_RATE_ROOT=os.path.join('.', 'RATE_ROOT')
 #print WORKER_RATE_ROOT
@@ -122,11 +122,19 @@ class Worker:
 #                print returncode
                 if returncode == 0 and os.path.exists(absTemplatePath):
                     template_file = open(absTemplatePath, 'rb')
-                    try:
-                        ftp.mkd(u[-12:-10])
-                    except:
-                        pass
-                    ftp.storbinary('STOR ' + "%s/%s.t" % (u[-12:-10], u[-10:]), template_file)
+                    tried = 0
+                    while tried<5:
+                        try:
+                            ftp.mkd(u[-12:-10])
+                        except:
+                            pass
+                        try:
+                            ftp.storbinary('STOR ' + "%s/%s.t" % (u[-12:-10], u[-10:]), template_file)
+                            break
+                        except Exception, e:
+                            print e
+                            traceback.print_exc()
+                            tried = tried + 1
                     template_file.close()
                     rawResult['result'] = 'ok'
             except Exception, e:

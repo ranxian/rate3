@@ -76,34 +76,47 @@ class RateProducer:
         f = open(self.benchmark_file_path, 'r')
         lines = f.readlines()
         f.close()
+        print "benchmark.txt read into memory"
         matches = [ lines[i*3:i*3+3] for i in range(len(lines)/3) ]
+        print "benchmark.txt splitted"
         uuid_files = {}
+        i = 0
         for match in matches:
             (u1,u2) = match[0].strip().split(' ')[:2]
             if u1 not in uuid_files.keys():
                 uuid_files[u1] = match[1].strip()
             if u2 not in uuid_files.keys():
                 uuid_files[u2] = match[2].strip()
+            i=i+1
+            if i%1000==0:
+                print "[%d/%d] matches analyzed" % (i, len(matches))
         print "%d matches" % len(matches)
         print "%d enrolls" % len(uuid_files)
 
         # enroll all
         l = []
+        i = 0
         for (u,f) in uuid_files.items():
             t = {'uuid':u, 'file': os.path.join('samples',f) }
             l.append(t)
             if len(l)==ENROLL_BLOCK_SIZE:
                 self.submitEnrollBlock(l)
                 l = []
+                i = i+1
+                if i%10 == 0:
+                    print "[%d*%d/%d] enrolls has been submitted" % (i, ENROLL_BLOCK_SIZE, len(uuid_files))
         if len(l)!=0:
             self.submitEnrollBlock(l)
             l = []
+        self.enroll_uuids = uuid_files.keys()
+        uuid_files = None # does python release memory when I do this?
 
         self.waitForEnrollResults()
         print "enroll finished, failed %d" % len(self.failed_enroll_uuids)
 
         # match all
         l = []
+        i = 0
         for match in matches:
             (u1,u2, gOrI) = match[0].strip().split(' ')[:3]
             if u1 in self.failed_enroll_uuids or u2 in self.failed_enroll_uuids:
@@ -115,12 +128,15 @@ class RateProducer:
             if len(l) == MATCH_BLOCK_SIZE:
                 self.submitMatchBlock(l)
                 l = []
+                i = i+1
+                if i%10 == 0:
+                    print "[%d*%d/%d] matches has been submitted" % (i, MATCH_BLOCK_SIZE, len(matches))
         if len(l)!=0:
             self.submitMatchBlock(l)
             l = []
 
-        self.waitForMatchResults()
-
+        if len(self.match_subtask_uuids)!=0:
+            self.waitForMatchResults()
 
 #        self.generateResults()
 
@@ -152,7 +168,6 @@ class RateProducer:
     def enrollCallBack(self, ch, method, properties, body):
         result = pickle.loads(body)
         self.enroll_finished_subtask_uuids.append(result['subtask_uuid'])
-        print "enroll result [%s] [%d/%d]" % (result['subtask_uuid'][:8], len(self.enroll_finished_subtask_uuids), len(self.enroll_subtask_uuids))
         self.ch.basic_ack(delivery_tag=method.delivery_tag)
         if len(self.enroll_finished_subtask_uuids)==len(self.enroll_subtask_uuids):
             self.ch.stop_consuming()
@@ -160,6 +175,7 @@ class RateProducer:
             print>>self.enroll_result_file, "%s %s" % (rawResult['uuid'], rawResult['result'])
             if rawResult['result']=='failed':
                 self.failed_enroll_uuids.add(rawResult['uuid'])
+        print "enroll result [%s] subtask finished/total [%d/%d] enroll failed/total [%d/%d]" % (result['subtask_uuid'][:8], len(self.enroll_finished_subtask_uuids), len(self.enroll_subtask_uuids), len(self.failed_enroll_uuids), len(self.enroll_uuids))
         self.enroll_result_file.flush()
 
     def matchCallBack(self, ch, method, properties, body):
