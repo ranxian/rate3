@@ -5,6 +5,7 @@ import ftplib
 import subprocess
 import shutil
 import urllib2
+import multiprocessing
 from multiprocessing import Process
 import threading
 import time
@@ -23,18 +24,32 @@ WORKER_NUM=8
 WORKER_RATE_ROOT=os.path.join('.', 'RATE_ROOT')
 #print WORKER_RATE_ROOT
 
-file_lock = threading.Lock()
-dir_lock = threading.Lock()
-ftp_mkd_lock = threading.Lock()
-clean_lock = threading.Lock()
-semphore = threading.Semaphore(WORKER_NUM)
+
+#file_lock = threading.Lock()
+#dir_lock = threading.Lock()
+#ftp_mkd_lock = threading.Lock()
+#clean_lock = threading.Lock()
 
 class Worker:
-    def __init__(self, host='localhost'):
+    def __init__(self, host, file_lock, dir_lock, ftp_mkd_lock, clean_lock, semaphore, process_lock, CURRENT_WORKER_NUM):
         self.host = host
-        self.uuid = uuid.uuid4().__str__()
+
+        self.file_lock = file_lock
+        self.dir_lock = dir_lock
+        self.ftp_mkd_lock = ftp_mkd_lock
+        self.clean_lock = clean_lock
+        self.semaphore = semaphore
+        self.process_lock = process_lock
+        self.CURRENT_WORKER_NUM = CURRENT_WORKER_NUM
+
+        #self.uuid = uuid.uuid4().__str__()
         self.WORKER_RATE_ROOT = WORKER_RATE_ROOT
         self.download_ftp = None
+
+        process_lock.acquire()
+        self.worker_num = CURRENT_WORKER_NUM.value
+        CURRENT_WORKER_NUM.value = CURRENT_WORKER_NUM.value + 1
+        process_lock.release()
 
 #    def __del__(self):
 #        self.ch.queue_delete(queue='running-%s'%self.uuid)
@@ -46,13 +61,13 @@ class Worker:
         pass
 
     def checkDir(self, dirPath):
-        dir_lock.acquire()
+        self.dir_lock.acquire()
         try:
             if not os.path.isdir(dirPath):
                 os.makedirs(dirPath)
         except exceptions.OSError, e:
             print e
-        dir_lock.release()
+        self.dir_lock.release()
 
     def checkFile(self, relPath):
         tried = 0
@@ -60,13 +75,13 @@ class Worker:
             absPath = os.path.join(self.WORKER_RATE_ROOT, relPath)
             if os.path.exists(absPath):
                 break
-            file_lock.acquire()
+            self.file_lock.acquire()
             if os.path.exists(absPath):
-                file_lock.release()
+                self.file_lock.release()
                 break
             try:
                 self.checkDir(os.path.dirname(absPath))
-                print '%s: download [%s] to [%s]' % (self.uuid[:8], relPath, absPath)
+                #print '%s: download [%s]' % (self.uuid[:8], relPath)
                 lf = open(absPath, 'wb')
                 self.openFTP() # open ftp only if we need it, and close it when self.prepare() is done
                 self.download_ftp.retrbinary("RETR " + relPath, lf.write)
@@ -77,13 +92,14 @@ class Worker:
                 print("retry %d times" % tried)
                 if os.path.exists(absPath):
                     os.remove(absPath)
-            file_lock.release()
+            self.file_lock.release()
 
     def prepare(self, subtask):
-        print "%s: prepare" % self.uuid[:8]
+        print "%s: prepare" % str(self.worker_num)
         for f in subtask['files']:
             self.checkFile(f)
         self.closeFTP()
+        print "%s: prepare finished" % str(self.worker_num)
 
     def doEnroll(self, subtask):
         enrollEXE = os.path.join(WORKER_RATE_ROOT, subtask['enrollEXE'])
@@ -97,13 +113,14 @@ class Worker:
         except ftplib.error_perm, e:
             if e.message.startswith('550'):
                 try:
-                    ftp_mkd_lock.acquire()
+                    #self.ftp_mkd_lock.acquire()
                     ftp.cwd(ftpdir)
                 except ftplib.error_perm, e2:
-                    ftp.mkd(ftpdir)
+                    #ftp.mkd(ftpdir)
                     ftp.cwd(ftpdir)
                 finally:
-                    ftp_mkd_lock.release()
+                    #self.ftp_mkd_lock.release()
+                    pass
 
         for tinytask in subtask['tinytasks']:
             u = tinytask['uuid']
@@ -125,7 +142,8 @@ class Worker:
                     tried = 0
                     while tried<5:
                         try:
-                            ftp.mkd(u[-12:-10])
+                            pass
+                            #ftp.mkd(u[-12:-10])
                         except:
                             pass
                         try:
@@ -204,15 +222,16 @@ class Worker:
         self.prepare(subtask)
 
         try:
-            semphore.acquire()
+            self.semaphore.acquire()
             # do the job
             if subtask['type'] == 'enroll':
-                print "%s: enroll begin" % self.uuid[:8]
+                print "%s: enroll begin" % str(self.worker_num)
                 result = self.doEnroll(subtask)
-                print "%s: enroll finished" % self.uuid[:8]
+                print "%s: enroll finished" % str(self.worker_num)
             elif subtask['type'] == 'match':
-                print "%s: match" % self.uuid[:8]
+                print "%s: match begin" % str(self.worker_num)
                 result = self.doMatch(subtask)
+                print "%s: match finished" % str(self.worker_num)
 
             # put result back
             result['subtask_uuid'] = subtask['subtask_uuid']
@@ -227,7 +246,7 @@ class Worker:
             traceback.print_exc()
             raise
         finally:
-            semphore.release()
+            self.semaphore.release()
 
     def doClean(self, ch, method, properties, body):
         cleanpath = pickle.loads(body)
@@ -236,22 +255,22 @@ class Worker:
             return
 
         try:
-            clean_lock.acquire()
+            self.clean_lock.acquire()
             if not os.path.exists(cleanpath):
                 return
-            print "%s: clean: %s" % (self.uuid[:8], cleanpath)
+            print "%s: clean: %s" % (str(self.worker_num), cleanpath)
             shutil.rmtree(cleanpath)
         except Exception, e:
             print e
         finally:
-            clean_lock.release()
+            self.clean_lock.release()
 
     def start(self):
         while True:
             try:
                 self.conn = pika.BlockingConnection(pika.ConnectionParameters(self.host))
                 self.ch = self.conn.channel()
-                print "[%d] [%s]" % (os.getpid(), self.uuid[:8]), 'queue server connected'
+                print "[%d] [%s]" % (os.getpid(), str(self.worker_num)), 'queue server connected'
                 self.ch.basic_qos(prefetch_count=1)
 
                 self.ch.exchange_declare(exchange='jobs-cleanup-exchange', type='fanout')
@@ -270,18 +289,40 @@ class Worker:
                 print "socket error: [", os.getpid(),"]", e
             time.sleep(1)
 
-def proc():
+def proc(file_lock, dir_lock, ftp_mkd_lock, clean_lock, semaphore, process_lock, CURRENT_WORKER_NUM):
     while True:
         try:
-            w = Worker('%s' % (SERVER, ))
+            w = Worker('%s' % (SERVER, ), file_lock, dir_lock, ftp_mkd_lock, clean_lock, semaphore, process_lock, CURRENT_WORKER_NUM)
             w.start()
         except Exception, e:
+            print e
             pass
 
 if __name__=='__main__':
+    multiprocessing.freeze_support()
+
+    file_lock = multiprocessing.Lock()
+    dir_lock = multiprocessing.Lock()
+    ftp_mkd_lock = multiprocessing.Lock()
+    clean_lock = multiprocessing.Lock()
+    semaphore = multiprocessing.Semaphore(WORKER_NUM)
+    process_lock = multiprocessing.Lock()
+    CURRENT_WORKER_NUM=multiprocessing.Value("i")
+    CURRENT_WORKER_NUM.value = 1
+
+    process_args = []
+    process_args.append(file_lock)
+    process_args.append(dir_lock)
+    process_args.append(ftp_mkd_lock)
+    process_args.append(clean_lock)
+    process_args.append(semaphore)
+    process_args.append(process_lock)
+    process_args.append(CURRENT_WORKER_NUM)
+
     ts = []
     for i in range(WORKER_NUM*2):
-        t = threading.Thread(target=proc)
+        #t = threading.Thread(target=proc)
+        t = Process(target=proc, args=process_args)
         t.start()
         ts.append(t)
     for t in ts:

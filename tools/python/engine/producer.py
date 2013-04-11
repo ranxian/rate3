@@ -6,10 +6,10 @@ import pickle
 import time
 import uuid
 
-ENROLL_BLOCK_SIZE = 20
-MATCH_BLOCK_SIZE = 100
+ENROLL_BLOCK_SIZE = 50
+MATCH_BLOCK_SIZE = 1000
 
-PRODUCER_RATE_ROOT='/Volumes/RATE_ROOT/'
+PRODUCER_RATE_ROOT='/Volumes/ratedev-home/RATE_ROOT/'
 
 class RateProducer:
     def __init__(self, host, benchmark_file_dir, result_file_dir, algorithm_version_dir, timelimit, memlimit):
@@ -73,6 +73,11 @@ class RateProducer:
         return subtask
 
     def solve(self):
+        # prepare dirs
+        os.makedirs(os.path.join(PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:]))
+        for i in range(16*16):
+            tdir = str(hex(i+256))[-2:]
+            os.mkdir(os.path.join(PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:], tdir))
         f = open(self.benchmark_file_path, 'r')
         lines = f.readlines()
         f.close()
