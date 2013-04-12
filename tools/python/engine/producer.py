@@ -28,6 +28,7 @@ class RateProducer:
         self.match_subtask_uuids = []
         self.enroll_finished_subtask_uuids = []
         self.match_finished_subtask_uuids = []
+        self.result_file_dir = result_file_dir
         if not os.path.isdir(result_file_dir):
             os.makedirs(result_file_dir)
         self.enroll_result_file = open(os.path.join(result_file_dir, 'enroll_result.txt'), 'w')
@@ -74,47 +75,50 @@ class RateProducer:
 
     def solve(self):
         # prepare dirs
+        print "preparing dirs on server"
         os.makedirs(os.path.join(PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:]))
         for i in range(16*16):
             tdir = str(hex(i+256))[-2:]
             os.mkdir(os.path.join(PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:], tdir))
+        print "reading benchmark.txt"
         f = open(self.benchmark_file_path, 'r')
         lines = f.readlines()
         f.close()
         print "benchmark.txt read into memory"
         matches = [ lines[i*3:i*3+3] for i in range(len(lines)/3) ]
         print "benchmark.txt splitted"
-        uuid_files = {}
+
+        self.enroll_uuids = set()
         i = 0
+        j = 0
+        l = []
+        enroll_log_file = open(os.path.join(self.result_file_dir, 'benchmark.enroll.log'), 'w')
         for match in matches:
-            (u1,u2) = match[0].strip().split(' ')[:2]
-            if u1 not in uuid_files.keys():
-                uuid_files[u1] = match[1].strip()
-            if u2 not in uuid_files.keys():
-                uuid_files[u2] = match[2].strip()
+            us = match[0].strip().split(' ')[:2]
+            for u in us:
+                if u not in self.enroll_uuids:
+                    self.enroll_uuids.add(u)
+                    f = os.path.join('samples', match[us.index(u)+1].strip())
+                    t = {'uuid':u, 'file': f }
+                    print>>enroll_log_file, u, f
+                    l.append(t)
+                    if len(l)==ENROLL_BLOCK_SIZE:
+                        self.submitEnrollBlock(l)
+                        l = []
+                        j = j+1
+                        if j%10 == 0:
+                            print "[%d*%d] enrolls has been submitted" % (j, ENROLL_BLOCK_SIZE)
             i=i+1
             if i%1000==0:
                 print "[%d/%d] matches analyzed" % (i, len(matches))
-        print "%d matches" % len(matches)
-        print "%d enrolls" % len(uuid_files)
+        enroll_log_file.close()
 
-        # enroll all
-        l = []
-        i = 0
-        for (u,f) in uuid_files.items():
-            t = {'uuid':u, 'file': os.path.join('samples',f) }
-            l.append(t)
-            if len(l)==ENROLL_BLOCK_SIZE:
-                self.submitEnrollBlock(l)
-                l = []
-                i = i+1
-                if i%10 == 0:
-                    print "[%d*%d/%d] enrolls has been submitted" % (i, ENROLL_BLOCK_SIZE, len(uuid_files))
         if len(l)!=0:
             self.submitEnrollBlock(l)
             l = []
-        self.enroll_uuids = uuid_files.keys()
-        uuid_files = None # does python release memory when I do this?
+
+        print "%d matches" % len(matches)
+        print "%d enrolls" % len(self.enroll_uuids)
 
         self.waitForEnrollResults()
         print "enroll finished, failed %d" % len(self.failed_enroll_uuids)

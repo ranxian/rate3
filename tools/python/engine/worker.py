@@ -15,20 +15,9 @@ import pika
 from pika.exceptions import AMQPConnectionError
 import pickle
 
-#TODO when ftp download failed
-#TODO maybe we should use multilevel dirs for templates
-
 SERVER='ratedev-server'
 WORKER_NUM=8
-#WORKER_RATE_ROOT='%s/RATE_ROOT' % (os.path.dirname(os.path.abspath(__file__)),)
 WORKER_RATE_ROOT=os.path.join('.', 'RATE_ROOT')
-#print WORKER_RATE_ROOT
-
-
-#file_lock = threading.Lock()
-#dir_lock = threading.Lock()
-#ftp_mkd_lock = threading.Lock()
-#clean_lock = threading.Lock()
 
 class Worker:
     def __init__(self, host, file_lock, dir_lock, ftp_mkd_lock, clean_lock, semaphore, process_lock, CURRENT_WORKER_NUM):
@@ -320,7 +309,7 @@ if __name__=='__main__':
     process_args.append(CURRENT_WORKER_NUM)
 
     ts = []
-    for i in range(WORKER_NUM*2):
+    for i in range(WORKER_NUM*3):
         #t = threading.Thread(target=proc)
         t = Process(target=proc, args=process_args)
         t.start()
