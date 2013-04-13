@@ -5,11 +5,14 @@ import pika
 import pickle
 import time
 import uuid
+import ConfigParser
 
-ENROLL_BLOCK_SIZE = 50
-MATCH_BLOCK_SIZE = 1000
+config = ConfigParser.ConfigParser()
+config.readfp(open('producer.conf', 'r'))
 
-PRODUCER_RATE_ROOT='/Volumes/ratedev-home/RATE_ROOT/'
+ENROLL_BLOCK_SIZE = config.getint('rate-server', 'ENROLL_BLOCK_SIZE')
+MATCH_BLOCK_SIZE = config.getint('rate-server', 'MATCH_BLOCK_SIZE')
+PRODUCER_RATE_ROOT = config.get('rate-server', 'PRODUCER_RATE_ROOT')
 
 class RateProducer:
     def __init__(self, host, benchmark_file_dir, result_file_dir, algorithm_version_dir, timelimit, memlimit):
@@ -92,7 +95,7 @@ class RateProducer:
         i = 0
         j = 0
         l = []
-        enroll_log_file = open(os.path.join(self.result_file_dir, 'benchmark.enroll.log'), 'w')
+        #enroll_log_file = open(os.path.join(self.result_file_dir, 'benchmark.enroll.log'), 'w')
         for match in matches:
             us = match[0].strip().split(' ')[:2]
             for u in us:
@@ -100,7 +103,7 @@ class RateProducer:
                     self.enroll_uuids.add(u)
                     f = os.path.join('samples', match[us.index(u)+1].strip())
                     t = {'uuid':u, 'file': f }
-                    print>>enroll_log_file, u, f
+                    #print>>enroll_log_file, u, f
                     l.append(t)
                     if len(l)==ENROLL_BLOCK_SIZE:
                         self.submitEnrollBlock(l)
@@ -111,7 +114,7 @@ class RateProducer:
             i=i+1
             if i%1000==0:
                 print "[%d/%d] matches analyzed" % (i, len(matches))
-        enroll_log_file.close()
+        #enroll_log_file.close()
 
         if len(l)!=0:
             self.submitEnrollBlock(l)

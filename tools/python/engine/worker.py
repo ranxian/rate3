@@ -14,10 +14,16 @@ import socket
 import pika
 from pika.exceptions import AMQPConnectionError
 import pickle
+import ConfigParser
 
-SERVER='ratedev-server'
-WORKER_NUM=8
-WORKER_RATE_ROOT=os.path.join('.', 'RATE_ROOT')
+config = ConfigParser.ConfigParser()
+config.readfp(open('worker.conf', 'r'))
+
+SERVER=config.get('rate-worker', 'SERVER')
+WORKER_NUM=config.getint('rate-worker', 'WORKER_NUM')
+WORKER_RATE_ROOT=config.get('rate-worker', 'WORKER_RATE_ROOT')
+
+log = open('worker.log', 'w')
 
 class Worker:
     def __init__(self, host, file_lock, dir_lock, ftp_mkd_lock, clean_lock, semaphore, process_lock, CURRENT_WORKER_NUM):
@@ -50,44 +56,49 @@ class Worker:
         pass
 
     def checkDir(self, dirPath):
+        if os.path.isdir(dirPath):
+            return
+
         self.dir_lock.acquire()
         try:
             if not os.path.isdir(dirPath):
                 os.makedirs(dirPath)
         except exceptions.OSError, e:
             print e
-        self.dir_lock.release()
+            traceback.print_exc()
+        finally:
+            self.dir_lock.release()
 
     def checkFile(self, relPath):
         tried = 0
-        while tried<5:
-            absPath = os.path.join(self.WORKER_RATE_ROOT, relPath)
-            if os.path.exists(absPath):
-                break
+        absPath = os.path.join(self.WORKER_RATE_ROOT, relPath)
+        while not os.path.exists(absPath) or os.stat(absPath).st_size==0:
             self.file_lock.acquire()
-            if os.path.exists(absPath):
-                self.file_lock.release()
-                break
             try:
-                self.checkDir(os.path.dirname(absPath))
-                #print '%s: download [%s]' % (self.uuid[:8], relPath)
-                lf = open(absPath, 'wb')
-                self.openFTP() # open ftp only if we need it, and close it when self.prepare() is done
-                self.download_ftp.retrbinary("RETR " + relPath, lf.write)
-                lf.close()
-            except Exception, e:
-                print(e)
-                tried = tried + 1
-                print("retry %d times" % tried)
                 if os.path.exists(absPath):
-                    os.remove(absPath)
-            self.file_lock.release()
+                    return
+                try:
+                    self.checkDir(os.path.dirname(absPath))
+                    lf = open(absPath, 'wb')
+                    #print '%s: download [%s]' % (self.uuid[:8], relPath)
+                    self.openFTP() # open ftp only if we need it, and close it when self.prepare() is done
+                    self.download_ftp.retrbinary("RETR " + relPath, lf.write)
+                except Exception, e:
+                    print(e)
+                    tried = tried + 1
+                    print("retry %d times" % tried)
+                    if lf:
+                        lf.close()
+                    if os.path.exists(absPath):
+                        os.path.remove(absPath)
+            finally:
+                self.file_lock.release()
 
     def prepare(self, subtask):
         print "%s: prepare" % str(self.worker_num)
         for f in subtask['files']:
             self.checkFile(f)
-        self.closeFTP()
+        #self.closeFTP()
         print "%s: prepare finished" % str(self.worker_num)
 
     def doEnroll(self, subtask):
@@ -115,13 +126,15 @@ class Worker:
             u = tinytask['uuid']
             rawResult = { 'uuid': u,'result':'failed' }
             f = tinytask['file']
+            self.checkFile(f)
             absImagePath = os.path.join(WORKER_RATE_ROOT, f).replace('/', os.path.sep)
             absTemplatePath = os.path.join(WORKER_RATE_ROOT,'temp',subtask['producer_uuid'][-12:],u[-12:-10], "%s.t" % u[-10:]).replace('/', os.path.sep)
             self.checkDir(os.path.dirname(absTemplatePath))
             cmd = '.\\rate_run.exe %s %s %s %s %s' % (str(timelimit), str(memlimit), enrollEXE, absImagePath, absTemplatePath)
-            cmdlogfile = open('./enrollcmd.log', 'a')
-            print>>cmdlogfile, cmd
-            cmdlogfile.close()
+            #cmd = '%s %s %s' % (enrollEXE, absImagePath, absTemplatePath)
+#            cmdlogfile = open('./enrollcmd-%d.log' % self.worker_num, 'a')
+#            print>>cmdlogfile, cmd
+#            cmdlogfile.close()
             try:
                 p = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=open(os.devnull, "w"))
                 returncode = p.wait()
@@ -129,7 +142,7 @@ class Worker:
                 if returncode == 0 and os.path.exists(absTemplatePath):
                     template_file = open(absTemplatePath, 'rb')
                     tried = 0
-                    while tried<5:
+                    while True:
                         try:
                             pass
                             #ftp.mkd(u[-12:-10])
@@ -141,11 +154,13 @@ class Worker:
                         except Exception, e:
                             print e
                             traceback.print_exc()
+                            print "try again: %d" % tried
                             tried = tried + 1
                     template_file.close()
                     rawResult['result'] = 'ok'
             except Exception, e:
                 print e
+                traceback.print_exc()
                 rawResult['result'] = 'failed'
             rawResults.append(rawResult)
         result = {}
@@ -170,9 +185,10 @@ class Worker:
             rawResult['match_type'] = tinytask['match_type']
             rawResult['result'] = 'failed'
             cmd = '.\\rate_run.exe %s %s %s %s %s' % (str(timelimit), str(memlimit), matchEXE, f1, f2)
-            cmdlogfile = open('./matchcmd.log', 'a')
-            print>>cmdlogfile, cmd
-            cmdlogfile.close()
+            #cmd = '%s %s %s' % (matchEXE, f1, f2)
+#            cmdlogfile = open('./matchcmd-%d.log' % self.worker_num , 'a')
+#            print>>cmdlogfile, cmd
+#            cmdlogfile.close()
             try:
                 p = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=open(os.devnull, "w"))
                 returncode = p.wait()
@@ -188,6 +204,7 @@ class Worker:
                     rawResult['score'] = str(score)
             except Exception, e:
                 print e
+                traceback.print_exc()
                 rawResult['result'] = 'failed'
             rawResults.append(rawResult)
 
@@ -251,6 +268,7 @@ class Worker:
             shutil.rmtree(cleanpath)
         except Exception, e:
             print e
+            traceback.print_exc()
         finally:
             self.clean_lock.release()
 
@@ -285,6 +303,7 @@ def proc(file_lock, dir_lock, ftp_mkd_lock, clean_lock, semaphore, process_lock,
             w.start()
         except Exception, e:
             print e
+            traceback.print_exc()
             pass
 
 if __name__=='__main__':
@@ -309,7 +328,7 @@ if __name__=='__main__':
     process_args.append(CURRENT_WORKER_NUM)
 
     ts = []
-    for i in range(WORKER_NUM*3):
+    for i in range(WORKER_NUM*2):
         #t = threading.Thread(target=proc)
         t = Process(target=proc, args=process_args)
         t.start()
