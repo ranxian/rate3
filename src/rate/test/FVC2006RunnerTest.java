@@ -28,8 +28,8 @@ public class FVC2006RunnerTest extends BaseTest {
         session.beginTransaction();
 
         TaskEntity task = new TaskEntity();
-        task.setAlgorithmVersion(algorithmVersion);
-        task.setBenchmark(benchmark);
+        task.setAlgorithmVersion((AlgorithmVersionEntity)getExample("AlgorithmVersion"));
+        task.setBenchmark((BenchmarkEntity)getExample("BenchmakrEntity"));
         task.setCreated(HibernateUtil.getCurrentTimestamp());
         session.save(task);
 
@@ -43,13 +43,6 @@ public class FVC2006RunnerTest extends BaseTest {
         // runner.run();
         // Runner end
 
-
-        FileUtils.deleteDirectory(new File(task.getDirPath()));
-        task.setBenchmark(slsbBenchmark);
-        runner.setTask(task);
-        DebugUtil.debug("start run slsb benchmark");
-        runner.run();
-        session.delete(task);
 
         session.getTransaction().commit();
     }

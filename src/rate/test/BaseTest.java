@@ -1,6 +1,7 @@
 package rate.test;
 
 import org.hibernate.Session;
+import rate.controller.algorithm_version.AlgorithmVersionActionBase;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
@@ -15,13 +16,9 @@ import rate.util.HibernateUtil;
  */
 public class BaseTest {
     protected static final Session session = HibernateUtil.getSession();
-    protected static ViewEntity view;
-    protected static AlgorithmVersionEntity algorithmVersion = (AlgorithmVersionEntity)session.createQuery("from AlgorithmVersionEntity ").list().get(0);
-    protected static AlgorithmEntity algorithm;
-    protected static BenchmarkEntity benchmark = (BenchmarkEntity)session.createQuery("from BenchmarkEntity where uuid=:uuid")
-            .setParameter("uuid", "0b60b978-731f-4cfa-b201-fe91c813c5a8")
-            .list().get(0);
-    protected static BenchmarkEntity slsbBenchmark =  (BenchmarkEntity)session.createQuery("from BenchmarkEntity where uuid=:uuid")
-            .setParameter("uuid", "72e33a12-a737-4bb7-ae45-661b620f71d2")
-            .list().get(0);
+
+    public static Object getExample(String entityName) {
+        String className = entityName+"Entity";
+        return session.createQuery("from "+className).list().get(0);
+    }
 }

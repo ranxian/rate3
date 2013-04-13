@@ -2,6 +2,7 @@ package rate.engine.benchmark;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import rate.model.BenchmarkEntity;
 import rate.model.ClazzEntity;
@@ -146,69 +147,66 @@ public class SLSBBenchmark extends GeneralBenchmark {
     public void generateFarBenchmark(PrintWriter generalPw) throws Exception {
         int classCount = selectedMap.size();
         DebugUtil.debug("classcount = " + classCount);
-        Set<Integer> generalSelectedSet = new HashSet<Integer>();
-
+        Set<Pair<Integer, Integer>> generalSelectedSet = new HashSet<Pair<Integer, Integer>>();
         for (int i = 1; i <= K; i++) {  // Generate S[1], S[2], ..., S[B4Far]
-            Set<Integer> set = new HashSet<Integer>();
-
+            List<Pair<Integer, Integer>> list = new ArrayList<Pair<Integer, Integer>>();
             // 见论文中对划分子集的描述
             if (classCount % 2 == 0) {
                 int modN = i % (classCount-1);
-                for (int j = 1; j <= modN/2 + 1; j++) {
-                    int k = modN - j;
-
-                    if (k >= 1) {
-                        set.add(j);
-                        set.add(k);
+                for (int j = 1; j <= classCount-1; j++) {
+                    for (int k = j+1; k <= classCount; k++) {
+                        if ((j+k) % (classCount - 1) == modN) {
+                            list.add(new ImmutablePair<Integer, Integer>(j, k));
+                        }
                     }
                 }
-                for (int j = 1; i <= modN/2; i++) {
-                    if (2*j == modN) set.add(j);
+                for (int j = 1; j <= classCount-1; j++) {
+                    if ((2*j) % (classCount-1) == modN) {
+                        list.add(new ImmutablePair<Integer, Integer>(j, classCount));
+                    }
                 }
             } else {
                 int modN = (i-1) % classCount;
 
-                for (int j = 1; j <= modN/2 + 1; j++) {
-                    // j + k = (i-1) mod classCount;
-                    int k = modN - j;
-                    if (k >= 1) {
-                        set.add(k);
-                        set.add(j);
+                for (int j = 1; j <= classCount - 1; j++) {
+                    for (int k = j + 1; k <= classCount; k++) {
+                        if ((j+k) % classCount == modN) {
+                            list.add(new ImmutablePair<Integer, Integer>(j, k));
+                        }
                     }
                 }
             }
-            List<Pair<ClazzEntity, List<SampleEntity>>> selectedThisTurn = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
-            Set<Integer> innerSet = new HashSet<Integer>();
-            ArrayList<Integer> arrSet = new ArrayList<Integer>(set);
+            Set<Pair<Integer, Integer>> innerSet = new HashSet<Pair<Integer, Integer>>();
             for (int j = 1; j <= B4Far; j++) {
-                selectedThisTurn.clear();
-                innerSet.clear();
-                File benchmarkFile = new File(getFarBenchmarkFilePath(i, j));
-                PrintWriter pw = new PrintWriter(benchmarkFile);
-
-                for (int k = 0; k < arrSet.size(); k++) {
-                    innerSet.add(random.nextInt(arrSet.size()));
+                PrintWriter pw = new PrintWriter(new FileWriter(getFarBenchmarkFilePath(i, j)));
+                DebugUtil.debug(i + " " + j);
+                for (int k = 1; k <= list.size(); k++) {
+                    int index = random.nextInt(list.size());
+                    innerSet.add(list.get(index));
+                    generalSelectedSet.add(list.get(index));
                 }
-
-                for (int k : innerSet) {
-                    selectedThisTurn.add(selectedMap.get(arrSet.get(k)));
-                }
-                generateInterClazz(pw, selectedThisTurn);
+                printFarBenchmark(innerSet, pw);
                 pw.close();
             }
 
-            // S[i] generated
-            for (int j : set) {
-                selectedThisTurn.add(selectedMap.get(j-1));  // (j-1) is right
-                generalSelectedSet.add(j);
+        }
+
+        printFarBenchmark(generalSelectedSet, generalPw);
+    }
+
+    private void printFarBenchmark(Set<Pair<Integer, Integer>> set, PrintWriter pw) throws Exception {
+        Iterator<Pair<Integer, Integer>> iterator = set.iterator();
+        while (iterator.hasNext()) {
+            Pair<Integer, Integer> matchPair = iterator.next();
+            List<SampleEntity> sampleList1 = selectedMap.get(matchPair.getLeft()-1).getRight();
+            List<SampleEntity> sampleList2 = selectedMap.get(matchPair.getRight()-1).getRight();
+            for (SampleEntity sample : sampleList1) {
+                for (SampleEntity sample2 : sampleList2) {
+                    pw.println(sample.getUuid() + " " + sample2.getUuid() + " I");
+                    pw.println(sample.getFilePath());
+                    pw.println(sample2.getFilePath());
+                }
             }
         }
-
-        List<Pair<ClazzEntity, List<SampleEntity>>> generalSelected = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
-
-        for (int j : generalSelectedSet) {
-            generalSelected.add(selectedMap.get(j-1));
-        }
-        generateInterClazz(generalPw, generalSelected);
     }
 }

@@ -3,6 +3,7 @@ package rate.test;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import rate.engine.benchmark.runner.AbstractRunner;
+import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.SampleEntity;
 import rate.util.DebugUtil;
@@ -18,8 +19,10 @@ import java.util.Random;
  * Time: 下午3:02
  */
 public class FVC2006WithRateRunner extends BaseTest {
+    private static AlgorithmVersionEntity algorithmVersion;
     public static void main(String args[]) throws Exception {
         String rateRunnerPath = AbstractRunner.getRateRunnerPath();
+        algorithmVersion = (AlgorithmVersionEntity)getExample("AlgorithmVersion");
         String matchExePath = algorithmVersion.dirPath() + "/match.exe";
         String enrollExePath = algorithmVersion.dirPath() + "/enroll.exe";
         SampleEntity sample1 = (SampleEntity)session.createQuery("from SampleEntity").list().get(0);
