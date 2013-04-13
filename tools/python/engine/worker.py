@@ -23,7 +23,7 @@ SERVER=config.get('rate-worker', 'SERVER')
 WORKER_NUM=config.getint('rate-worker', 'WORKER_NUM')
 WORKER_RATE_ROOT=config.get('rate-worker', 'WORKER_RATE_ROOT')
 
-log = open('worker.log', 'w')
+#log = open('worker.log', 'w')
 
 class Worker:
     def __init__(self, host, file_lock, dir_lock, ftp_mkd_lock, clean_lock, semaphore, process_lock, CURRENT_WORKER_NUM):
@@ -45,6 +45,9 @@ class Worker:
         self.worker_num = CURRENT_WORKER_NUM.value
         CURRENT_WORKER_NUM.value = CURRENT_WORKER_NUM.value + 1
         process_lock.release()
+
+        self.download_ftp = None
+        self.conn = None
 
 #    def __del__(self):
 #        self.ch.queue_delete(queue='running-%s'%self.uuid)
@@ -80,17 +83,19 @@ class Worker:
                 try:
                     self.checkDir(os.path.dirname(absPath))
                     lf = open(absPath, 'wb')
+                    if not self.download_ftp:
+                        self.openDownloadFTP()
                     #print '%s: download [%s]' % (self.uuid[:8], relPath)
-                    self.openFTP() # open ftp only if we need it, and close it when self.prepare() is done
                     self.download_ftp.retrbinary("RETR " + relPath, lf.write)
                 except Exception, e:
                     print(e)
                     tried = tried + 1
-                    print("retry %d times" % tried)
+                    print("%d: download: retry %d times" % (self.worker_num, tried))
                     if lf:
                         lf.close()
                     if os.path.exists(absPath):
-                        os.path.remove(absPath)
+                        os.remove(absPath)
+                    self.openDownloadFTP() # open ftp only if we need it, and close it when self.prepare() is done
             finally:
                 self.file_lock.release()
 
@@ -101,27 +106,25 @@ class Worker:
         #self.closeFTP()
         print "%s: prepare finished" % str(self.worker_num)
 
+    def openUploadFTP(self, subtask):
+        print "%d: openUploadFTP()" % self.worker_num
+        while True:
+            try:
+                ftp = ftplib.FTP(SERVER, 'ratedev', 'Biometrics')
+                ftpdir = 'RATE_ROOT/temp/%s/' % subtask['producer_uuid'][-12:]
+                ftp.cwd(ftpdir)
+                return ftp
+            except Exception, e:
+                print e
+                traceback.print_exc()
+                time.sleep(1)
+
     def doEnroll(self, subtask):
         enrollEXE = os.path.join(WORKER_RATE_ROOT, subtask['enrollEXE'])
         timelimit = subtask['timelimit']
         memlimit = subtask['memlimit']
         rawResults = []
-        ftp = ftplib.FTP('ratedev-server', 'ratedev', 'Biometrics')
-        ftpdir = 'RATE_ROOT/temp/%s/' % subtask['producer_uuid'][-12:]
-        try:
-            ftp.cwd(ftpdir)
-        except ftplib.error_perm, e:
-            if e.message.startswith('550'):
-                try:
-                    #self.ftp_mkd_lock.acquire()
-                    ftp.cwd(ftpdir)
-                except ftplib.error_perm, e2:
-                    #ftp.mkd(ftpdir)
-                    ftp.cwd(ftpdir)
-                finally:
-                    #self.ftp_mkd_lock.release()
-                    pass
-
+        ftp = self.openUploadFTP(subtask)
         for tinytask in subtask['tinytasks']:
             u = tinytask['uuid']
             rawResult = { 'uuid': u,'result':'failed' }
@@ -144,18 +147,14 @@ class Worker:
                     tried = 0
                     while True:
                         try:
-                            pass
-                            #ftp.mkd(u[-12:-10])
-                        except:
-                            pass
-                        try:
                             ftp.storbinary('STOR ' + "%s/%s.t" % (u[-12:-10], u[-10:]), template_file)
                             break
                         except Exception, e:
                             print e
                             traceback.print_exc()
-                            print "try again: %d" % tried
+                            print "%d: upload: retry %d" % (self.worker_num, tried)
                             tried = tried + 1
+                            ftp = self.openUploadFTP(subtask)
                     template_file.close()
                     rawResult['result'] = 'ok'
             except Exception, e:
@@ -208,15 +207,20 @@ class Worker:
                 rawResult['result'] = 'failed'
             rawResults.append(rawResult)
 
-
         result = {}
         result['results'] = rawResults
         return result
 
-    def openFTP(self):
-        if not self.download_ftp:
-            self.download_ftp = ftplib.FTP('ratedev-server', 'ratedev', 'Biometrics')
-            self.download_ftp.cwd('RATE_ROOT')
+    def openDownloadFTP(self):
+        print "%d: openDownloadFTP()" % self.worker_num
+        while True:
+            try:
+                self.download_ftp = ftplib.FTP(SERVER, 'ratedev', 'Biometrics')
+                self.download_ftp.cwd('RATE_ROOT')
+                break
+            except Exception, e:
+                print e
+                time.sleep(1)
 
     def closeFTP(self):
         if self.download_ftp:
@@ -244,7 +248,7 @@ class Worker:
             result['type'] = subtask['type']
             result_queue = 'results-%s-%s' % (subtask['type'], subtask['producer_uuid'])
             #print 'result_queue:', result_queue
-            self.ch.queue_declare(queue=result_queue)
+            self.ch.queue_declare(queue=result_queue, durable=False, exclusive=False, auto_delete=False)
             self.ch.basic_publish(exchange='', routing_key=result_queue, body=pickle.dumps(result))
             self.ch.basic_ack(delivery_tag=method.delivery_tag)
 
@@ -285,7 +289,7 @@ class Worker:
                 self.ch.queue_bind(exchange='jobs-cleanup-exchange', queue=my_cleanup_queue_name)
                 self.ch.basic_consume(self.doClean, queue=my_cleanup_queue_name, no_ack=True)
 
-                self.ch.queue_declare(queue = 'jobs')
+                self.ch.queue_declare(queue = 'jobs', durable=False, exclusive=False, auto_delete=False)
                 self.ch.basic_consume(self.doWork, queue='jobs')
 
                 self.ch.start_consuming()
@@ -294,6 +298,11 @@ class Worker:
                 pass
             except socket.error, e:
                 print "socket error: [", os.getpid(),"]", e
+            except Exception, e:
+                print e
+            finally:
+                if self.conn:
+                    self.conn.close()
             time.sleep(1)
 
 def proc(file_lock, dir_lock, ftp_mkd_lock, clean_lock, semaphore, process_lock, CURRENT_WORKER_NUM):

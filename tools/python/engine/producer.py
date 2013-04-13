@@ -129,6 +129,8 @@ class RateProducer:
         # match all
         l = []
         i = 0
+        self.match_count = 0
+        self.failed_match_count = 0
         for match in matches:
             (u1,u2, gOrI) = match[0].strip().split(' ')[:3]
             if u1 in self.failed_enroll_uuids or u2 in self.failed_enroll_uuids:
@@ -137,6 +139,7 @@ class RateProducer:
             f2 = 'temp/%s/%s/%s.t' % (self.uuid[-12:], u2[-12:-10], u2[-10:])
             t = { 'uuid1':u1, 'uuid2':u2, 'file1':f1, 'file2':f2, 'match_type':gOrI }
             l.append(t)
+            self.match_count += 1
             if len(l) == MATCH_BLOCK_SIZE:
                 self.submitMatchBlock(l)
                 l = []
@@ -174,7 +177,7 @@ class RateProducer:
             fpath = os.path.join(PRODUCER_RATE_ROOT, fpath)
             if not os.path.exists(fpath):
                 raise Exception("file does not exists: %s" % fpath)
-        self.ch.queue_declare(queue='jobs')
+        self.ch.queue_declare(queue='jobs', durable=False, exclusive=False, auto_delete=False)
         self.ch.basic_publish(exchange='', routing_key='jobs', body=pickle.dumps(subtask))
 
     def enrollCallBack(self, ch, method, properties, body):
@@ -187,13 +190,12 @@ class RateProducer:
             print>>self.enroll_result_file, "%s %s" % (rawResult['uuid'], rawResult['result'])
             if rawResult['result']=='failed':
                 self.failed_enroll_uuids.add(rawResult['uuid'])
-        print "enroll result [%s] subtask finished/total [%d/%d] enroll failed/total [%d/%d]" % (result['subtask_uuid'][:8], len(self.enroll_finished_subtask_uuids), len(self.enroll_subtask_uuids), len(self.failed_enroll_uuids), len(self.enroll_uuids))
+        print "enroll result [%s] finished [%d/%d] failed/total [%d/%d]" % (result['subtask_uuid'][:8], len(self.enroll_finished_subtask_uuids), len(self.enroll_subtask_uuids), len(self.failed_enroll_uuids), len(self.enroll_uuids))
         self.enroll_result_file.flush()
 
     def matchCallBack(self, ch, method, properties, body):
         result = pickle.loads(body)
         self.match_finished_subtask_uuids.append(result['subtask_uuid'])
-        print "match result [%s] [%d/%d]" % (result['subtask_uuid'][:8], len(self.match_finished_subtask_uuids), len(self.match_subtask_uuids))
         self.ch.basic_ack(delivery_tag=method.delivery_tag)
         if len(self.match_finished_subtask_uuids)==len(self.match_subtask_uuids):
             self.ch.stop_consuming()
@@ -202,12 +204,14 @@ class RateProducer:
                 print>>self.match_result_file, '%s %s %s ok %s' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'], rawResult['score'])
             elif rawResult['result'] == 'failed':
                 print>>self.match_result_file, '%s %s %s failed' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'])
+                self.failed_match_count += 1
+        print "match result [%s] finished [%d/%d] failed [%d/%d]" % (result['subtask_uuid'][:8], len(self.match_finished_subtask_uuids), len(self.match_subtask_uuids), self.failed_match_count, self.match_count)
         self.match_result_file.flush()
 
     def waitForEnrollResults(self):
         print 'waiting for enroll results'
         qname = 'results-enroll-%s' % (self.uuid,)
-        self.ch.queue_declare(queue=qname)
+        self.ch.queue_declare(queue=qname, durable=False, exclusive=False, auto_delete=False)
         self.ch.basic_qos(prefetch_count=1)
         self.ch.basic_consume(self.enrollCallBack, queue=qname)
         self.ch.start_consuming()
@@ -216,7 +220,7 @@ class RateProducer:
     def waitForMatchResults(self):
         print 'waiting for match results'
         qname = 'results-match-%s' % (self.uuid,)
-        self.ch.queue_declare(queue=qname)
+        self.ch.queue_declare(queue=qname, durable=False, exclusive=False, auto_delete=False)
         self.ch.basic_qos(prefetch_count=1)
         self.ch.basic_consume(self.matchCallBack, queue=qname)
         self.ch.start_consuming()

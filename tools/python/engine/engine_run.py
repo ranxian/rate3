@@ -1,4 +1,5 @@
 from producer import RateProducer
+import traceback
 import sys
 
 # super big
@@ -23,5 +24,9 @@ if __name__=='__main__':
         print usage
         exit()
 
-    p = RateProducer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
-    p.solve()
+    try:
+        p = RateProducer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
+        p.solve()
+    except Exception, e:
+        print e
+        traceback.print_exc()
