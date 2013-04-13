@@ -158,6 +158,7 @@
         </action>
         <action name="show" class="rate.controller.task.ShowAction" method="execute">
             <result name="success" type="freemarker">/templates/task/show.ftl</result>
+            <result name="SLSB" type="freemarker">/templates/task/slsb.ftl</result>
         </action>
         <action name="delete" class="rate.controller.task.DeleteAction" method="execute">
             <result name="success" type="redirectAction">
@@ -193,6 +194,22 @@
             </result>
         </action>
         <action name="roc"  class="rate.controller.chart.RocAction" method="execute">
+            <result name="success" type="chart">
+                <param name="value">chart</param>
+                <param name="type">png</param>
+                <param name="width">420</param>
+                <param name="height">300</param>
+            </result>
+        </action>
+        <action name="SLSBFrr" class="rate.controller.chart.SLSBFrrAction" method="execute">
+            <result name="success" type="chart">
+                <param name="value">chart</param>
+                <param name="type">png</param>
+                <param name="width">420</param>
+                <param name="height">300</param>
+            </result>
+        </action>
+        <action name="SLSBFar" class="rate.controller.chart.SLSBFarAction" method="execute">
             <result name="success" type="chart">
                 <param name="value">chart</param>
                 <param name="type">png</param>

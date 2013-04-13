@@ -6,6 +6,7 @@ import rate.model.TaskEntity;
 import rate.util.DebugUtil;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 
@@ -15,7 +16,7 @@ import java.io.FilenameFilter;
  * Date: 13-4-4
  * Time: 下午2:44
  */
-public class SLSBTask extends TaskEntity {
+public class SLSBTask extends TaskResult {
     private String farResultDir;
     private String frrResultDir;
     private String taskStateFilePath;
@@ -70,6 +71,7 @@ public class SLSBTask extends TaskEntity {
     }
 
     public SLSBTask(TaskEntity task) throws Exception {
+        super(task);
         this.task = task;
         this.benchmark = task.getBenchmark();
         farResultDir = FilenameUtils.concat(task.getDirPath(), "FAR");

@@ -35,10 +35,6 @@ public class GeneralTask extends TaskResult {
         if (task.getFinished() != null) {
             getStatistics();
         }
-
-        if (new File(getTaskStatePath()).exists()) {
-            getTaskState();
-        }
     }
 
     public String getLogPathByTypeNumber(String type, String num) {

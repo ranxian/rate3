@@ -28,7 +28,7 @@ public class TaskResult {
     protected String updated;
     protected long startTime;
 
-    public TaskResult(TaskEntity task) {
+    public TaskResult(TaskEntity task) throws Exception {
         this.task = task;
         enrollExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "enroll.exe");
         matchExeFilePath = FilenameUtils.concat(task.getAlgorithmVersion().dirPath(), "match.exe");
@@ -37,6 +37,10 @@ public class TaskResult {
         stderrPath = FilenameUtils.concat(task.getDirPath(), "stderr.txt");
         purfPath = FilenameUtils.concat(task.getDirPath(), "purf.txt");
         taskStatePath = FilenameUtils.concat(task.getDirPath(), "state.txt");
+        if (new File(getTaskStatePath()).exists()) {
+            getTaskState();
+        }
+
     }
 
     public String getEnrollExeFilePath() {

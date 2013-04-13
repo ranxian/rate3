@@ -2,6 +2,7 @@ package rate.controller.task;
 
 import rate.controller.RateActionBase;
 import rate.engine.task.GeneralTask;
+import rate.engine.task.SLSBTask;
 import rate.model.TaskEntity;
 import rate.util.StringUtil;
 
@@ -15,13 +16,18 @@ import rate.util.StringUtil;
 public class ShowAction extends RateActionBase {
 
     public String execute() throws Exception {
-        return SUCCESS;
+        if (task.getBenchmark().getType().equals("SLSB")) {
+            slsbTask = new SLSBTask(task);
+            return "SLSB";
+        } else {
+            generalTask = new GeneralTask(task);
+            return SUCCESS;
+        }
     }
 
     public void setUuid(String uuid) throws Exception {
         this.uuid = uuid;
         this.task = (TaskEntity) session.createQuery("from TaskEntity where uuid=:uuid").setParameter("uuid", uuid).list().get(0);
-        generalTask = new GeneralTask(task);
     }
 
     private String uuid;
@@ -41,4 +47,9 @@ public class ShowAction extends RateActionBase {
     }
 
     protected GeneralTask generalTask;
+    protected SLSBTask slsbTask;
+
+    public SLSBTask getSlsbTask() {
+        return slsbTask;
+    }
 }
