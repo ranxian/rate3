@@ -65,7 +65,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
     public void getBenchmarkDesc() throws Exception {
         File descFile = new File(descFilePath);
         if (descFile.exists()) {
-            String line = FileUtils.readFileToString(descFile);
+            String line = FileUtils.readFileToString(descFile).trim();
             String[] params = line.split(" ");
             B4Frr = Integer.parseInt(params[0]);
             B4Far = Integer.parseInt(params[1]);

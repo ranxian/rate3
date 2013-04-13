@@ -1,7 +1,9 @@
 package rate.engine.task;
 
 import org.apache.commons.io.FilenameUtils;
+import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
+import rate.util.DebugUtil;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -25,20 +27,21 @@ public class SLSBTask extends TaskEntity {
     private String purfPath;
     private String farResultPath;
     private String frrResultPath;
+    private BenchmarkEntity benchmark;
 
     public String getFarResultPath() {
         return farResultPath;
     }
 
     public int getB4Far() throws Exception {
-        BufferedReader rd = new BufferedReader(new FileReader(getBenchmark().dirPath()));
+        BufferedReader rd = new BufferedReader(new FileReader(getBenchmark().dirPath()+"/desc.txt"));
         int res = Integer.parseInt(rd.readLine().split(" ")[1]);
         rd.close();
         return res;
     }
 
     public int getB4Frr() throws Exception {
-        BufferedReader rd = new BufferedReader(new FileReader(getBenchmark().dirPath()));
+        BufferedReader rd = new BufferedReader(new FileReader(getBenchmark().dirPath()+"/desc.txt"));
         int res = Integer.parseInt(rd.readLine().split(" ")[0]);
         rd.close();
         return res;
@@ -54,8 +57,13 @@ public class SLSBTask extends TaskEntity {
 
     private TaskEntity task;
 
+    public BenchmarkEntity getBenchmark() {
+        return benchmark;
+    }
+
     public SLSBTask(TaskEntity task) throws Exception {
         this.task = task;
+        this.benchmark = task.getBenchmark();
         farResultDir = FilenameUtils.concat(task.getDirPath(), "FAR");
         frrResultDir = FilenameUtils.concat(task.getDirPath(), "FRR");
         taskStateFilePath = FilenameUtils.concat(task.getDirPath(), "state.txt");

@@ -43,7 +43,7 @@ public class SLSBGeneratorTest extends BaseTest {
         DebugUtil.debug("start generate");
         benchmark = generator.generate();
         DebugUtil.debug("finished generate");
-        session.delete(benchmark);
+//        session.delete(benchmark);
         session.getTransaction().commit();
     }
 }

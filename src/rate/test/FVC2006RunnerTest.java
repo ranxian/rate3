@@ -27,9 +27,12 @@ public class FVC2006RunnerTest extends BaseTest {
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
 
+        BenchmarkEntity slsbBenchmark = (BenchmarkEntity)session.createQuery("from BenchmarkEntity where uuid=:uuid").setParameter("uuid", "cfb2c25c-140a-4b55-80e6-5a8c507e37da")
+                .list().get(0);
+
         TaskEntity task = new TaskEntity();
         task.setAlgorithmVersion((AlgorithmVersionEntity)getExample("AlgorithmVersion"));
-        task.setBenchmark((BenchmarkEntity)getExample("BenchmakrEntity"));
+        task.setBenchmark(slsbBenchmark);
         task.setCreated(HibernateUtil.getCurrentTimestamp());
         session.save(task);
 
@@ -40,7 +43,7 @@ public class FVC2006RunnerTest extends BaseTest {
         runner.setTask(task);
 
         DebugUtil.debug("start tun");
-        // runner.run();
+        runner.run();
         // Runner end
 
 
