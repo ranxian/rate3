@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 
 	wchar_t cwd[MAX_PATH];
 	_tgetcwd(cwd, MAX_PATH);
-	cerr << "current_dir is: " << T2A(cwd) << endl;
+	//cerr << "current_dir is: " << T2A(cwd) << endl;
 
 	SetErrorMode(0xFFFF);
 
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 		cerr << "Usage: " << argv[0] << " timelimit(ms) memlimit(byte) [command line]" << endl;
 		return 0;
 	}	
-	cerr << "started" << endl;
+	//cerr << "started" << endl;
 
 	unsigned int timelimit_ms = atoi(argv[1]);
 	SIZE_T memlimit = atoi(argv[2]);
@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
 		LogError(runresult);
 	}
 	
-	LogPerformance(timelimit_ms, memlimit, cmd, args, accounting, purfPath);	
+	//LogPerformance(timelimit_ms, memlimit, cmd, args, accounting, purfPath);	
 
 	//LOG(INFO) << "finished" << endl; 
 

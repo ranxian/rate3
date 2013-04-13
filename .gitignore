@@ -25,3 +25,4 @@ ipch*/
 *.pyc
 *.log
 *.swp
+*.apple.timemachine.supported

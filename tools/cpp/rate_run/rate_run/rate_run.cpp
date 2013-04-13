@@ -112,7 +112,7 @@ DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCO
 		return err;
 	}	
 			
-	cerr << "Process created with pid: " << pi.dwProcessId << endl;
+	//cerr << "Process created with pid: " << pi.dwProcessId << endl;
 
 	// associate the process with the job
 	if (!AssignProcessToJobObject(job, pi.hProcess)) {
@@ -120,13 +120,13 @@ DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCO
 		cerr << "Failed to AssignProcessToJobObject: " << err << endl;
 		return err;
 	}
-	cerr << "Process assigned to job" << endl;
+	//cerr << "Process assigned to job" << endl;
 
 	// run and wait for the process	
 	ResumeThread(pi.hThread);
 	CloseHandle(pi.hThread);
 	
-	cerr << "Process running" << endl;
+	//cerr << "Process running" << endl;
 
 	// job object对于时间的控制好像总是有3s左右的延时，所以还是要自己来做
 	// 对最大使用内存的计算也要自己来做
@@ -156,12 +156,12 @@ DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCO
 				WaitForSingleObject(pi.hProcess, INFINITE);
 			}
 		}
-		Sleep(100);
 		if (!GetExitCodeProcess(pi.hProcess, &exitcode)) {
 			int err = GetLastError();
 			cerr << "GetExitCodeProcess error: " << err << endl;
 			return err;
-		}		
+		}
+		Sleep(10);
 		cerr << "clock time: " << clockTime << " user time:" << jobobject_accounting.TotalUserTime.QuadPart/10000 << endl;
 	}
 	cerr << "Process terminated" << endl;

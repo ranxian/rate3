@@ -29,7 +29,7 @@
 using namespace std;
 
 //#ifndef DEBUG
-#define RUN_IN_ALTERNATE_DESKTOP // 不显示子进程产生的图形界面
+//#define RUN_IN_ALTERNATE_DESKTOP // 不显示子进程产生的图形界面
 #define ALTERNATE_DESKTOP_NAME "sandbox_run_desktop"
 //#endif 
 
