@@ -1,6 +1,8 @@
 package rate.engine.benchmark.analyzer;
 
-import javafx.util.Pair;
+//import java.util.Pair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import rate.engine.benchmark.SLSBBenchmark;
@@ -124,7 +126,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
             for (int j = 0; j < B4Far; j++) {
                 readerList.add(new BufferedReader(new FileReader(slsbTask.getFarResultPathByNum(i, j + 1)+"-result.txt")));
                 String line = readerList.get(j).readLine();
-                scoreList.add(new Pair<Double, Double>(Double.parseDouble(line.split(" ")[0]), Double.parseDouble(line.split(" ")[1])));
+                scoreList.add(new ImmutablePair<Double, Double>(Double.parseDouble(line.split(" ")[0]), Double.parseDouble(line.split(" ")[1])));
             }
             double t = 1.0;
             for (int j = 0; j < 1000; j++) {
@@ -136,7 +138,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
                     } else {
                         while (true) {
                             String[] sp = readerList.get(k).readLine().split(" ");
-                            scoreList.set(k, new Pair<Double, Double>(Double.parseDouble(sp[0]), Double.parseDouble(sp[1])));
+                            scoreList.set(k, new ImmutablePair<Double, Double>(Double.parseDouble(sp[0]), Double.parseDouble(sp[1])));
                             if (scoreList.get(k).getValue() <= t || scoreList.get(k).getValue() == 0.0) {
                                 list.add(scoreList.get(k).getKey());
                                 break;
@@ -150,7 +152,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
                 int lower = (int)(alpha/2*list.size()+0.5);
                 int higher = (int)((1-alpha/2)*list.size());
 
-                fmrList.add(new Pair<Double, Double>(list.get(lower), list.get(higher)));
+                fmrList.add(new ImmutablePair<Double, Double>(list.get(lower), list.get(higher)));
             }
             t = 1.0;
 
@@ -183,7 +185,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
             }
             lowBound /= K;
             highBound /= K;
-            fmrList.add(new Pair<Double, Double>(lowBound, highBound));
+            fmrList.add(new ImmutablePair<Double, Double>(lowBound, highBound));
         }
 
         for (BufferedReader reader : readerList) {
@@ -211,7 +213,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         for (int i = 0; i < B4Frr; i++) {
             readerList.add(new BufferedReader(new FileReader(slsbTask.getFrrResultPathByNum(i+1)+"-result.txt")));
             String line = readerList.get(i).readLine();
-            scoreList.add(new Pair<Double, Double>(Double.parseDouble(line.split(" ")[0]), Double.parseDouble(line.split(" ")[1])));
+            scoreList.add(new ImmutablePair<Double, Double>(Double.parseDouble(line.split(" ")[0]), Double.parseDouble(line.split(" ")[1])));
         }
 
         double t = 0.0;
@@ -226,7 +228,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
                 } else {
                     while (true) {
                         String[] sp = readerList.get(j).readLine().split(" ");
-                        scoreList.set(j, new Pair<Double, Double>(Double.parseDouble(sp[0]), Double.parseDouble(sp[1])));
+                        scoreList.set(j, new ImmutablePair<Double, Double>(Double.parseDouble(sp[0]), Double.parseDouble(sp[1])));
                         if (scoreList.get(j).getValue() > t || scoreList.get(j).getValue() == 0.0) {
                             list.add(scoreList.get(j).getKey());
                             break;
@@ -239,7 +241,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
             Collections.sort(list);
             int lower = (int)(alpha/2*list.size()+0.5);
             int higher = (int)((1-alpha/2)*list.size());
-            fnmrList.add(new Pair<Double, Double>(list.get(lower), list.get(higher)));
+            fnmrList.add(new ImmutablePair<Double, Double>(list.get(lower), list.get(higher)));
         }
 
         t = 0.0;
