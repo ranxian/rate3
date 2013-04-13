@@ -25,7 +25,7 @@ public class SLSBAnalyzerTest extends BaseTest {
         slsbAnalyzer.setK(10);
         slsbAnalyzer.setAlpha(0.1);
 //        slsbAnalyzer.analyze();
-//        slsbAnalyzer.analyzeTotalFMR();
-        slsbAnalyzer.analyzeTotalFNMR();
+        slsbAnalyzer.analyzeTotalFMR();
+//        slsbAnalyzer.analyzeTotalFNMR();
     }
 }
