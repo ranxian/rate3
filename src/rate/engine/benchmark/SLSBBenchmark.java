@@ -69,6 +69,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
             String[] params = line.split(" ");
             B4Frr = Integer.parseInt(params[0]);
             B4Far = Integer.parseInt(params[1]);
+            K = Integer.parseInt(params[1]);
         }
     }
 
@@ -102,7 +103,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
         new File(frrBenchmarkDir).mkdir();
         new File(farBenchmarkDir).mkdir();
         BufferedWriter wr = new BufferedWriter(new FileWriter(descFilePath));
-        wr.append(B4Frr + " " + B4Far + "\r\n");
+        wr.append(B4Frr + " " + B4Far + K + "\r\n");
         wr.close();
     }
 

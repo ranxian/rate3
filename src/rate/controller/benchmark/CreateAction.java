@@ -2,6 +2,7 @@ package rate.controller.benchmark;
 
 import rate.engine.benchmark.GeneralBenchmark;
 import rate.engine.benchmark.OneClassImposterBenchmark;
+import rate.engine.benchmark.SLSBBenchmark;
 import rate.model.BenchmarkEntity;
 import rate.model.ViewEntity;
 import rate.util.DebugUtil;
@@ -58,13 +59,14 @@ public class CreateAction extends BenchmarkActionBase {
             OneClassImposterBenchmark generator = new OneClassImposterBenchmark();
             generator.setBenchmark(benchmark);
             benchmark = generator.generate();
+        } else if (generatorStr.equals("SLSB")) {
+            SLSBBenchmark generator = new SLSBBenchmark();
+            generator.setBenchmark(benchmark);
+            // This should depend on user's option
+            generator.setScale("SMALL");
+            benchmark = generator.generate();
         } else {
             return ERROR;
-//        } else if (generatorStr.equals("SLSB")) {
-//            SLSBBenchmark generator = new SLSBBenchmark();
-//            generator.setBenchmark(benchmark);
-//            generator.setScale("SMALL");
-//            benchmark = generator.generate();
         }
 
         session.update(benchmark);

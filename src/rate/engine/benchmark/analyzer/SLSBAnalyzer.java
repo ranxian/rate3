@@ -42,6 +42,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         B4Far = benchmark.getB4Far();
         B4Frr = benchmark.getB4Frr();
         K = benchmark.getK();
+        this.alpha = 0.1;
     }
 
     public void analyze() throws Exception {
@@ -51,11 +52,11 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
 
         calcFarBenchmark();
 
-//        analyzeTotalFMR();
-//
-//        analyzeTotalFNMR();
-//
-//        analyzeTotalERR();
+        analyzeTotalFMR();
+
+        analyzeTotalFNMR();
+
+        analyzeTotalERR();
     }
 
     private void calcFRRbenchmark() throws Exception {

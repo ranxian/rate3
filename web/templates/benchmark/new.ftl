@@ -30,7 +30,7 @@
             <div class="controls">
                 <@s.select
                 name="benchmark.generator"
-                list="{'SMALL', 'MEDIUM', 'LARGE', 'VERY_LARGE', 'OneClassImposter','SLSB(not imp.)'}"
+                list="{'SMALL', 'MEDIUM', 'LARGE', 'VERY_LARGE', 'OneClassImposter','SLSB'}"
                 headerKey="0"
                 headerValue="Choose a algorithm type"
             ></@s.select>
