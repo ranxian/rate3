@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.29, for debian-linux-gnu (i686)
+-- MySQL dump 10.13  Distrib 5.5.28, for Win32 (x86)
 --
 -- Host: localhost    Database: rate3
 -- ------------------------------------------------------
--- Server version	5.5.29-0ubuntu0.12.10.1-log
+-- Server version	5.5.28
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -26,7 +26,7 @@ CREATE TABLE `algorithm` (
   `uuid` binary(16) NOT NULL,
   `name` varchar(255) NOT NULL,
   `type` enum('FINGERVEIN') NOT NULL,
-  `protocol` enum('FVC2006','FVC2004','RATE') NOT NULL,
+  `protocol` enum('FVC2006','FVC2004','PKURATE') NOT NULL,
   `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `description` text NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -60,11 +60,11 @@ DROP TABLE IF EXISTS `benchmark`;
 CREATE TABLE `benchmark` (
   `uuid` binary(16) NOT NULL,
   `view_uuid` binary(16) NOT NULL,
-  `protocol` enum('FVC2006') DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `description` text,
   `generator` varchar(45) NOT NULL,
+  `type` varchar(45) NOT NULL DEFAULT 'General',
   PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -239,4 +239,4 @@ CREATE TABLE `view_sample` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-04-05 12:33:33
+-- Dump completed on 2013-04-15 16:54:53
