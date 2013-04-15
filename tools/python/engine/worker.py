@@ -15,6 +15,7 @@ import pika
 from pika.exceptions import AMQPConnectionError
 import pickle
 import ConfigParser
+import rate_run
 
 config = ConfigParser.ConfigParser()
 config.readfp(open('worker.conf', 'r'))
@@ -133,14 +134,14 @@ class Worker:
             absImagePath = os.path.join(WORKER_RATE_ROOT, f).replace('/', os.path.sep)
             absTemplatePath = os.path.join(WORKER_RATE_ROOT,'temp',subtask['producer_uuid'][-12:],u[-12:-10], "%s.t" % u[-10:]).replace('/', os.path.sep)
             self.checkDir(os.path.dirname(absTemplatePath))
-            cmd = '.\\rate_run.exe %s %s %s %s %s' % (str(timelimit), str(memlimit), enrollEXE, absImagePath, absTemplatePath)
-            #cmd = '%s %s %s' % (enrollEXE, absImagePath, absTemplatePath)
+            #cmd = '.\\rate_run.exe %s %s %s %s %s' % (str(timelimit), str(memlimit), enrollEXE, absImagePath, absTemplatePath)
+            cmd = '%s %s %s' % (enrollEXE, absImagePath, absTemplatePath)
+            
 #            cmdlogfile = open('./enrollcmd-%d.log' % self.worker_num, 'a')
 #            print>>cmdlogfile, cmd
 #            cmdlogfile.close()
             try:
-                p = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=open(os.devnull, "w"))
-                returncode = p.wait()
+                (returncode, output) = rate_run.rate_run_main(int(timelimit), int(memlimit), cmd)        
 #                print returncode
                 if returncode == 0 and os.path.exists(absTemplatePath):
                     template_file = open(absTemplatePath, 'rb')
@@ -174,31 +175,36 @@ class Worker:
         for tinytask in subtask['tinytasks']:
             u1 = tinytask['uuid1']
             u2 = tinytask['uuid2']
-            f1 = tinytask['file1'].replace('/', os.path.sep)
-            f2 = tinytask['file2'].replace('/', os.path.sep)
-            f1 = os.path.join(WORKER_RATE_ROOT, f1)
-            f2 = os.path.join(WORKER_RATE_ROOT, f2)
+            f1 = tinytask['file1']#.replace('/', os.path.sep)
+            f2 = tinytask['file2']#.replace('/', os.path.sep)
+            f1 = "/".join((WORKER_RATE_ROOT, f1))
+            f2 = "/".join((WORKER_RATE_ROOT, f2))
             rawResult = {}
             rawResult['uuid1'] = u1
             rawResult['uuid2'] = u2
             rawResult['match_type'] = tinytask['match_type']
             rawResult['result'] = 'failed'
-            cmd = '.\\rate_run.exe %s %s %s %s %s' % (str(timelimit), str(memlimit), matchEXE, f1, f2)
-            #cmd = '%s %s %s' % (matchEXE, f1, f2)
-#            cmdlogfile = open('./matchcmd-%d.log' % self.worker_num , 'a')
-#            print>>cmdlogfile, cmd
-#            cmdlogfile.close()
+            #cmd = '.\\rate_run.exe %s %s %s %s %s' % (str(timelimit), str(memlimit), matchEXE, f1, f2)
+            cmd = '%s %s %s' % (matchEXE, f1, f2)
+            #print cmd
+            cmdlogfile = open('./matchcmd-%d.log' % self.worker_num , 'a')
+            print>>cmdlogfile, cmd
+            cmdlogfile.close()
+            
             try:
-                p = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=open(os.devnull, "w"))
-                returncode = p.wait()
+                (returncode, output) = rate_run.rate_run_main(int(timelimit), int(memlimit), str(cmd))
+                #print type(output)
+                #print output
+                #p = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=open(os.devnull, "w"))
+                #returncode = p.wait()
                 if returncode != 0:
                     rawResult['result'] = 'failed'
-                    print 'returncode: %d' % p.returncode
+                    #print 'returncode: %d' % returncode
                 else:
-                    score = p.stdout.readline().strip()
-#                    print "score string: %s" % score
+                    score = output.strip()
+                    #print "score string: %s" % score
                     score = float(score)
-#                    print "score float: %f" % score
+                    #print "score float: %f" % score
                     rawResult['result'] = 'ok'
                     rawResult['score'] = str(score)
             except Exception, e:
