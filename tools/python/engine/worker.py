@@ -136,12 +136,12 @@ class Worker:
             self.checkDir(os.path.dirname(absTemplatePath))
             #cmd = '.\\rate_run.exe %s %s %s %s %s' % (str(timelimit), str(memlimit), enrollEXE, absImagePath, absTemplatePath)
             cmd = '%s %s %s' % (enrollEXE, absImagePath, absTemplatePath)
-            
+
 #            cmdlogfile = open('./enrollcmd-%d.log' % self.worker_num, 'a')
 #            print>>cmdlogfile, cmd
 #            cmdlogfile.close()
             try:
-                (returncode, output) = rate_run.rate_run_main(int(timelimit), int(memlimit), cmd)        
+                (returncode, output) = rate_run.rate_run_main(int(timelimit), int(memlimit), cmd)
 #                print returncode
                 if returncode == 0 and os.path.exists(absTemplatePath):
                     template_file = open(absTemplatePath, 'rb')
@@ -187,10 +187,10 @@ class Worker:
             #cmd = '.\\rate_run.exe %s %s %s %s %s' % (str(timelimit), str(memlimit), matchEXE, f1, f2)
             cmd = '%s %s %s' % (matchEXE, f1, f2)
             #print cmd
-            cmdlogfile = open('./matchcmd-%d.log' % self.worker_num , 'a')
-            print>>cmdlogfile, cmd
-            cmdlogfile.close()
-            
+#            cmdlogfile = open('./matchcmd-%d.log' % self.worker_num , 'a')
+#            print>>cmdlogfile, cmd
+#            cmdlogfile.close()
+
             try:
                 (returncode, output) = rate_run.rate_run_main(int(timelimit), int(memlimit), str(cmd))
                 #print type(output)
