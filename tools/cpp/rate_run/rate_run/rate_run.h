@@ -46,6 +46,9 @@ DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCO
 int LogPerformance(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmd, const char* args, const ACCOUNTING &accounting, const char* filename);
 void LogError(DWORD dwError);
 
+int ParseCommandLine(int argc, char* argv[], char *cmd, char *args, char *cmdline);
+int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returncode, char* stdout_buf);
+
 #define BUFSIZE 4096
 
 #endif

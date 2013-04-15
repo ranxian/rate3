@@ -11,6 +11,95 @@
 
 using namespace std;
 
+int ParseCommandLine(int argc, char* argv[], char *cmd, char *args, char *cmdline)
+{
+	ZeroMemory(cmd, sizeof(cmd));
+	ZeroMemory(args, sizeof(args));
+	ZeroMemory(cmdline, sizeof(cmdline));
+	strcpy(cmd, argv[0]);
+	for (int i=1; i<argc; i++) {
+		strcat(args, argv[i]);
+		if (i==argc-1) break;
+		strcat(args, " ");
+	}
+	strcat(cmdline, cmd);
+	strcat(cmdline, " ");
+	strcat(cmdline, args);
+
+	return 0;
+}
+
+int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returncode, char* stdout_buf) 
+{
+	USES_CONVERSION;
+
+	wchar_t cwd[MAX_PATH];
+	_tgetcwd(cwd, MAX_PATH);
+	cerr << "current_dir is: " << T2A(cwd) << endl;
+
+	SetErrorMode(0xFFFF);
+		
+	//cerr << "started" << endl;
+
+	//char stdoutPath[MAX_PATH], stderrPath[MAX_PATH], purfPath[MAX_PATH];
+	//strcpy(stdoutPath, argv[3]);
+	//strcpy(stderrPath, argv[4]);
+	//strcpy(purfPath, "rate_run_perf.txt");
+
+	
+	cerr << cmdline << endl;
+	cerr << "timelimit:" << timelimit_ms << "ms memlimit:" << memlimit << "byte(" << memlimit/1024 << "kb)" << endl;
+	
+	ACCOUNTING accounting;
+	ZeroMemory(&accounting, sizeof(accounting));
+
+	//HANDLE hstdoutf = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	WCHAR tempFileNameW[MAX_PATH];
+	GetTempFileName(A2W("."), NULL, 0, tempFileNameW); 
+	char tempFileName[MAX_PATH];
+	strcpy(tempFileName, W2A(tempFileNameW));
+	
+	HANDLE hstdoutf = NULL, hstderrf = NULL;
+	MakeOutputFileHandle(&hstdoutf, tempFileName);
+	//MakeOutputFileHandle(&hstderrf, stderrPath);	
+
+	//////////
+	returncode = run(timelimit_ms, memlimit, cmdline, &accounting, hstdoutf, NULL);
+	if (hstdoutf!=NULL)
+		CloseHandle(hstdoutf);
+	//////////
+	
+	if (returncode!=0) {
+		accounting.return_value = returncode;
+		cerr << "error during execution, client returns " <<  returncode << endl;
+		LogError(returncode);
+	}
+	
+	// read the output
+	memset(stdout_buf,0,BUFSIZE);
+	ifstream inf(tempFileName);
+	int i = 0;
+	while (!inf.eof() && i<BUFSIZE) {
+		char ctemp;
+		ctemp = inf.get();
+		if (ctemp=='\n' || ctemp==' ')
+			break;
+		stdout_buf[i++]=ctemp;
+	}
+	stdout_buf[i] = '\0';
+	inf.close();
+	remove(tempFileName);
+	//cout << stdout_buf << endl;
+	
+	
+	//LogPerformance(timelimit_ms, memlimit, cmd, args, accounting, purfPath);	
+
+	//LOG(INFO) << "finished" << endl; 
+
+	return 0;
+}
+
 HANDLE GetDesktop()
 {
 	HANDLE d;

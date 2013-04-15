@@ -269,7 +269,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         while (reader.ready()) {
             String line = reader.readLine();
             String[] results = line.split(" ");
-            if (results.length == 4) continue; // This is a enroll result
+            DebugUtil.debug(line);
             hashedResult.put(results[0]+results[1], Double.parseDouble(results[4]));
         }
 
