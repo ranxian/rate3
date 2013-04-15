@@ -22,9 +22,7 @@
         <div class="controls">
             <@s.select label="Type"
             name="algorithm.type"
-            list="{'FINGERVEIN', 'FINGERVEIN'}"
-            headerKey="0"
-            headerValue="Choose a algorithm type"
+            list="{'FINGERVEIN'}"
             ></@s.select>
         </div>
     </div>
@@ -36,7 +34,7 @@
         <div class="controls">
             <@s.select label="Protocol"
             name="algorithm.protocol"
-            list="{'FVC2006', 'FVC2004', 'RATE'}"
+            list="{'PKURATE', 'FVC2006', 'FVC2004'}"
             ></@s.select>
         </div>
     </div>

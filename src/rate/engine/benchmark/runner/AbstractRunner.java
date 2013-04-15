@@ -54,6 +54,7 @@ abstract public class AbstractRunner {
     }
 
     protected void cleanUp() throws Exception {
+
         FileUtils.deleteDirectory(new File(task.getTempDirPath()));
     }
 

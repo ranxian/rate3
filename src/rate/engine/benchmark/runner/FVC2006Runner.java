@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import rate.engine.task.GeneralTask;
 import rate.engine.task.TaskResult;
+import rate.model.SampleEntity;
 import rate.model.TaskEntity;
 import rate.util.RateConfig;
 
@@ -193,5 +194,38 @@ public class FVC2006Runner extends AbstractRunner
         list.add(tempOutputFilePath);
 
         return StringUtils.join(list, " ");
+    }
+
+    public String genLog(String uuid1, String uuid2) throws Exception {
+        logger.trace(String.format("Generate log for sample %s and %s", uuid1, uuid2));
+        SampleEntity sample1 = (SampleEntity)session.createQuery("from SampleEntity where uuid=:uuid")
+                .setParameter("uuid", uuid1).list().get(0);
+        SampleEntity sample2 = (SampleEntity)session.createQuery("from SampleEntity where uuid=:uuid")
+                .setParameter("uuid", uuid2).list().get(0);
+        String filePath1 = FilenameUtils.concat(RateConfig.getSampleRootDir(), sample1.getFilePath());
+        String filePath2 = FilenameUtils.concat(RateConfig.getSampleRootDir(), sample2.getFilePath());
+        Random random = new Random();
+        String tempOutputPath = FilenameUtils.concat(RateConfig.getTempRootDir(), String.format("task-log-%d", random.nextInt()));
+        File file = new File(tempOutputPath);
+        // 为了满足程序需要的参数
+        file.createNewFile();
+        String templateFilePath = FilenameUtils.concat(task.getTempDirPath(), "template-"+uuid1);
+        String enrollCmd = this.genCmdFromLines(filePath1, templateFilePath, 0);
+        String matchCmd  = this.genCmdFromLines(filePath2, templateFilePath, 1);
+
+        Process process = Runtime.getRuntime().exec(enrollCmd);
+        process.waitFor();
+
+        process = Runtime.getRuntime().exec(matchCmd);
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+        process.waitFor();
+        StringBuffer lines = new StringBuffer();
+        String line;
+        while ((line = stdInput.readLine()) != null) {
+            lines.append(line).append("\r\n");
+        }
+        stdInput.close();
+        file.delete();
+        return lines.toString();
     }
 }

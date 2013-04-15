@@ -5,6 +5,10 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import rate.engine.benchmark.runner.AbstractRunner;
+import rate.engine.benchmark.runner.FVC2006Runner;
+import rate.engine.benchmark.runner.PKURATERunner;
+import rate.engine.benchmark.runner.RunnerException;
 import rate.engine.task.GeneralTask;
 import rate.model.SampleEntity;
 import rate.model.TaskEntity;
@@ -144,10 +148,10 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
             String line = genuineList.get(i);
             String info[] = line.split(" ");
             String s1 = info[0], s2 = info[1];
+            String log = genLog(s1, s2);
 
             PrintWriter fileWriter = new PrintWriter(generalTask.getLogPathByTypeNumber("genuine", String.valueOf(i + 1)));
             fileWriter.println(line);
-            String log = genLog(s1, s2, "0");
             fileWriter.println(log);
             fileWriter.close();
         }
@@ -156,10 +160,9 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
             String line = imposterList.get(i);
             String info[] = line.split(" ");
             String  s1 = info[0], s2 = info[1];
-
+            String log = genLog(s1, s2);
             PrintWriter fileWriter = new PrintWriter(generalTask.getLogPathByTypeNumber("imposter", String.valueOf(imposterList.size() - i)));
             fileWriter.println(line);
-            String log = genLog(s1, s2, "0");
             fileWriter.println(log);
             fileWriter.close();
         }
@@ -242,7 +245,6 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
     }
 
     private double getErrorRateOnThreshold(double thresholdIn, String filePath) throws Exception {
-//        logger.trace(String.format("filePath [%s] thresholdIn [%f]", filePath, thresholdIn));
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
         String line;
         double threshold = 0, errorRate = 0;
@@ -251,7 +253,6 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
             threshold = Double.parseDouble(rs[0]);
             errorRate = Double.parseDouble(rs[1]);
 
-//            logger.trace(String.format("getErrorRateOnThreshold: filePath [%s] threshold [%f] errorRate [%f]", filePath, threshold, errorRate));
 
             if (threshold>=thresholdIn) break;
         }
@@ -260,33 +261,20 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
     }
 
 
-    private String genLog(String s1, String s2, String config) throws Exception {
-        logger.trace(String.format("Generate log for sample %s and %s", s1, s2));
-        SampleEntity sample1 = (SampleEntity)session.createQuery("from SampleEntity where uuid=:uuid")
-                .setParameter("uuid", s1).list().get(0);
-        SampleEntity sample2 = (SampleEntity)session.createQuery("from SampleEntity where uuid=:uuid")
-                .setParameter("uuid", s2).list().get(0);
-        String filePath1 = FilenameUtils.concat(RateConfig.getSampleRootDir(), sample1.getFilePath());
-        String filePath2 = FilenameUtils.concat(RateConfig.getSampleRootDir(), sample2.getFilePath());
-        Random random = new Random();
-        String tempOutputPath = FilenameUtils.concat(RateConfig.getTempRootDir(), String.format("task-log-%d", random.nextInt()));
-        File file = new File(tempOutputPath);
-        // 为了满足程序需要的参数
-        file.createNewFile();
-        String cmd = generalTask.getMatchExeFilePath() + " " + filePath1 + " " + filePath2 + " " + config + " " + tempOutputPath;
-        logger.debug("run command " + cmd);
-        Process process = Runtime.getRuntime().exec(cmd);
+    private String genLog(String uuid1, String uuid2) throws Exception {
+        logger.trace(String.format("Generate log for sample %s and %s", uuid1, uuid2));
+        String protocal = generalTask.getTask().getAlgorithmVersion().getAlgorithm().getProtocol();
 
-        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        process.waitFor();
-        StringBuffer lines = new StringBuffer();
-        String line;
-        while ((line = stdInput.readLine()) != null) {
-            lines.append(line).append("\r\n");
+        if (protocal.equals("FVC2006")) {
+            FVC2006Runner runner = new FVC2006Runner();
+            return runner.genLog(uuid1, uuid2);
+        } else if (protocal.equals("PKURATE")) {
+            PKURATERunner runner = new PKURATERunner();
+            runner.setTask(generalTask.getTask());
+            return runner.genLog(uuid1, uuid2);
+        } else {
+            throw new Exception("Protocal not supported");
         }
-        stdInput.close();
-        file.delete();
-        return lines.toString();
     }
 
     private void prepare() throws Exception {
