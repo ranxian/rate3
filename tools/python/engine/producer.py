@@ -16,9 +16,9 @@ PRODUCER_RATE_ROOT = config.get('rate-server', 'PRODUCER_RATE_ROOT')
 
 class RateProducer:
     def __init__(self, host, benchmark_file_dir, result_file_dir, algorithm_version_dir, timelimit, memlimit):
-        self.benchmark_file_path = os.path.join(benchmark_file_dir, 'benchmark.txt')
-        self.enrollEXE = os.path.join(algorithm_version_dir, 'enroll.exe')
-        self.matchEXE = os.path.join(algorithm_version_dir, 'match.exe')
+        self.benchmark_file_path = "/".join((benchmark_file_dir, 'benchmark.txt'))
+        self.enrollEXE = "/".join((algorithm_version_dir, 'enroll.exe'))
+        self.matchEXE = "/".join((algorithm_version_dir, 'match.exe'))
         self.timelimit = timelimit
         self.memlimit = memlimit
 
@@ -34,8 +34,8 @@ class RateProducer:
         self.result_file_dir = result_file_dir
         if not os.path.isdir(result_file_dir):
             os.makedirs(result_file_dir)
-        self.enroll_result_file = open(os.path.join(result_file_dir, 'enroll_result.txt'), 'w')
-        self.match_result_file = open(os.path.join(result_file_dir, 'match_result.txt'), 'w')
+        self.enroll_result_file = open("/".join((result_file_dir, 'enroll_result.txt'), 'w'))
+        self.match_result_file = open("/".join((result_file_dir, 'match_result.txt'), 'w'))
         self.failed_enroll_uuids = set()
         self.failed_match_uuids = set()
 
@@ -79,10 +79,10 @@ class RateProducer:
     def solve(self):
         # prepare dirs
         print "preparing dirs on server"
-        os.makedirs(os.path.join(PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:]))
+        os.makedirs("/".join((PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:])))
         for i in range(16*16):
             tdir = str(hex(i+256))[-2:]
-            os.mkdir(os.path.join(PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:], tdir))
+            os.mkdir("/".join((PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:], tdir)))
         print "reading benchmark.txt"
 #        lines = f.readlines()
 #        f.close()
@@ -109,7 +109,7 @@ class RateProducer:
             for u in us:
                 if u not in self.enroll_uuids:
                     self.enroll_uuids.add(u)
-                    f = os.path.join('samples', match[us.index(u)+1].strip())
+                    f = "/".join(('samples', match[us.index(u)+1].strip()))
                     t = {'uuid':u, 'file': f }
                     #print>>enroll_log_file, u, f
                     l.append(t)
@@ -177,21 +177,21 @@ class RateProducer:
     def cleanUp(self):
         print "cleaning up"
         try:
-            temp_dir = os.path.join(PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:])
+            temp_dir = "/".join((PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:]))
             if os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
         except Exception, e:
             print e
 
         self.ch.exchange_declare(exchange='jobs-cleanup-exchange', type='fanout')
-        cleanup_dir = os.path.join('temp', self.uuid[-12:])
+        cleanup_dir = "/".join(('temp', self.uuid[-12:]))
         self.ch.basic_publish(exchange='jobs-cleanup-exchange', routing_key='', body=pickle.dumps(cleanup_dir))
 
     def submit(self, subtask):
         if subtask==None:
             return
         for fpath in subtask['files']:
-            fpath = os.path.join(PRODUCER_RATE_ROOT, fpath)
+            fpath = "/".join((PRODUCER_RATE_ROOT, fpath))
             if not os.path.exists(fpath):
                 raise Exception("file does not exists: %s" % fpath)
         self.ch.queue_declare(queue='jobs', durable=False, exclusive=False, auto_delete=False)
