@@ -27,3 +27,4 @@ ipch*/
 *.swp
 *.apple.timemachine.supported
 .AppleDouble/
+.DS_Store

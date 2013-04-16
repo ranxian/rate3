@@ -84,19 +84,27 @@ class RateProducer:
             tdir = str(hex(i+256))[-2:]
             os.mkdir(os.path.join(PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:], tdir))
         print "reading benchmark.txt"
-        f = open(self.benchmark_file_path, 'r')
-        lines = f.readlines()
-        f.close()
-        print "benchmark.txt read into memory"
-        matches = [ lines[i*3:i*3+3] for i in range(len(lines)/3) ]
-        print "benchmark.txt splitted"
+#        lines = f.readlines()
+#        f.close()
+#        print "benchmark.txt read into memory"
+#        matches = [ lines[i*3:i*3+3] for i in range(len(lines)/3) ]
+#        print "benchmark.txt splitted"
 
         self.enroll_uuids = set()
         i = 0
         j = 0
         l = []
         #enroll_log_file = open(os.path.join(self.result_file_dir, 'benchmark.enroll.log'), 'w')
-        for match in matches:
+        benchmarkf = open(self.benchmark_file_path, 'r')
+        self.countOfMatches = 0
+        while True:
+            a = benchmarkf.readline().strip()
+            if len(a)==0:
+                break
+            self.countOfMatches += 1
+            b = benchmarkf.readline().strip()
+            c = benchmarkf.readline().strip()
+            match = [a,b,c]
             us = match[0].strip().split(' ')[:2]
             for u in us:
                 if u not in self.enroll_uuids:
@@ -110,17 +118,18 @@ class RateProducer:
                         l = []
                         j = j+1
                         if j%10 == 0:
-                            print "[%d*%d] enrolls has been submitted" % (j, ENROLL_BLOCK_SIZE)
+                            print "[%d*%d=%d] enrolls has been submitted" % (j, ENROLL_BLOCK_SIZE, j * ENROLL_BLOCK_SIZE)
             i=i+1
             if i%1000==0:
-                print "[%d/%d] matches analyzed" % (i, len(matches))
+                print "[%d] matches analyzed" % (i)
+        benchmarkf.close()
         #enroll_log_file.close()
 
         if len(l)!=0:
             self.submitEnrollBlock(l)
             l = []
 
-        print "%d matches" % len(matches)
+        print "%d matches" % self.countOfMatches
         print "%d enrolls" % len(self.enroll_uuids)
 
         self.waitForEnrollResults()
@@ -131,7 +140,14 @@ class RateProducer:
         i = 0
         self.match_count = 0
         self.failed_match_count = 0
-        for match in matches:
+        benchmarkf = open(self.benchmark_file_path, 'r')
+        while True:
+            a = benchmarkf.readline().strip()
+            if len(a)==0:
+                break
+            b = benchmarkf.readline().strip()
+            c = benchmarkf.readline().strip()
+            match = [a,b,c]
             (u1,u2, gOrI) = match[0].strip().split(' ')[:3]
             if u1 in self.failed_enroll_uuids or u2 in self.failed_enroll_uuids:
                 continue
@@ -145,10 +161,11 @@ class RateProducer:
                 l = []
                 i = i+1
                 if i%10 == 0:
-                    print "[%d*%d/%d] matches has been submitted" % (i, MATCH_BLOCK_SIZE, len(matches))
+                    print "[%d*%d/%d=%d%%] matches has been submitted" % (i, MATCH_BLOCK_SIZE, self.countOfMatches, i*MATCH_BLOCK_SIZE*100/self.countOfMatches)
         if len(l)!=0:
             self.submitMatchBlock(l)
             l = []
+        benchmarkf.close()
 
         if len(self.match_subtask_uuids)!=0:
             self.waitForMatchResults()
