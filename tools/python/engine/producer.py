@@ -34,8 +34,8 @@ class RateProducer:
         self.result_file_dir = result_file_dir
         if not os.path.isdir(result_file_dir):
             os.makedirs(result_file_dir)
-        self.enroll_result_file = open("/".join((result_file_dir, 'enroll_result.txt'), 'w'))
-        self.match_result_file = open("/".join((result_file_dir, 'match_result.txt'), 'w'))
+        self.enroll_result_file = open("/".join((result_file_dir, 'enroll_result.txt')), 'w')
+        self.match_result_file = open("/".join((result_file_dir, 'match_result.txt')), 'w')
         self.failed_enroll_uuids = set()
         self.failed_match_uuids = set()
 
