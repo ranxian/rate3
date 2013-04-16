@@ -76,6 +76,7 @@ class Worker:
     def checkFile(self, relPath):
         tried = 0
         absPath = os.path.join(self.WORKER_RATE_ROOT, relPath)
+        absPath = absPath.replace('\\', '/')
         while not os.path.exists(absPath) or os.stat(absPath).st_size==0:
             self.file_lock.acquire()
             try:
