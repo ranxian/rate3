@@ -1,9 +1,13 @@
+# coding:utf8
 import MySQLdb
 import hashlib
 import os
+#TODO 要把学生名字给update过来
 
 conn = MySQLdb.connect('localhost', 'root', 'testing', 'rate3')
 c = conn.cursor()
+
+#c.execute('delete from sample where device=unhex("0A66B7775EC711E2A73200247E0F739B"')
 
 #check duplicated files
 c.execute("select file from sample where import_tag='newbioverify' group by file having count(*)>1;")

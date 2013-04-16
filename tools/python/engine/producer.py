@@ -16,9 +16,9 @@ PRODUCER_RATE_ROOT = config.get('rate-server', 'PRODUCER_RATE_ROOT')
 
 class RateProducer:
     def __init__(self, host, benchmark_file_dir, result_file_dir, algorithm_version_dir, timelimit, memlimit):
-        self.benchmark_file_path = os.path.join(benchmark_file_dir, 'benchmark.txt')
-        self.enrollEXE = os.path.join(algorithm_version_dir, 'enroll.exe')
-        self.matchEXE = os.path.join(algorithm_version_dir, 'match.exe')
+        self.benchmark_file_path = "/".join((benchmark_file_dir, 'benchmark.txt'))
+        self.enrollEXE = "/".join((algorithm_version_dir, 'enroll.exe'))
+        self.matchEXE = "/".join((algorithm_version_dir, 'match.exe'))
         self.timelimit = timelimit
         self.memlimit = memlimit
 
@@ -34,8 +34,8 @@ class RateProducer:
         self.result_file_dir = result_file_dir
         if not os.path.isdir(result_file_dir):
             os.makedirs(result_file_dir)
-        self.enroll_result_file = open(os.path.join(result_file_dir, 'enroll_result.txt'), 'w')
-        self.match_result_file = open(os.path.join(result_file_dir, 'match_result.txt'), 'w')
+        self.enroll_result_file = open("/".join((result_file_dir, 'enroll_result.txt')), 'w')
+        self.match_result_file = open("/".join((result_file_dir, 'match_result.txt')), 'w')
         self.failed_enroll_uuids = set()
         self.failed_match_uuids = set()
 
@@ -79,29 +79,37 @@ class RateProducer:
     def solve(self):
         # prepare dirs
         print "preparing dirs on server"
-        os.makedirs(os.path.join(PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:]))
+        os.makedirs("/".join((PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:])))
         for i in range(16*16):
             tdir = str(hex(i+256))[-2:]
-            os.mkdir(os.path.join(PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:], tdir))
+            os.mkdir("/".join((PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:], tdir)))
         print "reading benchmark.txt"
-        f = open(self.benchmark_file_path, 'r')
-        lines = f.readlines()
-        f.close()
-        print "benchmark.txt read into memory"
-        matches = [ lines[i*3:i*3+3] for i in range(len(lines)/3) ]
-        print "benchmark.txt splitted"
+#        lines = f.readlines()
+#        f.close()
+#        print "benchmark.txt read into memory"
+#        matches = [ lines[i*3:i*3+3] for i in range(len(lines)/3) ]
+#        print "benchmark.txt splitted"
 
         self.enroll_uuids = set()
         i = 0
         j = 0
         l = []
         #enroll_log_file = open(os.path.join(self.result_file_dir, 'benchmark.enroll.log'), 'w')
-        for match in matches:
+        benchmarkf = open(self.benchmark_file_path, 'r')
+        self.countOfMatches = 0
+        while True:
+            a = benchmarkf.readline().strip()
+            if len(a)==0:
+                break
+            self.countOfMatches += 1
+            b = benchmarkf.readline().strip()
+            c = benchmarkf.readline().strip()
+            match = [a,b,c]
             us = match[0].strip().split(' ')[:2]
             for u in us:
                 if u not in self.enroll_uuids:
                     self.enroll_uuids.add(u)
-                    f = os.path.join('samples', match[us.index(u)+1].strip())
+                    f = "/".join(('samples', match[us.index(u)+1].strip()))
                     t = {'uuid':u, 'file': f }
                     #print>>enroll_log_file, u, f
                     l.append(t)
@@ -110,17 +118,18 @@ class RateProducer:
                         l = []
                         j = j+1
                         if j%10 == 0:
-                            print "[%d*%d] enrolls has been submitted" % (j, ENROLL_BLOCK_SIZE)
+                            print "[%d*%d=%d] enrolls has been submitted" % (j, ENROLL_BLOCK_SIZE, j * ENROLL_BLOCK_SIZE)
             i=i+1
             if i%1000==0:
-                print "[%d/%d] matches analyzed" % (i, len(matches))
+                print "[%d] matches analyzed" % (i)
+        benchmarkf.close()
         #enroll_log_file.close()
 
         if len(l)!=0:
             self.submitEnrollBlock(l)
             l = []
 
-        print "%d matches" % len(matches)
+        print "%d matches" % self.countOfMatches
         print "%d enrolls" % len(self.enroll_uuids)
 
         self.waitForEnrollResults()
@@ -131,7 +140,14 @@ class RateProducer:
         i = 0
         self.match_count = 0
         self.failed_match_count = 0
-        for match in matches:
+        benchmarkf = open(self.benchmark_file_path, 'r')
+        while True:
+            a = benchmarkf.readline().strip()
+            if len(a)==0:
+                break
+            b = benchmarkf.readline().strip()
+            c = benchmarkf.readline().strip()
+            match = [a,b,c]
             (u1,u2, gOrI) = match[0].strip().split(' ')[:3]
             if u1 in self.failed_enroll_uuids or u2 in self.failed_enroll_uuids:
                 continue
@@ -145,10 +161,11 @@ class RateProducer:
                 l = []
                 i = i+1
                 if i%10 == 0:
-                    print "[%d*%d/%d] matches has been submitted" % (i, MATCH_BLOCK_SIZE, len(matches))
+                    print "[%d*%d/%d=%d%%] matches has been submitted" % (i, MATCH_BLOCK_SIZE, self.countOfMatches, i*MATCH_BLOCK_SIZE*100/self.countOfMatches)
         if len(l)!=0:
             self.submitMatchBlock(l)
             l = []
+        benchmarkf.close()
 
         if len(self.match_subtask_uuids)!=0:
             self.waitForMatchResults()
@@ -160,21 +177,21 @@ class RateProducer:
     def cleanUp(self):
         print "cleaning up"
         try:
-            temp_dir = os.path.join(PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:])
+            temp_dir = "/".join((PRODUCER_RATE_ROOT, 'temp', self.uuid[-12:]))
             if os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
         except Exception, e:
             print e
 
         self.ch.exchange_declare(exchange='jobs-cleanup-exchange', type='fanout')
-        cleanup_dir = os.path.join('temp', self.uuid[-12:])
+        cleanup_dir = "/".join(('temp', self.uuid[-12:]))
         self.ch.basic_publish(exchange='jobs-cleanup-exchange', routing_key='', body=pickle.dumps(cleanup_dir))
 
     def submit(self, subtask):
         if subtask==None:
             return
         for fpath in subtask['files']:
-            fpath = os.path.join(PRODUCER_RATE_ROOT, fpath)
+            fpath = "/".join((PRODUCER_RATE_ROOT, fpath))
             if not os.path.exists(fpath):
                 raise Exception("file does not exists: %s" % fpath)
         self.ch.queue_declare(queue='jobs', durable=False, exclusive=False, auto_delete=False)
