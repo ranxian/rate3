@@ -15,8 +15,8 @@ config.readfp(open('%s/producer.conf' % os.path.dirname(__file__), 'r'))
 ENROLL_BLOCK_SIZE = config.getint('rate-server', 'ENROLL_BLOCK_SIZE')
 MATCH_BLOCK_SIZE = config.getint('rate-server', 'MATCH_BLOCK_SIZE')
 PRODUCER_RATE_ROOT = config.get('rate-server', 'PRODUCER_RATE_ROOT')
-MAX_WORKING_ENROLL_SUBTASKS = 10
-MAX_WORKING_MATCH_SUBTASKS = 10
+MAX_WORKING_ENROLL_SUBTASKS = 100000
+MAX_WORKING_MATCH_SUBTASKS = 100000
 
 class RateProducer:
     def __init__(self, host, benchmark_file_dir, result_file_dir, algorithm_version_dir, timelimit, memlimit):

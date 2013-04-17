@@ -263,9 +263,9 @@ class Worker:
             result['type'] = subtask['type']
             result_queue = 'results-%s-%s' % (subtask['type'], subtask['producer_uuid'])
             #print 'result_queue:', result_queue
-            self.ch.queue_declare(queue=result_queue, durable=False, exclusive=False, auto_delete=False)
-            self.ch.basic_publish(exchange='', routing_key=result_queue, body=pickle.dumps(result))
-            self.ch.basic_ack(delivery_tag=method.delivery_tag)
+            ch.queue_declare(queue=result_queue, durable=False, exclusive=False, auto_delete=False)
+            ch.basic_publish(exchange='', routing_key=result_queue, body=pickle.dumps(result))
+            ch.basic_ack(delivery_tag=method.delivery_tag)
 
         except Exception, e:
             traceback.print_exc()
