@@ -109,16 +109,18 @@ int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returnc
 	//remove(tempFileName);
 
 	int tried = 0;
-	while ((_access(tempFileName, 0) != -1) && tried<500 ) {
+	// shit let's wait for ever!!!
+	while ((_access(tempFileName, 0) != -1) && tried<5000 ) {
 		int r = remove(tempFileName);
 		//if (r!=0) {
 		//	cerr << "failed with " << r << endl;
 		//}
 		tried++;
+		Sleep(10);
 	}
 
-	//if (tried>=50) {
-	//	cerr << "shitttt" << tempFileName << endl;
+	//if (tried>=500) {
+	//	cerr << "shitttt" << tried << "  " << tempFileName << endl;
 	//}
 
 	//cout << stdout_buf << endl;
