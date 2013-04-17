@@ -7,6 +7,7 @@
 #include "rate_run.h"
 
 #include <psapi.h>
+#include <io.h>
 #include <iostream>
 
 using namespace std;
@@ -89,9 +90,20 @@ int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returnc
 	}
 	stdout_buf[i] = '\0';
 	inf.close();
-	remove(tempFileName);
+
+	int tried = 0;
+	while ((_access(tempFileName, 0) != -1) && tried<500 ) {
+		int r = remove(tempFileName);
+		//if (r!=0) {
+		//	cerr << "failed with " << r << endl;
+		//}
+		tried++;
+	}
+	//if (tried>=50) {
+	//	cerr << "shitttt" << tempFileName << endl;
+	//}
+
 	//cout << stdout_buf << endl;
-	
 	
 	//LogPerformance(timelimit_ms, memlimit, cmd, args, accounting, purfPath);	
 
