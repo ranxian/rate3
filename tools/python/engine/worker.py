@@ -76,6 +76,7 @@ class Worker:
     def checkFile(self, relPath):
         tried = 0
         absPath = os.path.join(self.WORKER_RATE_ROOT, relPath)
+        absPath = absPath.replace('\\', '/')
         while not os.path.exists(absPath) or os.stat(absPath).st_size==0:
             self.file_lock.acquire()
             try:
@@ -104,7 +105,12 @@ class Worker:
         print "%s: prepare" % str(self.worker_num)
         for f in subtask['files']:
             self.checkFile(f)
-        #self.closeFTP()
+        if self.download_ftp!=None:
+            try:
+                self.download_ftp.quit()
+                self.download_ftp = None
+            except Exception, e:
+                print e
         print "%s: prepare finished" % str(self.worker_num)
 
     def openUploadFTP(self, subtask):
@@ -165,6 +171,12 @@ class Worker:
             rawResults.append(rawResult)
         result = {}
         result['results'] = rawResults
+
+        try:
+            ftp.quit()
+        except Exception, e:
+            print e
+
         return result
 
     def doMatch(self, subtask):
@@ -193,6 +205,7 @@ class Worker:
 
             try:
                 (returncode, output) = rate_run.rate_run_main(int(timelimit), int(memlimit), str(cmd))
+                os.system("del *.tmp")
                 #print type(output)
                 #print output
                 #p = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=open(os.devnull, "w"))
@@ -228,10 +241,6 @@ class Worker:
                 print e
                 time.sleep(1)
 
-    def closeFTP(self):
-        if self.download_ftp:
-            self.download_ftp.quit()
-            self.download_ftp = None
 
     def doWork(self, ch, method, properties, body):
         subtask = pickle.loads(body)
@@ -341,6 +350,11 @@ if __name__=='__main__':
     process_args.append(semaphore)
     process_args.append(process_lock)
     process_args.append(CURRENT_WORKER_NUM)
+
+    try:
+        os.system("del *.tmp")
+    except Exception, e:
+        print e
 
     ts = []
     for i in range(WORKER_NUM*2):
