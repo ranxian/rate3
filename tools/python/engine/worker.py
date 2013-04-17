@@ -205,7 +205,7 @@ class Worker:
 
             try:
                 (returncode, output) = rate_run.rate_run_main(int(timelimit), int(memlimit), str(cmd))
-                os.system("del *.tmp")
+                #os.system("del *.tmp")
                 #print type(output)
                 #print output
                 #p = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=open(os.devnull, "w"))

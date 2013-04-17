@@ -9,6 +9,9 @@
 #include <psapi.h>
 #include <io.h>
 #include <iostream>
+#include "rpcdce.h"
+#include <Rpc.h>
+#pragma comment(lib, "Rpcrt4.lib")
 
 using namespace std;
 
@@ -55,16 +58,27 @@ int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returnc
 	ZeroMemory(&accounting, sizeof(accounting));
 
 	//HANDLE hstdoutf = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	WCHAR tempFileNameW[MAX_PATH];
-	GetTempFileName(A2W("."), NULL, 0, tempFileNameW); 
-	char tempFileName[MAX_PATH];
-	strcpy(tempFileName, W2A(tempFileNameW));
+	
+	// only in this way can we gurantee the filenames would not collide
+	// stupid windows GetTempFileName() and C++'s tmpnam()
+	// they are all not thread safe 
+	// basicly because they rely on random, which then relies on system time
+	// thus threads that are running into the same code almost at the same time would get the same result filename
+	UUID uuid;
+	ZeroMemory(&uuid, sizeof(UUID));
+	UuidCreate(&uuid);
+	RPC_WSTR tempFileNameR = NULL;
+	UuidToString(&uuid, &tempFileNameR);
+	wchar_t* tempFileNameW = reinterpret_cast<wchar_t*>(tempFileNameR);
+	char tempFileName[MAX_PATH] = "./";
+	strcat(tempFileName, W2A(tempFileNameW));
+	strcat(tempFileName, ".tmp");
+	RpcStringFree(&tempFileNameR);
 	
 	HANDLE hstdoutf = NULL, hstderrf = NULL;
 	MakeOutputFileHandle(&hstdoutf, tempFileName);
 	//MakeOutputFileHandle(&hstderrf, stderrPath);	
-
+	
 	//////////
 	returncode = run(timelimit_ms, memlimit, cmdline, &accounting, hstdoutf, NULL);
 	if (hstdoutf!=NULL)
@@ -82,6 +96,7 @@ int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returnc
 	ifstream inf(tempFileName);
 	int i = 0;
 	while (!inf.eof() && i<BUFSIZE) {
+		//cerr << "still" << endl;
 		char ctemp;
 		ctemp = inf.get();
 		if (ctemp=='\n' || ctemp==' ')
@@ -91,6 +106,8 @@ int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returnc
 	stdout_buf[i] = '\0';
 	inf.close();
 
+	//remove(tempFileName);
+
 	int tried = 0;
 	while ((_access(tempFileName, 0) != -1) && tried<500 ) {
 		int r = remove(tempFileName);
@@ -99,6 +116,7 @@ int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returnc
 		//}
 		tried++;
 	}
+
 	//if (tried>=50) {
 	//	cerr << "shitttt" << tempFileName << endl;
 	//}
