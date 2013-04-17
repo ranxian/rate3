@@ -64,7 +64,7 @@ int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returnc
 	// they are all not thread safe 
 	// basicly because they rely on random, which then relies on system time
 	// thus threads that are running into the same code almost at the same time would get the same result filename
-	UUID uuid;
+	/*UUID uuid;
 	ZeroMemory(&uuid, sizeof(UUID));
 	UuidCreate(&uuid);
 	RPC_WSTR tempFileNameR = NULL;
@@ -73,8 +73,13 @@ int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returnc
 	char tempFileName[MAX_PATH] = "./";
 	strcat(tempFileName, W2A(tempFileNameW));
 	strcat(tempFileName, ".tmp");
-	RpcStringFree(&tempFileNameR);
-	
+	RpcStringFree(&tempFileNameR);*/
+
+	WCHAR tempFileNameW[MAX_PATH];
+	GetTempFileName(A2W("."), NULL, 0, tempFileNameW);
+	char tempFileName[MAX_PATH];
+	strcpy(tempFileName, W2A(tempFileNameW));
+
 	HANDLE hstdoutf = NULL, hstderrf = NULL;
 	MakeOutputFileHandle(&hstdoutf, tempFileName);
 	//MakeOutputFileHandle(&hstderrf, stderrPath);	
@@ -108,16 +113,16 @@ int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returnc
 
 	//remove(tempFileName);
 
-	int tried = 0;
+	//int tried = 0;
 	// shit let's wait for ever!!!
-	while ((_access(tempFileName, 0) != -1) && tried<5000 ) {
-		int r = remove(tempFileName);
+	//while ((_access(tempFileName, 0) != -1) && tried<500 ) {
+	int r = remove(tempFileName);
 		//if (r!=0) {
 		//	cerr << "failed with " << r << endl;
 		//}
-		tried++;
-		Sleep(10);
-	}
+		//tried++;
+		//Sleep(10);
+	//}
 
 	//if (tried>=500) {
 	//	cerr << "shitttt" << tried << "  " << tempFileName << endl;
