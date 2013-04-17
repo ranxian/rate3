@@ -35,7 +35,7 @@ int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returnc
 
 	wchar_t cwd[MAX_PATH];
 	_tgetcwd(cwd, MAX_PATH);
-	cerr << "current_dir is: " << T2A(cwd) << endl;
+	//cerr << "current_dir is: " << T2A(cwd) << endl;
 
 	SetErrorMode(0xFFFF);
 		
@@ -47,8 +47,8 @@ int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returnc
 	//strcpy(purfPath, "rate_run_perf.txt");
 
 	
-	cerr << cmdline << endl;
-	cerr << "timelimit:" << timelimit_ms << "ms memlimit:" << memlimit << "byte(" << memlimit/1024 << "kb)" << endl;
+	//cerr << cmdline << endl;
+	//cerr << "timelimit:" << timelimit_ms << "ms memlimit:" << memlimit << "byte(" << memlimit/1024 << "kb)" << endl;
 	
 	ACCOUNTING accounting;
 	ZeroMemory(&accounting, sizeof(accounting));
@@ -72,7 +72,7 @@ int rate_run_main(int timelimit_ms, SIZE_T memlimit, char* cmdline, int &returnc
 	
 	if (returncode!=0) {
 		accounting.return_value = returncode;
-		cerr << "error during execution, client returns " <<  returncode << endl;
+		//cerr << "error during execution, return code " <<  returncode << endl;
 		LogError(returncode);
 	}
 	
@@ -112,7 +112,7 @@ HANDLE GetDesktop()
 		NULL
 		);
 	if (d==NULL) {
-		cerr << "Failed to CreateDesktop with error: " << GetLastError() << endl;
+		//cerr << "Failed to CreateDesktop with error: " << GetLastError() << endl;
 	};
 	return d;
 }
@@ -137,10 +137,10 @@ DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCO
 	HANDLE job = CreateJobObject(NULL, NULL);
 	if (!job) {
 		int err = GetLastError();
-		cerr << "Failed to CreateJobObject with error: " << err << endl;
+		//cerr << "Failed to CreateJobObject with error: " << err << endl;
 		return err;
 	}
-	cerr << "Job created" << endl;
+	//cerr << "Job created" << endl;
 
 	// set limits to the job object
 	JOBOBJECT_BASIC_ACCOUNTING_INFORMATION jobobject_accounting;	
@@ -151,10 +151,10 @@ DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCO
 	extendedlimit.JobMemoryLimit = memlimit;
 	if (!SetInformationJobObject(job, JobObjectExtendedLimitInformation, &extendedlimit, sizeof(extendedlimit))) {
 		int err = GetLastError();
-		cerr << "Failed to SetInformationJobObject with error: " << err << endl;
+		//cerr << "Failed to SetInformationJobObject with error: " << err << endl;
 		return err;
 	}
-	cerr << "Job limited" << endl;
+	//cerr << "Job limited" << endl;
 
 	JOBOBJECT_BASIC_UI_RESTRICTIONS uirestriction = { JOB_OBJECT_UILIMIT_ALL };
 
@@ -197,7 +197,7 @@ DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCO
 		)
 	{
 		int err = GetLastError();
-		cerr << "Failed to CreateProcess with error: " << err << endl;
+		//cerr << "Failed to CreateProcess with error: " << err << endl;
 		return err;
 	}	
 			
@@ -206,7 +206,7 @@ DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCO
 	// associate the process with the job
 	if (!AssignProcessToJobObject(job, pi.hProcess)) {
 		int err = GetLastError();
-		cerr << "Failed to AssignProcessToJobObject: " << err << endl;
+		//cerr << "Failed to AssignProcessToJobObject: " << err << endl;
 		return err;
 	}
 	//cerr << "Process assigned to job" << endl;
@@ -228,7 +228,7 @@ DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCO
 		// 检查流逝时间，较宽松，是timelimit_ms的两倍
 		clock_t clockTime = clock() - starttime;
 		if (clockTime > (timelimit_ms)*2) {
-			cerr << "clock time limit exceed" << endl;
+			//cerr << "clock time limit exceed" << endl;
 			TerminateJobObject(job, ERROR_NOT_ENOUGH_QUOTA);
 			WaitForSingleObject(pi.hProcess, INFINITE);
 		}
@@ -236,48 +236,48 @@ DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCO
 		else {
 			if (!QueryInformationJobObject(job, JobObjectBasicAccountingInformation, &jobobject_accounting, sizeof(jobobject_accounting), NULL)) {
 				int err = GetLastError();
-				cerr << "QueryInformationJobObject error: " << err << endl;
+				//cerr << "QueryInformationJobObject error: " << err << endl;
 				return err;
 			}
 			if (jobobject_accounting.TotalUserTime.QuadPart/10000 > timelimit_ms) {
-				cerr << "user time limit exceed" << endl;
+				//cerr << "user time limit exceed" << endl;
 				TerminateJobObject(job, ERROR_NOT_ENOUGH_QUOTA);
 				WaitForSingleObject(pi.hProcess, INFINITE);
 			}
 		}
 		if (!GetExitCodeProcess(pi.hProcess, &exitcode)) {
 			int err = GetLastError();
-			cerr << "GetExitCodeProcess error: " << err << endl;
+			//cerr << "GetExitCodeProcess error: " << err << endl;
 			return err;
 		}
 		Sleep(10);
-		cerr << "clock time: " << clockTime << " user time:" << jobobject_accounting.TotalUserTime.QuadPart/10000 << endl;
+		//cerr << "clock time: " << clockTime << " user time:" << jobobject_accounting.TotalUserTime.QuadPart/10000 << endl;
 	}
-	cerr << "Process terminated" << endl;
+	//cerr << "Process terminated" << endl;
 	//Sleep(1000);
 	if (exitcode!=0 && GetLastError()!=0) {		
 		exitcode = GetLastError();
 	}
-	cerr << "Process return: " << exitcode << endl;
+	//cerr << "Process return: " << exitcode << endl;
 	
 	// terminate the job，防止还有子进程没有结束
 	while(true) {
 		if (!QueryInformationJobObject(job, JobObjectBasicAccountingInformation, &jobobject_accounting, sizeof(jobobject_accounting), NULL)) {
 			int err = GetLastError();
-			cerr << "QueryInformationJobObject error: " << err << endl;
+			//cerr << "QueryInformationJobObject error: " << err << endl;
 			return err;
 		}
 		if (jobobject_accounting.ActiveProcesses == 0) {
 			break;
 		}
-		cerr << "User process exit, but it's subprocesses are still running" << endl;
+		//cerr << "User process exit, but it's subprocesses are still running" << endl;
 		if (!TerminateJobObject(job, 0)) {
 			int err = GetLastError();
-			cerr << "TerminateJobObject error: " << err << endl;
+			//cerr << "TerminateJobObject error: " << err << endl;
 			return err;
 		}
 	}
-	cerr << "Job terminated" << endl;
+	//cerr << "Job terminated" << endl;
 
 	// accounting
 	paccounting->kernel_time = (int)(jobobject_accounting.TotalKernelTime.QuadPart / 10000);
@@ -286,7 +286,7 @@ DWORD run(unsigned int timelimit_ms, SIZE_T memlimit, const char* cmdline, PACCO
 	PROCESS_MEMORY_COUNTERS pmc;
 	if (!GetProcessMemoryInfo(pi.hProcess, &pmc, sizeof(pmc))) {
 		int err = GetLastError();
-		cerr << "GetProcessMemoryInfo error: " << err << endl;
+		//cerr << "GetProcessMemoryInfo error: " << err << endl;
 		return err;
 	}
 	paccounting->max_mem = pmc.PeakWorkingSetSize;
@@ -337,7 +337,7 @@ HANDLE MakeOutputFileHandle(HANDLE* h, const char* filename)
 		FILE_ATTRIBUTE_NORMAL,
 		NULL);
 	if (*h==INVALID_HANDLE_VALUE) {
-		cerr << "CreateFile error: " << GetLastError() << endl;
+		//cerr << "CreateFile error: " << GetLastError() << endl;
 		return *h;
 	}
 	SetFilePointer(*h, 0L, NULL, FILE_END);
@@ -346,6 +346,7 @@ HANDLE MakeOutputFileHandle(HANDLE* h, const char* filename)
 
 void LogError(DWORD dwError)
 {
+#ifdef DEBUG
 	LPVOID lpMsgBuf;
 	DWORD dw = dwError; 
 
@@ -366,4 +367,6 @@ void LogError(DWORD dwError)
 	// Display the error message and exit the process
 	USES_CONVERSION;
 	cerr << "Error Message: " << ": " << T2A((LPCWSTR)lpMsgBuf) << endl;
+#else
+#endif
 }
