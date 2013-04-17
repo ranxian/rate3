@@ -132,4 +132,10 @@ public class AlgorithmVersionEntity {
 
     private void setAuthorName(String nonsense) {}
 
+    @Transient
+    public String getBareDir() {
+        return "algorithms" + "/" + getAlgorithm().getUuid() + "/" + this.getUuid();
+    }
+
+    private void setBareDir(String nonsense) {}
 }

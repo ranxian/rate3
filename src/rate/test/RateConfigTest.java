@@ -22,6 +22,7 @@ public class RateConfigTest {
         System.out.println(RateConfig.getZipRootDir());
         System.out.println(RateConfig.getClassPath());
         System.out.println(RateConfig.getBenchmarkRootDir());
+        DebugUtil.debug(RateConfig.getDistEngineDir());
 
         BenchmarkEntity benchmark = new BenchmarkEntity();
         session.save(benchmark);

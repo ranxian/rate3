@@ -115,6 +115,11 @@ public class RateConfig {
     }
 
     public static Boolean isDistRun() {
+        DebugUtil.debug(config.getString("DIST_RUN"));
         return config.getString("DIST_RUN").equals("1") ? true : false;
+    }
+
+    public static String getDistEngineDir() {
+        return FilenameUtils.concat(getBinDir(), "dist");
     }
 }
