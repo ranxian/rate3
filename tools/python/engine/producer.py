@@ -8,7 +8,7 @@ import uuid
 import ConfigParser
 
 config = ConfigParser.ConfigParser()
-config.readfp(open('producer.conf', 'r'))
+config.readfp(open('%s/producer.conf' % os.path.dirname(__file__), 'r'))
 
 ENROLL_BLOCK_SIZE = config.getint('rate-server', 'ENROLL_BLOCK_SIZE')
 MATCH_BLOCK_SIZE = config.getint('rate-server', 'MATCH_BLOCK_SIZE')
