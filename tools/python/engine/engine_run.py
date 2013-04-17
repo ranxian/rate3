@@ -1,6 +1,8 @@
+import sys
+import os
+sys.path.append(os.path.dirname(__file__))
 from producer import RateProducer
 import traceback
-import sys
 
 # super big
 # python engine_run.py ratedev-server ~/Desktop/ ~/Desktop algorithms/01fc27c3-2284-448d-bc04-01e3de59951d/f51173ec-b2ca-4c7f-aebe-a48a6eadf199/ 1000 52428800
