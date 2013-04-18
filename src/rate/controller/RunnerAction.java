@@ -40,6 +40,9 @@ public class RunnerAction extends RateActionBase {
     }
 
     public String execute() throws Exception {
+        if (!getIsUserSignedIn()) {
+            return "eLogin";
+        }
 
         task = algorithmVersion.getTaskOn(benchmark);
 

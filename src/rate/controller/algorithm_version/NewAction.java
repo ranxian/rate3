@@ -20,6 +20,7 @@ public class NewAction extends AlgorithmVersionActionBase {
     private static final Logger logger = Logger.getLogger(NewAction.class);
 
     public String execute() {
+        if (!getIsUserSignedIn()) return "eLogin";
         if (!isAuthor()) return "eNotAuthor";
         return SUCCESS;
     }
