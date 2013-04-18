@@ -1,5 +1,7 @@
 package rate.engine.benchmark.runner;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -15,6 +17,7 @@ import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 import rate.util.RateConfig;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,11 +47,13 @@ public class RunnerMain {
 
     public static String buildDistCommand() {
         List<String> list = new ArrayList<String>();
+        list.add(RateConfig.getPythonExe());
         list.add(AbstractRunner.getDistEnginePath());
         list.add("162.105.30.204");
         list.add(benchmark.dirPath());
-        list.add(task.getResultFilePath());
+        list.add(task.getDirPath());
         list.add(algorithmVersion.getBareDir());
+        logger.debug("algorithm bare url path is " + algorithmVersion.getBareDir());
         list.add("1000");
         list.add("50000000");
         DebugUtil.debug(list.toString());
@@ -77,10 +82,23 @@ public class RunnerMain {
             // Run!
             if (RateConfig.isDistRun()) {
                 String cmd = buildDistCommand();
-                logger.trace("Run with distributed system command" + cmd);
+                logger.trace("Run with distributed system command " + cmd);
                 logger.trace(cmd);
                 Process process = Runtime.getRuntime().exec(cmd);
                 process.waitFor();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                PrintWriter writer = new PrintWriter(new FileWriter(task.getDirPath() + "\\log.txt" ));
+                while (true) {
+                    String line = reader.readLine();
+                    if (line == null) break;
+                    writer.println(line);
+                    writer.flush();
+                }
+                writer.close();
+                reader.close();
+                FileUtils.moveFile(new File(FilenameUtils.concat(task.getDirPath(), "match_result.txt")), new File(task.getResultFilePath()));
+
                 logger.trace("finished");
             } else {
                 logger.info(String.format("Attempt to run task [%s] with runner [%s]", task.getUuid(), runnerClass.getName()));

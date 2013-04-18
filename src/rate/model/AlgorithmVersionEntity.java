@@ -1,14 +1,17 @@
 package rate.model;
 
 import org.apache.commons.io.FilenameUtils;
+import org.hibernate.Session;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import rate.util.HibernateUtil;
 import rate.util.UUIDType;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * User:    Yu Yuankai
@@ -138,4 +141,15 @@ public class AlgorithmVersionEntity {
     }
 
     private void setBareDir(String nonsense) {}
+
+    @Transient
+    public TaskEntity getTaskOn(BenchmarkEntity benchmark) {
+        Session session = HibernateUtil.getSession();
+        List<TaskEntity>  tasks = session.createQuery("from TaskEntity where algorithmVersion=:version and benchmark=:benchmark")
+                .setParameter("version", this).setParameter("benchmark", benchmark)
+                .list();
+        if (tasks.isEmpty()) return null;
+        return tasks.get(0);
+    }
+    private void setTaskEntity(TaskEntity entity) { }
 }

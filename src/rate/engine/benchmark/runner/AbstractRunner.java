@@ -45,7 +45,7 @@ abstract public class AbstractRunner {
     }
 
     public static String getDistEnginePath() {
-        return FilenameUtils.concat(RateConfig.getDistEngineDir(), "engine_run.py");
+        return "E:\\RATE_ROOT\\bin\\dist\\engine_run.py";
     }
 
     protected void prepare() throws Exception {

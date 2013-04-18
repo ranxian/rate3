@@ -154,4 +154,10 @@ public class UserEntity {
             return null;
         }
     }
+
+    @Transient
+    public Boolean isVip() {
+        return this.privilege.equals("vip");
+    }
+    private void setVip(Boolean nonsense) {}
 }

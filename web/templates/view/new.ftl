@@ -1,7 +1,7 @@
 <#include "../base.ftl" />
 <#macro main_container>
 
-<h1 class="title">Add Views - Import your data</h1>
+<h1 class="title">Add Views</h1>
 <div class="ratehr"></div>
 <form class="form-horizontal add-page" enctype="multipart/form-data" action="view/create">
     <div class="control-group">
@@ -17,7 +17,6 @@
                       name="view.type"
                       list="{'FINGERVEIN'}"
                       headerKey="0"
-                      headerValue="Choose a view type"
             ></@s.select>
         </div>
     </div>
