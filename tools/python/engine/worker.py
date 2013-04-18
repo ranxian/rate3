@@ -15,7 +15,6 @@ import pika
 from pika.exceptions import AMQPConnectionError
 import pickle
 import ConfigParser
-import rate_run
 
 config = ConfigParser.ConfigParser()
 config.readfp(open('worker.conf', 'r'))
@@ -127,6 +126,7 @@ class Worker:
                 time.sleep(1)
 
     def doEnroll(self, subtask):
+        import rate_run
         enrollEXE = os.path.join(WORKER_RATE_ROOT, subtask['enrollEXE'])
         timelimit = subtask['timelimit']
         memlimit = subtask['memlimit']
@@ -180,6 +180,7 @@ class Worker:
         return result
 
     def doMatch(self, subtask):
+        import rate_run
         rawResults = []
         timelimit = subtask['timelimit']
         memlimit = subtask['memlimit']
@@ -330,6 +331,14 @@ def proc(file_lock, dir_lock, ftp_mkd_lock, clean_lock, semaphore, process_lock,
             traceback.print_exc()
             pass
 
+def clean_tmp_files():
+    while True:
+        try:
+            os.system("del *.tmp")
+            time.sleep(600)
+        except Exception, e:
+            print e
+
 if __name__=='__main__':
     multiprocessing.freeze_support()
 
@@ -357,6 +366,10 @@ if __name__=='__main__':
         print e
 
     ts = []
+    t = Process(target=clean_tmp_files)
+    t.start()
+    ts.append(t)
+
     for i in range(WORKER_NUM*2):
         #t = threading.Thread(target=proc)
         t = Process(target=proc, args=process_args)
