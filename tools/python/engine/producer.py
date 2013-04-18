@@ -1,4 +1,6 @@
 #coding:utf8
+import logging
+logging.basicConfig()
 from pika.adapters.tornado_connection import TornadoConnection
 import shutil
 import threading
