@@ -11,7 +11,7 @@ py_rate_run_main(PyObject *self, PyObject *args)
 	PyArg_ParseTuple(args, "iis", &timelimit, &memlimit, &cmdline);
 	//cerr << timelimit << endl;
 	//cerr << memlimit << endl;
-	cerr << cmdline << endl;
+	//cerr << cmdline << endl;
 	//return Py_None;
 
 	int returncode;

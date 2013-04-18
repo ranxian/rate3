@@ -28,3 +28,5 @@ ipch*/
 *.apple.timemachine.supported
 .AppleDouble/
 .DS_Store
+*.tmp
+*.opensdf
