@@ -24,8 +24,8 @@ config.readfp(open('%s/producer.conf' % os.path.dirname(__file__), 'r'))
 ENROLL_BLOCK_SIZE = config.getint('rate-server', 'ENROLL_BLOCK_SIZE')
 MATCH_BLOCK_SIZE = config.getint('rate-server', 'MATCH_BLOCK_SIZE')
 PRODUCER_RATE_ROOT = config.get('rate-server', 'PRODUCER_RATE_ROOT')
-MAX_WORKING_ENROLL_SUBTASKS = 100000
-MAX_WORKING_MATCH_SUBTASKS = 100000
+MAX_WORKING_ENROLL_SUBTASKS = config.getint('rate-server', 'MAX_WORKING_ENROLL_SUBTASKS')
+MAX_WORKING_MATCH_SUBTASKS = config.getint('rate-server', 'MAX_WORKING_MATCH_SUBTASKS')
 
 def formMatchRedisKey(algorithm_version_uuid, u1, u2):
     u1 = u1.replace('-', '').lower()
@@ -35,12 +35,13 @@ def formMatchRedisKey(algorithm_version_uuid, u1, u2):
         u1 = u2
         u2 = t
     algorithm_version_uuid = algorithm_version_uuid.replace('-', '').lower()
-    return "match#%s#%s#%s" % (algorithm_version_uuid, u1, u2)
+    return "m#%s#%s#%s" % (algorithm_version_uuid[-12:], u1[-12:], u2[-12:])
 
 class RateProducer:
     def __init__(self, host, benchmark_file_dir, result_file_dir, algorithm_version_dir, timelimit, memlimit):
         self.host = host
         self.benchmark_file_path = "/".join((benchmark_file_dir, 'benchmark.txt'))
+        self.enroll_file_path = "/".join((benchmark_file_dir, 'benchmark.enroll.txt'))
         self.enrollEXE = "/".join((algorithm_version_dir, 'enroll.exe')).replace('\\', '/')
         self.enrollEXEUUID = [ v for v in self.enrollEXE.split('/') if v!="" ][-2].replace('-', '')
         self.matchEXE = "/".join((algorithm_version_dir, 'match.exe')).replace('\\','/')
@@ -125,63 +126,46 @@ class RateProducer:
 
     def doEnroll(self):
         self.submitting_enroll = True
-        if USE_REDIS:
-            redis_conn = redis.StrictRedis(host=self.host)
         i = 0 # i j is for counting in case to print messages with i%xxx=0
         j = 0
         l = []
-        benchmarkf = open(self.benchmark_file_path, 'r')
-        self.count_of_matches = 0
+        enrollf = open(self.enroll_file_path, 'r')
         with self.enroll_lock:
             enroll_result_thread = threading.Thread(target=self.waitForEnrollResults)
             enroll_result_thread.start()
         wait = False
         while True:
             if wait == True:
-                time.sleep(5)
+                time.sleep(60)
                 wait = False
             with self.enroll_lock:
                 working_enroll_subtasks = len(self.enroll_subtask_uuids)-len(self.finished_enroll_subtask_uuids)
                 if working_enroll_subtasks >= MAX_WORKING_ENROLL_SUBTASKS:
-                    print "%d enroll queue full, wait for 5 sec" % (working_enroll_subtasks, )
+                    print "%d enroll queue full, wait for 1 min" % (working_enroll_subtasks, )
                     wait = True
                     continue
-                a = benchmarkf.readline().strip()
+                a = enrollf.readline()
                 if len(a)==0:
                     break
-                self.count_of_matches += 1
-                b = benchmarkf.readline().strip()
-                c = benchmarkf.readline().strip()
-                match = [a,b,c]
-                us = match[0].strip().split(' ')[:2]
-                if USE_REDIS:
-                    redis_key = formMatchRedisKey(self.matchEXEUUID, us[0], us[1])
-                    if DISCARD_REDIS:
-                        redis_conn.delete(redis_key)
-                    elif redis_conn.exists(redis_key):
-                        continue
-                for u in us:
-                    if u not in self.enroll_uuids:
-                        self.enroll_uuids.add(u)
-                        f = "/".join(('samples', match[us.index(u)+1].strip()))
-                        t = {'uuid':u, 'file': f }
-                        #print>>enroll_log_file, u, f
-                        l.append(t)
-                        if len(l)==ENROLL_BLOCK_SIZE:
-                            self.submitEnrollBlock(l)
-                            l = []
-                            j = j+1
-                            if j%10 == 0:
-                                print "[%d*%d=%d] enrolls has been submitted" % (j, ENROLL_BLOCK_SIZE, j * ENROLL_BLOCK_SIZE)
-                i=i+1
-                if i%1000==0:
-                    print "[%d] matches analyzed" % (i)
+                (u, f) = a.strip().split(' ')
+
+                if u not in self.enroll_uuids:
+                    self.enroll_uuids.add(u)
+                    t = {'uuid':u, 'file': f }
+                    #print>>enroll_log_file, u, f
+                    l.append(t)
+                    if len(l)==ENROLL_BLOCK_SIZE:
+                        self.submitEnrollBlock(l)
+                        l = []
+                        j = j+1
+                        if j%10 == 0:
+                            print "[%d*%d=%d] enrolls has been submitted" % (j, ENROLL_BLOCK_SIZE, j * ENROLL_BLOCK_SIZE)
 
         with self.enroll_lock:
             if len(l)!=0:
                 self.submitEnrollBlock(l)
                 l = []
-                benchmarkf.close()
+                enrollf.close()
                 #enroll_log_file.close()
             if len(self.finished_enroll_subtask_uuids)==len(self.enroll_subtask_uuids):
                 print "enroll workers finished before producer reach this line"
@@ -191,7 +175,6 @@ class RateProducer:
                     print e
             self.submitting_enroll = False
 
-        print "%d matches" % self.count_of_matches
         print "%d enrolls" % len(self.enroll_uuids)
         print "all enrolls submitted, waiting for all results"
         enroll_result_thread.join()
@@ -199,7 +182,7 @@ class RateProducer:
 
     def doMatch(self):
         if USE_REDIS:
-            redis_conn = redis.StrictRedis(host=self.host)
+            self.match_redis_conn = redis.StrictRedis(host=self.host)
         self.submitting_match = True
         l = []
         i = 0
@@ -221,6 +204,10 @@ class RateProducer:
                     wait = True
                     continue
 
+                i = i+1
+                if i%10000==0:
+                    print "%d matches proceeded" % (i,)
+
                 a = benchmarkf.readline().strip()
                 if len(a)==0:
                     break
@@ -228,19 +215,18 @@ class RateProducer:
                 c = benchmarkf.readline().strip()
                 match = [a,b,c]
                 (u1,u2, gOrI) = match[0].strip().split(' ')[:3]
+
                 if USE_REDIS:
                     # check if the match has already been in redis
                     # if so, output the result and continue
                     redis_key = formMatchRedisKey(self.matchEXEUUID, u1, u2)
                     redis_value = None
 #                    print redis_key
-                    if not redis_conn.exists(redis_key):
+                    try:
+                        redis_value = json.loads(self.match_redis_conn.get(redis_key))
+                    except Exception, e:
+#                        print e
                         pass
-                    else:
-                        try:
-                            redis_value = json.loads(redis_conn.get(redis_key))
-                        except Exception, e:
-                            print e
 #                    print redis_value
 #                    print type(redis_value)
                     if redis_value!=None:
@@ -260,9 +246,8 @@ class RateProducer:
                 if len(l) == MATCH_BLOCK_SIZE:
                     self.submitMatchBlock(l)
                     l = []
-                    i = i+1
-                    if i%10 == 0:
-                        print "[%d*%d/%d=%d%%] matches has been submitted" % (i, MATCH_BLOCK_SIZE, self.count_of_matches, i*MATCH_BLOCK_SIZE*100/self.count_of_matches)
+                    if self.submitted_match_count%10 == 0:
+                        print "[%d*%d] matches has been submitted" % (self.submitted_match_count, MATCH_BLOCK_SIZE)
 
         with self.match_lock:
             if len(l)!=0:
@@ -347,8 +332,7 @@ class RateProducer:
                 if USE_REDIS:
                     redis_key = formMatchRedisKey(self.matchEXEUUID, rawResult['uuid1'], rawResult['uuid2'])
                     self.matchCallBack_redis_conn.set(redis_key, json.dumps(redis_value))
-            print "match result [%s] finished [%d/%d] failed [%d/%d]" % (result['subtask_uuid'][:8], len(self.finished_match_subtask_uuids), len(self.match_subtask_uuids), self.failed_match_count, self.submitted_match_count)
-            self.match_result_file.flush()
+            print "match result [%s] finished [%d/%d=%d%%] failed [%d/%d]" % (result['subtask_uuid'][:8], len(self.finished_match_subtask_uuids), len(self.match_subtask_uuids), 100*len(self.finished_match_subtask_uuids)/len(self.match_subtask_uuids), self.failed_match_count, self.submitted_match_count) self.match_result_file.flush()
             if (not self.submitting_match) and len(self.finished_match_subtask_uuids)==len(self.match_subtask_uuids):
                 ch.stop_consuming()
 

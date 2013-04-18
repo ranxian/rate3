@@ -1,4 +1,5 @@
 import sys
+import shutil
 import os
 sys.path.append(os.path.dirname(__file__))
 from producer import RateProducer
@@ -18,6 +19,16 @@ if __name__=='__main__':
         exit()
 
     try:
+        benchmark_dir = sys.argv[2]
+        benchmarkf = "/".join((benchmark_dir, "benchmark.txt"))
+        enrollf = "/".join((benchmark_dir, "benchmark.enroll.txt"))
+
+        while not os.path.exists(enrollf):
+            enrollf_tmp = enrollf+".ingen"
+            from filterenroll import filterEnroll
+            filterEnroll(benchmarkf, enrollf_tmp)
+            shutil.move(enrollf_tmp, enrollf)
+
         p = RateProducer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
         p.solve()
     except Exception, e:
