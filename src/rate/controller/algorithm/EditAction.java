@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class EditAction extends AlgorithmActionBase {
     public String execute() throws Exception {
+        if (!getIsUserSignedIn()) return "eLogin";
         if (!isAuthor()) return "eNotAuthor";
 
         return SUCCESS;

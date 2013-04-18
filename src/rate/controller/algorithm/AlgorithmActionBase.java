@@ -44,13 +44,13 @@ public class AlgorithmActionBase extends RateActionBase {
         return uuid;
     }
 
-    protected UserEntity getAuthor() {
+    public UserEntity getAuthor() {
         UserAlgorithmEntity userAlgorithm = (UserAlgorithmEntity)session.createQuery("from UserAlgorithmEntity where algorithm=:algorithm").setParameter("algorithm", algorithm)
                 .list().get(0);
         return userAlgorithm.getUser();
     }
 
-    protected boolean isAuthor() {
+    public boolean isAuthor() {
         UserEntity user = getAuthor();
 
         return user.equals(getCurrentUser());
