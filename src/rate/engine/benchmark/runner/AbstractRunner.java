@@ -44,6 +44,10 @@ abstract public class AbstractRunner {
         return FilenameUtils.concat(RateConfig.getBinDir(), "rate_run.exe");
     }
 
+    public static String getDistEnginePath() {
+        return "E:\\RATE_ROOT\\bin\\dist\\engine_run.py";
+    }
+
     protected void prepare() throws Exception {
         if (!(new File(task.getTempDirPath()).exists())) {
             FileUtils.forceMkdir(new File(task.getTempDirPath()));

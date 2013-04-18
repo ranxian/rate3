@@ -1,10 +1,13 @@
 package rate.test;
 
+import org.apache.commons.io.FileUtils;
 import org.hibernate.Query;
 import rate.engine.benchmark.SLSBBenchmark;
 import rate.model.BenchmarkEntity;
 import rate.model.ViewEntity;
 import rate.util.DebugUtil;
+
+import java.io.File;
 
 /**
  * Created by XianRan
@@ -19,17 +22,18 @@ public class SLSBGeneratorTest extends BaseTest {
 //        .setParameter("uuid", "968d97c2-785f-4775-ad3f-f29ceb8c799c"); // 2011-spring
 //        .setParameter("uuid", "11f9ec0c-5380-4e8c-95c8-a586cae0ad3d"); // 2011-autumn
 //                .setParameter("uuid", "9919088d-ef1e-4238-beee-15aecdfc10f8"); // 2012-spring
-        .setParameter("uuid", "68f71c23-bdee-448c-a5cd-e76318b8ebb9");
+        .setParameter("uuid", "9919088d-ef1e-4238-beee-15aecdfc10f8");
         ViewEntity view = (ViewEntity)query.list().get(0);
         BenchmarkEntity benchmark = new BenchmarkEntity();
         benchmark.setView(view);
-        benchmark.setName("SLSB");
+        benchmark.setName("BIG_SLSB");
         // general
         SLSBBenchmark generator = new SLSBBenchmark();
-        generator.setB4Far(10);
-        generator.setB4Frr(10);
-        generator.setK(10);
-        generator.setScale("SMALL");
+        generator.setB4Far(100);
+        generator.setB4Frr(100);
+        generator.setK(20);
+        generator.setClassCount(100);
+        generator.setSampleCount(10);
         benchmark.setGenerator("SLSB");
         benchmark.setType("SLSB");
 
@@ -43,6 +47,7 @@ public class SLSBGeneratorTest extends BaseTest {
         DebugUtil.debug("start generate");
         benchmark = generator.generate();
         DebugUtil.debug("finished generate");
+//        FileUtils.forceDelete(new File(benchmark.dirPath()));
 //        session.delete(benchmark);
         session.getTransaction().commit();
     }

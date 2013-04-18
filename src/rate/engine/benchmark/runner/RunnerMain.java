@@ -1,5 +1,8 @@
 package rate.engine.benchmark.runner;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -10,7 +13,13 @@ import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
+import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
+import rate.util.RateConfig;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,6 +45,21 @@ public class RunnerMain {
         algorithm = algorithmVersion.getAlgorithm();
     }
 
+    public static String buildDistCommand() {
+        List<String> list = new ArrayList<String>();
+        list.add(RateConfig.getPythonExe());
+        list.add(AbstractRunner.getDistEnginePath());
+        list.add("162.105.30.204");
+        list.add(benchmark.dirPath());
+        list.add(task.getDirPath());
+        list.add(algorithmVersion.getBareDir());
+        logger.debug("algorithm bare url path is " + algorithmVersion.getBareDir());
+        list.add("1000");
+        list.add("50000000");
+        DebugUtil.debug(list.toString());
+        return StringUtils.join(list, " ");
+    }
+
     public static void main(String args[]) {
         try {
             logger.debug("Started");
@@ -55,11 +79,32 @@ public class RunnerMain {
 
             AbstractRunner runner = (AbstractRunner)runnerClass.newInstance();
             runner.setTask(task);
-
             // Run!
-            logger.info(String.format("Attempt to run task [%s] with runner [%s]", task.getUuid(), runnerClass.getName()));
-            runner.run();
-            logger.info(String.format("Run task [%s] with runner [%s] finished", task.getUuid(), runnerClass.getName()));
+            if (RateConfig.isDistRun()) {
+                String cmd = buildDistCommand();
+                logger.trace("Run with distributed system command " + cmd);
+                logger.trace(cmd);
+                Process process = Runtime.getRuntime().exec(cmd);
+                process.waitFor();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                PrintWriter writer = new PrintWriter(new FileWriter(task.getDirPath() + "\\log.txt" ));
+                while (true) {
+                    String line = reader.readLine();
+                    if (line == null) break;
+                    writer.println(line);
+                    writer.flush();
+                }
+                writer.close();
+                reader.close();
+                FileUtils.moveFile(new File(FilenameUtils.concat(task.getDirPath(), "match_result.txt")), new File(task.getResultFilePath()));
+
+                logger.trace("finished");
+            } else {
+                logger.info(String.format("Attempt to run task [%s] with runner [%s]", task.getUuid(), runnerClass.getName()));
+                runner.run();
+                logger.info(String.format("Run task [%s] with runner [%s] finished", task.getUuid(), runnerClass.getName()));
+            }
 
             // Get an analyzer and analyze
             Class<?> analyzerClass;

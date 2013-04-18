@@ -2,7 +2,10 @@
 <#macro main_container>
 
 <h1 class="title">All Views</h1>
+<#if isUserSignedIn && currentUser.isVip()>
 <a href="/view/new" class="btn">Generate</a>
+</#if>
+
 <#--<a class="btn" class="title-addition" href="/view/new">Import Views</a>-->
 
 <div class="ratehr"></div>

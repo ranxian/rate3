@@ -1,6 +1,7 @@
 package rate.engine.benchmark.analyzer;
 
 //import java.util.Pair;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.io.FilenameUtils;
@@ -118,7 +119,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
     public void analyzeTotalFMR() throws Exception {
         for (int i = 1; i <= K; i++) {
             for (int j = 1; j <= B4Far; j++) {
-                analyzeFMR(slsbTask.getFarResultPathByNum(1, 1), slsbTask.getFarResultPathByNum(i, j)+"-result.txt");
+                analyzeFMR(slsbTask.getFarResultPathByNum(i, j), slsbTask.getFarResultPathByNum(i, j)+"-result.txt");
             }
             List<Pair<Double, Double>> fmrList = new ArrayList<Pair<Double, Double>>();
             List<BufferedReader> readerList = new LinkedList<BufferedReader>();

@@ -258,6 +258,11 @@
                 <param name="namespace">/task</param>
                 <param name="actionName">index</param>
             </result>
+            <result name="historyTask" type="redirectAction">
+                <param name="namespace">/task</param>
+                <param name="actionName">show</param>
+                <param name="uuid">${task.uuid}</param>
+            </result>
         </action>
     </package>
 

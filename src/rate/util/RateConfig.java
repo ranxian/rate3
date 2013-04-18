@@ -115,6 +115,19 @@ public class RateConfig {
     }
 
     public static Boolean isDistRun() {
+        DebugUtil.debug(config.getString("DIST_RUN"));
         return config.getString("DIST_RUN").equals("1") ? true : false;
+    }
+
+    public static String getDistEngineDir() {
+        return FilenameUtils.concat(getBinDir(), "dist");
+    }
+
+    public static String getPythonRoot() {
+        return config.getString("PYTHON_ROOT");
+    }
+
+    public static String getPythonExe() {
+        return FilenameUtils.concat(getPythonRoot(), "python.exe");
     }
 }

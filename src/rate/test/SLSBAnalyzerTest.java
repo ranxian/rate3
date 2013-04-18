@@ -17,12 +17,12 @@ public class SLSBAnalyzerTest extends BaseTest {
     public static void main(String[] args) throws Exception {
         SLSBAnalyzer slsbAnalyzer = new SLSBAnalyzer();
         TaskEntity task = (TaskEntity)session.createQuery("from TaskEntity where uuid=:uuid")
-                .setParameter("uuid", "2821d407-1d12-4c53-987b-5d3bfc4c5799")
+                .setParameter("uuid", "c3a32bb6-8121-43f2-a475-6a20bbff7531")
                 .list().get(0);
         SLSBTask slsbTask = new SLSBTask(task);
         DebugUtil.debug(slsbTask.getBenchmark().dirPath());
         slsbAnalyzer.setTask(task);
-        slsbAnalyzer.setK(10);
+        slsbAnalyzer.setK(20);
         slsbAnalyzer.setAlpha(0.1);
         slsbAnalyzer.analyze();
 //        slsbAnalyzer.analyzeTotalFMR();

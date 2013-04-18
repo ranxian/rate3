@@ -5,6 +5,8 @@ import org.hibernate.Session;
 import rate.engine.benchmark.runner.RunnerInvoker;
 import rate.model.AlgorithmVersionEntity;
 import rate.model.BenchmarkEntity;
+import rate.model.TaskEntity;
+import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
 /**
@@ -32,11 +34,21 @@ public class RunnerAction extends RateActionBase {
                 .list().get(0);
     }
 
-    public String execute() throws Exception {
-
-        RunnerInvoker.run(benchmark, algorithmVersion);
-
-        return SUCCESS;
+    private TaskEntity task;
+    public TaskEntity getTask() {
+        return this.task;
     }
 
+    public String execute() throws Exception {
+
+        task = algorithmVersion.getTaskOn(benchmark);
+
+        if (task != null) {
+            return "historyTask";
+        } else {
+            RunnerInvoker.run(benchmark, algorithmVersion);
+
+            return SUCCESS;
+        }
+    }
 }
