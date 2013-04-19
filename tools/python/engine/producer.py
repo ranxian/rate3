@@ -13,13 +13,14 @@ import time
 import uuid
 import ConfigParser
 
-USE_REDIS = True
+config = ConfigParser.ConfigParser()
+config.readfp(open('%s/producer.conf' % os.path.dirname(__file__), 'r'))
+
+USE_REDIS = config.getint('rate-server', 'USE_REDIS')
 if USE_REDIS:
     import redis
 DISCARD_REDIS = False
 
-config = ConfigParser.ConfigParser()
-config.readfp(open('%s/producer.conf' % os.path.dirname(__file__), 'r'))
 
 ENROLL_BLOCK_SIZE = config.getint('rate-server', 'ENROLL_BLOCK_SIZE')
 MATCH_BLOCK_SIZE = config.getint('rate-server', 'MATCH_BLOCK_SIZE')
@@ -330,8 +331,11 @@ class RateProducer:
                     print>>self.match_result_file, '%s %s %s failed' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'])
                     self.failed_match_count += 1
                 if USE_REDIS:
-                    redis_key = formMatchRedisKey(self.matchEXEUUID, rawResult['uuid1'], rawResult['uuid2'])
-                    self.matchCallBack_redis_conn.set(redis_key, json.dumps(redis_value))
+                    try:
+                        redis_key = formMatchRedisKey(self.matchEXEUUID, rawResult['uuid1'], rawResult['uuid2'])
+                        self.matchCallBack_redis_conn.set(redis_key, json.dumps(redis_value))
+                    except Exception, e:
+                        print e
             print "match result [%s] finished [%d/%d=%d%%] failed [%d/%d]" % (result['subtask_uuid'][:8], len(self.finished_match_subtask_uuids), len(self.match_subtask_uuids), 100*len(self.finished_match_subtask_uuids)/len(self.match_subtask_uuids), self.failed_match_count, self.submitted_match_count)
 
             self.match_result_file.flush()
