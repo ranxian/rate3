@@ -1,4 +1,5 @@
 #coding:utf8
+import base64
 import re
 import json
 import logging
@@ -16,12 +17,14 @@ import ConfigParser
 config = ConfigParser.ConfigParser()
 config.readfp(open('%s/producer.conf' % os.path.dirname(__file__), 'r'))
 
+#TODO cache the templates only when the template is small
 USE_MEMCACHE = True
 if USE_MEMCACHE:
     import memcache
     memcache_hosts = ['localhost:11211', ]#'162.105.30.164:11211']
 
 def getMemcacheConn(host):
+#    return None
     # FIXME it's a temp work around
     return memcache.Client(memcache_hosts, debug=0)
 #    return memcache.Client(["%s:11211" % host,], debug=0)
@@ -41,6 +44,9 @@ def formMatchKey(algorithm_version_uuid, u1, u2):
         u2 = t
     algorithm_version_uuid = algorithm_version_uuid.replace('-', '').lower()
     return "m#%s#%s#%s" % (algorithm_version_uuid[-12:], u1[-12:], u2[-12:])
+
+def formEnrollKey(algorithm_version_uuid, u):
+    return "e#%s#%s" % (algorithm_version_uuid[-12:], u[-12:])
 
 class RateProducer:
     def __init__(self, host, benchmark_file_dir, result_file_dir, algorithm_version_dir, timelimit, memlimit):
@@ -130,6 +136,9 @@ class RateProducer:
         print "prepare finished"
 
     def doEnroll(self):
+        if USE_MEMCACHE:
+            self.enroll_cache_conn = getMemcacheConn(self.host)
+
         self.submitting_enroll = True
         i = 0 # i j is for counting in case to print messages with i%xxx=0
         j = 0
@@ -155,6 +164,24 @@ class RateProducer:
                 (u, f) = a.strip().split(' ')
 
                 if u not in self.enroll_uuids:
+                    if USE_MEMCACHE:
+                        cache_key = formEnrollKey(self.enrollEXEUUID, u)
+                        cache_value = None
+                        try:
+                            cache_value = json.loads(self.enroll_cache_conn.get(cache_key))
+                            if cache_value[0]=='ok':
+                                dest_file = open("/".join((PRODUCER_RATE_ROOT, "temp", self.uuid[-12:], u[-12:-10], u[-10:]+".t")), 'wb')
+                                template = base64.b64decode(cache_value[1])
+                                dest_file.write(template)
+                                dest_file.close()
+                                print>>self.enroll_result_file, '%s ok' % u
+                            elif cache_value[0]=='failed':
+                                print>>self.enroll_result_file, '%s failed' % u
+                            continue
+                        except Exception, e:
+#                            print e
+                            pass
+
                     self.enroll_uuids.add(u)
                     t = {'uuid':u, 'file': f }
                     #print>>enroll_log_file, u, f
@@ -315,6 +342,25 @@ class RateProducer:
                     self.failed_enroll_uuids.add(rawResult['uuid'])
             print "enroll result [%s] finished [%d/%d] failed/total [%d/%d]" % (result['subtask_uuid'][:8], len(self.finished_enroll_subtask_uuids), len(self.enroll_subtask_uuids), len(self.failed_enroll_uuids), len(self.enroll_uuids))
 #            self.enroll_result_file.flush()
+
+            if USE_MEMCACHE:
+                for rawResult in result['results']:
+                    try:
+                        cache_value = [rawResult['result'], ]
+                        if rawResult['result']=='ok':
+                            u = rawResult['uuid']
+                            template_file = open("/".join((PRODUCER_RATE_ROOT, "temp", self.uuid[-12:], u[-12:-10], u[-10:]+".t")), 'rb')
+                            template = template_file.read()
+                            template_file.close()
+                            template = base64.b64encode(template)
+                            cache_value.append(template)
+                        elif rawResult['result']=='failed':
+                            pass
+                        self.enrollCallBack_cache_conn.set(formEnrollKey(self.enrollEXEUUID, rawResult['uuid']), json.dumps(cache_value))
+                    except Exception, e:
+#                        print e
+                        continue
+
             if (not self.submitting_enroll) and len(self.finished_enroll_subtask_uuids)==len(self.enroll_subtask_uuids):
 #                print "enrollCallBack stop consuming"
                 ch.stop_consuming()
@@ -339,7 +385,8 @@ class RateProducer:
                         cache_key = formMatchKey(self.matchEXEUUID, rawResult['uuid1'], rawResult['uuid2'])
                         self.matchCallBack_cache_conn.set(cache_key, json.dumps(cache_value))
                     except Exception, e:
-                        print e
+#                        print e
+                        pass
             print "match result [%s] finished [%d/%d=%d%%] failed [%d/%d]" % (result['subtask_uuid'][:8], len(self.finished_match_subtask_uuids), len(self.match_subtask_uuids), 100*len(self.finished_match_subtask_uuids)/len(self.match_subtask_uuids), self.failed_match_count, self.submitted_match_count)
 
 #            self.match_result_file.flush()
@@ -355,6 +402,8 @@ class RateProducer:
         if (not self.submitting_enroll) and len(self.finished_enroll_subtask_uuids)==len(self.enroll_subtask_uuids):
             pass
         else:
+            if USE_MEMCACHE:
+                self.enrollCallBack_cache_conn = getMemcacheConn(self.host)
             ch.basic_consume(self.enrollCallBack, queue=self.enroll_result_qname)
             ch.start_consuming()
         ch.queue_delete(queue=self.enroll_result_qname)
