@@ -246,8 +246,8 @@ class RateProducer:
                 if len(l) == MATCH_BLOCK_SIZE:
                     self.submitMatchBlock(l)
                     l = []
-                    if self.submitted_match_count%10 == 0:
-                        print "[%d*%d] matches has been submitted" % (self.submitted_match_count, MATCH_BLOCK_SIZE)
+                    if len(self.match_subtask_uuids)%10 == 0:
+                        print "[%d*%d] matches has been submitted" % (len(self.match_subtask_uuids), MATCH_BLOCK_SIZE)
 
         with self.match_lock:
             if len(l)!=0:
@@ -332,7 +332,9 @@ class RateProducer:
                 if USE_REDIS:
                     redis_key = formMatchRedisKey(self.matchEXEUUID, rawResult['uuid1'], rawResult['uuid2'])
                     self.matchCallBack_redis_conn.set(redis_key, json.dumps(redis_value))
-            print "match result [%s] finished [%d/%d=%d%%] failed [%d/%d]" % (result['subtask_uuid'][:8], len(self.finished_match_subtask_uuids), len(self.match_subtask_uuids), 100*len(self.finished_match_subtask_uuids)/len(self.match_subtask_uuids), self.failed_match_count, self.submitted_match_count) self.match_result_file.flush()
+            print "match result [%s] finished [%d/%d=%d%%] failed [%d/%d]" % (result['subtask_uuid'][:8], len(self.finished_match_subtask_uuids), len(self.match_subtask_uuids), 100*len(self.finished_match_subtask_uuids)/len(self.match_subtask_uuids), self.failed_match_count, self.submitted_match_count)
+
+            self.match_result_file.flush()
             if (not self.submitting_match) and len(self.finished_match_subtask_uuids)==len(self.match_subtask_uuids):
                 ch.stop_consuming()
 
