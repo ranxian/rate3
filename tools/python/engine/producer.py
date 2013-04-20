@@ -13,6 +13,7 @@ import pickle
 import time
 import uuid
 import ConfigParser
+from matchresult2bxx import matchresult2bxx
 
 config = ConfigParser.ConfigParser()
 config.readfp(open('%s/producer.conf' % os.path.dirname(__file__), 'r'))
@@ -51,6 +52,8 @@ def formEnrollKey(algorithm_version_uuid, u):
 class RateProducer:
     def __init__(self, host, benchmark_file_dir, result_file_dir, algorithm_version_dir, timelimit, memlimit):
         self.host = host
+        self.benchmark_file_dir = benchmark_file_dir
+        self.result_file_dir = result_file_dir
         self.benchmark_bxx_file_path = "/".join((benchmark_file_dir, 'benchmark_bxx.txt'))
         self.uuid_table_file_path = "/".join((benchmark_file_dir, 'uuid_table.txt'))
         self.uuid_bxx_table = {}
@@ -72,7 +75,6 @@ class RateProducer:
         self.match_subtask_uuids = []
         self.finished_enroll_subtask_uuids = []
         self.finished_match_subtask_uuids = []
-        self.result_file_dir = result_file_dir
         if not os.path.isdir(result_file_dir):
             os.makedirs(result_file_dir)
         self.enroll_result_file = open("/".join((result_file_dir, 'enroll_result.txt')), 'w')
@@ -429,4 +431,6 @@ class RateProducer:
             ch.basic_consume(self.matchCallBack, queue=self.match_result_qname)
             ch.start_consuming()
         ch.queue_delete(queue=self.match_result_qname)
+
+        matchresult2bxx(self.benchmark_file_dir, self.result_file_dir)
 #        conn.close()
