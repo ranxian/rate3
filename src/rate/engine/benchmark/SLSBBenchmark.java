@@ -91,6 +91,8 @@ public class SLSBBenchmark extends GeneralBenchmark {
 
         generateFarBenchmark(generalPw);
 
+        printUuidTable();
+
         benchmark.setDescription("This is a benchmark generate by the Second Level Subset Bootstrap method");
 
         generalPw.close();
@@ -204,9 +206,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
             List<SampleEntity> sampleList2 = selectedMap.get(matchPair.getRight()-1).getRight();
             for (SampleEntity sample : sampleList1) {
                 for (SampleEntity sample2 : sampleList2) {
-                    pw.println(sample.getUuid() + " " + sample2.getUuid() + " I");
-                    pw.println(sample.getFile());
-                    pw.println(sample2.getFile());
+                    pw.println(uuidTable.get(sample.getUuid()) + " " + uuidTable.get(sample2.getUuid()) + " I");
                 }
             }
         }

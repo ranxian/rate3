@@ -169,4 +169,17 @@ public class BenchmarkEntity {
         return this.getTasks().size();
     }
     private void setNumOfTasks(int nonsense) {}
+
+    @Transient
+    public String getUuidTableFilePath() {
+        return FilenameUtils.concat(this.dirPath(), "uuid_table.txt");
+    }
+    private void setUuidFilePath(String nonsense) {}
+
+    @Transient
+    public String getHexFilePath() {
+        return FilenameUtils.concat(this.dirPath(), "benchmark_hex.txt");
+    }
+    private void setHexFilePath(String no) {}
+
 }
