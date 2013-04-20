@@ -1,4 +1,5 @@
 import sys
+import shutil
 import os
 
 def benchmark2bxx(benchmark_dir):
@@ -39,8 +40,9 @@ def benchmark2bxx(benchmark_dir):
 
         print "sorting"
         os.system('sort %s -o %s' % (tmp_file, dst_file+".tmp"))
-        os.system('mv %s %s' % (dst_file+".tmp", dst_file))
-        os.system('rm %s' % tmp_file)
+        shutil.move(dst_file+".tmp", dst_file)
+        os.remove(tmp_file)
+        os.remove(src_file)
 
         return True
     except Exception, e:

@@ -31,6 +31,7 @@ def matchresult2bxx(benchmark_dir, result_dir):
 
         os.system('sort %s -o %s' % (tmp_bxx_result_file, bxx_result_file))
         os.remove(tmp_bxx_result_file)
+        os.remove(match_result_file)
 
         return True
     except Exception, e:
