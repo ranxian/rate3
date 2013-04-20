@@ -27,7 +27,7 @@ import java.util.*;
 public class GeneralBenchmark extends AbstractBenchmark {
     private static final Logger logger = Logger.getLogger(GeneralBenchmark.class);
     protected HashMap uuidTable = new HashMap();
-    protected Set<Pair<String, String>> enrollSet = new HashSet<Pair<String, String>>();
+    protected HashMap enrollMap = new HashMap();
 
 
     public int getClassCount() {
@@ -95,8 +95,6 @@ public class GeneralBenchmark extends AbstractBenchmark {
         // 检查参数，建立文件夹，按照 sampleCount 和 classCount 生成备选样本空间
         prepare();
         // 生成类内匹配
-        printEnroll();
-
         printUuidTable();
 
         PrintWriter writer = new PrintWriter(benchmark.getHexFilePath());
@@ -112,20 +110,11 @@ public class GeneralBenchmark extends AbstractBenchmark {
         return benchmark;
     }
 
-    public void printEnroll() throws Exception {
-        PrintWriter writer = new PrintWriter(new FileWriter(benchmark.getEnrollFilePath()));
-
-        for (Pair<String, String> enroll : enrollSet) {
-            writer.println(enroll.getKey() + " " + enroll.getValue());
-        }
-        writer.close();
-    }
-
     public void printUuidTable() throws Exception {
-        PrintWriter writer = new PrintWriter(new FileWriter(benchmark.getEnrollFilePath()));
+        PrintWriter writer = new PrintWriter(new FileWriter(benchmark.getUuidTableFilePath()));
         ArrayList<Map.Entry<String, String>> list = new ArrayList<Map.Entry<String, String>>(uuidTable.entrySet());
         for (Map.Entry<String, String> entry : list) {
-            writer.println(entry.getValue() + " " + entry.getKey());
+            writer.println(entry.getValue() + " " + entry.getKey() + " " + enrollMap.get(entry.getKey()));
         }
         writer.close();
     }
@@ -134,18 +123,6 @@ public class GeneralBenchmark extends AbstractBenchmark {
         benchmark.setType("General");
         prepareBenchMark();
         prepareSelectedClazz();
-        prepareUuidTable();
-    }
-
-    public void prepareUuidTable() {
-        Iterator<Pair<ClazzEntity, List<SampleEntity>>> iterator = selectedMap.iterator();
-        while (iterator.hasNext()) {
-            Pair<ClazzEntity, List<SampleEntity>> pair = iterator.next();
-            for(SampleEntity sample : pair.getValue()) {
-                if (!uuidTable.containsKey(sample.getUuid()))
-                    uuidTable.put(sample.getUuid(), Integer.toHexString(uuidTable.size()+1));
-            }
-        }
     }
 
     public void prepareBenchMark() throws Exception{
@@ -159,8 +136,6 @@ public class GeneralBenchmark extends AbstractBenchmark {
         // create the benchmark file
         File benchmarkDir = new File(benchmark.dirPath());
         benchmarkDir.mkdir();
-        File benchmarkFile = new File(benchmark.filePath());
-        benchmarkFile.createNewFile();
     }
 
     public void prepareSelectedClazz() throws Exception{
@@ -184,9 +159,13 @@ public class GeneralBenchmark extends AbstractBenchmark {
             query.setMaxResults(this.sampleCount);
             query.setParameter("clazz", clazz);
             List<SampleEntity> selectedSamples = (List<SampleEntity>)query.list();
+
             for (SampleEntity sample : selectedSamples) {
-                enrollSet.add(new MutablePair<String, String>(sample.getUuid(), sample.getFile()));
+                if (!uuidTable.containsKey(sample.getUuid()))
+                    uuidTable.put(sample.getUuid(), Integer.toHexString(uuidTable.size() + 1));
+                enrollMap.put(sample.getUuid(), sample.getFile());
             }
+
             if (selectedSamples.size() == 0) {
                 DebugUtil.debug(clazz.getUuid() + " has no samples");
                 continue;

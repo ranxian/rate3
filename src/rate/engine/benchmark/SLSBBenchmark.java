@@ -91,7 +91,6 @@ public class SLSBBenchmark extends GeneralBenchmark {
 
         generateFarBenchmark(generalPw);
 
-        printEnroll();
         printUuidTable();
 
         benchmark.setDescription("This is a benchmark generate by the Second Level Subset Bootstrap method");

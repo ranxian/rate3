@@ -171,12 +171,6 @@ public class BenchmarkEntity {
     private void setNumOfTasks(int nonsense) {}
 
     @Transient
-    public String getEnrollFilePath() {
-        return FilenameUtils.concat(this.dirPath(), "enroll_hex.txt");
-    }
-    private void setEnrollFilePath(String nonsense) {}
-
-    @Transient
     public String getUuidTableFilePath() {
         return FilenameUtils.concat(this.dirPath(), "uuid_table.txt");
     }
@@ -187,5 +181,5 @@ public class BenchmarkEntity {
         return FilenameUtils.concat(this.dirPath(), "benchmark_hex.txt");
     }
     private void setHexFilePath(String no) {}
-    }
+
 }
