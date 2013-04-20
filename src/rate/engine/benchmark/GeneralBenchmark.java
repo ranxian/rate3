@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import rate.model.BenchmarkEntity;
 import rate.model.ClazzEntity;
 import rate.model.SampleEntity;
+import rate.util.BaseXX;
 import rate.util.DebugUtil;
 
 import java.io.File;
@@ -70,7 +71,7 @@ public class GeneralBenchmark extends AbstractBenchmark {
                         logger.trace("Match uuid should not be the same one");
                         continue;
                     }
-                    writer.println(String.format("%s %s G", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
+                    writer.println(String.format("%s %s G ", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
                     totalGenuineCount++;
                 }
             }
@@ -85,7 +86,7 @@ public class GeneralBenchmark extends AbstractBenchmark {
             for (int j=i+1; j<selected.size(); j++) {
                 Pair<ClazzEntity, List<SampleEntity>> pair2 = selected.get(j);
                 SampleEntity sample2 = pair2.getValue().get(0);
-                writer.println(String.format("%s %s I", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
+                writer.println(String.format("%s %s I ", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
                 totalImposterCount++;
             }
         }
@@ -162,7 +163,7 @@ public class GeneralBenchmark extends AbstractBenchmark {
 
             for (SampleEntity sample : selectedSamples) {
                 if (!uuidTable.containsKey(sample.getUuid()))
-                    uuidTable.put(sample.getUuid(), Integer.toHexString(uuidTable.size() + 1));
+                    uuidTable.put(sample.getUuid(), BaseXX.parse(uuidTable.size()+1));
                 enrollMap.put(sample.getUuid(), sample.getFile());
             }
 
