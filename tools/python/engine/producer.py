@@ -143,6 +143,8 @@ class RateProducer:
         if USE_MEMCACHE:
             self.enroll_cache_conn = getMemcacheConn(self.host)
 
+        lines_proceeded = 0
+
         self.submitting_enroll = True
         i = 0 # i j is for counting in case to print messages with i%xxx=0
         j = 0
@@ -163,6 +165,10 @@ class RateProducer:
                     wait = True
                     continue
                 a = enrollf.readline()
+                lines_proceeded += 1
+                if lines_proceeded%1000==0:
+                    print "%d enrolls proceeded" % lines_proceeded
+
                 if len(a)==0:
                     break
                 (bxx, u, f) = a.strip().split(' ')
@@ -185,6 +191,7 @@ class RateProducer:
                                 dest_file.close()
                                 print>>self.enroll_result_file, '%s ok' % u
                             elif cache_value[0]=='failed':
+                                self.failed_enroll_uuids.add(u)
                                 print>>self.enroll_result_file, '%s failed' % u
                             continue
                         except Exception, e:
