@@ -4,10 +4,15 @@
     <title>RATE3</title>
 
     <link rel="stylesheet/less" type="text/css" href="/less/rate.less">
+    <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/js/rate.js"></script>
     <script type="text/javascript" src="/js/less-1.3.3.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/sortable.js"></script>
+    <script src="/js/jqBootstrapValidation.js"></script>
+    <script>
+        $(function () { $("input,select,textarea").not("[type=submit]").jqBootstrapValidation(); } );
+    </script>
 </head>
 <body>
 <div id="header">

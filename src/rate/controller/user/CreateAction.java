@@ -36,7 +36,7 @@ public class CreateAction extends RateActionBase {
             ActionContext.getContext().getSession().put("user-uuid", user.getUuid());
         }
         catch (HibernateException ex) {
-            throw ex;
+            return "input";
         }
         return SUCCESS;
     }
