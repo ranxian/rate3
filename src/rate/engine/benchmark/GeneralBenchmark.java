@@ -1,19 +1,22 @@
 package rate.engine.benchmark;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import rate.model.BenchmarkEntity;
 import rate.model.ClazzEntity;
 import rate.model.SampleEntity;
+import rate.util.DebugUtil;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.math.BigInteger;
+import java.util.*;
 
 /**
  * Created by XianRan
@@ -23,6 +26,9 @@ import java.util.Map;
  */
 public class GeneralBenchmark extends AbstractBenchmark {
     private static final Logger logger = Logger.getLogger(GeneralBenchmark.class);
+    protected HashMap uuidTable = new HashMap();
+    protected Set<Pair<String, String>> enrollSet = new HashSet<Pair<String, String>>();
+
 
     public int getClassCount() {
         return classCount;
@@ -64,9 +70,7 @@ public class GeneralBenchmark extends AbstractBenchmark {
                         logger.trace("Match uuid should not be the same one");
                         continue;
                     }
-                    writer.println(String.format("%s %s G", sample1.getUuid(), sample2.getUuid()));
-                    writer.println(sample1.getFile());
-                    writer.println(sample2.getFile());
+                    writer.println(String.format("%s %s G", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
                     totalGenuineCount++;
                 }
             }
@@ -81,9 +85,7 @@ public class GeneralBenchmark extends AbstractBenchmark {
             for (int j=i+1; j<selected.size(); j++) {
                 Pair<ClazzEntity, List<SampleEntity>> pair2 = selected.get(j);
                 SampleEntity sample2 = pair2.getValue().get(0);
-                writer.println(String.format("%s %s I", sample1.getUuid(), sample2.getUuid()));
-                writer.println(sample1.getFile());
-                writer.println(sample2.getFile());
+                writer.println(String.format("%s %s I", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
                 totalImposterCount++;
             }
         }
@@ -93,8 +95,13 @@ public class GeneralBenchmark extends AbstractBenchmark {
         // 检查参数，建立文件夹，按照 sampleCount 和 classCount 生成备选样本空间
         prepare();
         // 生成类内匹配
-        PrintWriter writer = new PrintWriter(benchmark.filePath());
+        printEnroll();
+
+        printUuidTable();
+
+        PrintWriter writer = new PrintWriter(benchmark.getHexFilePath());
         generateInnerClazz(writer, selectedMap);
+        writer.flush();
         // 生成类间匹配
         generateInterClazz(writer, selectedMap);
         writer.close();
@@ -105,10 +112,40 @@ public class GeneralBenchmark extends AbstractBenchmark {
         return benchmark;
     }
 
+    public void printEnroll() throws Exception {
+        PrintWriter writer = new PrintWriter(new FileWriter(benchmark.getEnrollFilePath()));
+
+        for (Pair<String, String> enroll : enrollSet) {
+            writer.println(enroll.getKey() + " " + enroll.getValue());
+        }
+        writer.close();
+    }
+
+    public void printUuidTable() throws Exception {
+        PrintWriter writer = new PrintWriter(new FileWriter(benchmark.getEnrollFilePath()));
+        ArrayList<Map.Entry<String, String>> list = new ArrayList<Map.Entry<String, String>>(uuidTable.entrySet());
+        for (Map.Entry<String, String> entry : list) {
+            writer.println(entry.getValue() + " " + entry.getKey());
+        }
+        writer.close();
+    }
+
     public void prepare() throws Exception {
         benchmark.setType("General");
         prepareBenchMark();
         prepareSelectedClazz();
+        prepareUuidTable();
+    }
+
+    public void prepareUuidTable() {
+        Iterator<Pair<ClazzEntity, List<SampleEntity>>> iterator = selectedMap.iterator();
+        while (iterator.hasNext()) {
+            Pair<ClazzEntity, List<SampleEntity>> pair = iterator.next();
+            for(SampleEntity sample : pair.getValue()) {
+                if (!uuidTable.containsKey(sample.getUuid()))
+                    uuidTable.put(sample.getUuid(), Integer.toHexString(uuidTable.size()+1));
+            }
+        }
     }
 
     public void prepareBenchMark() throws Exception{
@@ -147,6 +184,13 @@ public class GeneralBenchmark extends AbstractBenchmark {
             query.setMaxResults(this.sampleCount);
             query.setParameter("clazz", clazz);
             List<SampleEntity> selectedSamples = (List<SampleEntity>)query.list();
+            for (SampleEntity sample : selectedSamples) {
+                enrollSet.add(new MutablePair<String, String>(sample.getUuid(), sample.getFile()));
+            }
+            if (selectedSamples.size() == 0) {
+                DebugUtil.debug(clazz.getUuid() + " has no samples");
+                continue;
+            }
             selectedClasses.add(clazz);
             logger.trace(String.format("Add clazz [%s] [%d] of [%d]", clazz.getUuid(), selectedClasses.size(), this.classCount));
             Pair<ClazzEntity, List<SampleEntity>> newPair = new ImmutablePair<ClazzEntity, List<SampleEntity>>(clazz, selectedSamples);
