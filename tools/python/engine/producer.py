@@ -18,7 +18,7 @@ config = ConfigParser.ConfigParser()
 config.readfp(open('%s/producer.conf' % os.path.dirname(__file__), 'r'))
 
 #TODO cache the templates only when the template is small
-USE_MEMCACHE = True
+USE_MEMCACHE = config.getint('rate-server', 'USE_MEMCACHE')
 if USE_MEMCACHE:
     import memcache
     memcache_hosts = ['localhost:11211', ]#'162.105.30.164:11211']
@@ -51,8 +51,10 @@ def formEnrollKey(algorithm_version_uuid, u):
 class RateProducer:
     def __init__(self, host, benchmark_file_dir, result_file_dir, algorithm_version_dir, timelimit, memlimit):
         self.host = host
-        self.benchmark_file_path = "/".join((benchmark_file_dir, 'benchmark.txt'))
-        self.enroll_file_path = "/".join((benchmark_file_dir, 'benchmark.enroll.txt'))
+        self.benchmark_bxx_file_path = "/".join((benchmark_file_dir, 'benchmark_bxx.txt'))
+        self.uuid_table_file_path = "/".join((benchmark_file_dir, 'uuid_table.txt'))
+        self.uuid_bxx_table = {}
+        self.bxx_uuid_table = {}
         self.enrollEXE = "/".join((algorithm_version_dir, 'enroll.exe')).replace('\\', '/')
         self.enrollEXEUUID = [ v for v in self.enrollEXE.split('/') if v!="" ][-2].replace('-', '')
         self.matchEXE = "/".join((algorithm_version_dir, 'match.exe')).replace('\\','/')
@@ -143,7 +145,7 @@ class RateProducer:
         i = 0 # i j is for counting in case to print messages with i%xxx=0
         j = 0
         l = []
-        enrollf = open(self.enroll_file_path, 'r')
+        enrollf = open(self.uuid_table_file_path, 'r')
         with self.enroll_lock:
             enroll_result_thread = threading.Thread(target=self.waitForEnrollResults)
             enroll_result_thread.start()
@@ -161,7 +163,12 @@ class RateProducer:
                 a = enrollf.readline()
                 if len(a)==0:
                     break
-                (u, f) = a.strip().split(' ')
+                (bxx, u, f) = a.strip().split(' ')
+                f = "/".join(('samples', f))
+
+                if u not in self.uuid_bxx_table:
+                    self.uuid_bxx_table[u] = bxx
+                    self.bxx_uuid_table[bxx] = u
 
                 if u not in self.enroll_uuids:
                     if USE_MEMCACHE:
@@ -220,7 +227,7 @@ class RateProducer:
         i = 0
         self.submitted_match_count = 0
         self.failed_match_count = 0
-        benchmarkf = open(self.benchmark_file_path, 'r')
+        benchmarkf = open(self.benchmark_bxx_file_path, 'r')
         with self.match_lock:
             match_result_thread = threading.Thread(target=self.waitForMatchResults)
             match_result_thread.start()
@@ -240,13 +247,12 @@ class RateProducer:
                 if i%10000==0:
                     print "%d matches proceeded" % (i,)
 
-                a = benchmarkf.readline().strip()
+                a = benchmarkf.readline() # 11 22 I
                 if len(a)==0:
                     break
-                b = benchmarkf.readline().strip()
-                c = benchmarkf.readline().strip()
-                match = [a,b,c]
-                (u1,u2, gOrI) = match[0].strip().split(' ')[:3]
+                (bxx1, bxx2, gOrI) = a.strip().split(' ')[:3]
+                u1 = self.bxx_uuid_table[bxx1]
+                u2 = self.bxx_uuid_table[bxx2]
 
                 if USE_MEMCACHE:
                     # check if the match has already been in cache
