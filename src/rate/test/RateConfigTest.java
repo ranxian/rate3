@@ -23,6 +23,9 @@ public class RateConfigTest {
         System.out.println(RateConfig.getClassPath());
         System.out.println(RateConfig.getBenchmarkRootDir());
         DebugUtil.debug(RateConfig.getDistEngineDir());
+        if (RateConfig.isDistRun()) {
+            DebugUtil.debug("In distribution mode");
+        }
 
         BenchmarkEntity benchmark = new BenchmarkEntity();
         session.save(benchmark);

@@ -75,7 +75,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
             String[] params = line.split(" ");
             B4Frr = Integer.parseInt(params[0]);
             B4Far = Integer.parseInt(params[1]);
-            K = Integer.parseInt(params[1]);
+            K = Integer.parseInt(params[2]);
         }
     }
 
@@ -136,14 +136,13 @@ public class SLSBBenchmark extends GeneralBenchmark {
                 generalSelectedSet.add(j);
             }
 
+
             for (int j : set) {
                 selectedThisTurn.add(selectedMap.get(j));
             }
-
             generateInnerClazz(pw, selectedThisTurn);
             pw.close();
         }
-
         List<Pair<ClazzEntity, List<SampleEntity>>> generalSelected = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
         for (int i : generalSelectedSet) {
             generalSelected.add(selectedMap.get(i));
@@ -204,6 +203,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
 
     private void printFarBenchmark(Set<Pair<Integer, Integer>> set, PrintWriter pw) throws Exception {
         Iterator<Pair<Integer, Integer>> iterator = set.iterator();
+        int count = 0;
         while (iterator.hasNext()) {
             Pair<Integer, Integer> matchPair = iterator.next();
             List<SampleEntity> sampleList1 = selectedMap.get(matchPair.getLeft()-1).getRight();
@@ -211,6 +211,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
             for (SampleEntity sample : sampleList1) {
                 for (SampleEntity sample2 : sampleList2) {
                     pw.println(uuidTable.get(sample.getUuid()) + " " + uuidTable.get(sample2.getUuid()) + " I");
+                    count++;
                 }
             }
         }

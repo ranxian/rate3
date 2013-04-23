@@ -12,7 +12,8 @@ import rate.model.TaskEntity;
  */
 public class GeneralAnalyzerTest extends BaseTest {
     public static void main(String[] args) throws Exception {
-        TaskEntity task = (TaskEntity)session.createQuery("from TaskEntity where uuid=:uuid").setParameter("uuid", "e60788a4-837d-4e92-ad8a-e260587befc4")
+        TaskEntity task = (TaskEntity)session.createQuery("from TaskEntity where uuid=:uuid").
+                setParameter("uuid", "7b53dae7-d51d-4e3e-a75c-ef1c4e994db4")
                 .list().get(0);
 
         Analyzer analyzer = new GeneralAnalyzer();

@@ -66,8 +66,7 @@ public class GeneralBenchmark extends AbstractBenchmark {
                 for (int j=i+1; j<samples.size(); j++) {
                     SampleEntity sample2 = samples.get(j);
                     if (sample1.getUuid().equals(sample2.getUuid())) {
-                        logger.trace("Match uuid should not be the same one");
-                        DebugUtil.debug(String.format("WTF - %s %s", sample1.getUuid(), sample2.getUuid()));
+                        logger.debug(String.format("Match uuid should not be the same one - %s %s", sample1.getUuid(), sample2.getUuid()));
                         continue;
                     }
                     writer.print(String.format("%s %s G\n", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
@@ -86,9 +85,6 @@ public class GeneralBenchmark extends AbstractBenchmark {
                 Pair<ClazzEntity, List<SampleEntity>> pair2 = selected.get(j);
                 SampleEntity sample2 = pair2.getValue().get(0);
                 writer.print(String.format("%s %s I\n", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
-                if (sample1.getUuid().equals(sample2.getUuid())) {
-                    DebugUtil.debug(String.format("FTW - %s %s %s", sample1.getClazz().getUuid(), sample2.getClazz().getUuid(), sample1.getUuid()));
-                }
                 totalImposterCount++;
             }
         }
@@ -166,7 +162,6 @@ public class GeneralBenchmark extends AbstractBenchmark {
             }
             selectedClasses.add(clazz);
             logger.trace(String.format("Add clazz [%s] [%d] of [%d]", clazz.getUuid(), selectedClasses.size(), this.classCount));
-            DebugUtil.debug(String.format("Add clazz [%s] [%d] of [%d]", clazz.getUuid(), selectedClasses.size(), this.classCount));
 
             Pair<ClazzEntity, List<SampleEntity>> newPair = new ImmutablePair<ClazzEntity, List<SampleEntity>>(clazz, selectedSamples);
             selectedMap.add(newPair);

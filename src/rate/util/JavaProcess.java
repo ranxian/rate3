@@ -3,8 +3,10 @@ package rate.util;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 /**
@@ -29,8 +31,7 @@ public class JavaProcess {
                 File.separator + "java";
 
         // FIXME: this is just a temp for debug
-        String classpath = "C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\charsets.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\deploy.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\javaws.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\jce.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\jfr.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\jfxrt.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\jsse.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\management-agent.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\plugin.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\resources.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\rt.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\ext\\access-bridge.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\ext\\dnsns.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\ext\\jaccess.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\ext\\localedata.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\ext\\sunec.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\ext\\sunjce_provider.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\ext\\sunmscapi.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\ext\\sunpkcs11.jar;C:\\Program Files\\Java\\jdk1.7.0_09\\jre\\lib\\ext\\zipfs.jar;E:\\Dev\\rate3\\rate3\\out\\production\\rate3;E:\\Dev\\rate3\\rate3\\lib\\hibernate-core-4.1.1.Final.jar;E:\\Dev\\rate3\\rate3\\lib\\hibernate-jpa-2.0-api-1.0.1.Final.jar;E:\\Dev\\rate3\\rate3\\lib\\hibernate-commons-annotations-4.0.1.Final.jar;E:\\Dev\\rate3\\rate3\\lib\\antlr-2.7.7.jar;E:\\Dev\\rate3\\rate3\\lib\\dom4j-1.6.1.jar;E:\\Dev\\rate3\\rate3\\lib\\javassist-3.15.0-GA.jar;E:\\Dev\\rate3\\rate3\\lib\\jboss-logging-3.1.0.GA.jar;E:\\Dev\\rate3\\rate3\\lib\\jboss-transaction-api_1.1_spec-1.0.0.Final.jar;E:\\Dev\\rate3\\rate3\\lib\\commons-configuration-1.9.jar;E:\\Dev\\rate3\\rate3\\lib\\commons-lang-2.6.jar;E:\\Dev\\rate3\\rate3\\lib\\commons-logging-1.1.1.jar;E:\\Dev\\rate3\\rate3\\lib\\servlet-api-2.4.jar;E:\\Dev\\rate3\\rate3\\lib\\xml-apis-1.0.b2.jar;E:\\Dev\\rate3\\rate3\\lib\\commons-codec-1.6.jar;E:\\Dev\\rate3\\rate3\\lib\\log4j-1.2.15.jar;E:\\Dev\\rate3\\rate3\\lib\\mysql-connector-java-5.1.22.jar;E:\\Dev\\rate3\\rate3\\lib\\freemarker-2.3.19.jar;E:\\Dev\\rate3\\rate3\\lib\\jfreechart-1.0.9.jar;E:\\Dev\\rate3\\rate3\\lib\\jcommon-1.0.12.jar;E:\\Dev\\rate3\\rate3\\lib\\struts2-jfreechart-plugin-2.3.8.jar;E:\\Dev\\rate3\\rate3\\lib\\struts2-core-2.3.8.jar;E:\\Dev\\rate3\\rate3\\lib\\xwork-core-2.3.8.jar;E:\\Dev\\rate3\\rate3\\lib\\commons-lang3-3.1.jar;E:\\Dev\\rate3\\rate3\\lib\\ognl-3.0.6.jar;E:\\Dev\\rate3\\rate3\\lib\\javassist-3.11.0.GA.jar;E:\\Dev\\rate3\\rate3\\lib\\asm-commons-3.3.jar;E:\\Dev\\rate3\\rate3\\lib\\asm-tree-3.3.jar;E:\\Dev\\rate3\\rate3\\lib\\commons-fileupload-1.2.2.jar;E:\\Dev\\rate3\\rate3\\lib\\commons-io-2.0.1.jar;E:\\Dev\\rate3\\rate3\\lib\\jsp-api-2.0.jar;E:\\Program Files\\JetBrains\\IntelliJ IDEA 11.1.4\\lib\\idea_rt.jar";
-
+        String classpath = "/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/lib/ant-javafx.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/lib/dt.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/lib/javafx-doclet.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/lib/javafx-mx.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/lib/jconsole.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/lib/sa-jdi.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/lib/tools.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/deploy.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/htmlconverter.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/javaws.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/jfxrt.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/JObjC.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/management-agent.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/plugin.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/ext/dnsns.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/ext/localedata.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/ext/sunec.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/jre/lib/ext/zipfs.jar:/Users/xianran/Develop/rate3/out/production/rate3:/Users/xianran/Develop/rate3/lib/hibernate-core-4.1.1.Final.jar:/Users/xianran/Develop/rate3/lib/hibernate-jpa-2.0-api-1.0.1.Final.jar:/Users/xianran/Develop/rate3/lib/hibernate-commons-annotations-4.0.1.Final.jar:/Users/xianran/Develop/rate3/lib/antlr-2.7.7.jar:/Users/xianran/Develop/rate3/lib/dom4j-1.6.1.jar:/Users/xianran/Develop/rate3/lib/javassist-3.15.0-GA.jar:/Users/xianran/Develop/rate3/lib/jboss-logging-3.1.0.GA.jar:/Users/xianran/Develop/rate3/lib/jboss-transaction-api_1.1_spec-1.0.0.Final.jar:/Users/xianran/Develop/rate3/lib/commons-configuration-1.9.jar:/Users/xianran/Develop/rate3/lib/commons-lang-2.6.jar:/Users/xianran/Develop/rate3/lib/commons-logging-1.1.1.jar:/Users/xianran/Develop/rate3/lib/servlet-api-2.4.jar:/Users/xianran/Develop/rate3/lib/xml-apis-1.0.b2.jar:/Users/xianran/Develop/rate3/lib/commons-codec-1.6.jar:/Users/xianran/Develop/rate3/lib/log4j-1.2.15.jar:/Users/xianran/Develop/rate3/lib/mysql-connector-java-5.1.22.jar:/Users/xianran/Develop/rate3/lib/freemarker-2.3.19.jar:/Users/xianran/Develop/rate3/lib/jfreechart-1.0.9.jar:/Users/xianran/Develop/rate3/lib/jcommon-1.0.12.jar:/Users/xianran/Develop/rate3/lib/struts2-jfreechart-plugin-2.3.8.jar:/Users/xianran/Develop/rate3/lib/struts2-core-2.3.8.jar:/Users/xianran/Develop/rate3/lib/xwork-core-2.3.8.jar:/Users/xianran/Develop/rate3/lib/commons-lang3-3.1.jar:/Users/xianran/Develop/rate3/lib/ognl-3.0.6.jar:/Users/xianran/Develop/rate3/lib/javassist-3.11.0.GA.jar:/Users/xianran/Develop/rate3/lib/asm-commons-3.3.jar:/Users/xianran/Develop/rate3/lib/asm-tree-3.3.jar:/Users/xianran/Develop/rate3/lib/commons-fileupload-1.2.2.jar:/Users/xianran/Develop/rate3/lib/commons-io-2.0.1.jar:/Users/xianran/Develop/rate3/lib/jsp-api-2.0.jar:/Users/xianran/Develop/rate3/lib/zip4j-1.3.1.jar:/Applications/IntelliJ IDEA 12.app/lib/idea_rt.jar";
 //      String classpath = System.getProperty("java.class.path");
 
         classpath = "\"" + classpath + "\"";
@@ -40,7 +41,7 @@ public class JavaProcess {
 
 
         ProcessBuilder builder = new ProcessBuilder(
-                javaBin, "-cp", classpath, className, parameter);
+                javaBin, "-classpath", classpath, className, parameter);
 
         String cmd = String.format("Run with command: %s", StringUtils.join(builder.command(), " "));
         logger.debug(cmd);
@@ -48,6 +49,21 @@ public class JavaProcess {
 //        Process process = Runtime.getRuntime().exec(cmd);
 
         Process process = builder.start();
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+
+        process.waitFor();
+
+        DebugUtil.debug(process.exitValue()+"");
+
+        while (true) {
+            String line = stdInput.readLine();
+            if (line == null) break;
+
+            DebugUtil.debug(line);
+        }
+
+        stdInput.close();
 
         return 0;
 

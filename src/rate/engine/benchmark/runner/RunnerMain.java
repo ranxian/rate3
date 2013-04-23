@@ -40,6 +40,7 @@ public class RunnerMain {
     public static void setContext(String taskUuid) {
         Query query = session.createQuery("from TaskEntity where uuid = :uuid").setParameter("uuid", taskUuid);
         task = (TaskEntity)query.list().get(0);
+        new File(task.getDirPath()).mkdir();
         benchmark = task.getBenchmark();
         algorithmVersion = task.getAlgorithmVersion();
         algorithm = algorithmVersion.getAlgorithm();
@@ -47,7 +48,7 @@ public class RunnerMain {
 
     public static String buildDistCommand() {
         List<String> list = new ArrayList<String>();
-        list.add(RateConfig.getPythonExe());
+        list.add(RateConfig.getPython());
         list.add(AbstractRunner.getDistEnginePath());
         list.add("162.105.30.204");
         list.add(benchmark.dirPath());
@@ -87,8 +88,9 @@ public class RunnerMain {
                 Process process = Runtime.getRuntime().exec(cmd);
                 process.waitFor();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-                PrintWriter writer = new PrintWriter(new FileWriter(task.getDirPath() + "\\log.txt" ));
+                File logFIle = new File(task.getDirPath() + "/log.txt");
+                logFIle.createNewFile();
+                PrintWriter writer = new PrintWriter(new FileWriter(logFIle));
                 while (true) {
                     String line = reader.readLine();
                     if (line == null) break;

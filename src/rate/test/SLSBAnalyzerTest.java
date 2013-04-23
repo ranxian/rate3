@@ -2,7 +2,6 @@ package rate.test;
 
 import rate.engine.benchmark.analyzer.SLSBAnalyzer;
 import rate.engine.task.SLSBTask;
-import rate.model.BenchmarkEntity;
 import rate.model.TaskEntity;
 import rate.util.DebugUtil;
 
@@ -17,15 +16,14 @@ public class SLSBAnalyzerTest extends BaseTest {
     public static void main(String[] args) throws Exception {
         SLSBAnalyzer slsbAnalyzer = new SLSBAnalyzer();
         TaskEntity task = (TaskEntity)session.createQuery("from TaskEntity where uuid=:uuid")
-                .setParameter("uuid", "c3a32bb6-8121-43f2-a475-6a20bbff7531")
+                .setParameter("uuid", "83750d39-895e-41e4-9797-7be373b80c3b")
                 .list().get(0);
         SLSBTask slsbTask = new SLSBTask(task);
         DebugUtil.debug(slsbTask.getBenchmark().dirPath());
         slsbAnalyzer.setTask(task);
-        slsbAnalyzer.setK(20);
-        slsbAnalyzer.setAlpha(0.1);
-        slsbAnalyzer.analyze();
-//        slsbAnalyzer.analyzeTotalFMR();
-//        slsbAnalyzer.analyzeTotalFNMR();
+        slsbAnalyzer.setAlpha(0);
+//        slsbAnalyzer.analyze();
+        slsbAnalyzer.analyzeTotalFMR();
+        slsbAnalyzer.analyzeTotalFNMR();
     }
 }

@@ -46,7 +46,7 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
 
         analyzeROC(generalTask.getFmrFilePath(), generalTask.getFnmrFilePath(), generalTask.getRocFilePath());
 
-        calcBadResult();
+//        calcBadResult();
     }
 
     private void splitAndSortResult() throws Exception {
