@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created by XianRan
@@ -94,17 +95,17 @@ public class SLSBBenchmark extends GeneralBenchmark {
 
         generateFarBenchmark(generalPw);
 
+        generalPw.close();
+
         printUuidTable();
 
         benchmark.setDescription("This is a benchmark generate by the Second Level Subset Bootstrap method");
 
-        generalPw.close();
         return benchmark;
     }
 
     public void prepare() throws Exception{
         super.prepare();
-        benchmark.setType("SLSB");
         new File(frrBenchmarkDir).mkdir();
         new File(farBenchmarkDir).mkdir();
         BufferedWriter wr = new BufferedWriter(new FileWriter(descFilePath));

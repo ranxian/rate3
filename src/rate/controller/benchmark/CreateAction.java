@@ -37,7 +37,7 @@ public class CreateAction extends BenchmarkActionBase {
         String generatorStr = benchmark.getGenerator();
         if (generatorStr.matches("(SMALL)|(MEDIUM)|((VERY_)?LARGE)|.*Imposter")) {
             benchmark.setType("General");
-        } else if (generatorStr.equals("SLSB")) {
+        } else if (generatorStr.equals("SLSB(100C)") || generatorStr.equals("SLSB(1000C)")) {
             benchmark.setType("SLSB");
         }
     }
@@ -78,6 +78,7 @@ public class CreateAction extends BenchmarkActionBase {
             return ERROR;
         }
 
+        DebugUtil.debug(benchmark.getType());
         session.update(benchmark);
         session.getTransaction().commit();
         return SUCCESS;
