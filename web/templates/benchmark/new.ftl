@@ -10,8 +10,7 @@
         <div class="control-group">
             <div class="control-label">Name</div>
             <div class="controls">
-                <@s.textfield
-                name="benchmark.name" ></@s.textfield>
+                <input type="text" name="benchmark.name" required />
             </div>
         </div>
 
@@ -31,9 +30,7 @@
                 <@s.select
                 name="benchmark.generator"
                 list="{'SMALL', 'MEDIUM', 'LARGE', 'VERY_LARGE', 'OneClassImposter','SLSB'}"
-                headerKey="0"
-                headerValue="Choose a algorithm type"
-            ></@s.select>
+                            ></@s.select>
             </div>
         </div>
 
