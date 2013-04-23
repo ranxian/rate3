@@ -23,7 +23,7 @@
         <td>${created}</td>
         <td><a href="/task/show?uuid=${uuid}">
             <#if finished?exists>
-                <strong>${finished}</strong>
+                <strong class="ratered">${finished}</strong>
             <#else>
                 <strong class="running">running(${generalPercentage*100}%)</strong>
             </#if>
