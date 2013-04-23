@@ -1,4 +1,5 @@
 #coding:utf8
+import base64
 import re
 import json
 import logging
@@ -12,14 +13,22 @@ import pickle
 import time
 import uuid
 import ConfigParser
-
-USE_REDIS = True
-if USE_REDIS:
-    import redis
-DISCARD_REDIS = False
+from matchresult2bxx import matchresult2bxx
 
 config = ConfigParser.ConfigParser()
 config.readfp(open('%s/producer.conf' % os.path.dirname(__file__), 'r'))
+
+#TODO cache the templates only when the template is small
+USE_MEMCACHE = config.getint('rate-server', 'USE_MEMCACHE')
+if USE_MEMCACHE:
+    import memcache
+    memcache_hosts = ['localhost:11211', ]#'162.105.30.164:11211']
+
+def getMemcacheConn(host):
+#    return None
+    # FIXME it's a temp work around
+    return memcache.Client(memcache_hosts, debug=0)
+#    return memcache.Client(["%s:11211" % host,], debug=0)
 
 ENROLL_BLOCK_SIZE = config.getint('rate-server', 'ENROLL_BLOCK_SIZE')
 MATCH_BLOCK_SIZE = config.getint('rate-server', 'MATCH_BLOCK_SIZE')
@@ -27,7 +36,7 @@ PRODUCER_RATE_ROOT = config.get('rate-server', 'PRODUCER_RATE_ROOT')
 MAX_WORKING_ENROLL_SUBTASKS = config.getint('rate-server', 'MAX_WORKING_ENROLL_SUBTASKS')
 MAX_WORKING_MATCH_SUBTASKS = config.getint('rate-server', 'MAX_WORKING_MATCH_SUBTASKS')
 
-def formMatchRedisKey(algorithm_version_uuid, u1, u2):
+def formMatchKey(algorithm_version_uuid, u1, u2):
     u1 = u1.replace('-', '').lower()
     u2 = u2.replace('-', '').lower()
     if u1>u2:
@@ -37,11 +46,18 @@ def formMatchRedisKey(algorithm_version_uuid, u1, u2):
     algorithm_version_uuid = algorithm_version_uuid.replace('-', '').lower()
     return "m#%s#%s#%s" % (algorithm_version_uuid[-12:], u1[-12:], u2[-12:])
 
+def formEnrollKey(algorithm_version_uuid, u):
+    return "e#%s#%s" % (algorithm_version_uuid[-12:], u[-12:])
+
 class RateProducer:
     def __init__(self, host, benchmark_file_dir, result_file_dir, algorithm_version_dir, timelimit, memlimit):
         self.host = host
-        self.benchmark_file_path = "/".join((benchmark_file_dir, 'benchmark.txt'))
-        self.enroll_file_path = "/".join((benchmark_file_dir, 'benchmark.enroll.txt'))
+        self.benchmark_file_dir = benchmark_file_dir
+        self.result_file_dir = result_file_dir
+        self.benchmark_bxx_file_path = "/".join((benchmark_file_dir, 'benchmark_bxx.txt'))
+        self.uuid_table_file_path = "/".join((benchmark_file_dir, 'uuid_table.txt'))
+        self.uuid_bxx_table = {}
+        self.bxx_uuid_table = {}
         self.enrollEXE = "/".join((algorithm_version_dir, 'enroll.exe')).replace('\\', '/')
         self.enrollEXEUUID = [ v for v in self.enrollEXE.split('/') if v!="" ][-2].replace('-', '')
         self.matchEXE = "/".join((algorithm_version_dir, 'match.exe')).replace('\\','/')
@@ -59,7 +75,6 @@ class RateProducer:
         self.match_subtask_uuids = []
         self.finished_enroll_subtask_uuids = []
         self.finished_match_subtask_uuids = []
-        self.result_file_dir = result_file_dir
         if not os.path.isdir(result_file_dir):
             os.makedirs(result_file_dir)
         self.enroll_result_file = open("/".join((result_file_dir, 'enroll_result.txt')), 'w')
@@ -125,11 +140,16 @@ class RateProducer:
         print "prepare finished"
 
     def doEnroll(self):
+        if USE_MEMCACHE:
+            self.enroll_cache_conn = getMemcacheConn(self.host)
+
+        lines_proceeded = 0
+
         self.submitting_enroll = True
         i = 0 # i j is for counting in case to print messages with i%xxx=0
         j = 0
         l = []
-        enrollf = open(self.enroll_file_path, 'r')
+        enrollf = open(self.uuid_table_file_path, 'r')
         with self.enroll_lock:
             enroll_result_thread = threading.Thread(target=self.waitForEnrollResults)
             enroll_result_thread.start()
@@ -145,11 +165,39 @@ class RateProducer:
                     wait = True
                     continue
                 a = enrollf.readline()
+                lines_proceeded += 1
+                if lines_proceeded%1000==0:
+                    print "%d enrolls proceeded" % lines_proceeded
+
                 if len(a)==0:
                     break
-                (u, f) = a.strip().split(' ')
+                (bxx, u, f) = a.strip().split(' ')
+                f = "/".join(('samples', f))
+
+                if u not in self.uuid_bxx_table:
+                    self.uuid_bxx_table[u] = bxx
+                    self.bxx_uuid_table[bxx] = u
 
                 if u not in self.enroll_uuids:
+                    if USE_MEMCACHE:
+                        cache_key = formEnrollKey(self.enrollEXEUUID, u)
+                        cache_value = None
+                        try:
+                            cache_value = json.loads(self.enroll_cache_conn.get(cache_key))
+                            if cache_value[0]=='ok':
+                                dest_file = open("/".join((PRODUCER_RATE_ROOT, "temp", self.uuid[-12:], u[-12:-10], u[-10:]+".t")), 'wb')
+                                template = base64.b64decode(cache_value[1])
+                                dest_file.write(template)
+                                dest_file.close()
+                                print>>self.enroll_result_file, '%s ok' % u
+                            elif cache_value[0]=='failed':
+                                self.failed_enroll_uuids.add(u)
+                                print>>self.enroll_result_file, '%s failed' % u
+                            continue
+                        except Exception, e:
+#                            print e
+                            pass
+
                     self.enroll_uuids.add(u)
                     t = {'uuid':u, 'file': f }
                     #print>>enroll_log_file, u, f
@@ -181,14 +229,14 @@ class RateProducer:
         print "enroll finished, failed %d" % len(self.failed_enroll_uuids)
 
     def doMatch(self):
-        if USE_REDIS:
-            self.match_redis_conn = redis.StrictRedis(host=self.host)
+        if USE_MEMCACHE:
+            self.match_cache_conn = getMemcacheConn(self.host)
         self.submitting_match = True
         l = []
         i = 0
         self.submitted_match_count = 0
         self.failed_match_count = 0
-        benchmarkf = open(self.benchmark_file_path, 'r')
+        benchmarkf = open(self.benchmark_bxx_file_path, 'r')
         with self.match_lock:
             match_result_thread = threading.Thread(target=self.waitForMatchResults)
             match_result_thread.start()
@@ -208,33 +256,32 @@ class RateProducer:
                 if i%10000==0:
                     print "%d matches proceeded" % (i,)
 
-                a = benchmarkf.readline().strip()
+                a = benchmarkf.readline() # 11 22 I
                 if len(a)==0:
                     break
-                b = benchmarkf.readline().strip()
-                c = benchmarkf.readline().strip()
-                match = [a,b,c]
-                (u1,u2, gOrI) = match[0].strip().split(' ')[:3]
+                (bxx1, bxx2, gOrI) = a.strip().split(' ')[:3]
+                u1 = self.bxx_uuid_table[bxx1]
+                u2 = self.bxx_uuid_table[bxx2]
 
-                if USE_REDIS:
-                    # check if the match has already been in redis
+                if USE_MEMCACHE:
+                    # check if the match has already been in cache
                     # if so, output the result and continue
-                    redis_key = formMatchRedisKey(self.matchEXEUUID, u1, u2)
-                    redis_value = None
-#                    print redis_key
+                    cache_key = formMatchKey(self.matchEXEUUID, u1, u2)
+                    cache_value = None
+#                    print cache_key
                     try:
-                        redis_value = json.loads(self.match_redis_conn.get(redis_key))
+                        cache_value = json.loads(self.match_cache_conn.get(cache_key))
                     except Exception, e:
 #                        print e
                         pass
-#                    print redis_value
-#                    print type(redis_value)
-                    if redis_value!=None:
-                        if redis_value[0]=='ok':
-                            print>>self.match_result_file, '%s %s %s ok %s' % (u1, u2, redis_value[1], redis_value[2])
-                        elif redis_value[0]=='failed':
-                            print>>self.match_result_file, '%s %s %s failed' % (u1, u2, redis_value[1])
-                        self.match_result_file.flush()
+#                    print cache_value
+#                    print type(cache_value)
+                    if cache_value!=None:
+                        if cache_value[0]=='ok':
+                            print>>self.match_result_file, '%s %s %s ok %s' % (u1, u2, cache_value[1], cache_value[2])
+                        elif cache_value[0]=='failed':
+                            print>>self.match_result_file, '%s %s %s failed' % (u1, u2, cache_value[1])
+#                        self.match_result_file.flush()
                         continue
                 if u1 in self.failed_enroll_uuids or u2 in self.failed_enroll_uuids:
                     continue
@@ -309,7 +356,26 @@ class RateProducer:
                 if rawResult['result']=='failed':
                     self.failed_enroll_uuids.add(rawResult['uuid'])
             print "enroll result [%s] finished [%d/%d] failed/total [%d/%d]" % (result['subtask_uuid'][:8], len(self.finished_enroll_subtask_uuids), len(self.enroll_subtask_uuids), len(self.failed_enroll_uuids), len(self.enroll_uuids))
-            self.enroll_result_file.flush()
+#            self.enroll_result_file.flush()
+
+            if USE_MEMCACHE:
+                for rawResult in result['results']:
+                    try:
+                        cache_value = [rawResult['result'], ]
+                        if rawResult['result']=='ok':
+                            u = rawResult['uuid']
+                            template_file = open("/".join((PRODUCER_RATE_ROOT, "temp", self.uuid[-12:], u[-12:-10], u[-10:]+".t")), 'rb')
+                            template = template_file.read()
+                            template_file.close()
+                            template = base64.b64encode(template)
+                            cache_value.append(template)
+                        elif rawResult['result']=='failed':
+                            pass
+                        self.enrollCallBack_cache_conn.set(formEnrollKey(self.enrollEXEUUID, rawResult['uuid']), json.dumps(cache_value))
+                    except Exception, e:
+#                        print e
+                        continue
+
             if (not self.submitting_enroll) and len(self.finished_enroll_subtask_uuids)==len(self.enroll_subtask_uuids):
 #                print "enrollCallBack stop consuming"
                 ch.stop_consuming()
@@ -320,21 +386,25 @@ class RateProducer:
             self.finished_match_subtask_uuids.append(result['subtask_uuid'])
             ch.basic_ack(delivery_tag=method.delivery_tag)
             for rawResult in result['results']:
-                if USE_REDIS:
-                    redis_value = [rawResult['result'], rawResult['match_type']]
+                if USE_MEMCACHE:
+                    cache_value = [rawResult['result'], rawResult['match_type']]
                 if rawResult['result'] == 'ok':
                     print>>self.match_result_file, '%s %s %s ok %s' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'], rawResult['score'])
-                    if USE_REDIS:
-                        redis_value.append(rawResult['score'])
+                    if USE_MEMCACHE:
+                        cache_value.append(rawResult['score'])
                 elif rawResult['result'] == 'failed':
                     print>>self.match_result_file, '%s %s %s failed' % (rawResult['uuid1'], rawResult['uuid2'], rawResult['match_type'])
                     self.failed_match_count += 1
-                if USE_REDIS:
-                    redis_key = formMatchRedisKey(self.matchEXEUUID, rawResult['uuid1'], rawResult['uuid2'])
-                    self.matchCallBack_redis_conn.set(redis_key, json.dumps(redis_value))
+                if USE_MEMCACHE:
+                    try:
+                        cache_key = formMatchKey(self.matchEXEUUID, rawResult['uuid1'], rawResult['uuid2'])
+                        self.matchCallBack_cache_conn.set(cache_key, json.dumps(cache_value))
+                    except Exception, e:
+#                        print e
+                        pass
             print "match result [%s] finished [%d/%d=%d%%] failed [%d/%d]" % (result['subtask_uuid'][:8], len(self.finished_match_subtask_uuids), len(self.match_subtask_uuids), 100*len(self.finished_match_subtask_uuids)/len(self.match_subtask_uuids), self.failed_match_count, self.submitted_match_count)
 
-            self.match_result_file.flush()
+#            self.match_result_file.flush()
             if (not self.submitting_match) and len(self.finished_match_subtask_uuids)==len(self.match_subtask_uuids):
                 ch.stop_consuming()
 
@@ -347,6 +417,8 @@ class RateProducer:
         if (not self.submitting_enroll) and len(self.finished_enroll_subtask_uuids)==len(self.enroll_subtask_uuids):
             pass
         else:
+            if USE_MEMCACHE:
+                self.enrollCallBack_cache_conn = getMemcacheConn(self.host)
             ch.basic_consume(self.enrollCallBack, queue=self.enroll_result_qname)
             ch.start_consuming()
         ch.queue_delete(queue=self.enroll_result_qname)
@@ -361,9 +433,11 @@ class RateProducer:
         if (not self.submitting_match) and len(self.finished_match_subtask_uuids)==len(self.match_subtask_uuids):
             pass
         else:
-            if USE_REDIS:
-                self.matchCallBack_redis_conn = redis.StrictRedis(host=self.host)
+            if USE_MEMCACHE:
+                self.matchCallBack_cache_conn = getMemcacheConn(self.host)
             ch.basic_consume(self.matchCallBack, queue=self.match_result_qname)
             ch.start_consuming()
         ch.queue_delete(queue=self.match_result_qname)
+
+        matchresult2bxx(self.benchmark_file_dir, self.result_file_dir)
 #        conn.close()

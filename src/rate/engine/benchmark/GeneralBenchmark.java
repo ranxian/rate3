@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import rate.model.BenchmarkEntity;
 import rate.model.ClazzEntity;
 import rate.model.SampleEntity;
+import rate.util.BaseXX;
 import rate.util.DebugUtil;
 
 import java.io.File;
@@ -68,9 +69,10 @@ public class GeneralBenchmark extends AbstractBenchmark {
                     SampleEntity sample2 = samples.get(j);
                     if (sample1.getUuid().equals(sample2.getUuid())) {
                         logger.trace("Match uuid should not be the same one");
+                        DebugUtil.debug(String.format("WTF - %s %s", sample1.getUuid(), sample2.getUuid()));
                         continue;
                     }
-                    writer.println(String.format("%s %s G", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
+                    writer.print(String.format("%s %s G\n", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
                     totalGenuineCount++;
                 }
             }
@@ -85,7 +87,10 @@ public class GeneralBenchmark extends AbstractBenchmark {
             for (int j=i+1; j<selected.size(); j++) {
                 Pair<ClazzEntity, List<SampleEntity>> pair2 = selected.get(j);
                 SampleEntity sample2 = pair2.getValue().get(0);
-                writer.println(String.format("%s %s I", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
+                writer.print(String.format("%s %s I\n", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
+                if (sample1.getUuid().equals(sample2.getUuid())) {
+                    DebugUtil.debug(String.format("FTW - %s %s %s", sample1.getClazz().getUuid(), sample2.getClazz().getUuid(), sample1.getUuid()));
+                }
                 totalImposterCount++;
             }
         }
@@ -162,16 +167,18 @@ public class GeneralBenchmark extends AbstractBenchmark {
 
             for (SampleEntity sample : selectedSamples) {
                 if (!uuidTable.containsKey(sample.getUuid()))
-                    uuidTable.put(sample.getUuid(), Integer.toHexString(uuidTable.size() + 1));
+                    uuidTable.put(sample.getUuid(), BaseXX.parse(uuidTable.size()+1));
                 enrollMap.put(sample.getUuid(), sample.getFile());
             }
 
-            if (selectedSamples.size() == 0) {
-                DebugUtil.debug(clazz.getUuid() + " has no samples");
+            if (selectedSamples.size() < sampleCount) {
+                DebugUtil.debug(clazz.getUuid() + " has no enough samples");
                 continue;
             }
             selectedClasses.add(clazz);
             logger.trace(String.format("Add clazz [%s] [%d] of [%d]", clazz.getUuid(), selectedClasses.size(), this.classCount));
+            DebugUtil.debug(String.format("Add clazz [%s] [%d] of [%d]", clazz.getUuid(), selectedClasses.size(), this.classCount));
+
             Pair<ClazzEntity, List<SampleEntity>> newPair = new ImmutablePair<ClazzEntity, List<SampleEntity>>(clazz, selectedSamples);
             selectedMap.add(newPair);
         }

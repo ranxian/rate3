@@ -20,14 +20,14 @@ if __name__=='__main__':
 
     try:
         benchmark_dir = sys.argv[2]
-        benchmarkf = "/".join((benchmark_dir, "benchmark.txt"))
-        enrollf = "/".join((benchmark_dir, "benchmark.enroll.txt"))
 
-        while not os.path.exists(enrollf):
-            enrollf_tmp = enrollf+".ingen"
-            from filterenroll import filterEnroll
-            filterEnroll(benchmarkf, enrollf_tmp)
-            shutil.move(enrollf_tmp, enrollf)
+        benchmark_bxx_file = "/".join((benchmark_dir, "benchmark_bxx.txt"))
+        uuid_table_file = "/".join((benchmark_dir, "uuid_table.txt"))
+
+        if not os.path.exists(benchmark_bxx_file) or not os.path.exists(uuid_table_file):
+            from benchmark2bxx import benchmark2bxx
+            if not benchmark2bxx(benchmark_dir):
+                print "failed to benchmark2bxx"
 
         p = RateProducer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
         p.solve()
