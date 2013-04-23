@@ -29,7 +29,7 @@
             <div class="controls">
                 <@s.select
                 name="benchmark.generator"
-                list="{'SMALL', 'MEDIUM', 'LARGE', 'VERY_LARGE', 'OneClassImposter','SLSB'}"
+                list="{'SMALL', 'MEDIUM', 'LARGE', 'VERY_LARGE', 'OneClassImposter','SLSB(100C)', 'SLSB(1000C)'}"
                             ></@s.select>
             </div>
         </div>

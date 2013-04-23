@@ -46,9 +46,14 @@ public class SLSBBenchmark extends GeneralBenchmark {
         return K;
     }
 
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
+    }
+
     private int B4Frr;
     private int B4Far;
     private int K;
+    private double alpha;
 
     private String frrBenchmarkDir;
     private String farBenchmarkDir;
@@ -77,15 +82,13 @@ public class SLSBBenchmark extends GeneralBenchmark {
 //        if (B4Frr == 0 || B4Far == 0) throw new GeneratorException("B for Far or Frr not set!");
 
         // Experimental way
-        if (B4Frr == 0 || B4Far == 0 || K == 0) {
-            B4Frr = 10;
-            B4Far = 10;
-            K = 10;
-        }
+        B4Frr = B4Frr == 0 ? 10 : B4Frr;
+        B4Far = B4Far == 0 ? 10 : B4Far;
+        K = K == 0 ? 10 : K;
 
         prepare();
 
-        PrintWriter generalPw = new PrintWriter(benchmark.filePath());
+        PrintWriter generalPw = new PrintWriter(benchmark.getHexFilePath());
 
         generateFrrBenchmark(generalPw);
 
@@ -110,11 +113,11 @@ public class SLSBBenchmark extends GeneralBenchmark {
     }
 
     public String getFarBenchmarkFilePath(int i, int j) {
-        return FilenameUtils.concat(farBenchmarkDir, i + "" + j + ".txt");
+        return FilenameUtils.concat(farBenchmarkDir, i + "" + j + "_bxx.txt");
     }
 
     public String getFrrBenchmarkFilePath(int b) {
-        return FilenameUtils.concat(frrBenchmarkDir, b + ".txt");
+        return FilenameUtils.concat(frrBenchmarkDir, b + "_bxx.txt");
     }
 
     public void generateFrrBenchmark(PrintWriter generalPw) throws Exception {

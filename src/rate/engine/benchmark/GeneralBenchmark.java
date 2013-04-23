@@ -27,8 +27,6 @@ import java.util.*;
  */
 public class GeneralBenchmark extends AbstractBenchmark {
     private static final Logger logger = Logger.getLogger(GeneralBenchmark.class);
-    protected HashMap uuidTable = new HashMap();
-    protected HashMap enrollMap = new HashMap();
 
 
     public int getClassCount() {
@@ -109,19 +107,10 @@ public class GeneralBenchmark extends AbstractBenchmark {
         generateInterClazz(writer, selectedMap);
         writer.close();
 
-        benchmark.setDescription(String.format("Num of classes: %d, num of samples in each class: %d, num of genuine attempts %d, num of imposter attempts",
+        benchmark.setDescription(String.format("Num of classes: %d, num of samples in each class: %d, num of genuine attempts %d, num of imposter attempts %d",
                 this.classCount, this.sampleCount, totalGenuineCount, totalImposterCount));
 
         return benchmark;
-    }
-
-    public void printUuidTable() throws Exception {
-        PrintWriter writer = new PrintWriter(new FileWriter(benchmark.getUuidTableFilePath()));
-        ArrayList<Map.Entry<String, String>> list = new ArrayList<Map.Entry<String, String>>(uuidTable.entrySet());
-        for (Map.Entry<String, String> entry : list) {
-            writer.println(entry.getValue() + " " + entry.getKey() + " " + enrollMap.get(entry.getKey()));
-        }
-        writer.close();
     }
 
     public void prepare() throws Exception {

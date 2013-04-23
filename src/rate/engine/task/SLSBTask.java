@@ -49,6 +49,13 @@ public class SLSBTask extends TaskResult {
         return res;
     }
 
+    public double getAlpha() throws Exception {
+        BufferedReader rd = new BufferedReader(new FileReader(getBenchmark().dirPath()+"/desc.txt"));
+        int res = Integer.parseInt(rd.readLine().split(" ")[2]);
+        rd.close();
+        return res;
+    }
+
     public int getB4Frr() throws Exception {
         BufferedReader rd = new BufferedReader(new FileReader(getBenchmark().dirPath()+"/desc.txt"));
         int res = Integer.parseInt(rd.readLine().split(" ")[0]);

@@ -40,6 +40,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         this.B4Frr = slsbTask.getB4Frr();
         this.B4Far = slsbTask.getB4Far();
         this.benchmark = new SLSBBenchmark();
+        this.alpha = slsbTask.getAlpha();
         benchmark.setBenchmark(slsbTask.getBenchmark());
         benchmark.getBenchmarkDesc();
         B4Far = benchmark.getB4Far();

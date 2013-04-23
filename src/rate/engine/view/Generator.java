@@ -61,6 +61,7 @@ public class Generator {
             logger.trace(String.format("[%d] Sample [%s]", ++count, sample.getUuid()));
             toBeInsert.setView(view);
             toBeInsert.setSample(sample);
+            toBeInsert.setClazz(sample.getClazz());
             session.save(toBeInsert);
         }
 
