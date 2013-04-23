@@ -10,7 +10,7 @@
         <th>Created</th>
         <th>Finished</th>
         <th>Runner</th>
-        <th>For debug use</th>
+        <#if currentUser.isVip()><th>For debug use</th></#if>
     </tr>
     </thead>
     <tbody>
@@ -29,7 +29,7 @@
             </#if>
         </a></td>
         <td class="tableHighlight">${runnerName}</td>
-        <td><a href="/task/delete?uuid=${uuid}">delete</a></td>
+        <#if currentUser.isVip()><td><a href="/task/delete?uuid=${uuid}">delete</a></td></#if>
     </tr>
     </@s.iterator>
     </tbody>
