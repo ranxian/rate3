@@ -54,7 +54,6 @@ public class ByBenchmarkAction extends RateActionBase {
 
         for (AlgorithmVersionEntity v : allAlgorithmVersions) {
             AlgorithmEntity a = v.getAlgorithm();
-            DebugUtil.debug(a.getAuthorName());
             if (a.getAuthor().equals(getCurrentUser())) {
                 algorithmVersions.add(v);
             }

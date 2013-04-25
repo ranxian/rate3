@@ -25,7 +25,7 @@
             <#if finished?exists>
                 <strong class="ratered">${finished}</strong>
             <#else>
-                <strong class="running">running(${generalPercentage*100}%)</strong>
+                <strong class="running">running</strong>
             </#if>
         </a></td>
         <td class="tableHighlight">${runnerName}</td>

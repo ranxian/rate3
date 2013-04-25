@@ -25,13 +25,10 @@ public class ShowAction extends BenchmarkActionBase {
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
 
-                                             DebugUtil.debug(allAlgorithmVersions.size()+"");
         if (!getIsUserSignedIn()) return algorithmVersions;
         for (AlgorithmVersionEntity v : allAlgorithmVersions) {
-            DebugUtil.debug(v.getUuid());
             AlgorithmEntity a = v.getAlgorithm();
-            DebugUtil.debug(a.getUuid());
-            DebugUtil.debug(a.getAuthorName());
+
             if (a.getAuthor().equals(getCurrentUser())) {
                 algorithmVersions.add(v);
             }
