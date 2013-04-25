@@ -9,13 +9,6 @@
     <constant name="struts.action.excludePattern" value="/css/.*,/js/.*,/less/.*"/>
 
     <package name="rate-base-package" extends="struts-default">
-        <!--<interceptors>-->
-            <!--<interceptor name="hibernateSession" class="rate.interceptor.HibernateSessionInterceptor"></interceptor>-->
-            <!--<interceptor-stack name="intStack">-->
-                <!--<interceptor-ref name="hibernateSession"></interceptor-ref>-->
-            <!--</interceptor-stack>-->
-        <!--</interceptors>-->
-        <!--<default-interceptor-ref name="intStack"></default-interceptor-ref>-->
         <global-results>
             <result name="eLogin" type="freemarker">/templates/error/eLogin.ftl</result>
             <result name="eNotAuthor" type="freemarker">/templates/error/eNotAuthor.ftl</result>
