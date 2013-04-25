@@ -4,10 +4,10 @@
 <h1 class="title">Detail of Task #</b> ${uuid}
     <small class="pull-right getdown">(${generalTask.finishedTurn}/${generalTask.totalTurn})</small>
     <#if task.finished?exists>
-        <small class="pull-right percentage finished">${generalTask.percentage*100}%</small>
+        <small class="pull-right percentage finished">RUNNING</small>
 
     <#else>
-        <small class="pull-right percentage running">${generalTask.percentage*100}%
+        <small class="pull-right percentage running">FINISHED%
         </small>
     </#if>
 

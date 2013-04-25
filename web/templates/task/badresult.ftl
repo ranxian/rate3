@@ -19,13 +19,13 @@ ${result.sample1.uuid}
     <hr>
 </div>
 
-<div class="log">
-    <h1 class="title">Stdout from algorithm</h1>
-    <pre class="pre-scrollable">
-    ${result.log}
-    </pre>
-    <hr>
-</div>
+<#--<div class="log">-->
+    <#--<h1 class="title">Stdout from algorithm</h1>-->
+    <#--<pre class="pre-scrollable">-->
+    <#--${result.log}-->
+    <#--</pre>-->
+    <#--<hr>-->
+<#--</div>-->
 
 <div class="sample">
     <h1 class="title">Sample</h1>
