@@ -1,3 +1,4 @@
+<@s.fielderror></@s.fielderror>
 <div class="control-group">
     <div class="control-label">
         <label>Name</label>

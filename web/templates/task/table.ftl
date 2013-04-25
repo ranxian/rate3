@@ -21,13 +21,13 @@
         <td><a href="/benchmark/show?uuid=${benchmark.uuid}">${benchmark.name}</a></td>
         <td><a href="/view/show?uuid=${benchmark.view.uuid}">${benchmark.view.name}</a></td>
         <td>${created}</td>
-        <td><a href="/task/show?uuid=${uuid}">
+        <td>
             <#if finished?exists>
-                <strong class="ratered">${finished}</strong>
+            <a href="/task/show?uuid=${uuid}"><strong class="ratered">${finished}</strong></a>
             <#else>
                 <strong class="running">running</strong>
             </#if>
-        </a></td>
+        </td>
         <td class="tableHighlight">${runnerName}</td>
         <#if isUserSignedIn && currentUser.isVip()><td><a href="/task/delete?uuid=${uuid}">delete</a></td></#if>
     </tr>
