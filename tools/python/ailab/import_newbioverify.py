@@ -29,10 +29,14 @@ c = conn.cursor()
 #
 #exit()
 
-c.execute('select file, hex(uuid) from sample where import_tag="newbioverify" and hex(md5) = "00000000000000000000000000000000"')
+selectsql ='select file, hex(uuid) from sample where import_tag="newbioverify" and (md5 is null or hex(md5) = "00000000000000000000000000000000")'
+c.execute('select count(*) from (%s) as dt1' % selectsql)
+total = int(c.fetchone()[0])
+c.execute(selectsql)
 
 i = 0
 for r in c.fetchall():
+    print "%d/%d" % (i, total)
     f = r[0]
     u = r[1]
     f = os.path.join("/home/ratedev/RATE_ROOT/samples", f)
@@ -43,9 +47,10 @@ for r in c.fetchall():
 #        print md5
         sql = 'update sample set md5=unhex("%s") where uuid = unhex("%s")' % (md5, u)
         c.execute(sql)
+    i = i+1
 
 c.execute('commit')
 
 print "%d sample md5 updated"
 print "to check: "
-print 'select file, hex(uuid) from sample where import_tag="newbioverify" and hex(md5) = "00000000000000000000000000000000"'
+print selectsql
