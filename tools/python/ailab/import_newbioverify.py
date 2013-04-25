@@ -36,7 +36,7 @@ c.execute(selectsql)
 
 i = 0
 for r in c.fetchall():
-    print "%d/%d" % (i, total)
+#    print "%d/%d" % (i, total)
     f = r[0]
     u = r[1]
     f = os.path.join("/home/ratedev/RATE_ROOT/samples", f)
@@ -46,8 +46,14 @@ for r in c.fetchall():
         md5 = hashlib.md5(open(f,'rb').read()).hexdigest()
 #        print md5
         sql = 'update sample set md5=unhex("%s") where uuid = unhex("%s")' % (md5, u)
-        c.execute(sql)
+        try:
+            c.execute(sql)
+        except:
+            print sql
     i = i+1
+    if i%100==0:
+        c.execute('commit')
+        print "%d/%d" % (i, total)
 
 c.execute('commit')
 
