@@ -50,7 +50,7 @@ public class RunnerMain {
         List<String> list = new ArrayList<String>();
         list.add(RateConfig.getPython());
         list.add(AbstractRunner.getDistEnginePath());
-        list.add("162.105.30.204");
+        list.add("162.105.81.248");
         list.add(benchmark.dirPath());
         list.add(task.getDirPath());
         list.add(algorithmVersion.getBareDir());
