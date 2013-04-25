@@ -49,22 +49,6 @@ public class JavaProcess {
 //        Process process = Runtime.getRuntime().exec(cmd);
 
         Process process = builder.start();
-        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-
-
-        process.waitFor();
-
-        DebugUtil.debug(process.exitValue()+"");
-
-        while (true) {
-            String line = stdInput.readLine();
-            if (line == null) break;
-
-            DebugUtil.debug(line);
-        }
-
-        stdInput.close();
-
         return 0;
 
         //process.waitFor();

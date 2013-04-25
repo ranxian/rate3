@@ -38,20 +38,7 @@ public class HibernateUtil {
     }
 
     public static Session getSession() {
-        Session s = session.get();
-        if(s == null) {
-            s = sessionFactory.openSession();
-            session.set(s);
-        }
-        return s;
-    }
-
-    public static void closeSession() throws HibernateException {
-        Session s = session.get();
-        if(s != null) {
-            s.close();
-        }
-        session.set(null);
+        return sessionFactory.openSession();
     }
 
     public static Timestamp getCurrentTimestamp() {
