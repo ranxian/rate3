@@ -11,7 +11,7 @@
             <label>Name</label>
         </div>
         <div class="controls">
-            <@s.textfield name="algorithm.name" label="Name"></@s.textfield>
+            <input type="text" name="algorithm.name" required>
         </div>
     </div>
 
