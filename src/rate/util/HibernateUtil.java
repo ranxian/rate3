@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 public class HibernateUtil {
     private static final Logger logger = Logger.getLogger(HibernateUtil.class);
     private static final SessionFactory sessionFactory = buildSessionFactory();
+    public static final ThreadLocal<Session> session = new ThreadLocal<Session>();
 
     private static SessionFactory buildSessionFactory() {
         try {
@@ -37,7 +38,20 @@ public class HibernateUtil {
     }
 
     public static Session getSession() {
-        return getSessionFactory().openSession();
+        Session s = session.get();
+        if(s == null) {
+            s = sessionFactory.openSession();
+            session.set(s);
+        }
+        return s;
+    }
+
+    public static void closeSession() throws HibernateException {
+        Session s = session.get();
+        if(s != null) {
+            s.close();
+        }
+        session.set(null);
     }
 
     public static Timestamp getCurrentTimestamp() {
