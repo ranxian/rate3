@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.28, for Win32 (x86)
+-- MySQL dump 10.13  Distrib 5.5.29, for debian-linux-gnu (i686)
 --
 -- Host: localhost    Database: rate3
 -- ------------------------------------------------------
--- Server version	5.5.28
+-- Server version	5.5.29-0ubuntu0.12.10.1-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -132,12 +132,14 @@ CREATE TABLE `sample` (
   `uuid` binary(16) NOT NULL,
   `class_uuid` binary(16) DEFAULT NULL,
   `created` timestamp NULL DEFAULT NULL,
-  `file` varchar(256) NOT NULL COMMENT 'this should be a path with UNIX seperator \\''/\\'' to avoid strange behaviors',
+  `file` varchar(128) NOT NULL COMMENT 'this should be a path with UNIX seperator \\''/\\'' to avoid strange behaviors',
   `device_type` binary(16) DEFAULT NULL,
   `device` binary(16) DEFAULT NULL,
   `import_tag` varchar(45) NOT NULL COMMENT 'With each import, you must provide a import_tag. It is used for rollback functions.',
-  `md5` binary(16) NOT NULL,
+  `md5` binary(16) DEFAULT NULL,
   PRIMARY KEY (`uuid`),
+  UNIQUE KEY `file_UNIQUE` (`file`),
+  UNIQUE KEY `md5_UNIQUE` (`md5`),
   KEY `class_uuid_index` (`class_uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -239,4 +241,4 @@ CREATE TABLE `view_sample` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-04-15 16:54:53
+-- Dump completed on 2013-04-25 16:34:08
