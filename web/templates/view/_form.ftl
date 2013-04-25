@@ -20,8 +20,3 @@
     <@s.textarea name="view.description"></@s.textarea>
     </div>
 </div>
-<div class="control-group">
-    <div class="controls">
-        <button type="submit" class="btn">Submit</button>
-    </div>
-</div>

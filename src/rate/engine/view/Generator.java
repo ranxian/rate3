@@ -64,6 +64,13 @@ public class Generator {
             toBeInsert.setClazz(sample.getClazz());
             session.save(toBeInsert);
         }
+        int numOfClasses = ((Long)session.createQuery("select count(distinct clazz) from ViewSampleEntity where view=:view")
+                .setParameter("view", view).list().get(0)).intValue();
+        int numOfSample = ((Long)session.createQuery("select count(*) from ViewSampleEntity where view=:view")
+                .setParameter("view", view).list().get(0)).intValue();
+        view.setNumOfClasses(numOfClasses);
+        view.setNumOfSamples(numOfSample);
+        session.update(view);
 
         // update view set numOfClasses = (select count(distinct(class_uuid)) from view_sample where view_sample.view_uuid = view.uuid);
         // update view set numOfSamples = (select count(distinct(sample_uuid)) from view_sample where view_sample.view_uuid = view.uuid);

@@ -8,6 +8,11 @@
 <form class="form-horizontal add-page" enctype="multipart/form-data" action="view/update" method="post">
     <@s.hidden name="view.uuid" value="${view.uuid}"></@s.hidden>
     <#include "_form.ftl" />
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn">Submit</button>
+        </div>
+    </div>
 </form>
 
 </#macro>

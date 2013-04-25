@@ -11,7 +11,11 @@
 
         <div class="controls">
             <@s.textfield name="importTag"></@s.textfield>
-            <span class="help-block">${.now}</span>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn">Submit</button>
         </div>
     </div>
 </form>
