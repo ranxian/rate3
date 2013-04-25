@@ -8,14 +8,14 @@
 <div class="control-group">
     <label class="control-label">Enroll.exe</label>
     <div class="controls">
-        <input type="file" name="enrollExe" required>
+        <input type="file" name="enrollExe">
     </div>
 </div>
 
 <div class="control-group">
     <label class="control-label">Match.exe</label>
     <div class="controls">
-        <input type="file" name="matchExe" required>
+        <input type="file" name="matchExe">
     </div>
 </div>
 <div class="form-actions">

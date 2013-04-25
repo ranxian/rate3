@@ -12,6 +12,7 @@ import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -46,10 +47,19 @@ public class ByBenchmarkAction extends RateActionBase {
     }
 
     public String execute() throws Exception {
-        algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.type=:type order by created desc")
+        List<AlgorithmVersionEntity> allAlgorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.type=:type order by created desc")
                 .setParameter("type", benchmark.getView().getType())
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
+
+        for (AlgorithmVersionEntity v : allAlgorithmVersions) {
+            AlgorithmEntity a = v.getAlgorithm();
+            DebugUtil.debug(a.getAuthorName());
+            if (a.getAuthor().equals(getCurrentUser())) {
+                algorithmVersions.add(v);
+            }
+        }
+
         setNumOfItems((Long) session.createQuery("select count(*) from AlgorithmVersionEntity where algorithm.type=:type")
                 .setParameter("type", benchmark.getView().getType())
                 .list().get(0));

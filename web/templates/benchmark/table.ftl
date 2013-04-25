@@ -11,7 +11,7 @@
         <th>Created</th>
         <#--<th>Generator</th>-->
         <th>#Tasks</th>
-        <#if currentUser.isVip()>
+        <#if isUserSignedIn && currentUser.isVip()>
             <th>Delete</th>
         </#if>
     </tr>
@@ -25,7 +25,7 @@
         <td>${created}</td>
         <#--<td>${generator}</td>-->
         <td><a href="/task/bybenchmark?uuid=${uuid}">${numOfTasks}</a></td>
-        <#if currentUser.isVip()><td><a href="/benchmark/delete?uuid=${uuid}">delete</a></td></#if>
+        <#if isUserSignedIn && currentUser.isVip()><td><a href="/benchmark/delete?uuid=${uuid}">delete</a></td></#if>
     </tr>
     </@s.iterator>
     </tbody>

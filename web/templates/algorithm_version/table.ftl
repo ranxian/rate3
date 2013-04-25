@@ -9,7 +9,7 @@
         <th>Created</th>
         <th>Description</th>
         <th>#Results</th>
-        <#if currentUser.isVip()><th>for debug use</th></#if>
+        <#if isUserSignedIn && currentUser.isVip()><th>for debug use</th></#if>
         <#if benchmark??><th>Run</th></#if>
     </tr>
     </thead>
@@ -21,7 +21,7 @@
         <td>${created}</td>
         <td><#if description??>no description<#else>${description}</#if></td>
         <td><@s.property value="numOfResults" /></td>
-        <#if currentUser.isVip()><td><a href="/algorithm_version/delete?uuid=${uuid}">delete</td></#if>
+        <#if isUserSignedIn && currentUser.isVip()><td><a href="/algorithm_version/delete?uuid=${uuid}">delete</td></#if>
         <#if benchmark??><td><a href="/run?benchmarkUuid=${benchmark.uuid}&algorithmVersionUuid=${uuid}" class="btn btn-small btn-success">Run Now!</a></td></#if>
     </tr>
     </@s.iterator>
