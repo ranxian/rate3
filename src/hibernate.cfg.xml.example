@@ -9,6 +9,7 @@
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.username">root</property>
         <property name="connection.password">testing</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <mapping class="rate.model.AlgorithmEntity"/>
         <mapping class="rate.model.AlgorithmVersionEntity"/>
         <mapping class="rate.model.BenchmarkEntity"/>

@@ -135,6 +135,7 @@ public class RateConfig {
     }
 
     public static String getPython() {
-        return FilenameUtils.concat(getPythonRoot(), "python");
+        return config.getString("PYTHON_PATH");
+        //return FilenameUtils.concat(getPythonRoot(), "python");
     }
 }
