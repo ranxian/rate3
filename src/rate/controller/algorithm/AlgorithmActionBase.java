@@ -55,4 +55,8 @@ public class AlgorithmActionBase extends RateActionBase {
 
         return user.equals(getCurrentUser());
     }
+
+    public boolean getIsAuthor() {
+        return isAuthor();
+    }
 }
