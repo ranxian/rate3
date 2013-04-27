@@ -1,6 +1,7 @@
 package rate.controller.algorithm_version;
 
 import com.opensymphony.xwork2.ActionSupport;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
@@ -19,6 +20,7 @@ import rate.util.HibernateUtil;
 public class AlgorithmVersionActionBase extends RateActionBase {
 
     protected final Session session = HibernateUtil.getSession();
+    private final Logger logger = Logger.getLogger(AlgorithmVersionActionBase.class);
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
@@ -59,6 +61,7 @@ public class AlgorithmVersionActionBase extends RateActionBase {
         UserAlgorithmEntity userAlgorithm = (UserAlgorithmEntity)session.createQuery("from UserAlgorithmEntity where algorithm=:algorithm")
                 .setParameter("algorithm", algorithm)
                 .list().get(0);
+        logger.trace("algorithm " + algorithm.getUuid() + " user " + userAlgorithm.getUser().getName() + " currentUser " + getCurrentUser().getName());
 
         return userAlgorithm.getUser().equals(getCurrentUser());
     }

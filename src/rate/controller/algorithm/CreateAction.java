@@ -15,16 +15,10 @@ import rate.util.HibernateUtil;
  * Time: 下午12:37
  */
 public class CreateAction extends AlgorithmActionBase {
-<<<<<<< HEAD
-    //private UserAlgorithmEntity userAlgorithm;
     private final Logger logger = Logger.getLogger(CreateAction.class);
 
     // overide the father's session
     private final Session session = HibernateUtil.getSession();
-=======
-    private static final Logger logger = Logger.getLogger(CreateAction.class.getName());
-    private UserAlgorithmEntity userAlgorithm;
->>>>>>> 3be0506a1ae6ce7cde5d3fa631570c3c83eecbf8
 
     public String execute() throws Exception {
         logger.trace("execute");
@@ -34,10 +28,7 @@ public class CreateAction extends AlgorithmActionBase {
         }
 
         try {
-<<<<<<< HEAD
             logger.trace("beginTransaction");
-=======
->>>>>>> 3be0506a1ae6ce7cde5d3fa631570c3c83eecbf8
             session.beginTransaction();
             logger.trace("save algorithm" + algorithm.getUuid());
             session.save(algorithm);
@@ -52,17 +43,9 @@ public class CreateAction extends AlgorithmActionBase {
             session.save(userAlgorithm);
             logger.trace("commit");
             session.getTransaction().commit();
-<<<<<<< HEAD
-        }
-        catch (HibernateException ex) {
-            logger.trace(ex);
-=======
-            setAlgorithmAuthor(algorithm, getCurrentUser());
-
         }
         catch (HibernateException ex) {
             logger.trace(ex.getMessage());
->>>>>>> 3be0506a1ae6ce7cde5d3fa631570c3c83eecbf8
             throw ex;
         }
         return SUCCESS;
