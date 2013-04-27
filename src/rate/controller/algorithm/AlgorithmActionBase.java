@@ -15,14 +15,14 @@ import java.util.List;
  * Time: 下午2:35
  */
 public class AlgorithmActionBase extends RateActionBase {
-    public void setAlgorithmAuthor(AlgorithmEntity algorithm, UserEntity user) {
+    /*public void setAlgorithmAuthor(AlgorithmEntity algorithm, UserEntity user) {
         session.getTransaction().begin();
         UserAlgorithmEntity userAlgorithm = new UserAlgorithmEntity();
         userAlgorithm.setAlgorithm(algorithm);
         userAlgorithm.setUser(user);
         session.save(userAlgorithm);
         session.getTransaction().commit();
-    }
+    }*/
 
     protected String uuid;
     protected AlgorithmEntity algorithm;

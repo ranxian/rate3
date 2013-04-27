@@ -24,7 +24,7 @@ public class HibernateSessionFilter implements Filter {
         try {
             chain.doFilter(request, response);
         } finally {
-            HibernateUtil.closeSession();
+            rate.util.HibernateUtil.closeSession();
         }
     }
 }

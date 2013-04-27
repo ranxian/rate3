@@ -1,6 +1,7 @@
 package rate.model;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -25,6 +26,7 @@ import java.util.List;
 @Entity
 @TypeDef(name = "UUIDType", typeClass = UUIDType.class)
 public class AlgorithmEntity {
+    private final Logger logger = Logger.getLogger(AlgorithmEntity.class);
     private String uuid;
 
     @Type(type="UUIDType")
@@ -61,6 +63,7 @@ public class AlgorithmEntity {
     }
 
     public void setType(String type) {
+        logger.trace(this.getUuid() + " " + type);
         this.type = type;
     }
 
