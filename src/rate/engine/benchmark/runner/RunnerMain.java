@@ -87,7 +87,12 @@ public class RunnerMain {
                 logger.trace(cmd);
                 Process process = Runtime.getRuntime().exec(cmd);
                 process.waitFor();
+                logger.trace("process done");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                File taskDir = new File(task.getDirPath());
+                if (!taskDir.exists()) {
+                    taskDir.mkdirs();
+                }
                 File logFIle = new File(task.getDirPath() + "/log.txt");
                 logFIle.createNewFile();
                 PrintWriter writer = new PrintWriter(new FileWriter(logFIle));

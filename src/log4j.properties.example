@@ -4,13 +4,20 @@ log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %5p %C:%L - %m%n
 
 log4j.appender.logfile=org.apache.log4j.RollingFileAppender
-log4j.appender.logfile.File=/home/rate/RATE_ROOT/log
+log4j.appender.logfile.File=/home/rate/RATE_ROOT/log/rate3.log
 log4j.appender.logfile.MaxFileSize=512KB
 log4j.appender.logfile.MaxBackupIndex=20
 log4j.appender.logfile.layout=org.apache.log4j.PatternLayout
 log4j.appender.logfile.layout.ConversionPattern=%d{ABSOLUTE} %5p %C:%L - %m%n
 
-#log4j.rootLogger=INFO, stdout,logfile
+log4j.appender.rootLogfile=org.apache.log4j.RollingFileAppender
+log4j.appender.rootLogfile.File=/home/rate/RATE_ROOT/log/rate3-all.log
+log4j.appender.rootLogfile.MaxFileSize=512KB
+log4j.appender.rootLogfile.MaxBackupIndex=20
+log4j.appender.rootLogfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.rootLogfile.layout.ConversionPattern=%d{ABSOLUTE} %5p %C:%L - %m%n
+
+log4j.rootLogger=INFO, stdout,rootLogfile
 log4j.logger.rate=trace, logfile
 log4j.logger.org.jboss=error, stdout
 log4j.logger.org.hibernate=error, stdout
