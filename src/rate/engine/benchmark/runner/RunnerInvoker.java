@@ -42,6 +42,8 @@ public class RunnerInvoker {
         List<String> parameters = new ArrayList<String>();
         parameters.add(task.getUuid());
 
+        logger.trace("task saved, try JavaProcess.exec()");
+
         JavaProcess.exec(RunnerMain.class, parameters);
     }
 }

@@ -19,6 +19,10 @@ import java.lang.String;
 public class RateConfig {
     private static final Logger logger = Logger.getLogger(RateConfig.class);
 
+    public static Configuration getConfig() {
+        return config;
+    }
+
     private static final Configuration config = buildConfig();
 
     private static PropertiesConfiguration buildConfig() {
@@ -124,6 +128,10 @@ public class RateConfig {
 
     public static String getDistEngineDir() {
         return FilenameUtils.concat(getBinDir(), "engine");
+    }
+
+    public static String getDistEngineServer() {
+        return config.getString("DIST_SERVER");
     }
 
     public static String getPythonRoot() {

@@ -51,7 +51,7 @@ public class RunnerMain {
         List<String> list = new ArrayList<String>();
         list.add(RateConfig.getPython());
         list.add(AbstractRunner.getDistEnginePath());
-        list.add("162.105.30.204");
+        list.add(rate.util.RateConfig.getDistEngineServer());
         list.add(benchmark.dirPath());
         list.add(task.getDirPath());
         list.add(algorithmVersion.getBareDir());
@@ -76,7 +76,7 @@ public class RunnerMain {
             } else if (algorithm.getProtocol().equals("FVC2006")) {
                 runnerClass = FVC2006Runner.class;
             } else {
-                throw new RunnerException("Algorithm Protocal not Valid.");
+                throw new RunnerException("Algorithm Protocol not Valid.");
             }
 
             AbstractRunner runner = (AbstractRunner)runnerClass.newInstance();
