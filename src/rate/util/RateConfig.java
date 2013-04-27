@@ -119,7 +119,7 @@ public class RateConfig {
     }
 
     public static String getDistEngineDir() {
-        return FilenameUtils.concat(getBinDir(), "dist");
+        return FilenameUtils.concat(getBinDir(), "engine");
     }
 
     public static String getPythonRoot() {
