@@ -1,2 +1,9 @@
-RATE_ROOT=G:/RATE_ROOT
-JDK_ROOT=C:/Program Files/Java/jdk1.7.0_09
+RATE_ROOT=/home/rate/RATE_ROOT
+JDK_ROOT=/Libraries/Java/HOME
+PYTHON_PATH=/usr/bin/python
+
+DIST_RUN=1
+DIST_SERVER=localhost
+
+RATE_CLASS_PATH=/home/rate/tomcat/webapps/ROOT/WEB-INF/classes
+RATE_LIB_PATH=/home/rate/tomcat/webapps/ROOT/WEB-INF/lib
