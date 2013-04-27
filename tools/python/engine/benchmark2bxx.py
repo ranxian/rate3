@@ -42,7 +42,7 @@ def benchmark2bxx(benchmark_dir):
         os.system('sort %s -o %s' % (tmp_file, dst_file+".tmp"))
         shutil.move(dst_file+".tmp", dst_file)
         os.remove(tmp_file)
-        os.remove(src_file)
+        #os.remove(src_file)
 
         return True
     except Exception, e:

@@ -19,6 +19,7 @@ import rate.util.RateConfig;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,12 +51,12 @@ public class RunnerMain {
         List<String> list = new ArrayList<String>();
         list.add(RateConfig.getPython());
         list.add(AbstractRunner.getDistEnginePath());
-        list.add("162.105.81.248");
+        list.add("162.105.30.204");
         list.add(benchmark.dirPath());
         list.add(task.getDirPath());
         list.add(algorithmVersion.getBareDir());
         logger.debug("algorithm bare url path is " + algorithmVersion.getBareDir());
-        list.add("1000");
+        list.add("10000");
         list.add("50000000");
         DebugUtil.debug(list.toString());
         return StringUtils.join(list, " ");
@@ -86,19 +87,24 @@ public class RunnerMain {
                 logger.trace("Run with distributed system command " + cmd);
                 logger.trace(cmd);
                 Process process = Runtime.getRuntime().exec(cmd);
-                process.waitFor();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 File logFIle = new File(task.getDirPath() + "/log.txt");
                 logFIle.createNewFile();
+                File engineLogFile = new File(RateConfig.getLogDir() + File.separator + "engine.log");
+                PrintWriter engineLog = new PrintWriter(new FileWriter(engineLogFile), true);
                 PrintWriter writer = new PrintWriter(new FileWriter(logFIle));
                 while (true) {
                     String line = reader.readLine();
                     if (line == null) break;
                     writer.println(line);
+                    engineLog.println(new Date().getTime() + ": " + line);
                     writer.flush();
+                    engineLog.flush();
                 }
+                process.waitFor();
                 writer.close();
                 reader.close();
+                engineLog.close();
                 FileUtils.moveFile(new File(FilenameUtils.concat(task.getDirPath(), "match_result.txt")), new File(task.getResultFilePath()));
 
                 logger.trace("finished");
