@@ -37,7 +37,7 @@
         <div class="control-group">
             <div class="control-label">Custom Benchmark</div>
             <div class="controls">
-                <@s.textarea name="benchmarkContent" cols="20" rows="50"></@s.textarea>
+                <@s.textarea name="content" cols="20" rows="20" width="200px"></@s.textarea>
             </div>
         </div>
 
