@@ -4,6 +4,8 @@
     <title>RATE3</title>
 
     <link rel="stylesheet/less" type="text/css" href="/less/rate.less">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link rel=”bookmark” href="/images/favicon.ico">
     <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/js/rate.js"></script>
     <script type="text/javascript" src="/js/less-1.3.3.min.js"></script>
