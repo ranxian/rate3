@@ -21,7 +21,7 @@ public class OneClassImposterBenchmarkGeneratorTest {
     public static void main(String[] args) throws Exception {
         Session session = HibernateUtil.getSession();
         Query query = session.createQuery("from ViewEntity where uuid=:uuid")
-                .setParameter("uuid", "40811913-dfef-44a7-9087-358be72125ec");
+                .setParameter("uuid", "9919088d-ef1e-4238-beee-15aecdfc10f8");
         ViewEntity view = (ViewEntity)query.list().get(0);
 
         BenchmarkEntity benchmark = new BenchmarkEntity();

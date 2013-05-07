@@ -23,6 +23,16 @@ SERVER=config.get('rate-worker', 'SERVER')
 WORKER_NUM=config.getint('rate-worker', 'WORKER_NUM')
 WORKER_RATE_ROOT=config.get('rate-worker', 'WORKER_RATE_ROOT')
 
+try:
+    FTP_USER=config.get('rate-worker', 'FTP_USER')
+except:
+    FTP_USER='rate'
+
+try:
+    FTP_PASSWORD=config.get('rate-worker', 'FTP_PASSWORD')
+except:
+    FTP_PASSWORD='xxxxxxxxxxxx'
+
 #log = open('worker.log', 'w')
 
 class Worker:
@@ -116,7 +126,7 @@ class Worker:
         print "%d: openUploadFTP()" % self.worker_num
         while True:
             try:
-                ftp = ftplib.FTP(SERVER, 'ratedev', 'Biometrics')
+                ftp = ftplib.FTP(SERVER, FTP_USER, FTP_PASSWORD)
                 ftpdir = 'RATE_ROOT/temp/%s/' % subtask['producer_uuid'][-12:]
                 ftp.cwd(ftpdir)
                 return ftp
@@ -235,7 +245,7 @@ class Worker:
         print "%d: openDownloadFTP()" % self.worker_num
         while True:
             try:
-                self.download_ftp = ftplib.FTP(SERVER, 'ratedev', 'Biometrics')
+                self.download_ftp = ftplib.FTP(SERVER, FTP_USER, FTP_PASSWORD)
                 self.download_ftp.cwd('RATE_ROOT')
                 break
             except Exception, e:

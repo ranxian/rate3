@@ -147,23 +147,24 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
         for (i = 0; i < 10 && i < genuineList.size(); i++) {
             String line = genuineList.get(i);
             String info[] = line.split(" ");
-            String s1 = info[0], s2 = info[1];
-            String log = genLog(s1, s2);
+            //String s1 = info[0], s2 = info[1];
+            // 分布式下怎么处理 log 还是一个问题，暂时关掉这个功能
+            //String log = genLog(s1, s2);
 
             PrintWriter fileWriter = new PrintWriter(generalTask.getLogPathByTypeNumber("genuine", String.valueOf(i + 1)));
             fileWriter.println(line);
-            fileWriter.println(log);
+            //fileWriter.println(log);
             fileWriter.close();
         }
         logger.debug("Begin calc imposter bad result");
         for (i = 0; i <= imposterList.size() && i < 10; i++) {
             String line = imposterList.get(i);
             String info[] = line.split(" ");
-            String  s1 = info[0], s2 = info[1];
-            String log = genLog(s1, s2);
+            //String  s1 = info[0], s2 = info[1];
+            // String log = genLog(s1, s2);
             PrintWriter fileWriter = new PrintWriter(generalTask.getLogPathByTypeNumber("imposter", String.valueOf(imposterList.size() - i)));
             fileWriter.println(line);
-            fileWriter.println(log);
+            //fileWriter.println(log);
             fileWriter.close();
         }
         logger.debug("bad result generated successfully");

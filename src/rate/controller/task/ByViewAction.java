@@ -8,7 +8,9 @@ import rate.model.TaskEntity;
 import rate.model.ViewEntity;
 import rate.util.HibernateUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -39,16 +41,28 @@ public class ByViewAction extends RateActionBase {
                 .list().get(0);
     }
 
-    private Collection<TaskEntity> tasks;
+    private Collection<TaskEntity> tasks = new ArrayList<TaskEntity>();
 
     public String execute() {
-        tasks = session.createQuery("from TaskEntity where benchmark.view=:view order by created desc")
-                .setParameter("view", view)
-                .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
-                .list();
-        setNumOfItems((Long)session.createQuery("select count(*) from TaskEntity where benchmark.view=:view")
-                .setParameter("view", view)
-                .list().get(0));
+        if (getIsUserSignedIn() && getCurrentUser().isVip()) {
+            tasks = session.createQuery("from TaskEntity order by created desc")
+                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
+                    .list();
+        } else {
+            List<TaskEntity> alltasks = session.createQuery("from TaskEntity order where benchmark.view=:view order by created desc")
+                    .setParameter("view", view)
+                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage*10)
+                    .list();
+            if (getIsUserSignedIn()) {
+                for (TaskEntity task : alltasks) {
+                    if (task.getRunnerName().equals(getCurrentUser().getName())) {
+                        tasks.add(task);
+                        if (tasks.size() >= 10) break;
+                    }
+                }
+            }
+        }
+        setNumOfItems((long)tasks.size());
         return SUCCESS;
     }
 }

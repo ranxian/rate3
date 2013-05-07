@@ -26,6 +26,7 @@ public class SLSBTask extends TaskResult {
     private String stdoutPath;
     private String stderrPath;
     private String purfPath;
+    private String bxxResultFilePath;
 
     public String getFrrResultPath() {
         return frrResultPath;
@@ -42,9 +43,20 @@ public class SLSBTask extends TaskResult {
         return FilenameUtils.concat(task.getDirPath(), "FAR.txt");
     }
 
+    public String getBxxResultFilePath() {
+        return bxxResultFilePath;
+    }
+
     public int getB4Far() throws Exception {
         BufferedReader rd = new BufferedReader(new FileReader(getBenchmark().dirPath()+"/desc.txt"));
         int res = Integer.parseInt(rd.readLine().split(" ")[1]);
+        rd.close();
+        return res;
+    }
+
+    public double getAlpha() throws Exception {
+        BufferedReader rd = new BufferedReader(new FileReader(getBenchmark().dirPath()+"/desc.txt"));
+        int res = Integer.parseInt(rd.readLine().split(" ")[2]);
         rd.close();
         return res;
     }
@@ -78,6 +90,7 @@ public class SLSBTask extends TaskResult {
         frrResultDir = FilenameUtils.concat(task.getDirPath(), "FRR");
         taskStateFilePath = FilenameUtils.concat(task.getDirPath(), "state.txt");
         resultFilePath = FilenameUtils.concat(task.getDirPath(), "result.txt");
+        bxxResultFilePath = FilenameUtils.concat(task.getDirPath(), "match_result_bxx.unsorted.txt");
         stderrPath = FilenameUtils.concat(task.getDirPath(), "stderr.txt");
         stdoutPath = FilenameUtils.concat(task.getDirPath(), "stdout.txt");
         purfPath = FilenameUtils.concat(task.getDirPath(), "purf.txt") ;

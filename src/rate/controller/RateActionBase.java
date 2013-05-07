@@ -59,6 +59,7 @@ public class RateActionBase extends ActionSupport {
         q.setParameter("uuid", session.get("user-uuid"));
         List<UserEntity> list = q.list();
         UserEntity user = list.get(0);
+        logger.debug("current user is " + user.getName());
         return user;
     }
 
@@ -74,7 +75,9 @@ public class RateActionBase extends ActionSupport {
 
     public boolean getIsUserSignedIn() {
         Map session = ActionContext.getContext().getSession();
-        return (session.get("user-uuid") != null);
+        boolean isUserSignedIn =  (session.get("user-uuid") != null);
+        logger.trace("isUserSignedIn " + isUserSignedIn);
+        return isUserSignedIn;
     }
 
     public int getFirstResult() {

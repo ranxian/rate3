@@ -27,8 +27,6 @@ import java.util.*;
  */
 public class GeneralBenchmark extends AbstractBenchmark {
     private static final Logger logger = Logger.getLogger(GeneralBenchmark.class);
-    protected HashMap uuidTable = new HashMap();
-    protected HashMap enrollMap = new HashMap();
 
 
     public int getClassCount() {
@@ -68,8 +66,7 @@ public class GeneralBenchmark extends AbstractBenchmark {
                 for (int j=i+1; j<samples.size(); j++) {
                     SampleEntity sample2 = samples.get(j);
                     if (sample1.getUuid().equals(sample2.getUuid())) {
-                        logger.trace("Match uuid should not be the same one");
-                        DebugUtil.debug(String.format("WTF - %s %s", sample1.getUuid(), sample2.getUuid()));
+                        logger.debug(String.format("Match uuid should not be the same one - %s %s", sample1.getUuid(), sample2.getUuid()));
                         continue;
                     }
                     writer.print(String.format("%s %s G\n", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
@@ -88,9 +85,6 @@ public class GeneralBenchmark extends AbstractBenchmark {
                 Pair<ClazzEntity, List<SampleEntity>> pair2 = selected.get(j);
                 SampleEntity sample2 = pair2.getValue().get(0);
                 writer.print(String.format("%s %s I\n", uuidTable.get(sample1.getUuid()), uuidTable.get(sample2.getUuid())));
-                if (sample1.getUuid().equals(sample2.getUuid())) {
-                    DebugUtil.debug(String.format("FTW - %s %s %s", sample1.getClazz().getUuid(), sample2.getClazz().getUuid(), sample1.getUuid()));
-                }
                 totalImposterCount++;
             }
         }
@@ -109,19 +103,10 @@ public class GeneralBenchmark extends AbstractBenchmark {
         generateInterClazz(writer, selectedMap);
         writer.close();
 
-        benchmark.setDescription(String.format("Num of classes: %d, num of samples in each class: %d, num of genuine attempts %d, num of imposter attempts",
+        benchmark.setDescription(String.format("Num of classes: %d, num of samples in each class: %d, num of genuine attempts %d, num of imposter attempts %d",
                 this.classCount, this.sampleCount, totalGenuineCount, totalImposterCount));
 
         return benchmark;
-    }
-
-    public void printUuidTable() throws Exception {
-        PrintWriter writer = new PrintWriter(new FileWriter(benchmark.getUuidTableFilePath()));
-        ArrayList<Map.Entry<String, String>> list = new ArrayList<Map.Entry<String, String>>(uuidTable.entrySet());
-        for (Map.Entry<String, String> entry : list) {
-            writer.println(entry.getValue() + " " + entry.getKey() + " " + enrollMap.get(entry.getKey()));
-        }
-        writer.close();
     }
 
     public void prepare() throws Exception {
@@ -177,7 +162,6 @@ public class GeneralBenchmark extends AbstractBenchmark {
             }
             selectedClasses.add(clazz);
             logger.trace(String.format("Add clazz [%s] [%d] of [%d]", clazz.getUuid(), selectedClasses.size(), this.classCount));
-            DebugUtil.debug(String.format("Add clazz [%s] [%d] of [%d]", clazz.getUuid(), selectedClasses.size(), this.classCount));
 
             Pair<ClazzEntity, List<SampleEntity>> newPair = new ImmutablePair<ClazzEntity, List<SampleEntity>>(clazz, selectedSamples);
             selectedMap.add(newPair);

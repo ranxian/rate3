@@ -1,6 +1,7 @@
 package rate.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import rate.engine.benchmark.runner.RunnerInvoker;
 import rate.model.AlgorithmVersionEntity;
@@ -16,6 +17,7 @@ import rate.util.HibernateUtil;
 public class RunnerAction extends RateActionBase {
 
     private final Session session = HibernateUtil.getSession();
+    private final Logger logger = Logger.getLogger(RunnerAction.class);
     private String benchmarkUuid;
     private BenchmarkEntity benchmark;
     public void setBenchmarkUuid(String benchmarkUuid) {

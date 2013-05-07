@@ -178,7 +178,7 @@ public class BenchmarkEntity {
 
     @Transient
     public String getHexFilePath() {
-        return FilenameUtils.concat(this.dirPath(), "benchmark_hex.txt");
+        return FilenameUtils.concat(this.dirPath(), "benchmark_bxx.txt");
     }
     private void setHexFilePath(String no) {}
 

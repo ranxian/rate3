@@ -22,6 +22,7 @@ import java.util.Map;
  */
 public class GeneralImposterBenchmark extends AbstractBenchmark {
     private static final Logger logger = Logger.getLogger(GeneralImposterBenchmark.class);
+    private int countOfMatches = 0;
 
     public void setImposterClassAndSamples(List<Pair<ClazzEntity, List<SampleEntity>>> imposterClassAndSamples) {
         this.imposterClassAndSamples = imposterClassAndSamples;
@@ -30,67 +31,61 @@ public class GeneralImposterBenchmark extends AbstractBenchmark {
     protected List<Pair<ClazzEntity, List<SampleEntity>>> imposterClassAndSamples=null;
 
     public void setImpostedClassAndSamples(List<Pair<ClazzEntity, List<SampleEntity>>> impostedClassAndSamples) {
+        logger.debug("Imposted class and samples set");
         this.impostedClassAndSamples = impostedClassAndSamples;
     }
 
     protected List<Pair<ClazzEntity, List<SampleEntity>>> impostedClassAndSamples=null;
 
     public void prepare() throws Exception {
-        benchmark.setType("GeneralImposter");
-        prepareBenchmarkDir();
-        File benchmarkFile = new File(benchmark.filePath());
-        benchmarkFile.createNewFile();
-    }
-
-    public BenchmarkEntity generate() throws Exception {
         if ( imposterClassAndSamples==null || impostedClassAndSamples==null
                 || view==null) {
             throw new GeneratorException("Parameters not specified");
         }
-        DebugUtil.debug("here");
+
+        benchmark.setType("GeneralImposter");
+        prepareBenchmarkDir();
+    }
+
+
+    public BenchmarkEntity generate() throws Exception {
         prepare();
-        PrintWriter pw = new PrintWriter(new FileOutputStream(benchmark.filePath()));
 
-        DebugUtil.debug(String.format("Begin generation for benchmark [%s]", benchmark.getUuid()));
+        PrintWriter pw = new PrintWriter(new FileOutputStream(benchmark.getHexFilePath()));
 
-        // imposter and imposted
-        Iterator imposterClassAndSamplesIterator = imposterClassAndSamples.iterator();
-        int countOfMatches=0;
-        while (imposterClassAndSamplesIterator.hasNext()) {
-            Map.Entry<ClazzEntity, List<SampleEntity>> imposter = (Map.Entry<ClazzEntity, List<SampleEntity>>)imposterClassAndSamplesIterator.next();
-            ClazzEntity imposterClazz = imposter.getKey();
-            List<SampleEntity> imposterSamples = imposter.getValue();
-
-            for (int i=0; i<imposterSamples.size(); i++) {
-                // Enroll the imposter sample
-                SampleEntity imposterSample = imposterSamples.get(i);
-                logger.trace(String.format("Enroll [%s]", imposterSample.getUuid()));
-                pw.println(String.format("E %s %s", imposterClazz.getUuid(), imposterSample.getUuid()));
-                pw.println(imposterSample.getFile());
-                // Match with imposted samples
-                Iterator impostedClassAndSamplesIterator = impostedClassAndSamples.iterator();
-                while (impostedClassAndSamplesIterator.hasNext()) {
-                    Map.Entry<ClazzEntity, List<SampleEntity>> imposted = (Map.Entry<ClazzEntity, List<SampleEntity>>)impostedClassAndSamplesIterator.next();
-                    ClazzEntity impostedClazz = imposted.getKey();
-                    List<SampleEntity> impostedSamples = imposted.getValue();
-                    for (int j=0; j<impostedSamples.size(); j++) {
-                        SampleEntity impostedSample = impostedSamples.get(j);
-                        logger.trace(String.format("Match [%s]", impostedSample.getUuid()));
-                        pw.println(String.format("M %s %s %s %s", imposterClazz.getUuid(), imposterSample.getUuid(), impostedClazz.getUuid(), impostedSample.getUuid()));
-                        pw.println(impostedSample.getFile());
-                        countOfMatches++;
-                    }
-                }
-            }
-        }
-
-        // TODO: I think we should add inner-class for imposters.
-
+        generateInterClassBenchmark(pw); // TODO: I think we should add inner-class for imposters.
         pw.close();
+
+        printUuidTable();
 
         benchmark.setDescription(String.format("Num of imposter classes: %d, num of imposted classes: %d, total matches: %d",
                 imposterClassAndSamples.size(), impostedClassAndSamples.size(), countOfMatches));
 
         return benchmark;
+    }
+
+    public void generateInterClassBenchmark(PrintWriter pw) {
+        Iterator imposterClassAndSamplesIterator = imposterClassAndSamples.iterator();
+        while (imposterClassAndSamplesIterator.hasNext()) {
+            Map.Entry<ClazzEntity, List<SampleEntity>> imposter = (Map.Entry<ClazzEntity, List<SampleEntity>>)imposterClassAndSamplesIterator.next();
+            List<SampleEntity> imposterSamples = imposter.getValue();
+
+            for (int i=0; i<imposterSamples.size(); i++) {
+                // Enroll the imposter sample
+                SampleEntity imposterSample = imposterSamples.get(i);
+                // Match with imposted samples
+                Iterator impostedClassAndSamplesIterator = impostedClassAndSamples.iterator();
+                while (impostedClassAndSamplesIterator.hasNext()) {
+                    Map.Entry<ClazzEntity, List<SampleEntity>> imposted = (Map.Entry<ClazzEntity, List<SampleEntity>>)impostedClassAndSamplesIterator.next();
+                    List<SampleEntity> impostedSamples = imposted.getValue();
+                    for (int j=0; j<impostedSamples.size(); j++) {
+                        SampleEntity impostedSample = impostedSamples.get(j);
+                        logger.trace(String.format("Match [%s]", impostedSample.getUuid()));
+                        pw.println(String.format("%s %s I", uuidTable.get(imposterSample.getUuid()), uuidTable.get(impostedSample.getUuid())));
+                        countOfMatches++;
+                    }
+                }
+            }
+        }
     }
 }

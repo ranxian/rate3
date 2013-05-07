@@ -19,6 +19,7 @@ import rate.util.RateConfig;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,6 +41,7 @@ public class RunnerMain {
     public static void setContext(String taskUuid) {
         Query query = session.createQuery("from TaskEntity where uuid = :uuid").setParameter("uuid", taskUuid);
         task = (TaskEntity)query.list().get(0);
+        new File(task.getDirPath()).mkdir();
         benchmark = task.getBenchmark();
         algorithmVersion = task.getAlgorithmVersion();
         algorithm = algorithmVersion.getAlgorithm();
@@ -47,14 +49,14 @@ public class RunnerMain {
 
     public static String buildDistCommand() {
         List<String> list = new ArrayList<String>();
-        list.add(RateConfig.getPythonExe());
+        list.add(RateConfig.getPython());
         list.add(AbstractRunner.getDistEnginePath());
-        list.add("162.105.30.204");
+        list.add(rate.util.RateConfig.getDistEngineServer());
         list.add(benchmark.dirPath());
         list.add(task.getDirPath());
         list.add(algorithmVersion.getBareDir());
         logger.debug("algorithm bare url path is " + algorithmVersion.getBareDir());
-        list.add("1000");
+        list.add("10000");
         list.add("50000000");
         DebugUtil.debug(list.toString());
         return StringUtils.join(list, " ");
@@ -74,7 +76,7 @@ public class RunnerMain {
             } else if (algorithm.getProtocol().equals("FVC2006")) {
                 runnerClass = FVC2006Runner.class;
             } else {
-                throw new RunnerException("Algorithm Protocal not Valid.");
+                throw new RunnerException("Algorithm Protocol not Valid.");
             }
 
             AbstractRunner runner = (AbstractRunner)runnerClass.newInstance();
@@ -86,17 +88,29 @@ public class RunnerMain {
                 logger.trace(cmd);
                 Process process = Runtime.getRuntime().exec(cmd);
                 process.waitFor();
+                logger.trace("process done");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-                PrintWriter writer = new PrintWriter(new FileWriter(task.getDirPath() + "\\log.txt" ));
+                File taskDir = new File(task.getDirPath());
+                if (!taskDir.exists()) {
+                    taskDir.mkdirs();
+                }
+                File logFIle = new File(task.getDirPath() + "/log.txt");
+                logFIle.createNewFile();
+                File engineLogFile = new File(RateConfig.getLogDir() + File.separator + "engine.log");
+                PrintWriter engineLog = new PrintWriter(new FileWriter(engineLogFile), true);
+                PrintWriter writer = new PrintWriter(new FileWriter(logFIle));
                 while (true) {
                     String line = reader.readLine();
                     if (line == null) break;
                     writer.println(line);
+                    engineLog.println(new Date().getTime() + ": " + line);
                     writer.flush();
+                    engineLog.flush();
                 }
+                process.waitFor();
                 writer.close();
                 reader.close();
+                engineLog.close();
                 FileUtils.moveFile(new File(FilenameUtils.concat(task.getDirPath(), "match_result.txt")), new File(task.getResultFilePath()));
 
                 logger.trace("finished");

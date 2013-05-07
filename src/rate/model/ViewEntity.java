@@ -149,7 +149,7 @@ public class ViewEntity {
         return this.numOfClasses;
     }
 
-    private void setNumOfClasses(int numOfClasses) {
+    public void setNumOfClasses(int numOfClasses) {
         this.numOfClasses = numOfClasses;
     }
 
@@ -161,7 +161,7 @@ public class ViewEntity {
         return numOfSamples;
     }
 
-    private void setNumOfSamples(int numOfSamples) {
+    public void setNumOfSamples(int numOfSamples) {
         this.numOfSamples = numOfSamples;
     }
 

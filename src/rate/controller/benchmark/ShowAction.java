@@ -1,9 +1,13 @@
 package rate.controller.benchmark;
 
+import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
+import rate.util.DebugUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,11 +18,21 @@ import java.util.Collections;
  */
 public class ShowAction extends BenchmarkActionBase {
 
-    public Collection<AlgorithmVersionEntity> getAlgorithmVersions() {
-        Collection<AlgorithmVersionEntity> algorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.type=:type order by created desc")
+    public List<AlgorithmVersionEntity> getAlgorithmVersions() {
+        List<AlgorithmVersionEntity> algorithmVersions = new ArrayList<AlgorithmVersionEntity>();
+        List<AlgorithmVersionEntity> allAlgorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.type=:type order by created desc")
                 .setParameter("type", benchmark.getView().getType())
-                .setMaxResults(itemPerPage)
+                .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
+
+        if (!getIsUserSignedIn()) return algorithmVersions;
+        for (AlgorithmVersionEntity v : allAlgorithmVersions) {
+            AlgorithmEntity a = v.getAlgorithm();
+
+            if (a.getAuthor().equals(getCurrentUser())) {
+                algorithmVersions.add(v);
+            }
+        }
 
         return algorithmVersions;
     }

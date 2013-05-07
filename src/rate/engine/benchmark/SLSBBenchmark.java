@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created by XianRan
@@ -46,9 +47,14 @@ public class SLSBBenchmark extends GeneralBenchmark {
         return K;
     }
 
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
+    }
+
     private int B4Frr;
     private int B4Far;
     private int K;
+    private double alpha;
 
     private String frrBenchmarkDir;
     private String farBenchmarkDir;
@@ -69,7 +75,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
             String[] params = line.split(" ");
             B4Frr = Integer.parseInt(params[0]);
             B4Far = Integer.parseInt(params[1]);
-            K = Integer.parseInt(params[1]);
+            K = Integer.parseInt(params[2]);
         }
     }
 
@@ -77,31 +83,29 @@ public class SLSBBenchmark extends GeneralBenchmark {
 //        if (B4Frr == 0 || B4Far == 0) throw new GeneratorException("B for Far or Frr not set!");
 
         // Experimental way
-        if (B4Frr == 0 || B4Far == 0 || K == 0) {
-            B4Frr = 10;
-            B4Far = 10;
-            K = 10;
-        }
+        B4Frr = B4Frr == 0 ? 10 : B4Frr;
+        B4Far = B4Far == 0 ? 10 : B4Far;
+        K = K == 0 ? 10 : K;
 
         prepare();
 
-        PrintWriter generalPw = new PrintWriter(benchmark.filePath());
+        PrintWriter generalPw = new PrintWriter(benchmark.getHexFilePath());
 
         generateFrrBenchmark(generalPw);
 
         generateFarBenchmark(generalPw);
 
+        generalPw.close();
+
         printUuidTable();
 
         benchmark.setDescription("This is a benchmark generate by the Second Level Subset Bootstrap method");
 
-        generalPw.close();
         return benchmark;
     }
 
     public void prepare() throws Exception{
         super.prepare();
-        benchmark.setType("SLSB");
         new File(frrBenchmarkDir).mkdir();
         new File(farBenchmarkDir).mkdir();
         BufferedWriter wr = new BufferedWriter(new FileWriter(descFilePath));
@@ -110,11 +114,11 @@ public class SLSBBenchmark extends GeneralBenchmark {
     }
 
     public String getFarBenchmarkFilePath(int i, int j) {
-        return FilenameUtils.concat(farBenchmarkDir, i + "" + j + ".txt");
+        return FilenameUtils.concat(farBenchmarkDir, i + "" + j + "_bxx.txt");
     }
 
     public String getFrrBenchmarkFilePath(int b) {
-        return FilenameUtils.concat(frrBenchmarkDir, b + ".txt");
+        return FilenameUtils.concat(frrBenchmarkDir, b + "_bxx.txt");
     }
 
     public void generateFrrBenchmark(PrintWriter generalPw) throws Exception {
@@ -132,14 +136,13 @@ public class SLSBBenchmark extends GeneralBenchmark {
                 generalSelectedSet.add(j);
             }
 
+
             for (int j : set) {
                 selectedThisTurn.add(selectedMap.get(j));
             }
-
             generateInnerClazz(pw, selectedThisTurn);
             pw.close();
         }
-
         List<Pair<ClazzEntity, List<SampleEntity>>> generalSelected = new ArrayList<Pair<ClazzEntity, List<SampleEntity>>>();
         for (int i : generalSelectedSet) {
             generalSelected.add(selectedMap.get(i));
@@ -200,6 +203,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
 
     private void printFarBenchmark(Set<Pair<Integer, Integer>> set, PrintWriter pw) throws Exception {
         Iterator<Pair<Integer, Integer>> iterator = set.iterator();
+        int count = 0;
         while (iterator.hasNext()) {
             Pair<Integer, Integer> matchPair = iterator.next();
             List<SampleEntity> sampleList1 = selectedMap.get(matchPair.getLeft()-1).getRight();
@@ -207,6 +211,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
             for (SampleEntity sample : sampleList1) {
                 for (SampleEntity sample2 : sampleList2) {
                     pw.println(uuidTable.get(sample.getUuid()) + " " + uuidTable.get(sample2.getUuid()) + " I");
+                    count++;
                 }
             }
         }

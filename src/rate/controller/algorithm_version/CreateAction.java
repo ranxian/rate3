@@ -46,7 +46,12 @@ public class CreateAction extends AlgorithmVersionActionBase {
             session.save(algorithmVersion);
 
             File dir = new File(algorithmVersion.dirPath());
-            if (!dir.exists()) dir.mkdirs();
+            if (!dir.exists()) {
+                logger.trace(dir.toString() + "does not exists, try mkdirs");
+                dir.mkdirs();
+                //FileUtils.forceMkdir(dir);
+            }
+
 
             File dst = new File(FilenameUtils.concat(algorithmVersion.dirPath(), "enroll.exe"));
             FileUtils.copyFile(enrollExe, dst);

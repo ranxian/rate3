@@ -3,7 +3,6 @@
 <!DOCTYPE struts PUBLIC
         "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
         "http://struts.apache.org/dtds/struts-2.3.dtd">
-
 <struts>
     <constant name="struts.devMode" value="true" />
     <constant name="struts.action.extension" value=""/>
@@ -16,6 +15,9 @@
             <result name="eNoUser" type="freemarker">/templates/error/eNoUser.ftl</result>
             <result name="eNotVip" type="freemarker">/templates/error/eNotVip.ftl</result>
             <result name="ERROR" type="freemarker">/templates/error/ERROR.ftl</result>
+            <result name="input" type="freemarker">
+                /templates/error/ERROR.ftl
+            </result>
         </global-results>
     </package>
 
@@ -57,8 +59,11 @@
             <result name="success" type="freemarker">/templates/user/tasks.ftl</result>
         </action>
     </package>
-    <package name="basicstruts2" extends="struts-default">
+    <package name="basicstruts2" extends="rate-base-package">
         <action name="index" class="rate.controller.HomeAction" method="execute">
+            <result name="success" type="freemarker">/templates/index.ftl</result>
+        </action>
+        <action name="index.jsp" class="rate.controller.HomeAction" method="execute">
             <result name="success" type="freemarker">/templates/index.ftl</result>
         </action>
     </package>

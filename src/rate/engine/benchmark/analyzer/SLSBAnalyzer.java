@@ -1,7 +1,6 @@
 package rate.engine.benchmark.analyzer;
 
 //import java.util.Pair;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.io.FilenameUtils;
@@ -40,12 +39,12 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         this.B4Frr = slsbTask.getB4Frr();
         this.B4Far = slsbTask.getB4Far();
         this.benchmark = new SLSBBenchmark();
+        this.alpha = 0.1;
         benchmark.setBenchmark(slsbTask.getBenchmark());
         benchmark.getBenchmarkDesc();
         B4Far = benchmark.getB4Far();
         B4Frr = benchmark.getB4Frr();
         K = benchmark.getK();
-        this.alpha = 0.1;
     }
 
     public void analyze() throws Exception {
@@ -92,19 +91,24 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
     }
 
     private void fillResult(String inFilePath, String outFilePath) throws Exception {
+        Iterator iterator = hashedResult.keySet().iterator();
+
         BufferedReader reader = new BufferedReader(new FileReader(inFilePath));
         PrintWriter writer = new PrintWriter(new FileWriter(outFilePath));
 
         List<String> list = new ArrayList<String>();
+        Set ignoreSet = new HashSet();
         while (true) {
             String line = reader.readLine();
             if (line == null) break;
             String[] sp = line.split(" ");
-            reader.readLine();
-            reader.readLine();
-
-            double score = (Double)hashedResult.get(sp[0]+sp[1]);
-            list.add(sp[0] + " " + sp[1] + " " + score);
+            if (hashedResult.containsKey(sp[0]+sp[1])) {
+                double score = (Double)hashedResult.get(sp[0]+sp[1]);
+                list.add(sp[0] + " " + sp[1] + " " + score);
+            } else {
+                ignoreSet.add(sp[0]+sp[1]);
+                DebugUtil.debug(sp[0] + " matches " + sp[1] + " not found");
+            }
         }
 
         Collections.sort(list, this);
@@ -123,9 +127,10 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
             }
             List<Pair<Double, Double>> fmrList = new ArrayList<Pair<Double, Double>>();
             List<BufferedReader> readerList = new LinkedList<BufferedReader>();
+            // scoreList, [<阈值，分数>]
             List<Pair<Double, Double>> scoreList = new ArrayList<Pair<Double, Double>>();
             for (int j = 0; j < B4Far; j++) {
-                readerList.add(new BufferedReader(new FileReader(slsbTask.getFarResultPathByNum(i, j + 1)+"-result.txt")));
+                readerList.add(new BufferedReader(new FileReader(slsbTask.getFarResultPathByNum(i, j+1)+"-result.txt")));
                 String line = readerList.get(j).readLine();
                 scoreList.add(new ImmutablePair<Double, Double>(Double.parseDouble(line.split(" ")[0]), Double.parseDouble(line.split(" ")[1])));
             }
@@ -150,9 +155,10 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
 
                 t -= 0.001;
                 Collections.sort(list);
-                int lower = (int)(alpha/2*list.size()+0.5);
+                int lower = (int)(alpha/2*list.size());
                 int higher = (int)((1-alpha/2)*list.size());
-
+                if (lower < 0) lower = 0;
+                if (higher >= list.size()) higher = list.size()-1;
                 fmrList.add(new ImmutablePair<Double, Double>(list.get(lower), list.get(higher)));
             }
             t = 1.0;
@@ -205,6 +211,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
     public void analyzeTotalFNMR() throws Exception {
         List<Pair<Double, Double>> fnmrList = new ArrayList<Pair<Double, Double>>();
         List<BufferedReader> readerList = new LinkedList<BufferedReader>();
+        // scoreList, [<阈值，分数>]
         List<Pair<Double, Double>> scoreList = new ArrayList<Pair<Double, Double>>();
 
         for (int i = 1; i <= B4Frr; i++) {
@@ -222,7 +229,6 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         for (int i = 0; i < 1000; i++) {
             List<Double> list = new ArrayList<Double>();
             for (int j = 0; j < scoreList.size(); j++) {
-//                DebugUtil.debug(scoreList.get(j).toString());
 
                 if (scoreList.get(j).getValue() > t || scoreList.get(j).getValue() == 0.0) {
                     list.add(scoreList.get(j).getKey());
@@ -240,8 +246,10 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
 
             t += 0.001;
             Collections.sort(list);
-            int lower = (int)(alpha/2*list.size()+0.5);
+            int lower = (int)(alpha/2*list.size());
             int higher = (int)((1-alpha/2)*list.size());
+            if (lower < 0) lower = 0;
+            if (higher >= list.size()) higher = list.size()-1;
             fnmrList.add(new ImmutablePair<Double, Double>(list.get(lower), list.get(higher)));
         }
 
@@ -264,14 +272,13 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
     }
 
     private void hashResult() throws Exception {
-        String resultFile = slsbTask.getResultFilePath();
+        String resultFile = slsbTask.getBxxResultFilePath();
         BufferedReader reader = new BufferedReader(new FileReader(resultFile));
-
         while (reader.ready()) {
             String line = reader.readLine();
             String[] results = line.split(" ");
-            DebugUtil.debug(line);
-            hashedResult.put(results[0]+results[1], Double.parseDouble(results[4]));
+            // DebugUtil.debug(results[0]+ " " + results[1] + " " + Double.parseDouble(results[4]));
+            hashedResult.put(results[0] + results[1], Double.parseDouble(results[4]));
         }
 
         reader.close();

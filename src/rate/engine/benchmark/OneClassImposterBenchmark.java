@@ -7,6 +7,7 @@ import org.hibernate.Query;
 import rate.model.BenchmarkEntity;
 import rate.model.ClazzEntity;
 import rate.model.SampleEntity;
+import rate.util.BaseXX;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,10 @@ public class OneClassImposterBenchmark extends GeneralImposterBenchmark {
                         .setParameter("clazz", this.imposterClazz)
                         .setMaxResults(2).list()
         );
+        for (SampleEntity sample : imposterSamples) {
+            if (!uuidTable.containsKey(sample.getUuid()))
+                uuidTable.put(sample.getUuid(), BaseXX.parse(uuidTable.size()+1));
+        }
         imposterClassAndSamples.add(new ImmutablePair<ClazzEntity, List<SampleEntity>>(imposterClazz, imposterSamples));
         this.setImposterClassAndSamples(imposterClassAndSamples);
 
@@ -66,7 +71,11 @@ public class OneClassImposterBenchmark extends GeneralImposterBenchmark {
                             .setMaxResults(2).list()
             );
             impostedClassAndSamples.add(new ImmutablePair<ClazzEntity, List<SampleEntity>>(impostedClazz, impostedSamples));
-
+            for (SampleEntity sample : impostedSamples) {
+                if (!uuidTable.containsKey(sample.getUuid()))
+                    uuidTable.put(sample.getUuid(), BaseXX.parse(uuidTable.size()+1));
+                enrollMap.put(sample.getUuid(), sample.getFile());
+            }
             logger.trace(String.format("New imposted class [%s] [%d]", impostedClazz.getUuid(), impostedClassAndSamples.size()));
         }
 
@@ -75,14 +84,20 @@ public class OneClassImposterBenchmark extends GeneralImposterBenchmark {
 
     public BenchmarkEntity generate() throws Exception {
         if (imposterClazz == null) {
+            logger.trace("Select random imposter class");
             imposterClazz = (ClazzEntity) session.createQuery("from ClazzEntity order by RAND()").list().get(0);
         }
-        benchmark.setName(String.format("Imposter-[%s]", this.imposterClazz.getUuidShort()));
-        benchmark.setType("OneClassImposter");
+
         logger.trace(String.format("Imposter class [%s]", this.imposterClazz.getUuid()));
+        setImpostedClassCountLimit(1000);
 
         setClazzAndSample();
 
-        return super.generate();
+        logger.trace("Class and Sample set success");
+
+        benchmark = super.generate();
+        benchmark.setName(String.format("Imposter-[%s]", this.imposterClazz.getUuidShort()));
+        benchmark.setType("OneClassImposter");
+        return benchmark;
     }
 }

@@ -7,7 +7,9 @@ import rate.controller.RateActionBase;
 import rate.model.TaskEntity;
 import rate.util.HibernateUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -22,14 +24,28 @@ public class IndexAction extends RateActionBase {
         return tasks;
     }
 
-    private Collection<TaskEntity> tasks;
+    private Collection<TaskEntity> tasks = new ArrayList<TaskEntity>();
 
     public String execute() {
-        tasks = session.createQuery("from TaskEntity order by created desc")
-                .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
-                .list();
-        setNumOfItems((Long)session.createQuery("select count(*) from TaskEntity ")
-                .list().get(0));
+        if (getIsUserSignedIn() && getCurrentUser().isVip()) {
+            tasks = session.createQuery("from TaskEntity order by created desc")
+                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
+                    .list();
+        } else {
+            List<TaskEntity> alltasks = session.createQuery("from TaskEntity order by created desc")
+                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage*10)
+                    .list();
+            if (getIsUserSignedIn()) {
+                for (TaskEntity task : alltasks) {
+                    if (task.getRunnerName().equals(getCurrentUser().getName())) {
+                        tasks.add(task);
+                        if (tasks.size() >= 10) break;
+                    }
+                }
+            }
+
+        }
+        setNumOfItems((long)tasks.size());
         return SUCCESS;
     }
 }
