@@ -20,6 +20,8 @@ public class ShowAction extends RateActionBase {
             return "eLogin";
         }
         if (task.getAlgorithmVersion().getAlgorithm().getAuthor().getUuid().equals(getCurrentUser().getUuid()) || getCurrentUser().isVip()) {
+
+        } else {
             return "eNotVip";
         }
         if (task.getBenchmark().getType().equals("SLSB")) {

@@ -11,11 +11,11 @@
         <property name="connection.password">testing</property>
         <property name="hibernate.c3p0.max_size">20</property>
         <property name="hibernate.c3p0.min_size">5</property>
-                <property name="hibernate.c3p0.timeout">120</property>
-                <property name="hibernate.c3p0.max_statements">100</property>
-                <property name="hibernate.c3p0.idle_test_period">120</property>
-                <property name="hibernate.c3p0.acquire_increment">2</property>
-                <property name="hibernate.c3p0.validate">true</property>
+        <property name="hibernate.c3p0.timeout">120</property>
+        <property name="hibernate.c3p0.max_statements">100</property>
+        <property name="hibernate.c3p0.idle_test_period">120</property>
+        <property name="hibernate.c3p0.acquire_increment">2</property>
+        <property name="hibernate.c3p0.validate">true</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <mapping class="rate.model.AlgorithmEntity"/>
         <mapping class="rate.model.AlgorithmVersionEntity"/>

@@ -37,6 +37,7 @@ public class JavaProcess {
         String rate_lib_path = RateConfig.getConfig().getString("RATE_LIB_PATH");
         File libDir = new File(rate_lib_path);
         File[] jars = libDir.listFiles();
+        DebugUtil.debug(rate_lib_path);
         for (int i = 0; i< jars.length; i++) {
             classpath += ":" + jars[i].getAbsolutePath();
         }

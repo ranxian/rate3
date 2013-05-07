@@ -51,6 +51,7 @@ public class RunnerAction extends RateActionBase {
         if (task != null) {
             return "historyTask";
         } else {
+            DebugUtil.debug("Begin run");
             RunnerInvoker.run(benchmark, algorithmVersion);
 
             return SUCCESS;
