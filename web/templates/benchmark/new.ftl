@@ -29,8 +29,15 @@
             <div class="controls">
                 <@s.select
                 name="benchmark.generator"
-                list="{'SMALL', 'MEDIUM', 'LARGE', 'VERY_LARGE'}"
+                list="{'SMALL', 'MEDIUM', 'LARGE', 'VERY_LARGE', 'Custom'}"
                             ></@s.select>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="control-label">Custom Benchmark</div>
+            <div class="controls">
+                <@s.textarea name="benchmarkContent" cols="20" rows="50"></@s.textarea>
             </div>
         </div>
 
