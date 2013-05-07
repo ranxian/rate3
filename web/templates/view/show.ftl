@@ -20,6 +20,7 @@
     <#if isUserSignedIn && currentUser.isVip()>
 
 <a href="/benchmark/new?viewUuid=${view.uuid}" class="btn">New Benchmark</a>
+    <a href="/benchmark/custom?viewUuid=${view.uuid}" class="btn">Custom Benchmark</a>
     </#if>
 
 <hr>

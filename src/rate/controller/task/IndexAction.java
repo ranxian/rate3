@@ -27,24 +27,27 @@ public class IndexAction extends RateActionBase {
     private Collection<TaskEntity> tasks = new ArrayList<TaskEntity>();
 
     public String execute() {
-        if (getIsUserSignedIn() && getCurrentUser().isVip()) {
-            tasks = session.createQuery("from TaskEntity order by created desc")
-                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
-                    .list();
-        } else {
-            List<TaskEntity> alltasks = session.createQuery("from TaskEntity order by created desc")
-                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage*10)
-                    .list();
-            if (getIsUserSignedIn()) {
-                for (TaskEntity task : alltasks) {
-                    if (task.getRunnerName().equals(getCurrentUser().getName())) {
-                        tasks.add(task);
-                        if (tasks.size() >= 10) break;
-                    }
-                }
-            }
-
-        }
+        tasks = session.createQuery("from TaskEntity order by created desc")
+                .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
+                .list();
+//        if (getIsUserSignedIn() && getCurrentUser().isVip()) {
+//            tasks = session.createQuery("from TaskEntity order by created desc")
+//                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
+//                    .list();
+//        } else {
+//            List<TaskEntity> alltasks = session.createQuery("from TaskEntity order by created desc")
+//                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage*10)
+//                    .list();
+//            if (getIsUserSignedIn()) {
+//                for (TaskEntity task : alltasks) {
+//                    if (task.getRunnerName().equals(getCurrentUser().getName())) {
+//                        tasks.add(task);
+//                        if (tasks.size() >= 10) break;
+//                    }
+//                }
+//            }
+//
+//        }
         setNumOfItems((long)tasks.size());
         return SUCCESS;
     }

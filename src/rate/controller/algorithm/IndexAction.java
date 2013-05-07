@@ -28,18 +28,21 @@ public class IndexAction extends RateActionBase {
     private List<AlgorithmEntity> algorithms = new ArrayList<AlgorithmEntity>() ;
 
     public String execute() throws Exception {
-        if (getIsUserSignedIn() && getCurrentUser().isVip()) {
-            algorithms = session.createQuery("from AlgorithmEntity order by updated desc")
-                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
-                    .list();
-        } else {
-            List<UserAlgorithmEntity> userAlgorithmEntities = session.createQuery("from UserAlgorithmEntity where user=:user")
-                    .setParameter("user", getCurrentUser()).list();
-            for (UserAlgorithmEntity entity : userAlgorithmEntities) {
-                if (entity.getUser().equals(getCurrentUser()))
-                    algorithms.add(entity.getAlgorithm());
-            }
-        }
+        algorithms = session.createQuery("from AlgorithmEntity order by updated desc")
+                .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
+                .list();
+//        if (getIsUserSignedIn() && getCurrentUser().isVip()) {
+//            algorithms = session.createQuery("from AlgorithmEntity order by updated desc")
+//                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
+//                    .list();
+//        } else {
+//            List<UserAlgorithmEntity> userAlgorithmEntities = session.createQuery("from UserAlgorithmEntity where user=:user")
+//                    .setParameter("user", getCurrentUser()).list();
+//            for (UserAlgorithmEntity entity : userAlgorithmEntities) {
+//                if (entity.getUser().equals(getCurrentUser()))
+//                    algorithms.add(entity.getAlgorithm());
+//            }
+//        }
         setNumOfItems((long)algorithms.size());
         return SUCCESS;
     }

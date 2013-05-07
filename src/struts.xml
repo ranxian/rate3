@@ -164,7 +164,10 @@
         <action name="show" class="rate.controller.task.ShowAction" method="execute">
             <result name="success" type="freemarker">/templates/task/show.ftl</result>
             <result name="SLSB" type="freemarker">/templates/task/slsb.ftl</result>
-            <result name="RunOnce" type="freemarker">/templates/task/run_once.ftl</result>
+            <result name="RunOnce" type="redirectAction">
+                <param name="namespace">task</param>
+                <param name="actionName">index</param>
+            </result>
         </action>
         <action name="delete" class="rate.controller.task.DeleteAction" method="execute">
             <result name="success" type="redirectAction">

@@ -1,5 +1,6 @@
 package rate.controller.benchmark;
 
+import rate.engine.benchmark.CustomBenchmark;
 import rate.engine.benchmark.GeneralBenchmark;
 import rate.engine.benchmark.OneClassImposterBenchmark;
 import rate.engine.benchmark.SLSBBenchmark;
@@ -26,6 +27,16 @@ public class CreateAction extends BenchmarkActionBase {
         return viewUuid;
     }
 
+    private String content;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public void setViewUuid(String viewUuid) {
         this.viewUuid = viewUuid;
         view = (ViewEntity)session.createQuery("from ViewEntity where uuid=:uuid").setParameter("uuid", viewUuid)
@@ -39,6 +50,8 @@ public class CreateAction extends BenchmarkActionBase {
             benchmark.setType("General");
         } else if (generatorStr.equals("SLSB(100C)") || generatorStr.equals("SLSB(1000C)")) {
             benchmark.setType("SLSB");
+        } else {
+            benchmark.setType("Custom");
         }
     }
 
@@ -73,6 +86,11 @@ public class CreateAction extends BenchmarkActionBase {
             } else {
                 generator.setClassCount(1000);
             }
+            benchmark = generator.generate();
+        } else if (generatorStr.equals("Custom")) {
+            CustomBenchmark generator = new CustomBenchmark();
+            generator.setBenchmark(benchmark);
+            generator.setContent(content);
             benchmark = generator.generate();
         } else {
             return ERROR;

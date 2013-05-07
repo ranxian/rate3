@@ -9,7 +9,6 @@ import rate.util.BaseXX;
 import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
-import javax.sound.sampled.Line;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
@@ -20,8 +19,8 @@ import java.io.PrintWriter;
  * Time: PM4:11
  * To change this template use File | Settings | File Templates.
  */
-public class RunOnceBenchmark extends GeneralBenchmark {
-    private static final Logger logger = Logger.getLogger(RunOnceBenchmark.class);
+public class CustomBenchmark extends GeneralBenchmark {
+    private static final Logger logger = Logger.getLogger(CustomBenchmark.class);
 
     public String getContent() {
         return content;
@@ -35,21 +34,12 @@ public class RunOnceBenchmark extends GeneralBenchmark {
 
 
     public void prepare() {
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
-        BenchmarkEntity benchmark = new BenchmarkEntity();
-        benchmark.setGenerator("Run Once Generator");
-        benchmark.setName("RunOnce");
-        benchmark.setType("RunOnce");
-        benchmark.setView((ViewEntity)session.createQuery("from ViewEntity").list().get(0));
-        session.save(benchmark);
-        session.getTransaction().commit();
-        session.close();
-        setBenchmark(benchmark);
+        benchmark.setGenerator("Custom");
         prepareBenchmarkDir();
     }
 
     public BenchmarkEntity generate() throws Exception {
+        prepare();
         logger.info("Begin generate run once benchmark" + benchmark.getUuid());
         PrintWriter writer = new PrintWriter(new FileWriter(benchmark.getHexFilePath()));
 
