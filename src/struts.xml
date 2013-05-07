@@ -164,6 +164,7 @@
         <action name="show" class="rate.controller.task.ShowAction" method="execute">
             <result name="success" type="freemarker">/templates/task/show.ftl</result>
             <result name="SLSB" type="freemarker">/templates/task/slsb.ftl</result>
+            <result name="RunOnce" type="freemarker">/templates/task/run_once.ftl</result>
         </action>
         <action name="delete" class="rate.controller.task.DeleteAction" method="execute">
             <result name="success" type="redirectAction">
@@ -178,6 +179,14 @@
         </action>
         <action name="badresult" class="rate.controller.task.BadResultAction" method="execute">
             <result name="success" type="freemarker">/templates/task/badresult.ftl</result>
+        </action>
+        <action name="downloadResult" class="rate.controller.task.DownloadAction" >
+            <result name="success" type="stream">
+                <param name="contentType">text/plain</param>
+                <param name="inputName">inputStream</param>
+                <param name="contentDisposition">attachment;filename=${filename}</param>
+                <param name="bufferSize">4096</param>
+            </result>
         </action>
     </package>
 

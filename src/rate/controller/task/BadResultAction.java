@@ -29,7 +29,7 @@ public class BadResultAction extends TaskActionBase {
         result = new BadResult();
         result.setResultType(resultType);
         result.setNum(num);
-        result.setGeneralTask(GeneralTask);
+        result.setGeneralTask(generalTask);
         result.generateInfo();
         return SUCCESS;
     }

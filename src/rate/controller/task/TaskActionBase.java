@@ -15,7 +15,7 @@ public class TaskActionBase extends RateActionBase  {
     public void setUuid(String uuid) throws Exception {
         this.uuid = uuid;
         this.task = (TaskEntity)session.createQuery("from TaskEntity where uuid=:uuid").setParameter("uuid", uuid).list().get(0);
-        GeneralTask = new GeneralTask(task);
+        generalTask = new GeneralTask(task);
         System.out.println("uuid and task prepared");
     }
 
@@ -28,8 +28,8 @@ public class TaskActionBase extends RateActionBase  {
     protected TaskEntity task;
 
     public GeneralTask getGeneralTask() {
-        return GeneralTask;
+        return generalTask;
     }
 
-    protected GeneralTask GeneralTask;
+    protected GeneralTask generalTask;
 }

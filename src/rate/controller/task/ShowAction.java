@@ -19,6 +19,8 @@ public class ShowAction extends RateActionBase {
         if (task.getBenchmark().getType().equals("SLSB")) {
             slsbTask = new SLSBTask(task);
             return "SLSB";
+        } else if (task.getBenchmark().getType().equals("RunOnce")) {
+            return "RunOnce";
         } else {
             generalTask = new GeneralTask(task);
             return SUCCESS;
