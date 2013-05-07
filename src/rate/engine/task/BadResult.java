@@ -15,7 +15,7 @@ import java.io.FileReader;
  * Time: 下午5:56
  */
 public class BadResult {
-    private static final Session session = HibernateUtil.getSession();
+    private final Session session = HibernateUtil.getSession();
     private String resultType;
     private String num;
     private SampleEntity sample1;
