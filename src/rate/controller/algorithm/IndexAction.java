@@ -31,6 +31,7 @@ public class IndexAction extends RateActionBase {
         algorithms = session.createQuery("from AlgorithmEntity order by updated desc")
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
+        long count = (Long)(session.createQuery("select count(*) from AlgorithmEntity ").list().get(0));
 //        if (getIsUserSignedIn() && getCurrentUser().isVip()) {
 //            algorithms = session.createQuery("from AlgorithmEntity order by updated desc")
 //                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
@@ -43,7 +44,7 @@ public class IndexAction extends RateActionBase {
 //                    algorithms.add(entity.getAlgorithm());
 //            }
 //        }
-        setNumOfItems((long)algorithms.size());
+        setNumOfItems(count);
         return SUCCESS;
     }
 }

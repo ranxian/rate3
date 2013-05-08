@@ -50,14 +50,14 @@ public class CustomBenchmark extends GeneralBenchmark {
                 uuidTable.put(sp[0], BaseXX.parse(uuidTable.size()+1));
                 SampleEntity sample = (SampleEntity)session.createQuery("from SampleEntity where uuid=:uuid").setParameter("uuid", sp[0])
                         .list().get(0);
-                enrollMap.put(sp[0], sample.getFile());
+                enrollMap.put(sp[0], sample.getFilePath());
             }
 
             if (!uuidTable.containsKey(sp[1])) {
                 uuidTable.put(sp[1], BaseXX.parse(uuidTable.size()+1));
                 SampleEntity sample = (SampleEntity)session.createQuery("from SampleEntity where uuid=:uuid").setParameter("uuid", sp[1])
                         .list().get(0);
-                enrollMap.put(sp[1], sample.getFile());
+                enrollMap.put(sp[1], sample.getFilePath());
             }
 
             DebugUtil.debug(String.format("%s %s %s\n", uuidTable.get(sp[0]), uuidTable.get(sp[1]), sp[2]));

@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import rate.controller.RateActionBase;
 import rate.model.TaskEntity;
+import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class IndexAction extends RateActionBase {
         tasks = session.createQuery("from TaskEntity order by created desc")
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
+        long count = (Long)(session.createQuery("select count(*) from TaskEntity").list().get(0));
 //        if (getIsUserSignedIn() && getCurrentUser().isVip()) {
 //            tasks = session.createQuery("from TaskEntity order by created desc")
 //                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
@@ -48,7 +50,8 @@ public class IndexAction extends RateActionBase {
 //            }
 //
 //        }
-        setNumOfItems((long)tasks.size());
+        DebugUtil.debug(count+"");
+        setNumOfItems(count);
         return SUCCESS;
     }
 }

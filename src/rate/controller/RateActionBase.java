@@ -157,5 +157,5 @@ public class RateActionBase extends ActionSupport {
 
     protected int numOfPages = -1;
 
-    protected int itemPerPage = 10;
+    protected int itemPerPage = 50;
 }
