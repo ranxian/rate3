@@ -157,7 +157,7 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
             fileWriter.close();
         }
         logger.debug("Begin calc imposter bad result");
-        for (i = 0; i <= imposterList.size() && i < 10; i++) {
+        for (i = 0; i < imposterList.size() && i < 10; i++) {
             String line = imposterList.get(i);
             String info[] = line.split(" ");
             //String  s1 = info[0], s2 = info[1];

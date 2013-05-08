@@ -50,7 +50,6 @@ public class IndexAction extends RateActionBase {
 //            }
 //
 //        }
-        DebugUtil.debug(count+"");
         setNumOfItems(count);
         return SUCCESS;
     }
