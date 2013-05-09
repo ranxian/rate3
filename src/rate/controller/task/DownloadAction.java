@@ -33,6 +33,7 @@ public class DownloadAction extends TaskActionBase{
 
     public void prepairFiles(String resultFilePath, File baseDir) throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader(resultFilePath));
+        int cnt = 0;
         while (true) {
             String line = reader.readLine();
             if (line == null) break;
@@ -52,6 +53,8 @@ public class DownloadAction extends TaskActionBase{
 
             FileUtils.copyFileToDirectory(new File(sample1.getFilePath()), dir);
             FileUtils.copyFileToDirectory(new File(sample2.getFilePath()), dir);
+            cnt++;
+            if (cnt == 20) break;
         }
 
         reader.close();
@@ -64,7 +67,7 @@ public class DownloadAction extends TaskActionBase{
 
     public void genIResult() throws Exception {
         File baseDir = new File(FilenameUtils.concat(result.getAbsolutePath(), "imposter"));
-        prepairFiles(generalTask.getImposterFilePath(), baseDir);
+        prepairFiles(generalTask.getRevImposterPath(), baseDir);
     }
 
     public InputStream getInputStream() throws Exception {
@@ -79,7 +82,7 @@ public class DownloadAction extends TaskActionBase{
 
     public String execute() throws Exception {
         result = new File(RateConfig.getTempRootDir()+File.separator+task.getUuid());
-        tarFile = new File(result.getAbsolutePath()+".tar");
+        tarFile = new File(result.getAbsolutePath()+".zip");
         if (tarFile.exists()) return SUCCESS;
 
         if (!result.exists()) {
@@ -91,10 +94,19 @@ public class DownloadAction extends TaskActionBase{
 
 
         String dirName = result.getAbsolutePath();
-        DebugUtil.debug("tar czvf " + result.getAbsolutePath() + ".tar "+ result.getAbsolutePath());
-        Process process = Runtime.getRuntime().exec("tar czvf " + result.getAbsolutePath() + ".tar "+ result.getAbsolutePath());
-        process.waitFor();
 
+        String cmd = "zip -1 -rv " + result.getName() + ".zip "+ result.getName();
+        logger.debug("Run zip command " + cmd);
+        Process process = Runtime.getRuntime().exec(cmd, null, new File(RateConfig.getTempRootDir()));
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//        while (true) {
+//            String line  = reader.readLine();
+//            if (line == null) break;
+//            logger.debug(line);
+//        }
+
+        process.waitFor();
+//        reader.close();
 
         return SUCCESS;
     }

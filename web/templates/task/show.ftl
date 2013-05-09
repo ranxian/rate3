@@ -47,11 +47,9 @@
             </td>
         </#list>
     </tr>
-    <tr>
-        <td>
-            <a href="/task/downloadResult?uuid=${task.uuid}">Download</a>
-        </td>
-    </tr>
+
     </tbody>
+
 </table>
+<strong>TOP 20 Bad Results:</strong> <a href="/task/downloadResult?uuid=${task.uuid}" class="btn btn-success">${task.uuid + ".zip"}</a> <br>
 </#macro>

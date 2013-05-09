@@ -68,9 +68,9 @@
 </div>
 <div id="footer">
     <div class="container">
-        <p>All Rights Reserved 2012 AI LAB, Peking University </p>
+        <p>All Rights Reserved 2013 AI LAB, Peking University. By <strong>Yu Yuankai & Xian Ran</strong> </p>
 
-        <p>Any problem, Please Contact Administrator</p>
+        <p>Any problem, Please Contact <a href="mailto:xranthoar@gmail.com" style="color: white; font-weight: bold;">Administrator</a></p>
     </div>
 </div>
 </body>
