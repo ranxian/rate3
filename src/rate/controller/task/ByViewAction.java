@@ -44,25 +44,13 @@ public class ByViewAction extends RateActionBase {
     private Collection<TaskEntity> tasks = new ArrayList<TaskEntity>();
 
     public String execute() {
-        if (getIsUserSignedIn() && getCurrentUser().isVip()) {
-            tasks = session.createQuery("from TaskEntity order by created desc")
-                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
-                    .list();
-        } else {
-            List<TaskEntity> alltasks = session.createQuery("from TaskEntity order where benchmark.view=:view order by created desc")
-                    .setParameter("view", view)
-                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage*10)
-                    .list();
-            if (getIsUserSignedIn()) {
-                for (TaskEntity task : alltasks) {
-                    if (task.getRunnerName().equals(getCurrentUser().getName())) {
-                        tasks.add(task);
-                        if (tasks.size() >= 10) break;
-                    }
-                }
-            }
-        }
-        setNumOfItems((long)tasks.size());
+        tasks = session.createQuery("from TaskEntity where benchmark.view=:view order by created desc")
+                .setParameter("view", view).setMaxResults(itemPerPage).list();
+        long count = (Long)(session.createQuery("select count(*) from TaskEntity where benchmark.view=:view")
+                .setParameter("view", view).list().get(0));
+
+        setNumOfItems(count);
+
         return SUCCESS;
     }
 }
