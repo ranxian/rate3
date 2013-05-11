@@ -162,4 +162,9 @@ public class TaskEntity {
 //        }
     }
     private void setGeneralPercentage(Double nonsense) {}
+    @Transient
+    public UserEntity getAuthor() {
+        return this.algorithmVersion.getAlgorithm().getAuthor();
+    }
+    private void setAuthor(UserEntity nonsense) {}
 }

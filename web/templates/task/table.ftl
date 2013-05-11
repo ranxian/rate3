@@ -10,7 +10,7 @@
         <th>Created</th>
         <th>Finished</th>
         <th>Runner</th>
-        <#if isUserSignedIn && currentUser.isVip()><th>For debug use</th></#if>
+        <th>Delete</th>
     </tr>
     </thead>
     <tbody>
@@ -29,7 +29,11 @@
             </#if>
         </td>
         <td class="tableHighlight">${runnerName}</td>
-        <#if isUserSignedIn && currentUser.isVip()><td><a href="/task/delete?uuid=${uuid}">delete</a></td></#if>
+        <#if isUserSignedIn && (currentUser.isVip() || author.getUuid().equals(currentUser.getUuid()))>
+            <td><a href="/task/delete?uuid=${uuid}">delete</a></td>
+        <#else>
+            <td></td>
+        </#if>
     </tr>
     </@s.iterator>
     </tbody>
