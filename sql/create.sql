@@ -46,6 +46,7 @@ CREATE TABLE `algorithm_version` (
   `algorithm_uuid` binary(16) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'this column is also used to identify different versions of an algorithm',
   `description` text,
+  `id` int DEFAULT 0,
   PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
