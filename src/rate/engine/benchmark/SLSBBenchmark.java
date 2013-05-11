@@ -99,7 +99,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
 
         printUuidTable();
 
-        benchmark.setDescription("This is a benchmark generate by the Second Level Subset Bootstrap method");
+        benchmark.setDescription("This is a benchmark generate by the Second Level Partition Subset Bootstrap method");
 
         return benchmark;
     }
@@ -158,7 +158,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
             int modN;
             // 见论文中对划分子集的描述
             if (classCount % 2 == 0) {
-                modN = i % (classCount-1);
+                modN = i % classCount;
                 for (int j = 1; j <= classCount-1; j++) {
                     for (int k = j+1; k <= classCount; k++) {
                         if ((j+k) % (classCount - 1) == modN) {

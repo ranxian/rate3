@@ -75,11 +75,10 @@ public class CreateAction extends BenchmarkActionBase {
         } else if (generatorStr.equals("SLSB(100C)") || generatorStr.equals("SLSB(1000C)")) {
             SLSBBenchmark generator = new SLSBBenchmark();
             generator.setBenchmark(benchmark);
-            generator.setB4Far(20);
-            generator.setB4Frr(20);
-            generator.setK(10);
+            generator.setB4Far(100);
+            generator.setB4Frr(100);
             generator.setAlpha(0.1);
-            generator.setSampleCount(3);
+            generator.setSampleCount(5);
             // This should depend on user's option
             if (generatorStr.equals("SLSB(100C)")) {
                 generator.setClassCount(100);

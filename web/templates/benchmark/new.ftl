@@ -29,7 +29,7 @@
             <div class="controls">
                 <@s.select
                 name="benchmark.generator"
-                list="{'SMALL', 'MEDIUM', 'LARGE', 'VERY_LARGE', 'Custom'}"
+                list="{'SMALL', 'MEDIUM', 'LARGE', 'VERY_LARGE', 'Custom', 'SLSB(100C)', 'SLSB(1000C)'}"
                             ></@s.select>
             </div>
         </div>
@@ -37,7 +37,7 @@
         <div class="control-group">
             <div class="control-label">Custom Benchmark</div>
             <div class="controls">
-                <@s.textarea name="content" cols="20" rows="20" width="200px"></@s.textarea>
+                <@s.textarea name="content" cols="20" rows="20"  width="200px"></@s.textarea>
             </div>
         </div>
 
