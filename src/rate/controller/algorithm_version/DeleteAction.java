@@ -2,8 +2,10 @@ package rate.controller.algorithm_version;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import rate.model.TaskEntity;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,6 +23,13 @@ public class DeleteAction extends AlgorithmVersionActionBase {
 
         session.beginTransaction();
         this.algorithm = algorithmVersion.getAlgorithm();
+
+        List<TaskEntity> tasks =  session.createQuery("from TaskEntity where algorithmVersion=:version").setParameter("version", algorithmVersion)
+                .list();
+        for (TaskEntity task : tasks) {
+            FileUtils.deleteDirectory(new File(task.getDirPath()));
+            session.delete(task);
+        }
         FileUtils.deleteDirectory(new File(algorithmVersion.dirPath()));
         session.delete(algorithmVersion);
         session.getTransaction().commit();
