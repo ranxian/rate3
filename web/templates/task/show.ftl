@@ -14,11 +14,6 @@
 </h1>
 
 <div class="result-box">
-    <table class="table table-bordered">
-        <th>
-            <td>EER:</td>
-        </th>
-    </table>
     <div class="statics">
         <p>EER: ${generalTask.EER*100}% (${generalTask.EER_l*100}% - ${generalTask.EER_h*100}%) </p>
         <p>FMR100: ${generalTask.FMR100*100}%) </p>

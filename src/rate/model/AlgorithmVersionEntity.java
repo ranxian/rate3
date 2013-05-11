@@ -50,6 +50,17 @@ public class AlgorithmVersionEntity {
         this.created = created;
     }
 
+    private int id;
+    @Column(name = "id", nullable = true, insertable = true, updatable = true, length = 32, precision = 0)
+    @Basic
+    public int getId() {
+        return this.id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -152,4 +163,10 @@ public class AlgorithmVersionEntity {
         return tasks.get(0);
     }
     private void setTaskEntity(TaskEntity entity) { }
+
+    @Transient
+    public String getReadableName() {
+        return algorithm.getName() + "-" + id;
+    }
+    private void setReadableName(String nonsense) { }
 }

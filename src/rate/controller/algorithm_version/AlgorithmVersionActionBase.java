@@ -61,8 +61,8 @@ public class AlgorithmVersionActionBase extends RateActionBase {
         UserAlgorithmEntity userAlgorithm = (UserAlgorithmEntity)session.createQuery("from UserAlgorithmEntity where algorithm=:algorithm")
                 .setParameter("algorithm", algorithm)
                 .list().get(0);
-        logger.trace("algorithm " + algorithm.getUuid() + " user " + userAlgorithm.getUser().getName() + " currentUser " + getCurrentUser().getName());
+        DebugUtil.debug("algorithm " + algorithm.getUuid() + " user " + userAlgorithm.getUser().getName() + " currentUser " + getCurrentUser().getName());
 
-        return userAlgorithm.getUser().equals(getCurrentUser());
+        return userAlgorithm.getUser().getUuid().equals(getCurrentUser().getUuid());
     }
 }
