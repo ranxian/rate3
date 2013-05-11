@@ -18,5 +18,10 @@
     Enroll.exe &lt;InputImageName&gt; &lt;OutputTemplateName&gt; - Read the image and write a template file.
     Match.exe &lt;Template1&gt; &lt;Template2&gt; - Read 2 template file and tell the <strong class="ratered">SCORE</strong> from STDOUT.
 </pre>
+<p class="ask"><strong>A: What is FNMR & FMR?</strong></p>
+<pre>
+    <strong class="ratered">FNMR</strong> means False Not Match Rate. Basically, it's the same concept as <strong class="ratered">FRR</strong>(False Reject Rate).
+    <strong class="ratered">FMR</strong> means False Match Rate. Basically, it's the same concept as <strong class="ratered">FAR</strong>(False Accept Rate).
+</pre>
 
 </#macro>

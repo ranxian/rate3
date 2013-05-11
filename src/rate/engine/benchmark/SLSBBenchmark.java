@@ -39,16 +39,12 @@ public class SLSBBenchmark extends GeneralBenchmark {
         B4Far = b4Far;
     }
 
-    public void setK(int K) {
-        this.K = K;
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
     }
 
     public int getK() {
-        return K;
-    }
-
-    public void setAlpha(double alpha) {
-        this.alpha = alpha;
+        return this.K;
     }
 
     private int B4Frr;
@@ -85,7 +81,6 @@ public class SLSBBenchmark extends GeneralBenchmark {
         // Experimental way
         B4Frr = B4Frr == 0 ? 10 : B4Frr;
         B4Far = B4Far == 0 ? 10 : B4Far;
-        K = K == 0 ? 10 : K;
 
         prepare();
 
@@ -106,10 +101,13 @@ public class SLSBBenchmark extends GeneralBenchmark {
 
     public void prepare() throws Exception{
         super.prepare();
+        // Set K as class size / 2
+        K = selectedMap.size();
+        K = K % 2 == 0 ? K - 1 : K;
         new File(frrBenchmarkDir).mkdir();
         new File(farBenchmarkDir).mkdir();
         BufferedWriter wr = new BufferedWriter(new FileWriter(descFilePath));
-        wr.append(B4Frr + " " + B4Far + " " + K + "\r\n");
+        wr.append(B4Frr + " " + B4Far + " " + K + "\n");
         wr.close();
     }
 
@@ -153,22 +151,25 @@ public class SLSBBenchmark extends GeneralBenchmark {
     public void generateFarBenchmark(PrintWriter generalPw) throws Exception {
         int classCount = selectedMap.size();
         Set<Pair<Integer, Integer>> generalSelectedSet = new HashSet<Pair<Integer, Integer>>();
-        for (int i = 1; i <= K; i++) {  // Generate S[1], S[2], ..., S[B4Far]
+        for (int i = 1; i <= K-1; i++) {  // Generate S[1], S[2], ..., S[K]
             HashSet<Pair<Integer, Integer>> hashSet = new HashSet<Pair<Integer, Integer>>();
             int modN;
             // 见论文中对划分子集的描述
             if (classCount % 2 == 0) {
-                modN = i % classCount;
+                modN = i % (classCount-1);
                 for (int j = 1; j <= classCount-1; j++) {
                     for (int k = j+1; k <= classCount; k++) {
-                        if ((j+k) % (classCount - 1) == modN) {
+                        if ((j+k) % (classCount-1) == modN) {
                             hashSet.add(new ImmutablePair<Integer, Integer>(j, k));
                         }
                     }
                 }
-                for (int j = 1; j <= classCount-1; j++) {
-                    if ((2*j) % (classCount-1) == modN) {
-                        hashSet.add(new ImmutablePair<Integer, Integer>(j, classCount));
+                if (hashSet.size() != classCount / 2) {
+                    for (int j = 1; j <= classCount-1; j++) {
+                        if ((2*j) % (classCount-1) == modN) {
+                            hashSet.add(new ImmutablePair<Integer, Integer>(j, classCount));
+                            break;
+                        }
                     }
                 }
             } else {
@@ -182,6 +183,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
                     }
                 }
             }
+            DebugUtil.debug("K = " + i + " " + hashSet.toString());
             Set<Pair<Integer, Integer>> innerSet = new HashSet<Pair<Integer, Integer>>();
             List<Pair<Integer, Integer>> list = new ArrayList<Pair<Integer, Integer>>(hashSet);
             for (int j = 1; j <= B4Far; j++) {
@@ -198,7 +200,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
 
         }
 
-        printFarBenchmark(generalSelectedSet, generalPw);
+//        printFarBenchmark(generalSelectedSet, generalPw);
     }
 
     private void printFarBenchmark(Set<Pair<Integer, Integer>> set, PrintWriter pw) throws Exception {

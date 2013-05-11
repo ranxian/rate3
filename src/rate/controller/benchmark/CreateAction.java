@@ -77,7 +77,7 @@ public class CreateAction extends BenchmarkActionBase {
             generator.setBenchmark(benchmark);
             generator.setB4Far(100);
             generator.setB4Frr(100);
-            generator.setAlpha(0.1);
+            generator.setAlpha(0.05);
             generator.setSampleCount(5);
             // This should depend on user's option
             if (generatorStr.equals("SLSB(100C)")) {

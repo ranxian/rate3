@@ -15,7 +15,7 @@ import rate.util.HibernateUtil;
  * Time: 下午1:31
  */
 public class BaseTest {
-    protected static final Session session = HibernateUtil.getSession();
+    protected static Session session;
 
     public static Object getExample(String entityName) {
         String className = entityName+"Entity";

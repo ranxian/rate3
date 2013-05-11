@@ -27,7 +27,6 @@ import java.util.*;
 public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
     private GeneralTask generalTask;
     private static final Logger logger = Logger.getLogger(GeneralAnalyzer.class);
-    private static final Session session = HibernateUtil.getSession();
 
     public void setTask(TaskEntity task) throws Exception {
         this.generalTask = new GeneralTask(task);

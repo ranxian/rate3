@@ -19,7 +19,7 @@ import java.util.Map;
  * Time: 下午4:16
  */
 public abstract class AbstractBenchmark {
-    protected final Session session = HibernateUtil.getSession();
+    protected Session session = HibernateUtil.getSession();
 
     protected ViewEntity view = null;
 

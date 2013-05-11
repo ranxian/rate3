@@ -32,15 +32,17 @@ import java.util.List;
 public class RunnerMain {
 
     private static final Logger logger = Logger.getLogger(RunnerMain.class);
-    private static Session session = HibernateUtil.getSession();
+    private static Session session;
     private static TaskEntity task;
     private static BenchmarkEntity benchmark;
     private static AlgorithmVersionEntity algorithmVersion;
     private static AlgorithmEntity algorithm;
 
     public static void setContext(String taskUuid) {
+        session = HibernateUtil.getSession();
         Query query = session.createQuery("from TaskEntity where uuid = :uuid").setParameter("uuid", taskUuid);
         task = (TaskEntity)query.list().get(0);
+        session.close();
         new File(task.getDirPath()).mkdir();
         benchmark = task.getBenchmark();
         algorithmVersion = task.getAlgorithmVersion();
@@ -97,7 +99,7 @@ public class RunnerMain {
                 File logFIle = new File(task.getDirPath() + "/log.txt");
                 logFIle.createNewFile();
                 File engineLogFile = new File(RateConfig.getLogDir() + File.separator + "engine.log");
-                PrintWriter engineLog = new PrintWriter(new FileWriter(engineLogFile), true);
+                PrintWriter engineLog = new PrintWriter(new FileWriter(engineLogFile, true));
                 PrintWriter writer = new PrintWriter(new FileWriter(logFIle));
                 while (true) {
                     String line = reader.readLine();
@@ -137,9 +139,11 @@ public class RunnerMain {
 
             // Update task state
             task.setFinished(HibernateUtil.getCurrentTimestamp());
+            session = HibernateUtil.getSession();
             session.beginTransaction();
             session.update(task);
             session.getTransaction().commit();
+            session.close();
 
             logger.info("Exit");
         }

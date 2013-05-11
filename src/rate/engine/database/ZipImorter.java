@@ -24,7 +24,7 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class ZipImorter {
     private final Logger logger = Logger.getLogger(ZipImorter.class);
-    private final Session session = HibernateUtil.getSession();
+    private Session session = HibernateUtil.getSession();
 
     public void main(String importTag, String type, String zipPath) throws Exception {
         logger.trace("Begin import " + zipPath + " into database");
