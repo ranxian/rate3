@@ -150,16 +150,17 @@ public class GeneralBenchmark extends AbstractBenchmark {
             query.setParameter("clazz", clazz);
             List<SampleEntity> selectedSamples = (List<SampleEntity>)query.list();
 
+            if (selectedSamples.size() < sampleCount) {
+                DebugUtil.debug(clazz.getUuid() + " has no enough samples");
+                continue;
+            }
+
             for (SampleEntity sample : selectedSamples) {
                 if (!uuidTable.containsKey(sample.getUuid()))
                     uuidTable.put(sample.getUuid(), BaseXX.parse(uuidTable.size()+1));
                 enrollMap.put(sample.getUuid(), sample.getFile());
             }
 
-            if (selectedSamples.size() < sampleCount) {
-                DebugUtil.debug(clazz.getUuid() + " has no enough samples");
-                continue;
-            }
             selectedClasses.add(clazz);
             logger.trace(String.format("Add clazz [%s] [%d] of [%d]", clazz.getUuid(), selectedClasses.size(), this.classCount));
 

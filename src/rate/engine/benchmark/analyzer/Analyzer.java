@@ -67,7 +67,7 @@ public abstract class Analyzer {
             }
             i++;
         }
-        fmrPw.println(String.format("%f 0", matchScore));
+        fmrPw.println(String.format("%f 1", matchScore));
         fmrPw.close();
     }
 
