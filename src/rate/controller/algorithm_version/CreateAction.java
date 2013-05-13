@@ -43,8 +43,8 @@ public class CreateAction extends AlgorithmVersionActionBase {
             session.beginTransaction();
             //this.algorithmVersion = new AlgorithmVersionEntity();
             algorithmVersion.setAlgorithm(this.algorithm);
-            int count = ((Long)(session.createQuery("select max(id) from AlgorithmVersionEntity where algorithm=:algorithm").setParameter("algorithm", this.algorithm)
-            .list().get(0))).intValue();
+            int count = (Integer)session.createQuery("select max(id) from AlgorithmVersionEntity where algorithm=:algorithm").setParameter("algorithm", this.algorithm)
+            .list().get(0)+1;
             algorithmVersion.setId(count);
             session.save(algorithmVersion);
 
