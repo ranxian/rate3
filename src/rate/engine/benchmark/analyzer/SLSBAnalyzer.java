@@ -91,6 +91,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
     }
 
     private void fillResult(String inFilePath, String outFilePath) throws Exception {
+       // DebugUtil.debug("Fill " + outFilePath);
         Iterator iterator = hashedResult.keySet().iterator();
 
         BufferedReader reader = new BufferedReader(new FileReader(inFilePath));
@@ -118,11 +119,13 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         }
         reader.close();
         writer.close();
+       // DebugUtil.debug("Filled " + outFilePath);
     }
 
     public void analyzeTotalFMR() throws Exception {
         for (int i = 1; i <= K; i++) {
             for (int j = 1; j <= B4Far; j++) {
+//                DebugUtil.debug(i+" "+j +" " +K);
                 analyzeFMR(slsbTask.getFarResultPathByNum(i, j), slsbTask.getFarResultPathByNum(i, j)+"-result.txt");
             }
             List<Pair<Double, Double>> fmrList = new ArrayList<Pair<Double, Double>>();
@@ -143,7 +146,13 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
                         list.add(scoreList.get(k).getValue());
                     } else {
                         while (true) {
-                            String[] sp = readerList.get(k).readLine().split(" ");
+                            DebugUtil.debug(t+"");
+                            String line = readerList.get(k).readLine();
+                            if (line == null) {
+                                list.add(scoreList.get(k).getValue());
+                                break;
+                            }
+                            String[] sp = line.split(" ");
                             scoreList.set(k, new ImmutablePair<Double, Double>(Double.parseDouble(sp[0]), Double.parseDouble(sp[1])));
                             if (scoreList.get(k).getValue() < t) {
                                 list.add(scoreList.get(k).getValue());
@@ -233,10 +242,15 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
                     list.add(scoreList.get(j).getValue());
                 } else {
                     while (true) {
-                        String[] sp = readerList.get(j).readLine().split(" ");
+                        String line = readerList.get(j).readLine();
+                        if (line == null) {
+                            list.add(scoreList.get(j).getValue());
+                            break;
+                        }
+                        String[] sp = line.split(" ");
                         scoreList.set(j, new ImmutablePair<Double, Double>(Double.parseDouble(sp[0]), Double.parseDouble(sp[1])));
                         if (scoreList.get(j).getKey() >= t) {
-                            list.add(scoreList.get(j).getKey());
+                            list.add(scoreList.get(j).getValue());
                             break;
                         }
                     }

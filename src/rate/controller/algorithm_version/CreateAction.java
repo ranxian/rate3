@@ -4,6 +4,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
@@ -37,14 +38,37 @@ public class CreateAction extends AlgorithmVersionActionBase {
 
     private File matchExe;
 
+    private String description;
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAlgorithmUuid(String uuid) {
+        this.algorithm = (AlgorithmEntity) session
+                .createQuery("from AlgorithmEntity where uuid=:uuid")
+                .setParameter("uuid", uuid)
+                .list().get(0);
+    }
+
 
     public String execute() {
         try {
             session.beginTransaction();
-            //this.algorithmVersion = new AlgorithmVersionEntity();
+            algorithmVersion = new AlgorithmVersionEntity();
+            DebugUtil.debug(this.description);
+            DebugUtil.debug(algorithm.getName());
             algorithmVersion.setAlgorithm(this.algorithm);
-            int count = ((Long)(session.createQuery("select max(id) from AlgorithmVersionEntity where algorithm=:algorithm").setParameter("algorithm", this.algorithm)
-            .list().get(0))).intValue();
+            algorithmVersion.setDescription(this.description);
+            int count = 0;
+            if (session.createQuery("from AlgorithmVersionEntity where algorithm=:algorithm").setParameter("algorithm",algorithm)
+                    .list().isEmpty()) count = 0;
+            else {
+                Query q = session.createQuery("select max(id) from AlgorithmVersionEntity where algorithm=:algorithm")
+                    .setParameter("algorithm", algorithm);
+                count = (Integer)q.list().get(0) + 1;
+            }
+
             algorithmVersion.setId(count);
             session.save(algorithmVersion);
 

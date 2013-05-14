@@ -33,9 +33,9 @@ public class SLSBGeneratorTest extends BaseTest {
         // general
         SLSBBenchmark generator = new SLSBBenchmark();
 
-        generator.setB4Far(100);
-        generator.setB4Frr(100);
-        generator.setClassCount(10);
+        generator.setB4Far(20);
+        generator.setB4Frr(20);
+        generator.setClassCount(20);
         generator.setSampleCount(3);
         benchmark.setGenerator("SLSB");
         benchmark.setType("SLSB");

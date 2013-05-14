@@ -4,22 +4,20 @@
 <table class="table table-hover sortable" id="algorithm-version-list">
     <thead>
     <tr>
-        <th>Version</th>
-        <th>Algorithm</th>
+        <th>Name</th>
         <th>Created</th>
         <th>Description</th>
         <th>#Results</th>
-        <#if isUserSignedIn && currentUser.isVip()><th>for debug use</th></#if>
+        <#if isUserSignedIn && currentUser.isVip()><th>Delete</th></#if>
         <#if benchmark??><th>Run</th></#if>
     </tr>
     </thead>
     <tbody>
-    <@s.iterator value="algorithmVersions">
+    <@s.iterator value="algorithmVersions" var="algorithmVersion">
     <tr>
-        <td><a href="/algorithm_version/show?uuid=${uuid}">${uuidShort}</a></td>
-        <td><a href="/algorithm/show?uuid=${algorithm.uuid}">${algorithm.name}</a></td>
+        <td><a href="/algorithm_version/show?uuid=${uuid}">${readableName}</a></td>
         <td>${created}</td>
-        <td><#if description??>no description<#else>${description}</#if></td>
+        <td><#if !(algorithmVersion.description=="")>${algorithmVersion.description}<#else>No description</#if></td>
         <td><@s.property value="numOfResults" /></td>
         <#if isUserSignedIn && currentUser.isVip()><td><a href="/algorithm_version/delete?uuid=${uuid}">delete</td></#if>
         <#if benchmark??><td><a href="/run?benchmarkUuid=${benchmark.uuid}&algorithmVersionUuid=${uuid}" class="btn btn-small btn-success">Run Now!</a></td></#if>

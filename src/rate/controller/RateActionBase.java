@@ -28,7 +28,7 @@ import java.util.Map;
 public class RateActionBase extends ActionSupport {
 
     private static final Logger logger = Logger.getLogger(RateActionBase.class);
-    protected final Session session = HibernateUtil.getSession();
+    protected Session session = HibernateUtil.getSession();
 
     public void setFlashMsg(String msg) {
         Map session = ActionContext.getContext().getSession();
@@ -54,12 +54,18 @@ public class RateActionBase extends ActionSupport {
     public UserEntity getCurrentUser() {
         Map session = ActionContext.getContext().getSession();
         if (session.get("user-uuid") == null) return null;
-        Query q = HibernateUtil.getSession().createQuery("from UserEntity where uuid=:uuid");
+        Query q = this.session.createQuery("from UserEntity where uuid=:uuid");
 
         q.setParameter("uuid", session.get("user-uuid"));
         List<UserEntity> list = q.list();
         UserEntity user = list.get(0);
         return user;
+    }
+
+
+    public String getActionName() {
+        DebugUtil.debug(ActionContext.getContext().getName());
+        return ActionContext.getContext().getName();
     }
 
     public Object getSessionContent(Object key) {
@@ -157,5 +163,5 @@ public class RateActionBase extends ActionSupport {
 
     protected int numOfPages = -1;
 
-    protected int itemPerPage = 50;
+    protected int itemPerPage = 20;
 }

@@ -19,15 +19,17 @@
 
 <hr />
 
+
+<h3>Usable algorithm versions</h3>
+    <#include "../algorithm_version/table.ftl" />
+<a href="/algorithm_version/bybenchmark?uuid=${benchmark.uuid}">Show All</a>
+
+<hr>
 <h3>Tasks on this Benchmark</h3>
 
 <#include "../task/table.ftl" />
 <a href="/task/bybenchmark?uuid=${benchmark.uuid}">Show All</a>
 
-<hr>
-<h3>Usable algorithm versions</h3>
-<#include "../algorithm_version/table.ftl" />
-<a href="/algorithm_version/bybenchmark?uuid=${benchmark.uuid}">Show All</a>
 
 <div class="ratehr"></div>
 
