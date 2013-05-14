@@ -91,6 +91,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
     }
 
     private void fillResult(String inFilePath, String outFilePath) throws Exception {
+       // DebugUtil.debug("Fill " + outFilePath);
         Iterator iterator = hashedResult.keySet().iterator();
 
         BufferedReader reader = new BufferedReader(new FileReader(inFilePath));
@@ -118,11 +119,13 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         }
         reader.close();
         writer.close();
+       // DebugUtil.debug("Filled " + outFilePath);
     }
 
     public void analyzeTotalFMR() throws Exception {
         for (int i = 1; i <= K; i++) {
             for (int j = 1; j <= B4Far; j++) {
+//                DebugUtil.debug(i+" "+j +" " +K);
                 analyzeFMR(slsbTask.getFarResultPathByNum(i, j), slsbTask.getFarResultPathByNum(i, j)+"-result.txt");
             }
             List<Pair<Double, Double>> fmrList = new ArrayList<Pair<Double, Double>>();
@@ -135,18 +138,24 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
                 scoreList.add(new ImmutablePair<Double, Double>(Double.parseDouble(line.split(" ")[0]), Double.parseDouble(line.split(" ")[1])));
             }
             double t = 1.0;
-            for (int j = 0; j < 1000; j++) {
+            for (int j = 0; j <= 1000; j++) {
                 List<Double> list = new ArrayList<Double>();
 
                 for (int k = 0; k < scoreList.size(); k++) {
-                    if (scoreList.get(k).getValue() <= t || scoreList.get(k).getValue() == 0.0) {
-                        list.add(scoreList.get(k).getKey());
+                    if (scoreList.get(k).getKey() < t) {
+                        list.add(scoreList.get(k).getValue());
                     } else {
                         while (true) {
-                            String[] sp = readerList.get(k).readLine().split(" ");
+                            DebugUtil.debug(t+"");
+                            String line = readerList.get(k).readLine();
+                            if (line == null) {
+                                list.add(scoreList.get(k).getValue());
+                                break;
+                            }
+                            String[] sp = line.split(" ");
                             scoreList.set(k, new ImmutablePair<Double, Double>(Double.parseDouble(sp[0]), Double.parseDouble(sp[1])));
-                            if (scoreList.get(k).getValue() <= t || scoreList.get(k).getValue() == 0.0) {
-                                list.add(scoreList.get(k).getKey());
+                            if (scoreList.get(k).getValue() < t) {
+                                list.add(scoreList.get(k).getValue());
                                 break;
                             }
                         }
@@ -157,14 +166,13 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
                 Collections.sort(list);
                 int lower = (int)(alpha/2*list.size());
                 int higher = (int)((1-alpha/2)*list.size());
-                if (lower < 0) lower = 0;
                 if (higher >= list.size()) higher = list.size()-1;
                 fmrList.add(new ImmutablePair<Double, Double>(list.get(lower), list.get(higher)));
             }
             t = 1.0;
 
             PrintWriter writer = new PrintWriter(new FileWriter(slsbTask.getFarResultPath(i)));
-            for (int j = 0; j < 1000; j++) {
+            for (int j = 0; j <= 1000; j++) {
                 writer.println(String.format("%.3f %s %s", t, fmrList.get(j).getKey(), fmrList.get(j).getValue()));
                 t -= 0.001;
             }
@@ -226,18 +234,23 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
 
         double t = 0.0;
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i <= 1000; i++) {
             List<Double> list = new ArrayList<Double>();
             for (int j = 0; j < scoreList.size(); j++) {
 
-                if (scoreList.get(j).getValue() > t || scoreList.get(j).getValue() == 0.0) {
-                    list.add(scoreList.get(j).getKey());
+                if (scoreList.get(j).getKey() >= t) {
+                    list.add(scoreList.get(j).getValue());
                 } else {
                     while (true) {
-                        String[] sp = readerList.get(j).readLine().split(" ");
+                        String line = readerList.get(j).readLine();
+                        if (line == null) {
+                            list.add(scoreList.get(j).getValue());
+                            break;
+                        }
+                        String[] sp = line.split(" ");
                         scoreList.set(j, new ImmutablePair<Double, Double>(Double.parseDouble(sp[0]), Double.parseDouble(sp[1])));
-                        if (scoreList.get(j).getValue() > t || scoreList.get(j).getValue() == 0.0) {
-                            list.add(scoreList.get(j).getKey());
+                        if (scoreList.get(j).getKey() >= t) {
+                            list.add(scoreList.get(j).getValue());
                             break;
                         }
                     }
@@ -248,7 +261,6 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
             Collections.sort(list);
             int lower = (int)(alpha/2*list.size());
             int higher = (int)((1-alpha/2)*list.size());
-            if (lower < 0) lower = 0;
             if (higher >= list.size()) higher = list.size()-1;
             fnmrList.add(new ImmutablePair<Double, Double>(list.get(lower), list.get(higher)));
         }
@@ -256,7 +268,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         t = 0.0;
 
         PrintWriter writer = new PrintWriter(new FileWriter(slsbTask.getFrrResultPath()));
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i <= 1000; i++) {
             writer.println(String.format("%.3f %s %s", t, fnmrList.get(i).getKey(), fnmrList.get(i).getValue()));
             t += 0.001;
         }

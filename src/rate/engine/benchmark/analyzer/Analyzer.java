@@ -2,6 +2,7 @@ package rate.engine.benchmark.analyzer;
 
 import org.apache.commons.lang.StringUtils;
 import rate.model.TaskEntity;
+import rate.util.DebugUtil;
 import rate.util.RateConfig;
 
 import java.io.*;
@@ -16,6 +17,7 @@ import java.util.Scanner;
  */
 public abstract class Analyzer {
     protected void analyzeFMR(String imposterResultPath, String outputPath) throws Exception {
+        DebugUtil.debug("analyze fmr " + outputPath);
         BufferedReader imposterReader = new BufferedReader(new FileReader(imposterResultPath));
         File fmrFile = new File(outputPath);
         fmrFile.createNewFile();
@@ -67,7 +69,7 @@ public abstract class Analyzer {
             }
             i++;
         }
-        fmrPw.println(String.format("%f 0", matchScore));
+        fmrPw.println(String.format("%f 1", matchScore));
         fmrPw.close();
     }
 

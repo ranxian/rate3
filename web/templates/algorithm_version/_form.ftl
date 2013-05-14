@@ -1,7 +1,7 @@
 <div class="control-group">
     <label class="control-label">Description</label>
     <div class="controls">
-    <@s.textarea name="algorithmVersion.description" ></@s.textarea>
+    <@s.textarea name="description" ></@s.textarea>
     </div>
 </div>
 
