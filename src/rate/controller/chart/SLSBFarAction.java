@@ -36,8 +36,8 @@ public class SLSBFarAction extends TaskChartActionBase  {
             double x = Double.parseDouble(sp[0]);
             double l = Double.parseDouble(sp[1]);
             double u = Double.parseDouble(sp[2]);
-            lower.add(x, l);
-            upper.add(x, u);
+            lower.add(l, x);
+            upper.add(u, x);
         }
         reader.close();
 
@@ -45,17 +45,7 @@ public class SLSBFarAction extends TaskChartActionBase  {
         xySeriesCollection.addSeries(upper);
 
         chart = ChartFactory.createXYLineChart(
-                "", // title
-                "Ratio", // x
-                "Threshold", // y
-                xySeriesCollection,
-                PlotOrientation.HORIZONTAL, true,
-                true,
-                false
-        );
-
-        chart = ChartFactory.createXYLineChart(
-                "", // title
+                "FMR", // title
                 "Ratio", // x
                 "Threshold", // y
                 xySeriesCollection,

@@ -103,8 +103,10 @@ public class GeneralBenchmark extends AbstractBenchmark {
         generateInterClazz(writer, selectedMap);
         writer.close();
 
-        benchmark.setDescription(String.format("Num of classes: %d, num of samples in each class: %d, num of genuine attempts %d, num of imposter attempts %d",
+        if (benchmark.getDescription() == null || benchmark.getDescription() == "") {
+            benchmark.setDescription(String.format("Num of classes: %d, num of samples in each class: %d, num of genuine attempts %d, num of imposter attempts %d",
                 this.classCount, this.sampleCount, totalGenuineCount, totalImposterCount));
+        }
 
         return benchmark;
     }

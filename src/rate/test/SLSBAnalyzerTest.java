@@ -18,12 +18,12 @@ public class SLSBAnalyzerTest extends BaseTest {
         session = HibernateUtil.getSession();
         SLSBAnalyzer slsbAnalyzer = new SLSBAnalyzer();
         TaskEntity task = (TaskEntity)session.createQuery("from TaskEntity where uuid=:uuid")
-                .setParameter("uuid", "095ef60d-a058-4f21-92a4-6e98d399ea88")
+                .setParameter("uuid", "82dc7368-f698-40a2-8255-e09383a795bf")
                 .list().get(0);
         SLSBTask slsbTask = new SLSBTask(task);
         DebugUtil.debug(slsbTask.getBenchmark().dirPath());
         slsbAnalyzer.setTask(task);
-        slsbAnalyzer.setAlpha(0.1);
+        slsbAnalyzer.setAlpha(0.05);
         slsbAnalyzer.analyze();
         task.setFinished(HibernateUtil.getCurrentTimestamp());
         session.beginTransaction();

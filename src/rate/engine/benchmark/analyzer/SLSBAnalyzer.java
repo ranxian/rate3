@@ -28,6 +28,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
     private SLSBTask slsbTask;
     private SLSBBenchmark benchmark;
     private HashMap hashedResult = new HashMap();
+    private HashMap<String, String> uuidTable = new HashMap();
 
     public void setAlpha(double alpha) {
         this.alpha = alpha;
@@ -46,6 +47,22 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         B4Far = benchmark.getB4Far();
         B4Frr = benchmark.getB4Frr();
         K = benchmark.getK();
+    }
+
+    public void prepairUuidTable() throws Exception {
+        BufferedReader reader = new BufferedReader(new FileReader(slsbTask.getBenchmark().getUuidTableFilePath()));
+
+        while (true) {
+            String line = reader.readLine();
+            if (line == null) break;
+
+            String[] sp = line.split(" ");
+            uuidTable.put(sp[1], sp[0]);
+        }
+
+        DebugUtil.debug(uuidTable.size()+"");
+
+        reader.close();
     }
 
     public void analyze() throws Exception {
@@ -143,35 +160,42 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         for (int i = 1; i <= K; i++) {
             for (int j = 1; j <= B4Far; j++) {
 //                DebugUtil.debug(i+" "+j +" " +K);
-                analyzeFMR(slsbTask.getFarResultPathByNum(i, j), slsbTask.getFarResultPathByNum(i, j)+"-result.txt");
+                analyzeFMR(slsbTask.getFarResultPathByNum(i, j), slsbTask.getFarResultPathByNum(i, j) + "-result.txt");
             }
             List<Pair<Double, Double>> fmrList = new ArrayList<Pair<Double, Double>>();
             List<BufferedReader> readerList = new LinkedList<BufferedReader>();
             // scoreList, [<阈值，分数>]
             List<Pair<Double, Double>> scoreList = new ArrayList<Pair<Double, Double>>();
+            List<Pair<Double, Double>> scoreList2 = new ArrayList<Pair<Double, Double>>();
+
             for (int j = 0; j < B4Far; j++) {
                 readerList.add(new BufferedReader(new FileReader(slsbTask.getFarResultPathByNum(i, j+1)+"-result.txt")));
                 String line = readerList.get(j).readLine();
                 scoreList.add(new ImmutablePair<Double, Double>(Double.parseDouble(line.split(" ")[0]), Double.parseDouble(line.split(" ")[1])));
+                line = readerList.get(j).readLine();
+                scoreList2.add(new ImmutablePair<Double, Double>(Double.parseDouble(line.split(" ")[0]), Double.parseDouble(line.split(" ")[1])));
             }
-            double t = 1.0;
+            double t = 0.0;
             for (int j = 0; j <= 1000; j++) {
                 List<Double> list = new ArrayList<Double>();
 
                 for (int k = 0; k < scoreList.size(); k++) {
-                    if (scoreList.get(k).getKey() < t) {
+                    if (scoreList2.get(k).getKey() > t) {
                         list.add(scoreList.get(k).getValue());
                     } else {
                         while (true) {
-                            DebugUtil.debug(t+"");
                             String line = readerList.get(k).readLine();
+
                             if (line == null) {
-                                list.add(scoreList.get(k).getValue());
+                                list.add(scoreList2.get(k).getValue());
                                 break;
                             }
+
                             String[] sp = line.split(" ");
-                            scoreList.set(k, new ImmutablePair<Double, Double>(Double.parseDouble(sp[0]), Double.parseDouble(sp[1])));
-                            if (scoreList.get(k).getValue() < t) {
+                            scoreList.set(k, scoreList2.get(k));
+                            scoreList2.set(k, new ImmutablePair<Double, Double>(Double.parseDouble(sp[0]), Double.parseDouble(sp[1])));
+
+                            if (scoreList2.get(k).getKey() > t) {
                                 list.add(scoreList.get(k).getValue());
                                 break;
                             }
@@ -179,19 +203,19 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
                     }
                 }
 
-                t -= 0.001;
+                t += 0.001;
                 Collections.sort(list);
                 int lower = (int)(alpha/2*list.size());
                 int higher = (int)((1-alpha/2)*list.size());
                 if (higher >= list.size()) higher = list.size()-1;
                 fmrList.add(new ImmutablePair<Double, Double>(list.get(lower), list.get(higher)));
             }
-            t = 1.0;
+            t = 0.0;
 
             PrintWriter writer = new PrintWriter(new FileWriter(slsbTask.getFarResultPath(i)));
-            for (int j = 0; j <= 1000; j++) {
+            for (int j = 0; j < fmrList.size(); j++) {
                 writer.println(String.format("%.3f %s %s", t, fmrList.get(j).getKey(), fmrList.get(j).getValue()));
-                t -= 0.001;
+                t += 0.001;
             }
 
             writer.close();
@@ -206,13 +230,12 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
             readerList.add(new BufferedReader(new FileReader(slsbTask.getFarResultPath(i))));
         }
 
-        double t = 1.0;
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i <= 1000; i++) {
             double  lowBound = 0.0;
             double highBound = 0.0;
             for (BufferedReader reader : readerList) {
                 String[] sp = reader.readLine().split(" ");
-                lowBound += Double.parseDouble(sp[1]);
+                lowBound  += Double.parseDouble(sp[1]);
                 highBound += Double.parseDouble(sp[2]);
             }
             lowBound /= K;
@@ -225,10 +248,10 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         }
 
         PrintWriter writer = new PrintWriter(new FileWriter(slsbTask.getFarResultPath()));
-        t = 1.0;
-        for (int i = 0; i < 1000; i++) {
+        double t = 0.0;
+        for (int i = 0; i <= 1000; i++) {
             writer.println(String.format("%.3f %s %s", t, fmrList.get(i).getKey(), fmrList.get(i).getValue()));
-            t -= 0.001;
+            t += 0.001;
         }
         writer.close();
     }
@@ -238,6 +261,8 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         List<BufferedReader> readerList = new LinkedList<BufferedReader>();
         // scoreList, [<阈值，分数>]
         List<Pair<Double, Double>> scoreList = new ArrayList<Pair<Double, Double>>();
+        List<Pair<Double, Double>> scoreList2 = new ArrayList<Pair<Double, Double>>();
+
 
         for (int i = 1; i <= B4Frr; i++) {
             analyzeFNMR(slsbTask.getFrrResultPathByNum(i), slsbTask.getFrrResultPathByNum(i)+"-result.txt");
@@ -247,6 +272,8 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
             readerList.add(new BufferedReader(new FileReader(slsbTask.getFrrResultPathByNum(i+1)+"-result.txt")));
             String line = readerList.get(i).readLine();
             scoreList.add(new ImmutablePair<Double, Double>(Double.parseDouble(line.split(" ")[0]), Double.parseDouble(line.split(" ")[1])));
+            line = readerList.get(i).readLine();
+            scoreList2.add(new ImmutablePair<Double, Double>(Double.parseDouble(line.split(" ")[0]), Double.parseDouble(line.split(" ")[1])));
         }
 
         double t = 0.0;
@@ -255,18 +282,19 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
             List<Double> list = new ArrayList<Double>();
             for (int j = 0; j < scoreList.size(); j++) {
 
-                if (scoreList.get(j).getKey() >= t) {
+                if (scoreList2.get(j).getKey() > t) {
                     list.add(scoreList.get(j).getValue());
                 } else {
                     while (true) {
                         String line = readerList.get(j).readLine();
                         if (line == null) {
-                            list.add(scoreList.get(j).getValue());
+                            list.add(scoreList2.get(j).getValue());
                             break;
                         }
                         String[] sp = line.split(" ");
-                        scoreList.set(j, new ImmutablePair<Double, Double>(Double.parseDouble(sp[0]), Double.parseDouble(sp[1])));
-                        if (scoreList.get(j).getKey() >= t) {
+                        scoreList.set(j, scoreList2.get(j));
+                        scoreList2.set(j, new ImmutablePair<Double, Double>(Double.parseDouble(sp[0]), Double.parseDouble(sp[1])));
+                        if (scoreList2.get(j).getKey() > t) {
                             list.add(scoreList.get(j).getValue());
                             break;
                         }
@@ -285,7 +313,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         t = 0.0;
 
         PrintWriter writer = new PrintWriter(new FileWriter(slsbTask.getFrrResultPath()));
-        for (int i = 0; i <= 1000; i++) {
+        for (int i = 0; i < fnmrList.size(); i++) {
             writer.println(String.format("%.3f %s %s", t, fnmrList.get(i).getKey(), fnmrList.get(i).getValue()));
             t += 0.001;
         }

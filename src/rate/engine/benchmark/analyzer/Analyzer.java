@@ -26,6 +26,7 @@ public abstract class Analyzer {
         int countOfLines = RateConfig.getCountOfLines(imposterResultPath);
         int i=0;
         double p=-1, matchScore=0;
+        fmrPw.println("0 1");
         while (true) {
             String line = imposterReader.readLine();
             if (line==null) break;
@@ -42,6 +43,7 @@ public abstract class Analyzer {
             i++;
         }
         fmrPw.println(String.format("%f 0", matchScore));
+        fmrPw.println("1 0");
         fmrPw.close();
     }
 
@@ -54,6 +56,7 @@ public abstract class Analyzer {
         int countOfLines = RateConfig.getCountOfLines(genuinResultPath);
         int i=0;
         double p=-1, matchScore=0;
+        fmrPw.println("0 0");
         while (true) {
             String line = genuineReader.readLine();
             if (line==null) break;
@@ -70,6 +73,7 @@ public abstract class Analyzer {
             i++;
         }
         fmrPw.println(String.format("%f 1", matchScore));
+        fmrPw.println("1 1");
         fmrPw.close();
     }
 

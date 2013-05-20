@@ -90,7 +90,7 @@ public class SLSBTask extends TaskResult {
         frrResultDir = FilenameUtils.concat(task.getDirPath(), "FRR");
         taskStateFilePath = FilenameUtils.concat(task.getDirPath(), "state.txt");
         resultFilePath = FilenameUtils.concat(task.getDirPath(), "result.txt");
-        bxxResultFilePath = FilenameUtils.concat(task.getDirPath(), "match_result_bxx.unsorted.txt");
+        bxxResultFilePath = FilenameUtils.concat(task.getDirPath(), "match_result_bxx.txt");
         stderrPath = FilenameUtils.concat(task.getDirPath(), "stderr.txt");
         stdoutPath = FilenameUtils.concat(task.getDirPath(), "stdout.txt");
         purfPath = FilenameUtils.concat(task.getDirPath(), "purf.txt") ;

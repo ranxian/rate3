@@ -94,7 +94,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
 
         printUuidTable();
 
-        benchmark.setDescription("This is a benchmark generate by the Second Level Partition Subset Bootstrap method");
+        benchmark.setDescription(String.format("Class count: %d, Sample count: %d, B4FMR: %d, B4FNMR: %d", getClassCount(), getSampleCount(), getB4Far(), getB4Frr()));
 
         return benchmark;
     }

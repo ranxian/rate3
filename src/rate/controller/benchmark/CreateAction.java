@@ -1,12 +1,10 @@
 package rate.controller.benchmark;
 
-import rate.engine.benchmark.CustomBenchmark;
-import rate.engine.benchmark.GeneralBenchmark;
-import rate.engine.benchmark.OneClassImposterBenchmark;
-import rate.engine.benchmark.SLSBBenchmark;
+import rate.engine.benchmark.*;
 import rate.model.BenchmarkEntity;
 import rate.model.ViewEntity;
 import rate.util.DebugUtil;
+import rate.util.HibernateUtil;
 
 /**
  * Created by XianRan
@@ -44,57 +42,79 @@ public class CreateAction extends BenchmarkActionBase {
         benchmark.setView(view);
     }
 
-    public void setBenchmarkType() {
-        String generatorStr = benchmark.getGenerator();
-        if (generatorStr.matches("(SMALL)|(MEDIUM)|((VERY_)?LARGE)|.*Imposter")) {
-            benchmark.setType("General");
-        } else if (generatorStr.equals("SLSB(100C)") || generatorStr.equals("SLSB(1000C)")) {
-            benchmark.setType("SLSB");
-        } else {
-            benchmark.setType("Custom");
-        }
+    int B4far;
+    int B4frr;
+
+    public int getB4far() {
+        return B4far;
     }
+
+    public void setB4far(int b4far) {
+        B4far = b4far;
+    }
+
+    public int getB4frr() {
+        return B4frr;
+    }
+
+    public void setB4frr(int b4frr) {
+        B4frr = b4frr;
+    }
+
+    public int getClassCount() {
+        return classCount;
+    }
+
+    public void setClassCount(int classCount) {
+        this.classCount = classCount;
+    }
+
+    public int getSampleCount() {
+        return sampleCount;
+    }
+
+    public void setSampleCount(int sampleCount) {
+        this.sampleCount = sampleCount;
+    }
+
+    int classCount;
+    int sampleCount;
+
 
     public String execute() throws Exception {
         session.beginTransaction();
-        setBenchmarkType();
+        benchmark.setType(benchmark.getGenerator());
         session.save(benchmark);
+        session.getTransaction().commit();
+        session.close();
 
-        String generatorStr = benchmark.getGenerator();
-        if (generatorStr.matches("(SMALL)|(MEDIUM)|((VERY_)?LARGE)")) {
+        DebugUtil.debug(benchmark.getGenerator());
+
+        if (benchmark.getGenerator().equals("General")) {
             GeneralBenchmark generalBenchmark = new GeneralBenchmark();
-
+            generalBenchmark.setClassCount(classCount);
+            generalBenchmark.setSampleCount(sampleCount);
             generalBenchmark.setBenchmark(benchmark);
-            // This should depend on user's option
-            generalBenchmark.setScale(generatorStr);
             benchmark = generalBenchmark.generate();
-        } else if (generatorStr.equals("OneClassImposter")) {
-            OneClassImposterBenchmark generator = new OneClassImposterBenchmark();
-            generator.setBenchmark(benchmark);
-            benchmark = generator.generate();
-        } else if (generatorStr.equals("SLSB(100C)") || generatorStr.equals("SLSB(1000C)")) {
-            SLSBBenchmark generator = new SLSBBenchmark();
-            generator.setBenchmark(benchmark);
-            generator.setB4Far(100);
-            generator.setB4Frr(100);
-            generator.setAlpha(0.05);
-            generator.setSampleCount(5);
-            // This should depend on user's option
-            if (generatorStr.equals("SLSB(100C)")) {
-                generator.setClassCount(100);
-            } else {
-                generator.setClassCount(1000);
-            }
-            benchmark = generator.generate();
-        } else if (generatorStr.equals("Custom")) {
-            CustomBenchmark generator = new CustomBenchmark();
-            generator.setBenchmark(benchmark);
-            generator.setContent(content);
-            benchmark = generator.generate();
+        }  else if (benchmark.getGenerator().equals("SLSB")) {
+            SLSBBenchmark slsbBenchmark = new SLSBBenchmark();
+            slsbBenchmark.setBenchmark(benchmark);
+            slsbBenchmark.setClassCount(classCount);
+            slsbBenchmark.setSampleCount(sampleCount);
+            slsbBenchmark.setB4Frr(this.B4frr);
+            slsbBenchmark.setB4Far(this.B4far);
+            benchmark = slsbBenchmark.generate();
+        }  else if (benchmark.getGenerator().equals("Custom")) {
+            CustomBenchmark customBenchmark = new CustomBenchmark();
+            customBenchmark.setBenchmark(benchmark);
+            customBenchmark.setContent(content);
+            benchmark = customBenchmark.generate();
         } else {
             return ERROR;
         }
 
+        session = HibernateUtil.getSession();
+        session.beginTransaction();
         DebugUtil.debug(benchmark.getType());
         session.update(benchmark);
         session.getTransaction().commit();
