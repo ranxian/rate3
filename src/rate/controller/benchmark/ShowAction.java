@@ -2,6 +2,7 @@ package rate.controller.benchmark;
 
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
+import rate.model.UserAlgorithmEntity;
 import rate.util.DebugUtil;
 
 import java.util.ArrayList;
@@ -22,19 +23,19 @@ public class ShowAction extends BenchmarkActionBase {
         List<AlgorithmVersionEntity> algorithmVersions = new ArrayList<AlgorithmVersionEntity>();
         List<AlgorithmVersionEntity> allAlgorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.type=:type order by created desc")
                 .setParameter("type", benchmark.getView().getType())
-                .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
 
         if (!getIsUserSignedIn()) return algorithmVersions;
         for (AlgorithmVersionEntity v : allAlgorithmVersions) {
             AlgorithmEntity a = v.getAlgorithm();
 
-            if (a.getAuthor().equals(getCurrentUser())) {
+            if (a.getAuthor().getUuid().equals(getCurrentUser().getUuid())) {
                 algorithmVersions.add(v);
             }
         }
 
-        return algorithmVersions;
+        int cnt = algorithmVersions.size() <= itemPerPage ? algorithmVersions.size() : itemPerPage;
+        return algorithmVersions.subList(0, cnt);
     }
 
     public String execute() {

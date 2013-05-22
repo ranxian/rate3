@@ -101,7 +101,7 @@ public class GeneralAnalyzer extends Analyzer implements Comparator<String> {
         for (String line: imposterList) {
             imposterPw.println(line);
         }
-        for (int i = imposterList.size() - 1; i >= imposterList.size() - 20 && i >= 1; i--) {
+        for (int i = imposterList.size() - 1; i >= imposterList.size() - 20 && i >= 0; i--) {
             revImposterPw.println(imposterList.get(i));
         }
         genuinePw.close();

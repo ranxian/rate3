@@ -12,6 +12,8 @@
     </#if>
 
 </h1>
+<strong>Algorithm: </strong><a href="/algorithmVersion/show?uuid=${task.algorithmVersion.uuid}" class="btn">${task.algorithmVersion.readableName}</a>
+<strong>Benchmark: </strong><a href="/benchmark/show?uuid=${task.benchmark.uuid}" class="btn">${task.benchmark.name}</a>
 
 <div class="result-box">
     <div class="statics">
@@ -27,8 +29,6 @@
     <img src="/chart/roc?taskUuid=${task.uuid}" />
 
 </div>
-<strong>Algorithm: </strong><a href="$/algorithmVersion/show?uuid={task.algorithmVersion.uuid}" class="btn">${task.algorithmVersion.readableName}</a>
-<strong>Benchmark: </strong><a href="/benchmark/show?uuid=${task.benchmark.uuid}" class="btn">${task.benchmark.name}</a>
 <hr>
 <h1 class="title">Bad Result:</h1>
 <table class="table table-bordered">

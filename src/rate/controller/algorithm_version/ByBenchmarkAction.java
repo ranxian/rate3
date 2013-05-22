@@ -11,6 +11,7 @@ import rate.model.BenchmarkEntity;
 import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -49,19 +50,22 @@ public class ByBenchmarkAction extends RateActionBase {
     public String execute() throws Exception {
         List<AlgorithmVersionEntity> allAlgorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.type=:type order by created desc")
                 .setParameter("type", benchmark.getView().getType())
-                .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
+        algorithmVersions = new ArrayList<AlgorithmVersionEntity>();
 
+        int cnt = 0;
         for (AlgorithmVersionEntity v : allAlgorithmVersions) {
+
             AlgorithmEntity a = v.getAlgorithm();
-            if (a.getAuthor().equals(getCurrentUser())) {
-                algorithmVersions.add(v);
+            if (a.getAuthor().getUuid().equals(getCurrentUser().getUuid())) {
+                cnt+=1;
+                if (cnt >= getFirstResult())
+                    algorithmVersions.add(v);
             }
         }
 
-        setNumOfItems((Long) session.createQuery("select count(*) from AlgorithmVersionEntity where algorithm.type=:type")
-                .setParameter("type", benchmark.getView().getType())
-                .list().get(0));
+        Integer icnt = new Integer(cnt);
+        setNumOfItems(icnt.longValue());
         return SUCCESS;
     }
 

@@ -19,11 +19,11 @@ public class ShowAction extends RateActionBase {
         if (!getIsUserSignedIn()) {
             return "eLogin";
         }
-        if (task.getAlgorithmVersion().getAlgorithm().getAuthor().getUuid().equals(getCurrentUser().getUuid()) || getCurrentUser().isVip()) {
-
-        } else {
-            return "eNotVip";
-        }
+//        if (task.getAlgorithmVersion().getAlgorithm().getAuthor().getUuid().equals(getCurrentUser().getUuid()) || getCurrentUser().isVip()) {
+//
+//        } else {
+//            return "eNotVip";
+//        }
         if (task.getBenchmark().getType().equals("SLSB")) {
             slsbTask = new SLSBTask(task);
             return "SLSB";
