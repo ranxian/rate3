@@ -34,6 +34,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
     }
 
     public void setTask(TaskEntity task) throws Exception {
+        logger.trace("setting task");
         this.slsbTask = new SLSBTask(task);
         DebugUtil.debug(task.getDirPath());
         this.B4Frr = slsbTask.getB4Frr();
@@ -48,17 +49,31 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
     }
 
     public void analyze() throws Exception {
-        hashResult();
+        try {
+            logger.trace("hash result");
+            hashResult();
 
-        calcFRRbenchmark();
+            logger.trace("calc frr benchmark");
+            calcFRRbenchmark();
 
-        calcFarBenchmark();
+            logger.trace("calc far benchmark");
 
-        analyzeTotalFMR();
+            calcFarBenchmark();
 
-        analyzeTotalFNMR();
+            logger.trace("analyze total fmr");
 
-        analyzeTotalERR();
+            analyzeTotalFMR();
+
+            logger.trace("analyze total fnmr");
+
+            analyzeTotalFNMR();
+
+            logger.trace("analyze total err");
+
+            analyzeTotalERR();
+        } catch (Exception e) {
+            logger.trace(e.getMessage());
+        }
     }
 
     private void calcFRRbenchmark() throws Exception {
@@ -91,6 +106,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
     }
 
     private void fillResult(String inFilePath, String outFilePath) throws Exception {
+        logger.debug("Fill result " + outFilePath + " from" + inFilePath);
         Iterator iterator = hashedResult.keySet().iterator();
 
         BufferedReader reader = new BufferedReader(new FileReader(inFilePath));
@@ -98,8 +114,12 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
 
         List<String> list = new ArrayList<String>();
         Set ignoreSet = new HashSet();
+        logger.debug("benchmark is " + (reader.ready() ? "ready" : "not ready"));
+        if (!reader.ready()) return;
         while (true) {
+            //logger.debug("reading line");
             String line = reader.readLine();
+            //logger.debug("line readed");
             if (line == null) break;
             String[] sp = line.split(" ");
             if (hashedResult.containsKey(sp[0]+sp[1])) {
@@ -107,7 +127,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
                 list.add(sp[0] + " " + sp[1] + " " + score);
             } else {
                 ignoreSet.add(sp[0]+sp[1]);
-                DebugUtil.debug(sp[0] + " matches " + sp[1] + " not found");
+                // logger.debug(sp[0] + " matches " + sp[1] + " not found");
             }
         }
 
@@ -118,6 +138,7 @@ public class SLSBAnalyzer extends Analyzer implements Comparator<String> {
         }
         reader.close();
         writer.close();
+        logger.trace("Successully fill result");
     }
 
     public void analyzeTotalFMR() throws Exception {

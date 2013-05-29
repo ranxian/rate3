@@ -166,7 +166,7 @@ public class AlgorithmVersionEntity {
 
     @Transient
     public String getReadableName() {
-        return algorithm.getName() + "-" + id;
+        return algorithm.getName() + "(" + id + ")";
     }
     private void setReadableName(String nonsense) { }
 }

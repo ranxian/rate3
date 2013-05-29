@@ -138,6 +138,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
             for (int j : set) {
                 selectedThisTurn.add(selectedMap.get(j));
             }
+            DebugUtil.debug("Bootstrap " + i + set.toString());
             generateInnerClazz(pw, selectedThisTurn);
             pw.close();
         }
@@ -151,7 +152,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
     public void generateFarBenchmark(PrintWriter generalPw) throws Exception {
         int classCount = selectedMap.size();
         Set<Pair<Integer, Integer>> generalSelectedSet = new HashSet<Pair<Integer, Integer>>();
-        for (int i = 1; i <= K-1; i++) {  // Generate S[1], S[2], ..., S[K]
+        for (int i = 1; i <= K; i++) {  // Generate S[1], S[2], ..., S[K]
             HashSet<Pair<Integer, Integer>> hashSet = new HashSet<Pair<Integer, Integer>>();
             int modN;
             // 见论文中对划分子集的描述
@@ -179,6 +180,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
                     for (int k = j + 1; k <= classCount; k++) {
                         if ((j+k) % classCount == modN) {
                             hashSet.add(new ImmutablePair<Integer, Integer>(j, k));
+                           // generalSelectedSet.add(new ImmutablePair<Integer, Integer>(j, k));
                         }
                     }
                 }
@@ -192,15 +194,17 @@ public class SLSBBenchmark extends GeneralBenchmark {
                 for (int k = 1; k <= list.size(); k++) {
                     int index = random.nextInt(list.size());
                     innerSet.add(list.get(index));
+
                     generalSelectedSet.add(list.get(index));
                 }
+                DebugUtil.debug("Bootstrap " + j + ":" + innerSet.toString());
                 printFarBenchmark(innerSet, pw);
                 pw.close();
             }
 
         }
 
-//        printFarBenchmark(generalSelectedSet, generalPw);
+        printFarBenchmark(generalSelectedSet, generalPw);
     }
 
     private void printFarBenchmark(Set<Pair<Integer, Integer>> set, PrintWriter pw) throws Exception {

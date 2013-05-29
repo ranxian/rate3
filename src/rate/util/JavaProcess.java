@@ -67,10 +67,10 @@ public class JavaProcess {
 
         Process process = builder.start();
 
-        logger.trace("process started, waiting");
-        process.waitFor();
-        logger.trace("process finished");
-        logger.debug("Process return: " + process.exitValue());
+//        logger.trace("process started, waiting");
+//        process.waitFor();
+//        logger.trace("process finished");
+//        logger.debug("Process return: " + process.exitValue());
 
         return 0;
     }
