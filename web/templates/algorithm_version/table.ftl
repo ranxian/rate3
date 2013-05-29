@@ -4,7 +4,11 @@
 <table class="table table-hover sortable" id="algorithm-version-list">
     <thead>
     <tr>
+<<<<<<< HEAD
         <th>Algorithm</th>
+=======
+        <th>Name</th>
+>>>>>>> ce8bb73eb07bd32f49fd80898773e6506306a2dd
         <th>Created</th>
         <th>Description</th>
         <th>#Results</th>
@@ -13,11 +17,15 @@
     </tr>
     </thead>
     <tbody>
-    <@s.iterator value="algorithmVersions">
+    <@s.iterator value="algorithmVersions" var="algorithmVersion">
     <tr>
+<<<<<<< HEAD
         <td><strong><a href="/algorithm_version/show?uuid=${uuid}">${readableName}</a></strong></td>
+=======
+        <td><a href="/algorithm_version/show?uuid=${uuid}">${readableName}</a></td>
+>>>>>>> ce8bb73eb07bd32f49fd80898773e6506306a2dd
         <td>${created}</td>
-        <td><#if description??>no description<#else>${description}</#if></td>
+        <td><#if !(algorithmVersion.description=="")>${algorithmVersion.description}<#else>No description</#if></td>
         <td><@s.property value="numOfResults" /></td>
         <#if isUserSignedIn && currentUser.isVip()><td><a href="/algorithm_version/delete?uuid=${uuid}">delete</td></#if>
         <#if benchmark??><td><a href="/run?benchmarkUuid=${benchmark.uuid}&algorithmVersionUuid=${uuid}" class="btn btn-small btn-success">Run Now!</a></td></#if>

@@ -36,8 +36,8 @@ public class GeneralGeneratortest {
         benchmark.setType("General");
         // general
         GeneralBenchmark generator = new GeneralBenchmark();
-        generator.setClassCount(1000);
-        generator.setSampleCount(5);
+        generator.setClassCount(20);
+        generator.setSampleCount(3);
         benchmark.setGenerator("General");
 
         session.beginTransaction();

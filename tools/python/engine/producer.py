@@ -439,5 +439,6 @@ class RateProducer:
             ch.start_consuming()
         ch.queue_delete(queue=self.match_result_qname)
 
+        self.match_result_file.close()
         matchresult2bxx(self.benchmark_file_dir, self.result_file_dir)
 #        conn.close()

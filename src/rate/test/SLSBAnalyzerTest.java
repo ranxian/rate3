@@ -4,6 +4,7 @@ import rate.engine.benchmark.analyzer.SLSBAnalyzer;
 import rate.engine.task.SLSBTask;
 import rate.model.TaskEntity;
 import rate.util.DebugUtil;
+import rate.util.HibernateUtil;
 
 /**
  * Created by XianRan
@@ -14,16 +15,22 @@ import rate.util.DebugUtil;
 public class SLSBAnalyzerTest extends BaseTest {
 
     public static void main(String[] args) throws Exception {
+        session = HibernateUtil.getSession();
         SLSBAnalyzer slsbAnalyzer = new SLSBAnalyzer();
         TaskEntity task = (TaskEntity)session.createQuery("from TaskEntity where uuid=:uuid")
-                .setParameter("uuid", "83750d39-895e-41e4-9797-7be373b80c3b")
+                .setParameter("uuid", "095ef60d-a058-4f21-92a4-6e98d399ea88")
                 .list().get(0);
         SLSBTask slsbTask = new SLSBTask(task);
         DebugUtil.debug(slsbTask.getBenchmark().dirPath());
         slsbAnalyzer.setTask(task);
-        slsbAnalyzer.setAlpha(0);
-//        slsbAnalyzer.analyze();
-        slsbAnalyzer.analyzeTotalFMR();
-        slsbAnalyzer.analyzeTotalFNMR();
+        slsbAnalyzer.setAlpha(0.1);
+        slsbAnalyzer.analyze();
+        task.setFinished(HibernateUtil.getCurrentTimestamp());
+        session.beginTransaction();
+        session.update(task);
+
+//        slsbAnalyzer.analyzeTotalFMR();
+//        slsbAnalyzer.analyzeTotalFNMR();
+        session.close();
     }
 }
