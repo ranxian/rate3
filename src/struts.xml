@@ -281,6 +281,12 @@
                 <param name="uuid">${task.uuid}</param>
             </result>
         </action>
+        <action name="rerun" class="rate.controller.runner.ReRunAction" method="execute">
+            <result name="success" type="redirectAction">
+                <param name="namespace">/task</param>
+                <param name="actionName">index</param>
+            </result>
+        </action>
     </package>
 
     <package name="rate.controller.database" extends="rate-base-package" namespace="/database">

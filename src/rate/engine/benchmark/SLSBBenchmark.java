@@ -112,7 +112,7 @@ public class SLSBBenchmark extends GeneralBenchmark {
     }
 
     public String getFarBenchmarkFilePath(int i, int j) {
-        return FilenameUtils.concat(farBenchmarkDir, i + "" + j + "_bxx.txt");
+        return FilenameUtils.concat(farBenchmarkDir, i + "-" + j + "_bxx.txt");
     }
 
     public String getFrrBenchmarkFilePath(int b) {

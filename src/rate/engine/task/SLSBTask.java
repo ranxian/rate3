@@ -69,7 +69,7 @@ public class SLSBTask extends TaskResult {
     }
 
     public String getFarResultPathByNum(int i, int j) {
-        return FilenameUtils.concat(farResultDir,i+""+j+".txt" );
+        return FilenameUtils.concat(farResultDir,i+"-"+j+".txt" );
     }
 
     public String getFrrResultPathByNum(int i) {

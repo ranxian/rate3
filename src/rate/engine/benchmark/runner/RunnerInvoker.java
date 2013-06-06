@@ -46,4 +46,12 @@ public class RunnerInvoker {
 
         JavaProcess.exec(RunnerMain.class, parameters);
     }
+
+    public static void reRun(String uuid) throws Exception {
+        List<String> parameters = new ArrayList<String>();
+        parameters.add(uuid);
+
+        logger.trace("begin rerun task " + uuid);
+        JavaProcess.exec(RunnerMain.class, parameters);
+    }
 }

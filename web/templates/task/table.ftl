@@ -10,6 +10,9 @@
         <th>Finished</th>
         <th>Runner</th>
         <th>Delete</th>
+        <#if isUserSignedIn && currentUser.isVip()>
+            <th>ReRun</th>
+        </#if>
     </tr>
     </thead>
     <tbody>
@@ -31,6 +34,9 @@
             <td><a href="/task/delete?uuid=${uuid}">delete</a></td>
         <#else>
             <td></td>
+        </#if>
+        <#if isUserSignedIn && currentUser.isVip()>
+            <td><a href="/task/rerun?uuid=${uuid}">rerun</a></td>
         </#if>
     </tr>
     </@s.iterator>
