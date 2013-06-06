@@ -71,6 +71,14 @@
         <p>All Rights Reserved 2013 AI LAB, Peking University. By <strong>Yu Yuankai & Xian Ran</strong> </p>
 
         <p>Any problem, Please Contact <a href="mailto:xranthoar@gmail.com" style="color: white; font-weight: bold;">Administrator</a></p>
+        <p>
+        <#if isUserSignedIn && currentUser.isVip()>
+        <form action="/admin/restart_queue" method="post" class="form-horizontal" style="text-align: center;">
+            <input type="password" name="passwd" width="10px" />
+            <input type="submit" value="restart">
+        </form>
+        </#if>
+        </p>
     </div>
 </div>
 </body>
