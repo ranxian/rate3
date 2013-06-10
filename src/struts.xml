@@ -303,7 +303,7 @@
     </package>
 
     <package name="rate.controller.admin" extends="rate-base-package" namespace="/admin">
-        <action name="restart_queue" class="rate.controller.admin.RestartQueueAction">
+        <action name="restart_queue" class="rate.controller.admin.RestartQueueAction" method="execute">
             <result name="success" type="redirectAction">
                 <param name="namespace">/task</param>
                 <param name="actionName">index</param>

@@ -32,18 +32,7 @@ public class IndexAction extends RateActionBase {
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
         long count = (Long)(session.createQuery("select count(*) from AlgorithmEntity ").list().get(0));
-//        if (getIsUserSignedIn() && getCurrentUser().isVip()) {
-//            algorithms = session.createQuery("from AlgorithmEntity order by updated desc")
-//                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
-//                    .list();
-//        } else {
-//            List<UserAlgorithmEntity> userAlgorithmEntities = session.createQuery("from UserAlgorithmEntity where user=:user")
-//                    .setParameter("user", getCurrentUser()).list();
-//            for (UserAlgorithmEntity entity : userAlgorithmEntities) {
-//                if (entity.getUser().equals(getCurrentUser()))
-//                    algorithms.add(entity.getAlgorithm());
-//            }
-//        }
+
         setNumOfItems(count);
         return SUCCESS;
     }

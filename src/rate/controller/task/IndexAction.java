@@ -32,24 +32,6 @@ public class IndexAction extends RateActionBase {
                 .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
                 .list();
         long count = (Long)(session.createQuery("select count(*) from TaskEntity").list().get(0));
-//        if (getIsUserSignedIn() && getCurrentUser().isVip()) {
-//            tasks = session.createQuery("from TaskEntity order by created desc")
-//                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage)
-//                    .list();
-//        } else {
-//            List<TaskEntity> alltasks = session.createQuery("from TaskEntity order by created desc")
-//                    .setFirstResult(getFirstResult()).setMaxResults(itemPerPage*10)
-//                    .list();
-//            if (getIsUserSignedIn()) {
-//                for (TaskEntity task : alltasks) {
-//                    if (task.getRunnerName().equals(getCurrentUser().getName())) {
-//                        tasks.add(task);
-//                        if (tasks.size() >= 10) break;
-//                    }
-//                }
-//            }
-//
-//        }
         setNumOfItems(count);
         return SUCCESS;
     }

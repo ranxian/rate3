@@ -170,6 +170,16 @@ public class AlgorithmEntity {
         this.userAlgorithms = userAlgorithmsByUuid;
     }
 
+    private UserEntity user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid")
+    public UserEntity getUser() {
+        return this.user;
+    }
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
     @Transient
     public int getNumOfVersions() {
         return this.getAlgorithmVersions().size();

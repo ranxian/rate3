@@ -1,8 +1,11 @@
 package rate.controller.runner;
 
+import org.apache.commons.io.FileUtils;
 import rate.controller.RateActionBase;
 import rate.engine.benchmark.runner.RunnerInvoker;
 import rate.model.TaskEntity;
+
+import java.io.File;
 
 /**
  * Created by XianRan
@@ -25,6 +28,7 @@ public class ReRunAction extends RateActionBase {
         TaskEntity task = (TaskEntity)session.createQuery("from TaskEntity where uuid=:uuid").setParameter("uuid", uuid)
                 .list().get(0);
         task.setFinished(null);
+        FileUtils.deleteDirectory(new File(task.getDirPath()));
         session.beginTransaction();
         session.update(task);
         session.getTransaction().commit();

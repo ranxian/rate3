@@ -4,9 +4,7 @@
 <div class="ratehr"></div>
 <pre>
 公告：
-1.course 上助教上传了新的 samples，是应李老师要求提供的质量良好的 sample，并且配备了一个本地评测的脚本
-2.SLSB benchmark 是用于评测算法正确性的置信区间的，暂不考察大家在这些 benchmark 上的表现
-3.现在大家相互之间可以查看 task 的详情
+1. 有一个文档齐全的 <a href="/static/samples.zip" class="ratered"><strong>sample.zip</strong></a> 供调教
 </pre>
 <p class="ask"><strong>A: What is <strong class="ratered">RATE</strong></strong>?</p>
 <pre>
@@ -29,5 +27,12 @@
     <strong class="ratered">FNMR</strong> means False Not Match Rate. Basically, it's the same concept as <strong class="ratered">FRR</strong>(False Reject Rate).
     <strong class="ratered">FMR</strong> means False Match Rate. Basically, it's the same concept as <strong class="ratered">FAR</strong>(False Accept Rate).
 </pre>
+<p class="ask"><strong>A: 感觉搞不动啊</strong></p>
+<pre>
+    这里有两篇不错的论文：
+    <a href="/static/finger vein recognition by Huang Beining.pdf" class="ratered"><strong>finger vein recognition by Huang Beining</strong></a>
+    <a href="/static/finger posture correction.pdf" class="ratered"><strong>finger vein recognition by Japanese</strong></a>
+</pre>
+<pre></pre>
 
 </#macro>

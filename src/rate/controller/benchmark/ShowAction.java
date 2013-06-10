@@ -21,21 +21,25 @@ public class ShowAction extends BenchmarkActionBase {
 
     public List<AlgorithmVersionEntity> getAlgorithmVersions() {
         List<AlgorithmVersionEntity> algorithmVersions = new ArrayList<AlgorithmVersionEntity>();
-        List<AlgorithmVersionEntity> allAlgorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.type=:type order by created desc")
-                .setParameter("type", benchmark.getView().getType())
-                .list();
 
         if (!getIsUserSignedIn()) return algorithmVersions;
-        for (AlgorithmVersionEntity v : allAlgorithmVersions) {
-            AlgorithmEntity a = v.getAlgorithm();
 
-            if (a.getAuthor().getUuid().equals(getCurrentUser().getUuid())) {
-                algorithmVersions.add(v);
-            }
-        }
+        algorithmVersions = session.createQuery("select version from AlgorithmVersionEntity version where version.algorithm.user.uuid=:uuid order by created desc ")
+                .setParameter("uuid", getCurrentUser().getUuid()).setMaxResults(itemPerPage).list();
+//        List<AlgorithmVersionEntity> allAlgorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.type=:type order by created desc")
+//                .setParameter("type", benchmark.getView().getType())
+//                .list();
 
-        int cnt = algorithmVersions.size() <= itemPerPage ? algorithmVersions.size() : itemPerPage;
-        return algorithmVersions.subList(0, cnt);
+//        for (AlgorithmVersionEntity v : allAlgorithmVersions) {
+//            AlgorithmEntity a = v.getAlgorithm();
+//
+//            if (a.getAuthor().getUuid().equals(getCurrentUser().getUuid())) {
+//                algorithmVersions.add(v);
+//            }
+//        }
+
+//        int cnt = algorithmVersions.size() <= itemPerPage ? algorithmVersions.size() : itemPerPage;
+        return algorithmVersions;
     }
 
     public String execute() {

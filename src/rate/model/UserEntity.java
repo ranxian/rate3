@@ -107,6 +107,15 @@ public class UserEntity {
         return privilege;
     }
 
+    private Collection<AlgorithmEntity> algorithms;
+    @OneToMany(mappedBy = "user")
+    public Collection<AlgorithmEntity> getAlgorithms() {
+        return this.algorithms;
+    }
+    public void setAlgorithms(Collection<AlgorithmEntity> algorithms) {
+        this.algorithms = algorithms;
+    }
+
     public void setPrivilege(String privilege) {
         this.privilege = privilege;
     }

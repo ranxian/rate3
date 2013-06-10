@@ -48,24 +48,16 @@ public class ByBenchmarkAction extends RateActionBase {
     }
 
     public String execute() throws Exception {
-        List<AlgorithmVersionEntity> allAlgorithmVersions = session.createQuery("from AlgorithmVersionEntity where algorithm.type=:type order by created desc")
-                .setParameter("type", benchmark.getView().getType())
-                .list();
+        if (!getIsUserSignedIn())
+            return "eLogin";
         algorithmVersions = new ArrayList<AlgorithmVersionEntity>();
 
-        int cnt = 0;
-        for (AlgorithmVersionEntity v : allAlgorithmVersions) {
+        algorithmVersions = session.createQuery("select version from AlgorithmVersionEntity version where version.algorithm.user.uuid=:uuid order by created desc ")
+                .setParameter("uuid", getCurrentUser().getUuid()).setMaxResults(itemPerPage).list();
 
-            AlgorithmEntity a = v.getAlgorithm();
-            if (a.getAuthor().getUuid().equals(getCurrentUser().getUuid())) {
-                cnt+=1;
-                if (cnt >= getFirstResult())
-                    algorithmVersions.add(v);
-            }
-        }
-
-        Integer icnt = new Integer(cnt);
-        setNumOfItems(icnt.longValue());
+        Long cnt = (Long) session.createQuery("select count(*) from AlgorithmVersionEntity version where version.algorithm.user.uuid=:uuid")
+                .setParameter("uuid", getCurrentUser().getUuid()).list().get(0);
+        setNumOfItems(cnt);
         return SUCCESS;
     }
 

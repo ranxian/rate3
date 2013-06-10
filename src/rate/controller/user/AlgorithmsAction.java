@@ -2,6 +2,7 @@ package rate.controller.user;
 
 import org.apache.log4j.Logger;
 import rate.controller.RateActionBase;
+import rate.model.AlgorithmEntity;
 import rate.model.UserAlgorithmEntity;
 import rate.model.UserEntity;
 
@@ -37,7 +38,8 @@ public class AlgorithmsAction extends RateActionBase {
             }
         }
 
-        algorithms = session.createQuery("from UserAlgorithmEntity where user=:user").setParameter("user", user).list();
+        algorithms = getCurrentUser().getAlgorithms();
+
         setNumOfItems(Long.parseLong(String.valueOf(algorithms.size())));
 
         return SUCCESS;
@@ -47,9 +49,9 @@ public class AlgorithmsAction extends RateActionBase {
         return user;
     }
 
-    public Collection<UserAlgorithmEntity> getAlgorithms() {
+    public Collection<AlgorithmEntity> getAlgorithms() {
         return algorithms;
     }
 
-    private Collection<UserAlgorithmEntity> algorithms;
+    private Collection<AlgorithmEntity> algorithms;
 }

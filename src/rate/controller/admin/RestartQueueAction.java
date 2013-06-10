@@ -22,7 +22,7 @@ public class RestartQueueAction extends RateActionBase {
     }
 
     public String execute() throws Exception {
-        String cmd = "sudo -S restart rabbitmq-server";
+        String cmd = "sudo -S service rabbitmq-server restart";
         Process process = Runtime.getRuntime().exec(cmd);
         PrintWriter writer = new PrintWriter(new OutputStreamWriter(process.getOutputStream()));
         writer.println(passwd);
