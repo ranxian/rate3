@@ -15,13 +15,13 @@
     <tbody>
         <@s.iterator value="algorithms">
         <tr>
-            <td class="tableHighlight"><a href="/algorithm/show?uuid=${algorithm.uuid}">${algorithm.name}</a></td>
-            <td>${algorithm.type}</td>
-            <td>${algorithm.protocol}</td>
-            <td><#if (algorithm.description=="")>no description<#else>${algorithm.description}</#if></td>
-            <td>${algorithm.created}</td>
-            <td>${algorithm.updated}</td>
-            <td>${algorithm.numOfVersions}</td>
+            <td class="tableHighlight"><a href="/algorithm/show?uuid=${uuid}">${name}</a></td>
+            <td>${type}</td>
+            <td>${protocol}</td>
+            <td><#if (description=="")>no description<#else>${description}</#if></td>
+            <td>${created}</td>
+            <td>${updated}</td>
+            <td>${numOfVersions}</td>
         </tr>
         </@s.iterator>
     </tbody>

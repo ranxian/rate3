@@ -31,8 +31,7 @@
 <pre>
     这里有两篇不错的论文：
     <a href="/static/finger vein recognition by Huang Beining.pdf" class="ratered"><strong>finger vein recognition by Huang Beining</strong></a>
-    <a href="/static/finger posture correction.pdf" class="ratered"><strong>finger vein recognition by Japanese</strong></a>
+    <a href="/static/finger posture correction.pdf" class="ratered"><strong>finger posture correction</strong></a>
 </pre>
-<pre></pre>
 
 </#macro>

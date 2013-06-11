@@ -29,7 +29,7 @@
                 <strong class="running">running</strong>
             </#if>
         </td>
-        <td class="tableHighlight">${runnerName}</td>
+        <td class="tableHighlight"><a href="/user/algorithms?uuid=${algorithmVersion.algorithm.user.uuid}" class="ratered">${algorithmVersion.algorithm.user.name}</a></td>
         <#if isUserSignedIn && (currentUser.isVip() || author.getUuid().equals(currentUser.getUuid()))>
             <td><a href="/task/delete?uuid=${uuid}">delete</a></td>
         <#else>

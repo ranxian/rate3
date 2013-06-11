@@ -75,7 +75,7 @@
         <#if isUserSignedIn && currentUser.isVip()>
         <form action="/admin/restart_queue" method="post" class="form-horizontal" style="text-align: center;">
             <input type="password" name="passwd" width="10px" />
-            <input type="submit" value="restart">
+            <input type="submit" value="restart" class="btn btn-danger">
         </form>
         </#if>
         </p>
