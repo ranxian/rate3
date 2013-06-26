@@ -3,7 +3,6 @@ package rate.controller.user;
 import org.apache.log4j.Logger;
 import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
-import rate.model.UserAlgorithmEntity;
 import rate.model.UserEntity;
 
 import java.util.Collection;
@@ -38,7 +37,7 @@ public class AlgorithmsAction extends RateActionBase {
             }
         }
 
-        algorithms = getCurrentUser().getAlgorithms();
+        algorithms = user.getAlgorithms();
 
         setNumOfItems(Long.parseLong(String.valueOf(algorithms.size())));
 

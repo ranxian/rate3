@@ -137,17 +137,6 @@ public class UserEntity {
         return result;
     }
 
-    private Collection<UserAlgorithmEntity> userAlgorithms;
-
-    @OneToMany(mappedBy = "user")
-    public Collection<UserAlgorithmEntity> getUserAlgorithms() {
-        return userAlgorithms;
-    }
-
-    public void setUserAlgorithms(Collection<UserAlgorithmEntity> userAlgorithms) {
-        this.userAlgorithms = userAlgorithms;
-    }
-
     public static UserEntity authenticate(String name, String password) {
         org.hibernate.Query q = HibernateUtil.getSession().createQuery("from UserEntity where name=:name");
         q.setParameter("name", name);

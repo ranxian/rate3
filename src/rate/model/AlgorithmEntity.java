@@ -159,17 +159,6 @@ public class AlgorithmEntity {
         this.algorithmVersions = algorithmVersionsByUuid;
     }
 
-    private Collection<UserAlgorithmEntity> userAlgorithms;
-
-    @OneToMany(mappedBy = "algorithm")
-    public Collection<UserAlgorithmEntity> getUserAlgorithms() {
-        return userAlgorithms;
-    }
-
-    public void setUserAlgorithms(Collection<UserAlgorithmEntity> userAlgorithmsByUuid) {
-        this.userAlgorithms = userAlgorithmsByUuid;
-    }
-
     private UserEntity user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_uuid", referencedColumnName = "uuid")
@@ -190,24 +179,14 @@ public class AlgorithmEntity {
     }
     @Transient
     public String getAuthorName() {
-        List<UserAlgorithmEntity> userAlgorithms = (List<UserAlgorithmEntity>)
-                HibernateUtil.getSession().createQuery("from UserAlgorithmEntity where algorithm=:algorithm")
-                        .setParameter("algorithm", this)
-                        .list();
-        if (userAlgorithms.isEmpty()) return "Unknown";
-        else return userAlgorithms.get(0).getUser().getName();
+        return user.getName();
     }
 
     private void setAuthorName(String none) {}
 
     @Transient
     public UserEntity getAuthor() {
-        List<UserAlgorithmEntity> userAlgorithms = (List<UserAlgorithmEntity>)
-                HibernateUtil.getSession().createQuery("from UserAlgorithmEntity where algorithm=:algorithm")
-                        .setParameter("algorithm", this)
-                        .list();
-        if (userAlgorithms.isEmpty()) return null;
-        else return userAlgorithms.get(0).getUser();
+        return user;
     }
 
     private void setAuthor(){}

@@ -6,7 +6,6 @@ import org.hibernate.Session;
 import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
-import rate.model.UserAlgorithmEntity;
 import rate.util.DebugUtil;
 import rate.util.HibernateUtil;
 
@@ -58,11 +57,6 @@ public class AlgorithmVersionActionBase extends RateActionBase {
     protected AlgorithmEntity algorithm;
 
     protected boolean isAuthor() {
-        UserAlgorithmEntity userAlgorithm = (UserAlgorithmEntity)session.createQuery("from UserAlgorithmEntity where algorithm=:algorithm")
-                .setParameter("algorithm", algorithm)
-                .list().get(0);
-        DebugUtil.debug("algorithm " + algorithm.getUuid() + " user " + userAlgorithm.getUser().getName() + " currentUser " + getCurrentUser().getName());
-
-        return userAlgorithm.getUser().getUuid().equals(getCurrentUser().getUuid());
+        return algorithm.getUser().getUuid().equals(getCurrentUser().getUuid());
     }
 }

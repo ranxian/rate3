@@ -2,7 +2,6 @@ package rate.controller.benchmark;
 
 import rate.model.AlgorithmEntity;
 import rate.model.AlgorithmVersionEntity;
-import rate.model.UserAlgorithmEntity;
 import rate.util.DebugUtil;
 
 import java.util.ArrayList;

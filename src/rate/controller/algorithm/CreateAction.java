@@ -4,9 +4,6 @@ import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import rate.controller.RateActionBase;
-import rate.model.AlgorithmEntity;
-import rate.model.UserAlgorithmEntity;
 import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 
@@ -31,16 +28,10 @@ public class CreateAction extends AlgorithmActionBase {
             logger.trace("beginTransaction");
             session.beginTransaction();
             logger.trace("save algorithm" + algorithm.getUuid());
+
+            algorithm.setUser(getCurrentUser());
             session.save(algorithm);
-            logger.trace("new userAlgorithm");
-            UserAlgorithmEntity userAlgorithm = new UserAlgorithmEntity();
-            logger.trace("setAlgorithm " + algorithm.getUuid());
-            userAlgorithm.setAlgorithm(algorithm);
-            UserEntity user = getCurrentUser();
-            logger.trace("setUser " + user.getUuid());
-            userAlgorithm.setUser(user);
-            logger.trace("save userAlgorithm " + userAlgorithm.getAlgorithm().getUuid() + " " + userAlgorithm.getUser().getUuid());
-            session.save(userAlgorithm);
+
             logger.trace("commit");
             session.getTransaction().commit();
         }

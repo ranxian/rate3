@@ -1,12 +1,7 @@
 package rate.controller.algorithm;
 
-import com.opensymphony.xwork2.ActionSupport;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
-import rate.model.UserAlgorithmEntity;
-import rate.util.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;

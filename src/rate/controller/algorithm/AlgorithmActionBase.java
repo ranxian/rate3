@@ -2,7 +2,6 @@ package rate.controller.algorithm;
 
 import rate.controller.RateActionBase;
 import rate.model.AlgorithmEntity;
-import rate.model.UserAlgorithmEntity;
 import rate.model.UserEntity;
 import rate.util.HibernateUtil;
 
@@ -45,15 +44,11 @@ public class AlgorithmActionBase extends RateActionBase {
     }
 
     public UserEntity getAuthor() {
-        UserAlgorithmEntity userAlgorithm = (UserAlgorithmEntity)session.createQuery("from UserAlgorithmEntity where algorithm=:algorithm").setParameter("algorithm", algorithm)
-                .list().get(0);
-        return userAlgorithm.getUser();
+        return algorithm.getUser();
     }
 
     public boolean isAuthor() {
-        UserEntity user = getAuthor();
-
-        return user.equals(getCurrentUser());
+        return getAuthor().getUuid().equals(getCurrentUser().getUuid());
     }
 
     public boolean getIsAuthor() {
