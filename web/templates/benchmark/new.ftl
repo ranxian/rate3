@@ -50,6 +50,16 @@
         </div>
 
         <div class="control-group">
+            <div class="control-label">Visible?</div>
+            <div class="controls">
+                <label for="benchmark.visibleYES">YES</label>
+                <input type="radio" value="YES" name="benchmark.visible" id="benchmark.visibleYES">
+                <label for="benchmark.visibleNO">NO</label>
+                <input type="radio" value="NO" name="benchmark.visible" id="benchmark.visibleNO">
+            </div>
+        </div>
+
+        <div class="control-group">
             <div class="control-label">
                 Class Count
             </div>

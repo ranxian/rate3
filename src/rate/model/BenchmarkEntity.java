@@ -42,6 +42,18 @@ public class BenchmarkEntity {
         this.uuid = uuid;
     }
 
+    private String visible;
+
+    @Column(name = "visible", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
+    @Basic
+    public String getVisible() {
+        return visible;
+    }
+
+    public void setVisible(String visible) {
+        this.visible = visible;
+    }
+
     private String name;
 
     @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 255, precision = 0)

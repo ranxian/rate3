@@ -26,7 +26,11 @@ public class IndexAction extends RateActionBase {
     private Collection<BenchmarkEntity> benchmarks;
 
     public String execute() {
-        benchmarks = session.createQuery("from BenchmarkEntity order by created desc").list();
+        if (getIsUserSignedIn() && getCurrentUser().isVip()) {
+            benchmarks = session.createQuery("from BenchmarkEntity order by created desc").list();
+        } else {
+            benchmarks = session.createQuery("from BenchmarkEntity where visible='YES' order by created desc").list();
+        }
         return SUCCESS;
     }
 }

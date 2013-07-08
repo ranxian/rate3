@@ -4,7 +4,10 @@
 <div class="ratehr"></div>
 <pre>
 公告：
-1. 有一个文档齐全的 <a href="/static/samples.zip" class="ratered"><strong>sample.zip</strong></a> 供调教
+<h3>1. 有一个文档齐全的 <a href="/static/samples.zip" class="ratered"><strong>sample.zip</strong></a>，里面包含了一些有用的 tips</h3>
+2. 大家务必用 VS 中的 release 模式编译，否则可能会跑相当之久
+3. OpenCV 尚未支持，欢迎发送 OpenCV 版算法的源代码 + VS 编译的可执行文件到 xranthoar@gmail.com，附上你的 OpenCV、VS 版本
+4. 最近服务器不是特别稳定，如果出现这种情况管理员会重新 run 失败的测试（也就是 '50%直线')
 </pre>
 <p class="ask"><strong>A: What is <strong class="ratered">RATE</strong></strong>?</p>
 <pre>
