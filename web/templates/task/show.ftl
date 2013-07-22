@@ -12,7 +12,7 @@
     </#if>
 
 </h1>
-<strong>Algorithm: </strong><a href="/algorithmVersion/show?uuid=${task.algorithmVersion.uuid}" class="btn">${task.algorithmVersion.readableName}</a>
+<strong>Algorithm: </strong><a href="/algorithm_version/show?uuid=${task.algorithmVersion.uuid}" class="btn">${task.algorithmVersion.readableName}</a>
 <strong>Benchmark: </strong><a href="/benchmark/show?uuid=${task.benchmark.uuid}" class="btn">${task.benchmark.name}</a>
 
 <div class="result-box">
